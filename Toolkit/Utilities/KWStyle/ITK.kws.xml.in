@@ -9,7 +9,7 @@
 <Tabs>1</Tabs>
 <Spaces>3</Spaces>
 <Comments>/**, *, */,true</Comments>
-<Header>@LesionSizingKitSandbox_SOURCE_DIR@/Utilities/KWStyle/KitwareHeader.h,false,true</Header>
+<Header>@LesionSizingToolkit_SOURCE_DIR@/Utilities/KWStyle/KitwareHeader.h,false,true</Header>
 <Indent>SPACE,2,true,true</Indent>
 <Namespace>itk</Namespace>
 <NameOfClass>[NameOfClass],itk</NameOfClass>
