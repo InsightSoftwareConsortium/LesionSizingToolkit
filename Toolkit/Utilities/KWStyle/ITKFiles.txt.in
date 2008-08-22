@@ -1,0 +1,3 @@
+@StatisticsRefactoring_SOURCE_DIR@/Source/*.h
+@StatisticsRefactoring_SOURCE_DIR@/Source/*.txx
+@StatisticsRefactoring_SOURCE_DIR@/Source/*.cxx

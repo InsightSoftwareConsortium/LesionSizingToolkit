@@ -1,0 +1,1 @@
+itkMeasurementVectorTraits.h InternalVariables Disable

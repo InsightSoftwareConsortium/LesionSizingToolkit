@@ -22,3 +22,4 @@ ADD_SUBDIRECTORY(Source)
 ADD_SUBDIRECTORY(Testing)
 ADD_SUBDIRECTORY(Examples)
 
+INCLUDE(${LesionSizingKitToolkit_SOURCE_DIR}/Utilities/KWStyle/KWStyle.cmake)
