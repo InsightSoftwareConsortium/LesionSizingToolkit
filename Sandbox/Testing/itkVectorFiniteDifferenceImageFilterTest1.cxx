@@ -55,6 +55,9 @@ int main( int argc, char * argv [] )
 
   filter->SetNumberOfIterations( 5 );
 
+  // Exercise the Print method 
+  filter->Print( std::cout );
+
   try
     {
     filter->Update();
