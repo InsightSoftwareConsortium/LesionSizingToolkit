@@ -52,5 +52,13 @@ int main( int argc, char * argv [] )
   // Exercise the Print method 
   function->Print( std::cout );
 
+  typedef FunctionType::GlobalDataStruct GlobalDataStruct;
+
+  GlobalDataStruct * gds = static_cast< GlobalDataStruct * >( function->GetGlobalDataPointer() );
+   
+  FunctionType::NeighborhoodType neigborhood;
+
+  function->ComputeUpdate( neigborhood, gds );
+
   return EXIT_SUCCESS;
 }
