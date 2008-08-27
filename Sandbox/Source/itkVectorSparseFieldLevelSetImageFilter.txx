@@ -332,7 +332,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   unsigned int idx;
   unsigned int counter;
 
-  bool bounds_status;
+  // FIXME   bool bounds_status;
   bool flag;
 
   typename LayerType::Iterator         layerIt;
