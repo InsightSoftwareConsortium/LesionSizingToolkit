@@ -9,5 +9,9 @@ TARGET_LINK_LIBRARIES(itkSystemInformation ITKIO ITKNumerics)
 ADD_EXECUTABLE(itkVectorFiniteDifferenceImageFilterTest1 itkVectorFiniteDifferenceImageFilterTest1.cxx )
 TARGET_LINK_LIBRARIES(itkVectorFiniteDifferenceImageFilterTest1 ITKIO ITKNumerics)
 
+ADD_EXECUTABLE(itkVectorFiniteDifferenceFunctionTest1 itkVectorFiniteDifferenceFunctionTest1.cxx )
+TARGET_LINK_LIBRARIES(itkVectorFiniteDifferenceFunctionTest1 ITKIO ITKNumerics)
+
 ADD_TEST(itkSystemInformation ${CXX_TEST_PATH}/itkSystemInformation )
 ADD_TEST(itkVectorFiniteDifferenceImageFilterTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceImageFilterTest1 )
+ADD_TEST(itkVectorFiniteDifferenceFunctionTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceFunctionTest1 )
