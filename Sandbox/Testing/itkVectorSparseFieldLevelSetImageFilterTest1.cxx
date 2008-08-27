@@ -14,6 +14,7 @@
 =========================================================================*/
 
 #include "itkVectorSparseFieldLevelSetImageFilter.h"
+#include "itkVectorFiniteDifferenceFunction.h"
 #include "itkImage.h"
 #include "itkVector.h"
 
@@ -32,7 +33,11 @@ int main( int argc, char * argv [] )
   typedef itk::VectorSparseFieldLevelSetImageFilter< 
     LevelSetImageType, LevelSetImageType >               FilterType;
 
+  typedef itk::VectorFiniteDifferenceFunction<LevelSetImageType>  FunctionType;
+
   FilterType::Pointer filter = FilterType::New();
+
+  FunctionType::Pointer differenceFunction = FunctionType::New();
 
   std::cout << filter->GetNameOfClass() << std::endl;
 
@@ -54,6 +59,8 @@ int main( int argc, char * argv [] )
   filter->SetInput( inputLevelSet );
 
   filter->SetNumberOfIterations( 5 );
+
+  filter->SetDifferenceFunction( differenceFunction );
 
   // Exercise the Print method 
   filter->Print( std::cout );
