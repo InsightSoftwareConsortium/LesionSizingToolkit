@@ -62,7 +62,11 @@ int main( int argc, char * argv [] )
 
   FunctionType::NeighborhoodType neigborhood(radius, inputLevelSet, region);
 
+  FunctionType::TimeStepType timeStep = function->ComputeGlobalTimeStep( gds );
+
   function->ComputeUpdate( neigborhood, gds );
+
+  function->ReleaseGlobalDataPointer( gds );
 
   return EXIT_SUCCESS;
 }
