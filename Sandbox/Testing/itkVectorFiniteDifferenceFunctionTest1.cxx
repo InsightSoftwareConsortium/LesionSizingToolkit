@@ -56,7 +56,11 @@ int main( int argc, char * argv [] )
 
   GlobalDataStruct * gds = static_cast< GlobalDataStruct * >( function->GetGlobalDataPointer() );
    
-  FunctionType::NeighborhoodType neigborhood;
+  FunctionType::RadiusType radius;
+
+  radius.Fill( 3 );
+
+  FunctionType::NeighborhoodType neigborhood(radius, inputLevelSet, region);
 
   function->ComputeUpdate( neigborhood, gds );
 
