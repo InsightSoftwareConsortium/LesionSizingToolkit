@@ -18,6 +18,7 @@
 #define __itkVectorFiniteDifferenceImageFilter_txx_
 
 #include "itkVectorFiniteDifferenceImageFilter.h"
+#include "itkVectorFiniteDifferenceFunction.h"
 
 namespace itk {
 
@@ -26,6 +27,7 @@ template<class TInputImage, class TOutputImage>
 VectorFiniteDifferenceImageFilter<TInputImage, TOutputImage>
 ::VectorFiniteDifferenceImageFilter()
 {
+  this->SetDifferenceFunction( VectorFiniteDifferenceFunction<TInputImage>::New() );
 }
 
 template<class TInputImage, class TOutputImage>
