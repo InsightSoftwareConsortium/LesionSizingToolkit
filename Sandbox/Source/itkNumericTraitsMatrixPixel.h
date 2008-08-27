@@ -32,9 +32,9 @@ namespace itk
 // specializations or for a generic template instantiation. This Macro covers
 // the implementation for good compilers and for Visual Studio 6.0.
 //
-#define itkNumericTraitsMatrixPixelMacro(T) \
+#define itkNumericTraitsMatrixPixelMacro(T,M,N) \
 template < _TEMPLATE_ARGUMENT_ >  \
-class NumericTraits<Matrix< T > >  \
+class NumericTraits<Matrix< T, M, N > >  \
 { \
 public: \
   typedef T ValueType; \
@@ -47,11 +47,11 @@ public: \
  \
   typedef Matrix<T>                   Self; \
  \
-  typedef Matrix<ElementAbsType>          AbsType; \
-  typedef Matrix<ElementAccumulateType>   AccumulateType; \
-  typedef Matrix<ElementFloatType>        FloatType; \
-  typedef Matrix<ElementPrintType>        PrintType; \
-  typedef Matrix<ElementRealType>         RealType; \
+  typedef Matrix<ElementAbsType,M,N>          AbsType; \
+  typedef Matrix<ElementAccumulateType,M,N>   AccumulateType; \
+  typedef Matrix<ElementFloatType,M,N>        FloatType; \
+  typedef Matrix<ElementPrintType,M,N>        PrintType; \
+  typedef Matrix<ElementRealType,M,N>         RealType; \
  \
   typedef ElementRealType ScalarRealType; \
  \
@@ -123,12 +123,12 @@ itkNumericTraitsMatrixPixelMacro( double );
 // a generic template implementation of the traits
 //
 #define _TYPENAME_            typename
-#define _TEMPLATE_ARGUMENT_   class T
+#define _TEMPLATE_ARGUMENT_   class T, unsigned int M, unsigned int N
 
 //
 // Then we simply call the macro once with the generic template argument T.
 //
-itkNumericTraitsMatrixPixelMacro( T );
+itkNumericTraitsMatrixPixelMacro( T, M, N );
 
 #endif
 
