@@ -34,5 +34,33 @@ int main( int argc, char * argv [] )
 
   FilterType::Pointer filter = FilterType::New();
 
+  std::cout << filter->GetNameOfClass() << std::endl;
+
+  LevelSetImageType::Pointer inputLevelSet = LevelSetImageType::New();
+
+  LevelSetImageType::RegionType region;
+  LevelSetImageType::SizeType   size;
+  LevelSetImageType::IndexType  start;
+
+  start.Fill( 0 );
+  size.Fill( 10 );
+
+  region.SetSize( size );
+  region.SetIndex( start );
+
+  inputLevelSet->SetRegions( region );
+  inputLevelSet->Allocate();
+
+  filter->SetInput( inputLevelSet );
+
+  try
+    {
+    filter->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
+    }
+
   return EXIT_SUCCESS;
 }
