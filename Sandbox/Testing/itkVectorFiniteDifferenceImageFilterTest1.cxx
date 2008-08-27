@@ -53,6 +53,8 @@ int main( int argc, char * argv [] )
 
   filter->SetInput( inputLevelSet );
 
+  filter->SetNumberOfIterations( 5 );
+
   try
     {
     filter->Update();
@@ -61,6 +63,8 @@ int main( int argc, char * argv [] )
     {
     std::cerr << excp << std::endl;
     }
+
+  std::cout << "Number of elapsed iterations = " << filter->GetElapsedIterations() << std::endl;
 
   return EXIT_SUCCESS;
 }
