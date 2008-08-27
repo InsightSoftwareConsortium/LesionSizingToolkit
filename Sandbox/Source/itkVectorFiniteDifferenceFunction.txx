@@ -22,6 +22,30 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace itk {
 
+template< class TImageType >
+typename VectorFiniteDifferenceFunction< TImageType >::TimeStepType
+VectorFiniteDifferenceFunction<TImageType>
+::ComputeGlobalTimeStep(void *GlobalData) const
+{
+  TimeStepType dt;
+
+  dt = 0.1; // FIXME: revisit this with a smarter method.
+
+  return dt;
+}
+
+template< class TImageType >
+typename VectorFiniteDifferenceFunction< TImageType >::PixelType
+VectorFiniteDifferenceFunction< TImageType >
+::ComputeUpdate(const NeighborhoodType &it, void *globalData,
+                const FloatOffsetType& offset)
+{
+  const ScalarValueType center_value  = it.GetCenterPixel();
+
+  // Return the combination of all the terms.
+  return ( PixelType ) ( center_value ); // FIXME: replace this with a real computation.
+}
+
 template <class TImageType>
 void
 VectorFiniteDifferenceFunction<TImageType>::
