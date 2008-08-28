@@ -22,10 +22,17 @@ int main( int argc, char * argv [] )
   const unsigned int Dimension = 2;
   const unsigned int NumberOfPhases = 2;
 
-  typedef itk::Matrix< float, NumberOfPhases, Dimension >   MatrixType;
+  typedef itk::Matrix< char,   NumberOfPhases, Dimension >   MatrixType1;
+  typedef itk::Matrix< float,  NumberOfPhases, Dimension >   MatrixType2;
+  typedef itk::Matrix< double, NumberOfPhases, Dimension >   MatrixType3;
 
-  typedef itk::NumericTraits< MatrixType >::RealType    RealMatrixType;
+  typedef itk::NumericTraits< MatrixType1 >::RealType    RealMatrixType1;
+  typedef itk::NumericTraits< MatrixType2 >::RealType    RealMatrixType2;
+  typedef itk::NumericTraits< MatrixType3 >::RealType    RealMatrixType3;
 
+  RealMatrixType1 realTypeInstance1;
+  RealMatrixType2 realTypeInstance2;
+  RealMatrixType3 realTypeInstance3;
 
   return EXIT_SUCCESS;
 }
