@@ -439,6 +439,9 @@ protected:
   /** Additive identity of the ScalarValueType. */
   static ScalarValueType m_ScalarValueZero;
 
+  /** Multiplicative identity of the ScalarValueType. */
+  static ScalarValueType m_ScalarValueOne;
+
   /** Special status value which indicates pending change to another sparse
    *  field layer. */
   static StatusType m_StatusChanging;

@@ -18,7 +18,7 @@
 #define __itkVectorSparseFieldLevelSetImageFilter_txx_
 
 #include "itkVectorSparseFieldLevelSetImageFilter.h"
-#include "itkZeroCrossingImageFilter.h"
+#include "itkVectorZeroCrossingImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkVectorShiftScaleImageFilter.h"
@@ -100,6 +100,12 @@ ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::Va
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::m_ValueZero = NumericTraits<ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage,
                                                              TOutputImage>::ValueType >::ZeroValue();
+
+template<class TInputImage, class TOutputImage>
+ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ScalarValueType
+VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
+::m_ScalarValueOne = NumericTraits<ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage,
+                                                             TOutputImage>::ScalarValueType >::One;
 
 template<class TInputImage, class TOutputImage>
 ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ScalarValueType
@@ -556,17 +562,17 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   // keep a handle to the shifted output
   this->m_ShiftedImage = shiftScaleFilter->GetOutput();
    
-// FIXME   typename ZeroCrossingImageFilter<OutputImageType, OutputImageType>::Pointer
-// FIXME     zeroCrossingFilter = ZeroCrossingImageFilter<OutputImageType,
-// FIXME     OutputImageType>::New();
-// FIXME   zeroCrossingFilter->SetInput(m_ShiftedImage);
-// FIXME   zeroCrossingFilter->GraftOutput(this->GetOutput());
-// FIXME   zeroCrossingFilter->SetBackgroundValue(m_ValueOne);
-// FIXME   zeroCrossingFilter->SetForegroundValue(m_ValueZero);
-// FIXME  
-// FIXME   zeroCrossingFilter->Update();
-// FIXME  
-// FIXME   this->GraftOutput(zeroCrossingFilter->GetOutput());
+  typename VectorZeroCrossingImageFilter<OutputImageType, OutputImageType>::Pointer
+    zeroCrossingFilter = VectorZeroCrossingImageFilter<OutputImageType,
+    OutputImageType>::New();
+  zeroCrossingFilter->SetInput(m_ShiftedImage);
+  zeroCrossingFilter->GraftOutput(this->GetOutput());
+  zeroCrossingFilter->SetBackgroundValue(m_ScalarValueOne);
+  zeroCrossingFilter->SetForegroundValue(m_ScalarValueZero);
+ 
+  zeroCrossingFilter->Update();
+ 
+  this->GraftOutput(zeroCrossingFilter->GetOutput());
 }
   
 template<class TInputImage, class TOutputImage>
