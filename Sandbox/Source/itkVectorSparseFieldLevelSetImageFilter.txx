@@ -21,7 +21,7 @@
 #include "itkZeroCrossingImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
-#include "itkShiftScaleImageFilter.h"
+#include "itkVectorShiftScaleImageFilter.h"
 #include "itkNeighborhoodAlgorithm.h"
 
 namespace itk {
@@ -546,16 +546,16 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
   // First need to subtract the iso-surface value from the input image.
  
-// FIXME
-// FIXME: Use the index cast filter to extract a component, process it and push it back.
-// FIXME
-// FIXME   typedef ShiftScaleImageFilter<InputImageType, OutputImageType> ShiftScaleFilterType;
-// FIXME   typename ShiftScaleFilterType::Pointer shiftScaleFilter = ShiftScaleFilterType::New();
-// FIXME   shiftScaleFilter->SetInput( this->GetInput()  );
-// FIXME   shiftScaleFilter->SetShift( - m_IsoSurfaceValue );
-// FIXME   // keep a handle to the shifted output
-// FIXME   m_ShiftedImage = shiftScaleFilter->GetOutput();
-// FIXME   
+  // 
+  //  Use the index cast filter to extract a component, process it and push it back.
+  // 
+  typedef VectorShiftScaleImageFilter<InputImageType, OutputImageType> ShiftScaleFilterType;
+  typename ShiftScaleFilterType::Pointer shiftScaleFilter = ShiftScaleFilterType::New();
+  shiftScaleFilter->SetInput( this->GetInput()  );
+  shiftScaleFilter->SetShift( - this->m_IsoSurfaceValue );
+  // keep a handle to the shifted output
+  this->m_ShiftedImage = shiftScaleFilter->GetOutput();
+   
 // FIXME   typename ZeroCrossingImageFilter<OutputImageType, OutputImageType>::Pointer
 // FIXME     zeroCrossingFilter = ZeroCrossingImageFilter<OutputImageType,
 // FIXME     OutputImageType>::New();
