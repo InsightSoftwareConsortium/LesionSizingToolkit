@@ -18,6 +18,7 @@
 #define __itkMatrixLinearInterpolateImageFunction_h
 
 #include "itkMatrixInterpolateImageFunction.h"
+#include "itkNumericTraitsMatrixPixel.h"
 
 namespace itk
 {
@@ -63,8 +64,8 @@ public:
   typedef typename Superclass::RealType       RealType;
     
   /** Grab the vector dimension from the superclass. */
-  itkStaticConstMacro(Dimension, unsigned int,
-                       Superclass::Dimension);
+  itkStaticConstMacro(RowDimensions, unsigned int, Superclass::RowDimensions);
+  itkStaticConstMacro(ColumnDimensions, unsigned int, Superclass::ColumnDimensions);
 
   /** Dimension underlying input image. */
   itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);

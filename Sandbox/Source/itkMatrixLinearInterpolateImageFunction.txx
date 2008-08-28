@@ -121,10 +121,14 @@ MatrixLinearInterpolateImageFunction< TInputImage, TCoordRep >
     if( overlap )
       {
       const PixelType input = this->GetInputImage()->GetPixel( neighIndex );
-      for(unsigned int k = 0; k < Dimension; k++ )
+      for( unsigned int r = 0; r < RowDimensions; r++ )
         {
-        output[k] += overlap * static_cast<RealType>( input[k] );
+        for( unsigned int c = 0; c < ColumnDimensions; c++ )
+          {
+          output(r,c) += overlap * static_cast<RealType>( input(r,c) );
+          }
         }
+
       totalOverlap += overlap;
       }
 
