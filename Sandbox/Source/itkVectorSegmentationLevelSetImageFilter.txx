@@ -87,7 +87,7 @@ VectorSegmentationLevelSetImageFilter<TInputImage, TFeatureImage, TOutputImage>
   // Allocate the images from which speeds will be sampled.
   if (this->GetState() == Superclass::UNINITIALIZED && m_AutoGenerateSpeedAdvection == true)
     {
-    if (this->GetSegmentationFunction()->GetPropagationWeight() != 0)
+    if (this->GetSegmentationFunction()->GetPropagationWeight() != 0) // FIXME
       {
       this->GenerateSpeedImage();
       }

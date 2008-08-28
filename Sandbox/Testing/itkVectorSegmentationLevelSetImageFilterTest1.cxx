@@ -18,6 +18,29 @@
 #include "itkImage.h"
 #include "itkVector.h"
 
+namespace itk {
+
+template <class TInputImage, class TFeatureImage, class TOutputImage >
+class HelperVectorSegmentationLevelSetImageFilter
+  : public VectorSegmentationLevelSetImageFilter<TInputImage, TFeatureImage, TOutputImage >
+{
+public:
+  typedef HelperVectorSegmentationLevelSetImageFilter    Self;
+  typedef VectorSegmentationLevelSetImageFilter<
+    TInputImage, TFeatureImage, TOutputImage>            Superclass;
+  typedef SmartPointer<Self>                             Pointer;
+  typedef SmartPointer<const Self>                       ConstPointer;
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  /** Runtime information support. */
+  itkTypeMacro(HelperVectorSegmentationLevelSetImageFilter, 
+     VectorSegmentationLevelSetImageFilter);
+};
+
+} // end namespace itk
+
 
 int main( int argc, char * argv [] )
 {
@@ -31,7 +54,7 @@ int main( int argc, char * argv [] )
   typedef itk::Image< LevelSetPixelType, Dimension >     LevelSetImageType;
   typedef itk::Image< FeaturePixelType, Dimension >      FeatureImageType;
 
-  typedef itk::VectorSegmentationLevelSetImageFilter< 
+  typedef itk::HelperVectorSegmentationLevelSetImageFilter< 
     LevelSetImageType, FeatureImageType, LevelSetImageType >      FilterType;
 
   typedef itk::VectorFiniteDifferenceFunction<LevelSetImageType>  FunctionType;

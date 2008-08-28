@@ -17,8 +17,9 @@
 #ifndef __itkVectorSegmentationLevelSetImageFilter_h_
 #define __itkVectorSegmentationLevelSetImageFilter_h_
 
-#include "itkSparseFieldLevelSetImageFilter.h"
+#include "itkVectorSparseFieldLevelSetImageFilter.h"
 #include "itkVectorSegmentationLevelSetFunction.h"
+#include "itkNumericTraitsVectorPixel.h"
 
 namespace itk {
 
@@ -56,7 +57,7 @@ namespace itk {
  * \par INPUTS
  * The input to any subclass of this filter is the seed image for the initial
  * level set embedding.  As with other subclasses of the
- * SparseLevelSetImageFilter, the type of the input image is is not important.
+ * VectorSparseLevelSetImageFilter, the type of the input image is is not important.
  * The (RequestedRegion) size of the seed image must, however, match the
  * (RequestedRegion) size of the feature image.
  *
@@ -76,7 +77,7 @@ namespace itk {
  *
  * \par OUTPUTS
  * The output of any subclass of this filter is a level set embedding as
- * described in SparseFieldLevelSetImageFilter.  The zero crossings of the output
+ * described in VectorSparseFieldLevelSetImageFilter.  The zero crossings of the output
  * image give the pixels closest to the level set boundary.  By ITK convention,
  * NEGATIVE values are pixels INSIDE the segmented region and POSITIVE values are
  * pixels OUTSIDE the segmented region.
@@ -140,7 +141,7 @@ template <class TInputImage,
           class TFeatureImage,
           class TOutputImage >
 class ITK_EXPORT VectorSegmentationLevelSetImageFilter
-  : public SparseFieldLevelSetImageFilter<TInputImage, TOutputImage >
+  : public VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage >
 {
 public:
   /** Inherited typedef from the superclass. Needs to be placed befroe
@@ -156,7 +157,7 @@ public:
   typedef typename OutputImageType::PixelType       OutputPixelType;
   
   /** Standard class typedefs */
-  typedef SparseFieldLevelSetImageFilter<TInputImage, OutputImageType> Superclass;
+  typedef VectorSparseFieldLevelSetImageFilter<TInputImage, OutputImageType> Superclass;
   typedef SmartPointer<Self>  Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
@@ -178,7 +179,7 @@ public:
   typedef typename SegmentationFunctionType::ImageType       SpeedImageType;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorSegmentationLevelSetImageFilter, SparseFieldLevelSetImageFilter);
+  itkTypeMacro(VectorSegmentationLevelSetImageFilter, VectorSparseFieldLevelSetImageFilter);
 
   /** Set/Get the maximum number of iterations allowed for the solver.  This
    *  prevents infinite loops if a solution "bounces". */
@@ -419,8 +420,6 @@ public:
   
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
-  itkConceptMacro(OutputHasNumericTraitsCheck,
-                  (Concept::HasNumericTraits<OutputPixelType>));
   /** End concept checking */
 #endif
 

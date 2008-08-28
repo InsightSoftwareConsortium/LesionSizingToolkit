@@ -17,7 +17,7 @@
 #ifndef __itkVectorSegmentationLevelSetFunction_h_
 #define __itkVectorSegmentationLevelSetFunction_h_
 
-#include "itkLevelSetFunction.h"
+#include "itkVectorLevelSetFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkMatrixLinearInterpolateImageFunction.h"
 #include "itkMatrixCastImageFilter.h"
@@ -36,25 +36,25 @@ namespace itk {
   \par
   In order to create a working function object, you must subclass the
   CalculateSpeedImage method to produce a "feature image" that is used by the
-  parent LevelSetFunction class as the PropagationSpeed for its calculations.
+  parent VectorLevelSetFunction class as the PropagationSpeed for its calculations.
 
   \sa VectorSegmentationLevelSetImageFilter
-  \sa LevelSetFunction
+  \sa VectorLevelSetFunction
 */
   
 template <class TImageType, class TFeatureImageType = TImageType>
 class ITK_EXPORT VectorSegmentationLevelSetFunction
-  : public LevelSetFunction<TImageType>
+  : public VectorLevelSetFunction<TImageType>
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorSegmentationLevelSetFunction Self;
-  typedef LevelSetFunction<TImageType> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef VectorSegmentationLevelSetFunction      Self;
+  typedef VectorLevelSetFunction<TImageType>      Superclass;
+  typedef SmartPointer<Self>                      Pointer;
+  typedef SmartPointer<const Self>                ConstPointer;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro( VectorSegmentationLevelSetFunction, LevelSetFunction );
+  itkTypeMacro( VectorSegmentationLevelSetFunction, VectorLevelSetFunction );
 
   /** Extract some parameters from the superclass. */
   typedef typename Superclass::ImageType ImageType;
@@ -73,8 +73,8 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
   /** Define an image type for the advection field. */
-  typedef Matrix< double, ImageDimension, ImageDimension >             MatrixType;
-  typedef Image< MatrixType, itkGetStaticConstMacro(ImageDimension)>   MatrixImageType;
+  typedef typename Superclass::MatrixType            MatrixType;
+  typedef typename Superclass::MatrixImageType       MatrixImageType;
 
 
   /** Define a scalar interpolator */
@@ -183,20 +183,8 @@ private:
 
 } // end namespace
 
-// Define instantiation macro for this template.
-#define ITK_TEMPLATE_VectorSegmentationLevelSetFunction(_, EXPORT, x, y) namespace itk { \
-  _(2(class EXPORT VectorSegmentationLevelSetFunction< ITK_TEMPLATE_2 x >)) \
-  namespace Templates { typedef VectorSegmentationLevelSetFunction< ITK_TEMPLATE_2 x > \
-                                         VectorSegmentationLevelSetFunction##y; } \
-  }
-
-#if ITK_TEMPLATE_EXPLICIT
-# include "Templates/itkVectorSegmentationLevelSetFunction+-.h"
-#endif
-
 #if ITK_TEMPLATE_TXX
 # include "itkVectorSegmentationLevelSetFunction.txx"
 #endif
-
 
 #endif
