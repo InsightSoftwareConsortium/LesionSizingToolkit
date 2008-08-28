@@ -19,6 +19,7 @@
 
 #include "itkImageFunction.h"
 #include "itkFixedArray.h"
+#include "itkNumericTraitsMatrixPixel.h"
 
 namespace itk
 {
@@ -41,7 +42,7 @@ struct GetDimension
  *
  * MatrixInterpolateImageFunction is the base for all ImageFunctions that
  * interpolates image with vector pixel types. This function outputs
- * a return value of type Vector<double,Dimension>.
+ * a return value of type Matrix<double,RowDimensions,ColumnDimensions>.
  *
  * This class is templated input image type and the coordinate
  * representation type.
@@ -62,8 +63,10 @@ class ITK_EXPORT MatrixInterpolateImageFunction :
 {
 public:
   /** Extract the vector dimension from the pixel template parameter. */
-  itkStaticConstMacro(Dimension, unsigned int,
-                      TInputImage::PixelType::Dimension);
+  itkStaticConstMacro(RowDimensions, unsigned int,
+                      TInputImage::PixelType::RowDimensions);
+  itkStaticConstMacro(ColumnDimensions, unsigned int,
+                      TInputImage::PixelType::ColumnDimensions);
   
   /** Dimension underlying input image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
@@ -137,9 +140,12 @@ public:
     {
     OutputType output;
     PixelType input = this->GetInputImage()->GetPixel( index );
-    for( unsigned int k = 0; k < Dimension; k++ )
+    for( unsigned int r = 0; r < RowDimensions; r++ )
       {
-      output[k] = static_cast<double>( input[k] );
+      for( unsigned int c = 0; c < ColumnDimensions; c++ )
+        {
+        output(r,c) = static_cast<double>( input(r,c) );
+        }
       }
     return ( output );
     }

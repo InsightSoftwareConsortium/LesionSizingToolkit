@@ -75,7 +75,7 @@ public:
   /** ContinuousIndex typedef support. */
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
 
-  /** Output type is Vector<double,Dimension> */
+  /** Output type is Matrix<double,RowDimensions,ColumnDimensions> */
   typedef typename Superclass::OutputType OutputType;
 
   /** Evaluate the function at a ContinuousIndex position

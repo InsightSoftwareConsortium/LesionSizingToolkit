@@ -174,7 +174,7 @@ public:
   SegmentationFunctionType;
     
   /** The type used for the advection field */
-  typedef typename SegmentationFunctionType::VectorImageType VectorImageType;
+  typedef typename SegmentationFunctionType::MatrixImageType MatrixImageType;
   typedef typename SegmentationFunctionType::ImageType       SpeedImageType;
   
   /** Run-time type information (and related methods). */
@@ -225,7 +225,7 @@ public:
   /** This function is for advanced applications.  Set the image sampled as the
    * advection term of this segmentation method.  In general, the advection image
    * is generated automatically by a subclass of this filter. */
-  void SetAdvectionImage( VectorImageType *v)
+  void SetAdvectionImage( MatrixImageType *v)
   { m_SegmentationFunction->SetAdvectionImage( v ); }
 
   /** Return a pointer to the image sampled as the speed term of the
@@ -235,49 +235,15 @@ public:
 
   /** Return a pointer to the image sampled as the advection term of the
    * segmentation algorithm. */
-  virtual const VectorImageType *GetAdvectionImage() const
+  virtual const MatrixImageType *GetAdvectionImage() const
   { return m_SegmentationFunction->GetAdvectionImage(); }
 
-  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED.  This method reverses
-   * the speed function direction, effectively changing inside feature values to
-   * outside feature values and vice versa. */
-  void SetUseNegativeFeaturesOn()
-  {
-    itkWarningMacro( << "SetUseNegativeFeaturesOn has been deprecated.  Please use ReverseExpansionDirectionOn() instead" );
-    this->ReverseExpansionDirectionOn();
-  }
   void SetUseNegativeFeaturesOff()
   {
     itkWarningMacro( << "SetUseNegativeFeaturesOff has been deprecated.  Please use ReverseExpansionDirectionOff() instead" );
     this->ReverseExpansionDirectionOff();
   }
 
-  /** THIS METHOD IS DEPRECATED AND SHOULD NOT BE USED. Set/Get the value of the UseNegativeFeatures flag.  This method is
-   * deprecated.  Use Set/Get ReverseExpansionDirection instead.*/
-  void SetUseNegativeFeatures( bool u )
-  {
-    itkWarningMacro( << "SetUseNegativeFeatures has been deprecated.  Please use SetReverseExpansionDirection instead" );
-    if (u == true)
-      {
-      this->SetReverseExpansionDirection(false);
-      }
-    else
-      {
-      this->SetReverseExpansionDirection(true);
-      }
-  }
-  bool GetUseNegativeFeatures() const
-  {
-    itkWarningMacro( << "GetUseNegativeFeatures has been deprecated.  Please use GetReverseExpansionDirection() instead" );
-    if ( m_ReverseExpansionDirection == false)
-      {
-      return true;
-      }
-    else
-      {
-      return false;
-      }
-  }
 
   /** Turn On/Off the flag which determines whether Positive or Negative speed
    * terms will cause surface expansion.  If set to TRUE then negative speed
