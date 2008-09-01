@@ -140,7 +140,7 @@ MatrixLinearInterpolateImageFunction< TInputImage, TCoordRep >
 
     }
 
-  return ( output );
+  return output;
 }
 
 } // end namespace itk
