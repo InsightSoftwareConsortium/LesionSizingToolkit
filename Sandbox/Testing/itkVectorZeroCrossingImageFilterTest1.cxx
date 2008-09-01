@@ -161,6 +161,31 @@ int main( int argc, char * argv [] )
     std::cout << "Catch EXPECTED Exception." << std::endl;
     }
 
+  //
+  // Now set a region that is not overlapping with the largest possible region.
+  //
+  LevelSetImageType::IndexType  startTooLarge;
+
+  startTooLarge[0] = start[0] + 1000;
+  startTooLarge[1] = start[1] + 1000;
+
+  regionTooLarge.SetSize( sizeTooLarge );
+  regionTooLarge.SetIndex( startTooLarge );
+
+  filter->GetOutput()->SetRequestedRegion( regionTooLarge );
+
+  try
+    {
+    filter->Update();
+    std::cerr << "Failure to catch expected exception" << std::endl;
+    return EXIT_FAILURE;
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cout << "Catch EXPECTED Exception." << std::endl;
+    }
+
+
 
   return EXIT_SUCCESS;
 }
