@@ -130,7 +130,37 @@ int main( int argc, char * argv [] )
   catch( itk::ExceptionObject & excp )
     {
     std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
     }
+
+
+  // 
+  //  Test Exception code
+  //
+  //  Purposely placing a requested region that is too large.
+  //
+  LevelSetImageType::RegionType regionTooLarge;
+  LevelSetImageType::SizeType   sizeTooLarge;
+
+  sizeTooLarge[0] = size[0] + 100;
+  sizeTooLarge[1] = size[1] + 100;
+
+  regionTooLarge.SetSize( sizeTooLarge );
+  regionTooLarge.SetIndex( start );
+
+  filter->GetOutput()->SetRequestedRegion( regionTooLarge );
+
+  try
+    {
+    filter->Update();
+    std::cerr << "Failure to catch expected exception" << std::endl;
+    return EXIT_FAILURE;
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cout << "Catch EXPECTED Exception." << std::endl;
+    }
+
 
   return EXIT_SUCCESS;
 }
