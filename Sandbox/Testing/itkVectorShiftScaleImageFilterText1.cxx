@@ -23,14 +23,13 @@ int main( int argc, char * argv [] )
   const unsigned int Dimension = 2;
   const unsigned int NumberOfPhases = 3;
 
-  typedef itk::Vector< float, NumberOfPhases >           LevelSetPixelType;
-  typedef itk::Vector< float, NumberOfPhases >           FeaturePixelType;
+  typedef char  PixelComponentType;
 
-  typedef itk::Image< LevelSetPixelType, Dimension >     LevelSetImageType;
-  typedef itk::Image< FeaturePixelType, Dimension >      FeatureImageType;
+  typedef itk::Vector< PixelComponentType, NumberOfPhases >     LevelSetPixelType;
+  typedef itk::Image< LevelSetPixelType, Dimension >            LevelSetImageType;
 
   typedef itk::VectorShiftScaleImageFilter< 
-    LevelSetImageType, LevelSetImageType >               FilterType;
+    LevelSetImageType, LevelSetImageType >                      FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
@@ -43,7 +42,7 @@ int main( int argc, char * argv [] )
   LevelSetImageType::IndexType  start;
 
   start.Fill( 0 );
-  size.Fill( 10 );
+  size.Fill( 256 );
 
   region.SetSize( size );
   region.SetIndex( start );
@@ -51,13 +50,30 @@ int main( int argc, char * argv [] )
   inputLevelSet->SetRegions( region );
   inputLevelSet->Allocate();
 
-  LevelSetImageType::PixelType pixel1;
+  PixelComponentType value;
 
-  pixel1[0] =  7;
-  pixel1[1] =  9;
-  pixel1[2] = 11;
+  PixelComponentType minValue = itk::NumericTraits< PixelComponentType >::NonpositiveMin();
 
-  inputLevelSet->FillBuffer( pixel1 );
+  value = minValue;
+
+  LevelSetPixelType pixel;
+
+  typedef itk::ImageRegionIterator< LevelSetImageType > IteratorType;
+
+  IteratorType itr( inputLevelSet, region );
+
+  itr.GoToBegin();
+
+  while( !itr.IsAtEnd() )
+    {
+    pixel[0] =  value;
+    pixel[1] =  value; 
+    pixel[2] =  value;
+
+    itr.Set( pixel );
+
+    ++itr;
+    }
 
   filter->SetInput( inputLevelSet );
 
@@ -100,6 +116,9 @@ int main( int argc, char * argv [] )
     {
     std::cerr << excp << std::endl;
     }
+
+  std::cout << "Overflow count  = " << filter->GetOverflowCount()  << std::endl;
+  std::cout << "Underflow count = " << filter->GetUnderflowCount() << std::endl;
 
   return EXIT_SUCCESS;
 }
