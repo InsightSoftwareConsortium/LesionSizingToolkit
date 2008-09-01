@@ -24,6 +24,12 @@ TARGET_LINK_LIBRARIES(itkNumericTraitsMatrixPixelTest1 ITKIO ITKNumerics)
 ADD_EXECUTABLE(itkMatrixLinearInterpolateImageFunctionTest1 itkMatrixLinearInterpolateImageFunctionTest1.cxx )
 TARGET_LINK_LIBRARIES(itkMatrixLinearInterpolateImageFunctionTest1 ITKIO ITKNumerics)
 
+ADD_EXECUTABLE(itkMatrixInterpolateImageFunctionTest1 itkMatrixInterpolateImageFunctionTest1.cxx )
+TARGET_LINK_LIBRARIES(itkMatrixInterpolateImageFunctionTest1 ITKIO ITKNumerics)
+
+ADD_EXECUTABLE(itkVectorShiftScaleImageFilterText1 itkVectorShiftScaleImageFilterText1.cxx )
+TARGET_LINK_LIBRARIES(itkVectorShiftScaleImageFilterText1 ITKIO ITKNumerics)
+
 ADD_TEST(itkSystemInformation ${CXX_TEST_PATH}/itkSystemInformation )
 ADD_TEST(itkVectorFiniteDifferenceImageFilterTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceImageFilterTest1 )
 ADD_TEST(itkVectorFiniteDifferenceFunctionTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceFunctionTest1 )
@@ -31,3 +37,6 @@ ADD_TEST(itkVectorSparseFieldLevelSetImageFilterTest1 ${CXX_TEST_PATH}/itkVector
 ADD_TEST(itkVectorSegmentationLevelSetImageFilterTest1 ${CXX_TEST_PATH}/itkVectorSegmentationLevelSetImageFilterTest1 )
 ADD_TEST(itkNumericTraitsMatrixPixelTest1.cxx ${CXX_TEST_PATH}/itkNumericTraitsMatrixPixelTest1 )
 ADD_TEST(itkMatrixLinearInterpolateImageFunctionTest1.cxx ${CXX_TEST_PATH}/itkMatrixLinearInterpolateImageFunctionTest1 )
+ADD_TEST(itkMatrixInterpolateImageFunctionTest1.cxx ${CXX_TEST_PATH}/itkMatrixInterpolateImageFunctionTest1 )
+ADD_TEST(itkVectorShiftScaleImageFilterText1.cxx ${CXX_TEST_PATH}/itkVectorShiftScaleImageFilterText1 )
+
