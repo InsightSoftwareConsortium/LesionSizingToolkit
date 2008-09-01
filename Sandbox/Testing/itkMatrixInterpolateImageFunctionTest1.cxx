@@ -140,6 +140,50 @@ int main( int argc, char * argv [] )
         }
       }
     } 
+
+  InterpolatorType1::PointType point1;
+
+  point1[0] = 4.5;
+  point1[1] = 4.5;
+
+  value1 = interpolator1->Evaluate( point1 );
+
+  for( unsigned row=0; row < NumberOfPhases; row++ )
+    {
+    for( unsigned col=0; col < Dimension; col++ )
+      {
+      if( value1(row,col) != pixel1(row,col) )
+        {
+        std::cerr << "Error in EvaluateAtContinuousIndex()" << std::endl;
+        return EXIT_FAILURE;
+        }
+      }
+    } 
+
+  InterpolatorType1::IndexType index;
+
+  index[0] = 4;
+  index[1] = 4;
+
+  value1 = interpolator1->EvaluateAtIndex( index );
+
+  for( unsigned row=0; row < NumberOfPhases; row++ )
+    {
+    for( unsigned col=0; col < Dimension; col++ )
+      {
+      if( value1(row,col) != pixel1(row,col) )
+        {
+        std::cerr << "Error in EvaluateAtContinuousIndex()" << std::endl;
+        return EXIT_FAILURE;
+        }
+      }
+    } 
+
+
+  interpolator1->Print( std::cout );
+
+  std::cout << "Name of Class " << interpolator1->GetNameOfClass() << std::endl;
+
   return EXIT_SUCCESS;
 }
 
