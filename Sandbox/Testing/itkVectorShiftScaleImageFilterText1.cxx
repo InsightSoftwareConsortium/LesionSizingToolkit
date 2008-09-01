@@ -72,6 +72,7 @@ int main( int argc, char * argv [] )
 
     itr.Set( pixel );
 
+    ++value;
     ++itr;
     }
 
