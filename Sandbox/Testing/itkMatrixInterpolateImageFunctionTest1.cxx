@@ -117,6 +117,8 @@ int main( int argc, char * argv [] )
   pixel1(0,1) =  9;
   pixel1(1,0) = 11;
   pixel1(1,1) = 13;
+  pixel1(2,0) = 17;
+  pixel1(2,1) = 19;
 
   image1->FillBuffer( pixel1 );
 
