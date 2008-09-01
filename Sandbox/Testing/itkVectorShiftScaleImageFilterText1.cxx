@@ -79,9 +79,9 @@ int main( int argc, char * argv [] )
 
   FilterType::RealType scale;
 
-  scale[0] = 2.0;
-  scale[1] = 3.0;
-  scale[2] = 4.0;
+  scale[0] = 1.0;
+  scale[1] = 2.0;
+  scale[2] = 3.0;
 
   filter->SetScale( scale );
   if( scale != filter->GetScale() )
@@ -93,9 +93,9 @@ int main( int argc, char * argv [] )
 
   FilterType::RealType shift;
 
-  shift[0] = 2.0;
-  shift[1] = 3.0;
-  shift[2] = 4.0;
+  shift[0] = 0.0;
+  shift[1] = 1.0;
+  shift[2] = 2.0;
 
 
   filter->SetShift( shift );

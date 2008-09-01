@@ -58,9 +58,57 @@ int main( int argc, char * argv [] )
 
   filter->SetInput( inputLevelSet );
 
-  filter->SetNumberOfIterations( 5 );
+  const unsigned int numberOfLayers = 5;
+
+  filter->SetNumberOfLayers( numberOfLayers );
+  if( numberOfLayers != filter->GetNumberOfLayers() )
+    {
+    std::cerr << "Error: Set/Get NumberOfLayers " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  const unsigned int numberOfIterations = 5;
+
+  filter->SetNumberOfIterations( numberOfIterations );
+  if( numberOfIterations != filter->GetNumberOfIterations() )
+    {
+    std::cerr << "Error: Set/Get NumberOfIterations " << std::endl;
+    return EXIT_FAILURE;
+    }
 
   filter->SetDifferenceFunction( differenceFunction );
+
+  FilterType::ValueType isoSurfaceValue;
+  isoSurfaceValue[0] = 0.0;
+  isoSurfaceValue[1] = 0.0;
+
+  filter->SetIsoSurfaceValue( isoSurfaceValue );
+  if( isoSurfaceValue != filter->GetIsoSurfaceValue() )
+    {
+    std::cerr << "Error: Set/Get IsoSurfaceValue " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  bool interpolateSurfaceLocation = true;
+  filter->SetInterpolateSurfaceLocation( interpolateSurfaceLocation );
+  if( interpolateSurfaceLocation != filter->GetInterpolateSurfaceLocation() )
+    {
+    std::cerr << "Error: Set/Get InterpolateSurfaceLocation " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  interpolateSurfaceLocation = false;
+  filter->SetInterpolateSurfaceLocation( interpolateSurfaceLocation );
+  if( interpolateSurfaceLocation != filter->GetInterpolateSurfaceLocation() )
+    {
+    std::cerr << "Error: Set/Get InterpolateSurfaceLocation " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  filter->InterpolateSurfaceLocationOff();
+  filter->InterpolateSurfaceLocationOn();
+
+
 
   // Exercise the Print method 
   filter->Print( std::cout );
