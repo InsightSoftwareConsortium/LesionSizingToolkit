@@ -122,6 +122,14 @@ int main( int argc, char * argv [] )
     } 
 
 
+  //
+  // Test the code in a corner of the image
+  //
+  cindex[0] = -0.3;
+  cindex[1] = -0.3;
+
+  value1 = interpolator1->EvaluateAtContinuousIndex( cindex );
+
   interpolator1->Print( std::cout );
 
   std::cout << "Name of Class " << interpolator1->GetNameOfClass() << std::endl;
