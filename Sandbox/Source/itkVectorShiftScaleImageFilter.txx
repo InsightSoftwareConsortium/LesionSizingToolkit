@@ -22,6 +22,7 @@
 #include "itkImageRegionConstIterator.h"
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
+#include "itkMeasurementVectorTraits.h"
 
 namespace itk {
 
