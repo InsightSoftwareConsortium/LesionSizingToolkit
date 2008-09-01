@@ -183,6 +183,7 @@ int main( int argc, char * argv [] )
   interpolator1->Print( std::cout );
 
   std::cout << "Name of Class " << interpolator1->GetNameOfClass() << std::endl;
+  std::cout << "Name of SuperClass " << interpolator1->Superclass::GetNameOfClass() << std::endl;
 
   return EXIT_SUCCESS;
 }
