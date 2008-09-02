@@ -89,8 +89,8 @@ public:
   itkGetMacro(Scale,RealType);
 
   /** Get the number of pixels that underflowed and overflowed. */
-  itkGetMacro(UnderflowCount,long);
-  itkGetMacro(OverflowCount,long);
+  itkGetMacro(UnderflowCount,unsigned long);
+  itkGetMacro(OverflowCount,unsigned long);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -119,10 +119,10 @@ private:
   RealType m_Shift;
   RealType m_Scale;
 
-  long m_UnderflowCount;
-  long m_OverflowCount;
-  Array<long> m_ThreadUnderflow;
-  Array<long> m_ThreadOverflow;
+  unsigned long m_UnderflowCount;
+  unsigned long m_OverflowCount;
+  Array<unsigned long> m_ThreadUnderflow;
+  Array<unsigned long> m_ThreadOverflow;
 };
 
   

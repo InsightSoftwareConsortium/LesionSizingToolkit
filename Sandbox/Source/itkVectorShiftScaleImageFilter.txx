@@ -49,7 +49,7 @@ void
 VectorShiftScaleImageFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData ()
 {
-  int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int numberOfThreads = this->GetNumberOfThreads();
 
   //  Allocate and initialize the thread temporaries
   m_ThreadUnderflow.SetSize(numberOfThreads);
@@ -63,13 +63,13 @@ void
 VectorShiftScaleImageFilter<TInputImage, TOutputImage>
 ::AfterThreadedGenerateData ()
 {
-  int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int numberOfThreads = this->GetNumberOfThreads();
 
   m_UnderflowCount = 0;
   m_OverflowCount = 0;
 
   // Accumulate counts for each thread
-  for( int i = 0; i < numberOfThreads; i++)
+  for(unsigned int i = 0; i < numberOfThreads; i++)
     {
     m_UnderflowCount += m_ThreadUnderflow[i];
     m_OverflowCount += m_ThreadOverflow[i];
