@@ -78,6 +78,11 @@ public:
     {
     this->Superclass::Initialize();
     }
+
+  void CopyInputToOutput()
+    {
+    this->Superclass::CopyInputToOutput();
+    }
 };
 
 } // end namespace itk
@@ -271,6 +276,11 @@ int main( int argc, char * argv [] )
 
   helperFilter->SetInput( inputLevelSet );
 
+  FunctionType::Pointer helperDifferenceFunction = FunctionType::New();
+
+  helperFilter->SetDifferenceFunction( helperDifferenceFunction );
+
+  helperFilter->CopyInputToOutput();
   helperFilter->Initialize();
 
   helperFilter->ProcessOutsideList( outsideList, changeToStatus );
