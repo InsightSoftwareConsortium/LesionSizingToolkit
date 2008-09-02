@@ -18,11 +18,53 @@
 #include "itkImage.h"
 #include "itkVector.h"
 
+namespace itk {
+
+template <class TInputImage, class TOutputImage >
+class HelperVectorSparseFieldLevelSetImageFilter
+  : public VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage >
+{
+public:
+  typedef HelperVectorSparseFieldLevelSetImageFilter    Self;
+  typedef VectorSparseFieldLevelSetImageFilter<
+    TInputImage, TOutputImage>                          Superclass;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  /** Runtime information support. */
+  itkTypeMacro(HelperVectorSparseFieldLevelSetImageFilter, 
+     VectorSparseFieldLevelSetImageFilter);
+
+  typedef typename Superclass::ValueType            ValueType;
+  typedef typename Superclass::ScalarValueType      ScalarValueType;
+
+  ValueType GetValueZero() const 
+    {
+    return this->Superclass::GetValueZero(); 
+    }
+
+  ValueType GetValueOne() const 
+    {
+    return this->Superclass::GetValueOne(); 
+    }
+
+  ScalarValueType GetScalarValueZero() const
+    {
+    return this->Superclass::GetScalarValueZero(); 
+    }
+};
+
+} // end namespace itk
+
+
 int main( int argc, char * argv [] )
 {
 
   const unsigned int Dimension = 2;
-  const unsigned int NumberOfPhases = 2;
+  const unsigned int NumberOfPhases = 3;
 
   typedef itk::Vector< float, NumberOfPhases >           LevelSetPixelType;
   typedef itk::Vector< float, NumberOfPhases >           FeaturePixelType;
@@ -81,6 +123,7 @@ int main( int argc, char * argv [] )
   FilterType::ValueType isoSurfaceValue;
   isoSurfaceValue[0] = 0.0;
   isoSurfaceValue[1] = 0.0;
+  isoSurfaceValue[2] = 0.0;
 
   filter->SetIsoSurfaceValue( isoSurfaceValue );
   if( isoSurfaceValue != filter->GetIsoSurfaceValue() )
@@ -109,7 +152,6 @@ int main( int argc, char * argv [] )
   filter->InterpolateSurfaceLocationOn();
 
 
-
   // Exercise the Print method 
   filter->Print( std::cout );
 
@@ -123,6 +165,37 @@ int main( int argc, char * argv [] )
     }
 
   std::cout << "Number of elapsed iterations = " << filter->GetElapsedIterations() << std::endl;
+
+ 
+  typedef itk::HelperVectorSparseFieldLevelSetImageFilter< 
+    LevelSetImageType, LevelSetImageType >               HelperFilterType;
+
+  HelperFilterType::Pointer helperFilter = HelperFilterType::New();
+
+  HelperFilterType::ValueType   valueZero = helperFilter->GetValueZero();
+  HelperFilterType::ValueType   valueOne  = helperFilter->GetValueOne();
+
+  for(unsigned int k=0; k < NumberOfPhases; k++)
+    {
+    if( valueOne[k] != 1 )
+      {
+      std::cerr << "Error in GetValueOne()" << std::endl;
+      return EXIT_FAILURE;
+      }
+    if( valueZero[k] != 0 )
+      {
+      std::cerr << "Error in GetValueZero()" << std::endl;
+      return EXIT_FAILURE;
+      }
+    }
+
+  FilterType::ScalarValueType scalarValueZero = helperFilter->GetScalarValueZero();
+ 
+  if( scalarValueZero != 0 )
+    {
+    std::cerr << "Error in GetScalarValueZero()" << std::endl;
+    return EXIT_FAILURE;
+    }
 
   return EXIT_SUCCESS;
 }
