@@ -42,6 +42,8 @@ public:
   typedef typename Superclass::ScalarValueType      ScalarValueType;
   typedef typename Superclass::IndexType            IndexType;
   typedef typename Superclass::TimeStepType         TimeStepType;
+  typedef typename Superclass::LayerType            LayerType;
+  typedef typename Superclass::StatusType           StatusType;
 
   ValueType GetValueZero() const 
     {
@@ -67,7 +69,15 @@ public:
   return this->Superclass::CalculateUpdateValue(idx,dt,value,change);
   }
 
+  void ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus)
+    {
+    this->Superclass::ProcessOutsideList( OutsideList, ChangeToStatus );
+    };
 
+  void Initialize()
+    {
+    this->Superclass::Initialize();
+    }
 };
 
 } // end namespace itk
@@ -253,5 +263,16 @@ int main( int argc, char * argv [] )
     }
 
    
-  return EXIT_SUCCESS;
+  typedef HelperFilterType::LayerType  LayerType;
+
+  LayerType::Pointer outsideList = LayerType::New();
+
+  HelperFilterType::StatusType changeToStatus;
+
+  helperFilter->SetInput( inputLevelSet );
+
+  helperFilter->Initialize();
+
+  helperFilter->ProcessOutsideList( outsideList, changeToStatus );
+
 }
