@@ -31,6 +31,25 @@ int main( int argc, char * argv [] )
 
   typedef itk::SparseFieldCityBlockNeighborList< NeighborhoodType > NeighborhoodListType;
 
+  NeighborhoodListType neighborList;
+
+  NeighborhoodListType::RadiusType radius = neighborList.GetRadius();
+
+  std::cout << "Radius = " << radius << std::endl;
+
+  unsigned int size = neighborList.GetSize();
+
+  std::cout << "Size = " << size << std::endl;
+
+  std::cout << std::endl;
+
+  std::cout << "Index      Offset" << std::endl;
+
+  for( unsigned int i=0; i < size; i++ )
+    {
+    std::cout << neighborList.GetArrayIndex( i ) << "      ";
+    std::cout << neighborList.GetNeighborhoodOffset( i ) << std::endl;
+    }
 
   return EXIT_SUCCESS;
 }
