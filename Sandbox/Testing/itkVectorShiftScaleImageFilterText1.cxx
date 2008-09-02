@@ -118,8 +118,61 @@ int main( int argc, char * argv [] )
     std::cerr << excp << std::endl;
     }
 
-  std::cout << "Overflow count  = " << filter->GetOverflowCount()  << std::endl;
-  std::cout << "Underflow count = " << filter->GetUnderflowCount() << std::endl;
+  
+  LevelSetImageType::Pointer outputImage = filter->GetOutput();
+
+  IteratorType otr( outputImage, outputImage->GetBufferedRegion() );
+
+  itr.GoToBegin();
+  otr.GoToBegin();
+
+  typedef itk::NumericTraits< PixelComponentType >::RealType PixelComponentRealType;
+
+  const double tolerance = 1e-6;
+
+  unsigned long overflowCount  = 0L;
+  unsigned long underflowCount = 0L;
+ 
+  while( !itr.IsAtEnd() )
+    {
+    for( unsigned int i=0; i < NumberOfPhases; i++ )
+      {
+      PixelComponentRealType componentValue = itr.Get()[i];
+      componentValue += shift[i];
+      componentValue *= scale[i];
+      if( componentValue < itk::NumericTraits< PixelComponentType >::NonpositiveMin() )
+        {
+        componentValue = itk::NumericTraits< PixelComponentType >::NonpositiveMin();
+        underflowCount++;
+        }
+      if( componentValue > itk::NumericTraits< PixelComponentType >::max() )
+        {
+        componentValue = itk::NumericTraits< PixelComponentType >::max();
+        overflowCount++;
+        }
+      if( vcl_abs( componentValue - otr.Get()[i] ) > tolerance )
+        {
+        std::cerr << "Error in pixel = " << itr.GetIndex() << std::endl;
+        return EXIT_FAILURE;
+        }
+      } 
+    ++itr;
+    ++otr;
+    }
+
+  if( overflowCount != filter->GetOverflowCount() )
+    {
+    std::cerr << "Overflow count error = " << std::endl;
+    std::cerr << "expected = "  << overflowCount << std::endl;
+    std::cerr << "but received = "  << filter->GetOverflowCount()  << std::endl;
+    }
+
+  if( underflowCount != filter->GetUnderflowCount() )
+    {
+    std::cerr << "Underflow count error = " << std::endl;
+    std::cerr << "expected = "  << underflowCount << std::endl;
+    std::cerr << "but received = "  << filter->GetUnderflowCount()  << std::endl;
+    }
 
   return EXIT_SUCCESS;
 }
