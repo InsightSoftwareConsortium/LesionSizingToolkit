@@ -16,6 +16,7 @@
 #include "itkVectorZeroCrossingImageFilter.h"
 #include "itkImage.h"
 #include "itkVector.h"
+#include "itkImageRegionIteratorWithIndex.h"
 
 int main( int argc, char * argv [] )
 {
@@ -23,7 +24,7 @@ int main( int argc, char * argv [] )
   const unsigned int Dimension = 2;
   const unsigned int NumberOfPhases = 3;
 
-  typedef char  PixelComponentType;
+  typedef signed char  PixelComponentType;
 
   typedef itk::Vector< PixelComponentType, NumberOfPhases >     LevelSetPixelType;
   typedef itk::Image< LevelSetPixelType, Dimension >            LevelSetImageType;
@@ -58,7 +59,7 @@ int main( int argc, char * argv [] )
 
   LevelSetPixelType pixel;
 
-  typedef itk::ImageRegionIterator< LevelSetImageType > IteratorType;
+  typedef itk::ImageRegionIteratorWithIndex< LevelSetImageType > IteratorType;
 
   IteratorType itr( inputLevelSet, region );
 
@@ -131,6 +132,47 @@ int main( int argc, char * argv [] )
     {
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
+    }
+
+  LevelSetImageType::Pointer outputImage = filter->GetOutput();
+
+  IteratorType otr( outputImage, outputImage->GetBufferedRegion() );
+
+  itr.GoToBegin();
+  otr.GoToBegin();
+
+  typedef itk::NumericTraits< PixelComponentType >::RealType PixelComponentRealType;
+
+  while( !itr.IsAtEnd() )
+    {
+
+    LevelSetImageType::IndexType index = itr.GetIndex();
+
+    for( unsigned int i=0; i < NumberOfPhases; i++ )
+      {
+
+      PixelComponentRealType componentValue = itr.Get()[i];
+
+      if( index[0] == 127 )
+        {
+        if( componentValue == backgroundValue )
+          {
+          std::cerr << "Error: missing zero crossing at " << index << std::endl;
+          return EXIT_FAILURE;
+          }
+        }
+      else
+        {
+        if( componentValue == foregroundValue ) 
+          {
+          std::cerr << "Error: misplaced zero crossing at " << index << std::endl;
+          return EXIT_FAILURE;
+          }
+        }
+      } 
+
+    ++itr;
+    ++otr;
     }
 
 
