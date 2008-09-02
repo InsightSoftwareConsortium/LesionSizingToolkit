@@ -416,6 +416,7 @@ protected:
   
   itkGetConstMacro(ValueZero, ValueType);
   itkGetConstMacro(ValueOne, ValueType);
+  itkGetConstMacro(ScalarValueZero, ScalarValueType);
 
   /** Connectivity information for examining neighbor pixels.   */
   SparseFieldCityBlockNeighborList<NeighborhoodIterator<OutputImageType> >
