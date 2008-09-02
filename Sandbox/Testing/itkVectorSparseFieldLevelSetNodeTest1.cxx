@@ -37,9 +37,9 @@ int main( int argc, char * argv [] )
   NodeType node2;
   NodeType node3;
 
-  node1.Next = &node2;
-  node1.Program = &node3;
-  node3.m_Value = index1;
+  node1.Next     = &node2;
+  node1.Previous = &node3;
+  node3.m_Value  = index1;
  
   return EXIT_SUCCESS;
 }
