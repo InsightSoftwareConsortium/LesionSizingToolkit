@@ -182,22 +182,18 @@ VectorLevelSetFunction<TImageType>::ComputeMeanCurvature(
 }
 
 template <class TImageType>
-typename VectorLevelSetFunction<TImageType>::VectorType
-VectorLevelSetFunction<TImageType>::InitializeZeroVectorConstant()
+typename VectorLevelSetFunction<TImageType>::MatrixType
+VectorLevelSetFunction<TImageType>::InitializeZeroMatrixConstant()
 {
-  VectorType ans;
-  for (unsigned int i = 0; i < ImageDimension; ++i)
-    { 
-    ans[i] = NumericTraits<ScalarValueType>::Zero; 
-    }
-
+  MatrixType ans;
+  ans.fill( NumericTraits<ScalarValueType>::Zero );
   return ans;
 }
 
 template <class TImageType>
-typename VectorLevelSetFunction<TImageType>::VectorType
-VectorLevelSetFunction<TImageType>::m_ZeroVectorConstant =
-VectorLevelSetFunction<TImageType>::InitializeZeroVectorConstant();
+typename VectorLevelSetFunction<TImageType>::MatrixType
+VectorLevelSetFunction<TImageType>::m_ZeroMatrixConstant =
+VectorLevelSetFunction<TImageType>::InitializeZeroMatrixConstant();
 
 template <class TImageType>
 void
@@ -298,12 +294,18 @@ VectorLevelSetFunction< TImageType >
 {
   unsigned int i, j;  
   const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
-  const ScalarValueType center_value  = it.GetCenterPixel();
+  const PixelType center_value  = it.GetCenterPixel();
 
   const NeighborhoodScalesType neighborhoodScales = this->ComputeNeighborhoodScales();
 
-  ScalarValueType laplacian, x_energy, laplacian_term, propagation_term,
-    curvature_term, advection_term, propagation_gradient;
+  ScalarValueType laplacian;
+  ScalarValueType x_energy;
+  ScalarValueType laplacian_term;
+  ScalarValueType propagation_term;
+  ScalarValueType curvature_term;
+  ScalarValueType advection_term;
+  ScalarValueType propagation_gradient;
+
   VectorType advection_field;
 
   // Global data structure

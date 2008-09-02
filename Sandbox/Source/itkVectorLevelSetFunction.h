@@ -127,7 +127,7 @@ public:
   /** Advection field.  Default implementation returns a vector of zeros. */
   virtual MatrixType AdvectionField(const NeighborhoodType &,
                                     const FloatOffsetType &, GlobalDataStruct * = 0)  const
-    { return m_ZeroVectorConstant; }
+    { return m_ZeroMatrixConstant; }
 
   /** Propagation speed.  This term controls surface expansion/contraction.
    *  Default implementation returns zero. */ 
@@ -314,10 +314,10 @@ protected:
 
   /** This method's only purpose is to initialize the zero vector
    * constant. */
-  static VectorType InitializeZeroVectorConstant();
+  static MatrixType InitializeZeroMatrixConstant();
   
   /** Zero vector constant. */
-  static VectorType m_ZeroVectorConstant;
+  static MatrixType m_ZeroMatrixConstant;
 
   /** Epsilon magnitude controls the lower limit for gradient magnitude. */
   ScalarValueType m_EpsilonMagnitude;
