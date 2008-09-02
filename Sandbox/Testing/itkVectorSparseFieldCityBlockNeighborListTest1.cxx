@@ -43,12 +43,21 @@ int main( int argc, char * argv [] )
 
   std::cout << std::endl;
 
-  std::cout << "Index      Offset" << std::endl;
+  std::cout << "Index     Offset" << std::endl;
 
   for( unsigned int i=0; i < size; i++ )
     {
+    std::cout << "   ";
     std::cout << neighborList.GetArrayIndex( i ) << "      ";
     std::cout << neighborList.GetNeighborhoodOffset( i ) << std::endl;
+    }
+
+  std::cout << std::endl;
+  std::cout << "Strides " << std::endl;
+
+  for( unsigned int j=0; j < Dimension; j++ )
+    {
+    std::cout << j <<  " : " << neighborList.GetStride( j ) << std::endl;
     }
 
   return EXIT_SUCCESS;
