@@ -40,6 +40,8 @@ public:
 
   typedef typename Superclass::ValueType            ValueType;
   typedef typename Superclass::ScalarValueType      ScalarValueType;
+  typedef typename Superclass::IndexType            IndexType;
+  typedef typename Superclass::TimeStepType         TimeStepType;
 
   ValueType GetValueZero() const 
     {
@@ -55,6 +57,17 @@ public:
     {
     return this->Superclass::GetScalarValueZero(); 
     }
+
+  virtual ValueType CalculateUpdateValue(
+    const IndexType &idx,
+    const TimeStepType &dt,
+    const ValueType &value,
+    const ValueType &change)
+  { 
+  return this->Superclass::CalculateUpdateValue(idx,dt,value,change);
+  }
+
+
 };
 
 } // end namespace itk
@@ -195,6 +208,35 @@ int main( int argc, char * argv [] )
     {
     std::cerr << "Error in GetScalarValueZero()" << std::endl;
     return EXIT_FAILURE;
+    }
+
+  const HelperFilterType::TimeStepType  timeDelta = 0.1;
+
+  HelperFilterType::IndexType       idx;
+  HelperFilterType::ValueType       value;
+  HelperFilterType::ValueType       change;
+  
+  value[0] = 13;
+  value[1] = 17;
+  value[2] = 19;
+
+  change[0] = 2;
+  change[1] = 3;
+  change[2] = 4;
+
+  HelperFilterType::ValueType updatedValue = 
+    helperFilter->CalculateUpdateValue( idx, timeDelta, value, change );
+
+  const double tolerance = 1e-5;
+
+  for( unsigned int f = 0; f < NumberOfPhases; f++ )
+    {
+    double newValue = value[f] + timeDelta * change[f];
+    if( vcl_abs( updatedValue[f] - newValue ) > tolerance )
+      {
+      std::cerr << "Error in CalculateUpdateValue() " << std::endl;
+      return EXIT_FAILURE;
+      }
     }
 
   return EXIT_SUCCESS;
