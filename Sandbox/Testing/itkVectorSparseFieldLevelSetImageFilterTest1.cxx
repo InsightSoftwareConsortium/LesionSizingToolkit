@@ -239,5 +239,19 @@ int main( int argc, char * argv [] )
       }
     }
 
+  filter->SetNumberOfLayers(0);
+  
+  try
+    {
+    filter->Update();
+    std::cerr << "Error: Failure to catch an Expected Exception" << std::endl;
+    return EXIT_FAILURE;
+    }
+  catch( itk::ExceptionObject & )
+    {
+    std::cout << "Catched EXPECTED Exception" << std::endl;
+    }
+
+   
   return EXIT_SUCCESS;
 }
