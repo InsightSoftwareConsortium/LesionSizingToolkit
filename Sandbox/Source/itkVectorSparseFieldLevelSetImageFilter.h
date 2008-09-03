@@ -266,6 +266,10 @@ public:
 
   /** A type for a list of LayerPointerTypes */
   typedef std::vector<LayerPointerType> LayerListType;
+
+  /** A type for a list of LayerListTypes. Each one of them will correspond to
+   * a component (or phase) of the multi-component level set image. */
+  typedef std::vector<LayerListType>  LayerListComponentsType;
   
   /** Type used for storing status information */
   typedef signed char StatusType;
@@ -331,10 +335,8 @@ protected:
     const ValueType &value,
     const ValueType &change)
   { 
-  const unsigned int numberOfComponents = 
-    itk::MeasurementVectorTraits::GetLength( value );
   ValueType output;
-  for( unsigned int i=0; i < numberOfComponents; i++ )
+  for( unsigned int i=0; i < this->m_NumberOfComponents; i++ )
     {
     output[i] = value[i] + dt * change[i];
     }
@@ -375,16 +377,17 @@ protected:
   /** Initializes a layer of the sparse field using a previously initialized
    * layer. Builds the list of nodes in m_Layer[to] using m_Layer[from].
    * Marks values in the m_StatusImage. */
-  void ConstructLayer(StatusType from, StatusType to);
+  void ConstructLayer( StatusType from, StatusType to, unsigned int component);
 
   /** Constructs the active layer and initialize the first layers inside and
    * outside of the active layer.  The active layer defines the position of the
    * zero level set by its values, which are constrained within a range around
    *  zero. */
-  void ConstructActiveLayer();
+  void ConstructActiveLayers();
+  void ConstructActiveLayer(unsigned int component);
 
   /** Initializes the values of the active layer set. */
-  void InitializeActiveLayerValues();
+  void InitializeActiveLayerValues(unsigned int component);
   
   /** Adjusts the values in a single layer "to" using values in a neighboring
    *  layer "from".  The list of indicies in "to" are traversed and assigned
@@ -394,13 +397,14 @@ protected:
    *  propagation is inwards (more negative).  "InOrOut" == 2 indicates this
    *  propagation is outwards (more positive). */   
   void PropagateLayerValues(StatusType from, StatusType to,
-                            StatusType promote, int InOrOut);
+                            StatusType promote, int InOrOut,
+                            unsigned int component);
 
   /** Adjusts the values associated with all the index layers of the sparse
    * field by propagating out one layer at a time from the active set. This
    * method also takes care of deleting nodes from the layers which have been
    * marked in the status image as having been moved to other layers.*/
-  void PropagateAllLayerValues();
+  void PropagateAllLayerValues(unsigned int component);
 
   /** Updates the active layer values using m_UpdateBuffer. Also creates an
    *  "up" and "down" list for promotion/demotion of indicies leaving the
@@ -467,12 +471,17 @@ protected:
    * field. Layers are organized as follows: m_Layer[0] = active layer, 
    * m_Layer[i:odd] = inside layer (i+1)/2, m_Layer[i:even] = outside layer i/2
   */
-  LayerListType m_Layers;
+  LayerListType m_Layers;  // FIXME: DEPRECATED: Replaced with m_LayersComponents 
+  LayerListComponentsType   m_LayersComponents;
 
   /** The number of layers to use in the sparse field.  Sparse field will
    * consist of m_NumberOfLayers layers on both sides of a single active layer.
    * This active layer is the interface of interest, i.e. the zero level set.*/
   unsigned int m_NumberOfLayers;
+
+  /** The number of components per pixel in the input vector image. This is an
+   * auxiliary variable used to cache the number of components. */
+  unsigned int m_NumberOfComponents;
 
   /** An image of status values used internally by the algorithm. */
   typename StatusImageType::Pointer m_StatusImage;
