@@ -284,7 +284,7 @@ public:
   typedef ObjectStore<LayerNodeType> LayerNodeStorageType;
 
   /** Container type used to store updates to the active layer. */
-  typedef std::vector<ValueType> UpdateBufferType;
+  typedef std::vector<ScalarValueType> UpdateBufferType;
 
   /** Set/Get the number of layers to use in the sparse field.  Argument is the
    *  number of layers on ONE side of the active layer, so the total layers in
@@ -329,18 +329,13 @@ protected:
    * output values are applied during each iteration.  The default simply
    * follows the standard finite difference scheme of scaling the change by the
    * timestep and adding to the value of the previous iteration.*/
-  inline virtual ValueType CalculateUpdateValue(
+  inline virtual ScalarValueType CalculateUpdateValue(
     const IndexType &itkNotUsed(idx),
     const TimeStepType &dt,
-    const ValueType &value,
-    const ValueType &change)
+    const ScalarValueType &value,
+    const ScalarValueType &change)
   { 
-  ValueType output;
-  for( unsigned int i=0; i < this->m_NumberOfComponents; i++ )
-    {
-    output[i] = value[i] + dt * change[i];
-    }
-  return output;
+  return value + dt * change;
   }
 
   /**This method packages the output(s) into a consistent format.  The default
@@ -410,13 +405,15 @@ protected:
    *  "up" and "down" list for promotion/demotion of indicies leaving the
    *  active set. */
   void UpdateActiveLayerValues(TimeStepType dt, LayerType *StatusUpList,
-                               LayerType *StatusDownList);
+                               LayerType *StatusDownList, unsigned int component);
   /** */
   void ProcessStatusList(LayerType *InputList, LayerType *OutputList,
-                         StatusType ChangeToStatus, StatusType SearchForStatus);
+                         StatusType ChangeToStatus, StatusType SearchForStatus,
+                         unsigned int component);
 
   /** */
-  void ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus);
+  void ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus, 
+                          unsigned int component);
   
   itkGetConstMacro(ValueZero, ValueType);
   itkGetConstMacro(ValueOne, ValueType);

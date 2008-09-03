@@ -287,10 +287,10 @@ VectorLevelSetFunction< TImageType>
 }
   
 template< class TImageType >
-typename VectorLevelSetFunction< TImageType >::PixelType
+typename VectorLevelSetFunction< TImageType >::ScalarValueType
 VectorLevelSetFunction< TImageType >
 ::ComputeUpdate(const NeighborhoodType &it, void *globalData,
-                const FloatOffsetType& offset)
+                const FloatOffsetType& offset, unsigned int component)
 {
   unsigned int i, j;  
   const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
@@ -456,11 +456,12 @@ VectorLevelSetFunction< TImageType >
       laplacian * m_LaplacianSmoothingWeight * LaplacianSmoothingSpeed(it,offset, gd);
     }
   else 
+    {
     laplacian_term = ZERO;
+    }
 
   // Return the combination of all the terms.
-  return ( PixelType ) ( curvature_term - propagation_term 
-                         - advection_term - laplacian_term );
+  return ( ScalarValueType ) ( curvature_term - propagation_term - advection_term - laplacian_term );
 } 
 
 } // end namespace itk

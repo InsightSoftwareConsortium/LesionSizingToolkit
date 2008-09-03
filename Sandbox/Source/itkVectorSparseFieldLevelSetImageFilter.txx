@@ -164,67 +164,79 @@ void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::ApplyUpdate(TimeStepType dt)
 {
-  unsigned int i, j, k, t;
-
-  StatusType up_to, up_search;
-  StatusType down_to, down_search;
-  
-  LayerPointerType UpList[2];
-  LayerPointerType DownList[2];
-  for (i = 0; i < 2; ++i)
+ 
+  for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
     {
-    UpList[i]   = LayerType::New();
-    DownList[i] = LayerType::New();
+    unsigned int j;
+    unsigned int k;
+    unsigned int t;
+
+    StatusType up_to;
+    StatusType up_search;
+    StatusType down_to;
+    StatusType down_search;
+ 
+    LayerPointerType UpList[2];
+    LayerPointerType DownList[2];
+
+    for (unsigned int i = 0; i < 2; ++i)
+      {
+      UpList[i]   = LayerType::New();
+      DownList[i] = LayerType::New();
+      }
+    
+    // Process the active layer.  This step will update the values in the active
+    // layer as well as the values at indicies that *will* become part of the
+    // active layer when they are promoted/demoted.  Also records promotions,
+    // demotions in the m_StatusLayer for current active layer indicies
+    // (i.e. those indicies which will move inside or outside the active
+    // layers).
+    this->UpdateActiveLayerValues(dt, UpList[0], DownList[0], component);
+
+    // Process the status up/down lists.  This is an iterative process which
+    // proceeds outwards from the active layer.  Each iteration generates the
+    // list for the next iteration.
+    
+    // First process the status lists generated on the active layer.
+    this->ProcessStatusList(UpList[0], UpList[1], 2, 1, component);
+    this->ProcessStatusList(DownList[0], DownList[1], 1, 2, component);
+    
+    down_to = up_to = 0;
+    up_search       = 3;
+    down_search     = 4;
+    j = 1;
+    k = 0;
+
+    LayerListType & layers = this->m_LayersComponents[component];
+
+    while( down_search < static_cast<StatusType>( layers.size() ) )
+      {
+      this->ProcessStatusList(UpList[j], UpList[k], up_to, up_search, component);
+      this->ProcessStatusList(DownList[j], DownList[k], down_to, down_search, component);
+
+      if (up_to == 0) up_to += 1;
+      else            up_to += 2;
+      down_to += 2;
+
+      up_search   += 2;
+      down_search += 2;
+
+      // Swap the lists so we can re-use the empty one.
+      t = j;
+      j = k;
+      k = t;      
+      }
+
+    // Process the outermost inside/outside layers in the sparse field.
+    this->ProcessStatusList(UpList[j], UpList[k], up_to, m_StatusNull, component);
+    this->ProcessStatusList(DownList[j], DownList[k], down_to, m_StatusNull, component);
+    
+    // Now we are left with the lists of indicies which must be
+    // brought into the outermost layers.  Bring UpList into last inside layer
+    // and DownList into last outside layer.
+    this->ProcessOutsideList(UpList[k], static_cast<int>( layers.size()) -2, component);
+    this->ProcessOutsideList(DownList[k], static_cast<int>( layers.size()) -1, component);
     }
-  
-  // Process the active layer.  This step will update the values in the active
-  // layer as well as the values at indicies that *will* become part of the
-  // active layer when they are promoted/demoted.  Also records promotions,
-  // demotions in the m_StatusLayer for current active layer indicies
-  // (i.e. those indicies which will move inside or outside the active
-  // layers).
-  this->UpdateActiveLayerValues(dt, UpList[0], DownList[0]);
-
-  // Process the status up/down lists.  This is an iterative process which
-  // proceeds outwards from the active layer.  Each iteration generates the
-  // list for the next iteration.
-  
-  // First process the status lists generated on the active layer.
-  this->ProcessStatusList(UpList[0], UpList[1], 2, 1);
-  this->ProcessStatusList(DownList[0], DownList[1], 1, 2);
-  
-  down_to = up_to = 0;
-  up_search       = 3;
-  down_search     = 4;
-  j = 1;
-  k = 0;
-  while( down_search < static_cast<StatusType>( m_Layers.size() ) )
-    {
-    this->ProcessStatusList(UpList[j], UpList[k], up_to, up_search);
-    this->ProcessStatusList(DownList[j], DownList[k], down_to, down_search);
-
-    if (up_to == 0) up_to += 1;
-    else            up_to += 2;
-    down_to += 2;
-
-    up_search   += 2;
-    down_search += 2;
-
-    // Swap the lists so we can re-use the empty one.
-    t = j;
-    j = k;
-    k = t;      
-    }
-
-  // Process the outermost inside/outside layers in the sparse field.
-  this->ProcessStatusList(UpList[j], UpList[k], up_to, m_StatusNull);
-  this->ProcessStatusList(DownList[j], DownList[k], down_to, m_StatusNull);
-  
-  // Now we are left with the lists of indicies which must be
-  // brought into the outermost layers.  Bring UpList into last inside layer
-  // and DownList into last outside layer.
-  this->ProcessOutsideList(UpList[k], static_cast<int>( m_Layers.size()) -2);
-  this->ProcessOutsideList(DownList[k], static_cast<int>( m_Layers.size()) -1);
 
   // Finally, we update all of the layer values (excluding the active layer,
   // which has already been updated).
@@ -234,18 +246,20 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus)
+::ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus, unsigned int component)
 {
   LayerNodeType *node;
   
+  LayerListType & layers = this->m_LayersComponents[component];
+
   // Push each index in the input list into its appropriate status layer
   // (ChangeToStatus) and update the status image value at that index.
   while ( ! OutsideList->Empty() )
     {
-    m_StatusImage->SetPixel(OutsideList->Front()->m_Value, ChangeToStatus); 
+    m_StatusImage->SetPixel( OutsideList->Front()->m_Value, ChangeToStatus );
     node = OutsideList->Front();
     OutsideList->PopFront();
-    m_Layers[ChangeToStatus]->PushFront(node);
+    layers[ChangeToStatus]->PushFront(node);
     }
 }
 
@@ -253,7 +267,8 @@ template <class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::ProcessStatusList(LayerType *InputList, LayerType *OutputList,
-                    StatusType ChangeToStatus, StatusType SearchForStatus)
+                    StatusType ChangeToStatus, StatusType SearchForStatus,
+                    unsigned int component)
 {
   unsigned int i;
   bool bounds_status;
@@ -268,6 +283,8 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     statusIt.NeedToUseBoundaryConditionOff();
     }
   
+  LayerListType & layers = this->m_LayersComponents[component];
+
   // Push each index in the input list into its appropriate status layer
   // (ChangeToStatus) and update the status image value at that index.
   // Also examine the neighbors of the index to determine which need to go onto
@@ -279,7 +296,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
     node = InputList->Front();  // Must unlink from the input list 
     InputList->PopFront();      // _before_ transferring to another list.
-    m_Layers[ChangeToStatus]->PushFront(node);
+    layers[ChangeToStatus]->PushFront(node);
      
     for (i = 0; i < m_NeighborList.GetSize(); ++i)
       {
@@ -312,7 +329,7 @@ template <class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::UpdateActiveLayerValues(TimeStepType dt,
-                          LayerType *UpList, LayerType *DownList)
+                          LayerType *UpList, LayerType *DownList, unsigned int component)
 {
   // This method scales the update buffer values by the time step and adds
   // them to the active layer pixels.  New values at an index which fall
@@ -323,12 +340,10 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   // the active range).
   const ScalarValueType LOWER_ACTIVE_THRESHOLD = - (m_ConstantGradientValue / 2.0);
   const ScalarValueType UPPER_ACTIVE_THRESHOLD =    m_ConstantGradientValue / 2.0;
-  //   const ValueType LOWER_ACTIVE_THRESHOLD = - 0.7;
-  //   const ValueType UPPER_ACTIVE_THRESHOLD =   0.7;
 
-  ValueType new_value;
-  ValueType temp_value;
-  ValueType rms_change_accumulator;
+  ScalarValueType new_value;
+  ScalarValueType temp_value;
+  ScalarValueType rms_change_accumulator;
 
   LayerNodeType *node;
   LayerNodeType *release_node;
@@ -360,7 +375,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     }
   
   counter =0;
-  rms_change_accumulator = m_ValueZero;
+  rms_change_accumulator = m_ScalarValueZero;
   layerIt = m_Layers[0]->Begin();
   updateIt = m_UpdateBuffer.begin();
   while (layerIt != m_Layers[0]->End() )
@@ -370,7 +385,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
     new_value = this->CalculateUpdateValue(layerIt->m_Value,
                                            dt,
-                                           outputIt.GetCenterPixel(),
+                                           outputIt.GetCenterPixel()[component],
                                            *updateIt);
 
     // If this index needs to be moved to another layer, then search its
@@ -384,9 +399,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     // to avoid the creation of holes in the active layer.  The fix is simply
     // to not change this value and leave the index in the active set.
 
-// FIXME
-// FIXME    if (new_value >= UPPER_ACTIVE_THRESHOLD)
-    if (new_value[0] >= UPPER_ACTIVE_THRESHOLD)
+    if( new_value >= UPPER_ACTIVE_THRESHOLD)
       { // This index will move UP into a positive (outside) layer.
 
       // First check for active layer neighbors moving in the opposite
@@ -408,10 +421,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
         continue;
         }
 
-      for( i = 0; i < this->m_NumberOfComponents; i++ )
-        {
-        rms_change_accumulator[i] += vnl_math_sqr( new_value[i] - outputIt.GetCenterPixel()[i] );
-        }
+      rms_change_accumulator += vnl_math_sqr( new_value - outputIt.GetCenterPixel()[component] );
 
       // Search the neighborhood for inside indicies.
       temp_value = new_value - m_ConstantGradientValue;
@@ -442,7 +452,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       m_LayerNodeStore->Return( release_node );
       }
 
-    else if (new_value[0] < LOWER_ACTIVE_THRESHOLD) // FIXME (new_value < LOWER_ACTIVE_THRESHOLD)
+    else if( new_value < LOWER_ACTIVE_THRESHOLD)
       { // This index will move DOWN into a negative (inside) layer.
 
       // First check for active layer neighbors moving in the opposite
@@ -464,10 +474,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
         continue;              
         }
       
-      for( i = 0; i < this->m_NumberOfComponents; i++ )
-        {
-        rms_change_accumulator[i] += vnl_math_sqr( new_value[i] - outputIt.GetCenterPixel()[i] );
-        }
+      rms_change_accumulator += vnl_math_sqr( new_value - outputIt.GetCenterPixel()[component] );
 
    
       // Search the neighborhood for outside indicies.
@@ -500,10 +507,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       }
     else
       {
-      for( i = 0; i < this->m_NumberOfComponents; i++ )
-        {
-        rms_change_accumulator[i] += vnl_math_sqr( new_value[i] - outputIt.GetCenterPixel()[i] );
-        }
+      rms_change_accumulator += vnl_math_sqr( new_value - outputIt.GetCenterPixel()[component] );
 
       outputIt.SetCenterPixel( new_value );
       ++layerIt;
@@ -999,7 +1003,10 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   // squeeze method which can do this.  Alternately, we can implement our own
   // strategy for downsizing.
   m_UpdateBuffer.clear();
-  m_UpdateBuffer.reserve(m_Layers[0]->Size());
+
+  // Use the maximum of the sizes from all component layers.
+  LayerListType & layers = this->m_LayersComponents[0];
+  m_UpdateBuffer.reserve( layers[0]->Size() );
 }
 
 
@@ -1023,7 +1030,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   unsigned i;
   ScalarValueType MIN_NORM      = 1.0e-6;
 
-  if (this->GetUseImageSpacing())
+  if( this->GetUseImageSpacing() )
     {
     double minSpacing = NumericTraits<double>::max();
     for (i=0; i<ImageDimension; i++)
@@ -1047,76 +1054,84 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     outputIt.NeedToUseBoundaryConditionOff();
     }
   
-  m_UpdateBuffer.clear();
-  m_UpdateBuffer.reserve(m_Layers[0]->Size());
 
-  // Calculates the update values for the active layer indicies in this
-  // iteration.  Iterates through the active layer index list, applying 
-  // the level set function to the output image (level set image) at each
-  // index.  Update values are stored in the update buffer.
-  for (layerIt = m_Layers[0]->Begin(); layerIt != m_Layers[0]->End(); ++layerIt)
+  for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
     {
-    outputIt.SetLocation(layerIt->m_Value);
+    LayerListType & layers = this->m_LayersComponents[component];
 
-    // Calculate the offset to the surface from the center of this
-    // neighborhood.  This is used by some level set functions in sampling a
-    // speed, advection, or curvature term.
-    if (this->GetInterpolateSurfaceLocation()
-                   && (centerValue = outputIt.GetCenterPixel()) != 0.0 )
+    m_UpdateBuffer.clear();
+    m_UpdateBuffer.reserve(layers[0]->Size());
+
+    // Calculates the update values for the active layer indicies in this
+    // iteration.  Iterates through the active layer index list, applying 
+    // the level set function to the output image (level set image) at each
+    // index.  Update values are stored in the update buffer.
+    for (layerIt = m_Layers[0]->Begin(); layerIt != m_Layers[0]->End(); ++layerIt)
       {
-      // Surface is at the zero crossing, so distance to surface is:
-      // phi(x) / norm(grad(phi)), where phi(x) is the center of the
-      // neighborhood.  The location is therefore
-      // (i,j,k) - ( phi(x) * grad(phi(x)) ) / norm(grad(phi))^2
-      norm_grad_phi_squared = 0.0;
-      for (i = 0; i < ImageDimension; ++i)
-        {
-        forwardValue  = outputIt.GetNext(i);
-        backwardValue = outputIt.GetPrevious(i);
-            
-        if (forwardValue * backwardValue >= 0)
-          { //  Neighbors are same sign OR at least one neighbor is zero.
-          dx_forward  = forwardValue - centerValue;
-          dx_backward = centerValue - backwardValue;
+      outputIt.SetLocation(layerIt->m_Value);
 
-          // Pick the larger magnitude derivative.
-// FIXME         if (::vnl_math_abs(dx_forward) > ::vnl_math_abs(dx_backward) )
-// FIXME           {
-// FIXME           offset[i] = dx_forward;
-// FIXME           }
-// FIXME         else
-// FIXME           {
-// FIXME           offset[i] = dx_backward;
-// FIXME           }
-          }
-        else //Neighbors are opposite sign, pick the direction of the 0 surface.
+      // Calculate the offset to the surface from the center of this
+      // neighborhood.  This is used by some level set functions in sampling a
+      // speed, advection, or curvature term.
+      if (this->GetInterpolateSurfaceLocation()
+                     && (centerValue = outputIt.GetCenterPixel()) != 0.0 )
+        {
+        // Surface is at the zero crossing, so distance to surface is:
+        // phi(x) / norm(grad(phi)), where phi(x) is the center of the
+        // neighborhood.  The location is therefore
+        // (i,j,k) - ( phi(x) * grad(phi(x)) ) / norm(grad(phi))^2
+        norm_grad_phi_squared = 0.0;
+        for (i = 0; i < ImageDimension; ++i)
           {
-// FIXME         if (forwardValue * centerValue < 0)
-// FIXME           {
-// FIXME           offset[i] = forwardValue - centerValue;
-// FIXME           }
-// FIXME         else
-// FIXME           {
-// FIXME           offset[i] = centerValue - backwardValue;
-// FIXME           }
+          forwardValue  = outputIt.GetNext(i);
+          backwardValue = outputIt.GetPrevious(i);
+              
+          if (forwardValue * backwardValue >= 0)
+            { //  Neighbors are same sign OR at least one neighbor is zero.
+            dx_forward  = forwardValue - centerValue;
+            dx_backward = centerValue - backwardValue;
+
+            // Pick the larger magnitude derivative.
+  // FIXME         if (::vnl_math_abs(dx_forward) > ::vnl_math_abs(dx_backward) )
+  // FIXME           {
+  // FIXME           offset[i] = dx_forward;
+  // FIXME           }
+  // FIXME         else
+  // FIXME           {
+  // FIXME           offset[i] = dx_backward;
+  // FIXME           }
+            }
+          else //Neighbors are opposite sign, pick the direction of the 0 surface.
+            {
+  // FIXME         if (forwardValue * centerValue < 0)
+  // FIXME           {
+  // FIXME           offset[i] = forwardValue - centerValue;
+  // FIXME           }
+  // FIXME         else
+  // FIXME           {
+  // FIXME           offset[i] = centerValue - backwardValue;
+  // FIXME           }
+            }
+          
+          norm_grad_phi_squared += offset[i] * offset[i];
           }
         
-        norm_grad_phi_squared += offset[i] * offset[i];
+        for (i = 0; i < ImageDimension; ++i)
+          {
+  // FIXME        offset[i] = (offset[i] * centerValue) / (norm_grad_phi_squared + MIN_NORM);
+          }
+            
+            //  FIXME: Change GetDifferenceFunction() to GetComponentDifferenceFunction() ??
+            //  FIXME: OR... have multiple DifferenceFunctions() one per component...?
+        m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData, offset, component) );
         }
-      
-      for (i = 0; i < ImageDimension; ++i)
+      else // Don't do interpolation
         {
-// FIXME        offset[i] = (offset[i] * centerValue) / (norm_grad_phi_squared + MIN_NORM);
+        m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData, 0.0, component) );
         }
-          
-      m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData, offset) );
-      }
-    else // Don't do interpolation
-      {
-      m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData) );
       }
     }
-  
+    
   // Ask the finite difference function to compute the time step for
   // this iteration.  We give it the global data pointer to use, then
   // ask it to free the global data memory.
