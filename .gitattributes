@@ -1,3 +1,4 @@
 .git*            export-ignore
 
 *.odp           -crlf
+*.png           -crlf
