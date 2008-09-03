@@ -387,7 +387,7 @@ protected:
   void ConstructActiveLayer(unsigned int component);
 
   /** Initializes the values of the active layer set. */
-  void InitializeActiveLayerValues(unsigned int component);
+  void InitializeActiveLayerValues();
   
   /** Adjusts the values in a single layer "to" using values in a neighboring
    *  layer "from".  The list of indicies in "to" are traversed and assigned
@@ -404,7 +404,7 @@ protected:
    * field by propagating out one layer at a time from the active set. This
    * method also takes care of deleting nodes from the layers which have been
    * marked in the status image as having been moved to other layers.*/
-  void PropagateAllLayerValues(unsigned int component);
+  void PropagateAllLayerValues();
 
   /** Updates the active layer values using m_UpdateBuffer. Also creates an
    *  "up" and "down" list for promotion/demotion of indicies leaving the

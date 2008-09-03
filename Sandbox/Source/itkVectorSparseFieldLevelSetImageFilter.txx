@@ -228,10 +228,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
   // Finally, we update all of the layer values (excluding the active layer,
   // which has already been updated).
-  for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
-    {
-    this->PropagateAllLayerValues( component );
-    }
+  this->PropagateAllLayerValues();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -680,12 +677,13 @@ std::cout << "NUMBER OF COMPONENTS = " << this->m_NumberOfComponents << std::end
       this->ConstructLayer(i, i+2,component);
       }
     
-    // Set the values in the output image for the active layer.
-    this->InitializeActiveLayerValues(component);
-   
-    // Initialize layer values using the active layer as seeds.
-    this->PropagateAllLayerValues(component);
     }
+
+  // Set the values in the output image for the active layer.
+  this->InitializeActiveLayerValues();
+ 
+  // Initialize layer values using the active layer as seeds.
+  this->PropagateAllLayerValues();
 
   // Initialize pixels inside and outside the sparse field layers to positive
   // and negative values, respectively.  This is not necessary for the
@@ -919,7 +917,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::InitializeActiveLayerValues(unsigned int component)
+::InitializeActiveLayerValues()
 {
   const ValueType CHANGE_FACTOR = m_ConstantGradientValue / 2.0;
   ScalarValueType MIN_NORM      = 1.0e-6;
@@ -951,38 +949,41 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   ValueType length;
   ValueType distance;
 
-  LayerListType & layers = this->m_LayersComponents[component];
-
-  // For all indicies in the active layer...
-  for (activeIt = layers[0]->Begin();
-       activeIt != layers[0]->End(); ++activeIt)
+  for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
     {
-    // Interpolate on the (shifted) input image values at this index to
-    // assign an active layer value in the output image.
-    shiftedIt.SetLocation( activeIt->m_Value );
+    LayerListType & layers = this->m_LayersComponents[component];
 
-    length = m_ValueZero;
-    for (i = 0; i < ImageDimension; ++i)
+    // For all indicies in the active layer...
+    for (activeIt = layers[0]->Begin();
+         activeIt != layers[0]->End(); ++activeIt)
       {
-      dx_forward = ( shiftedIt.GetPixel(center + m_NeighborList.GetStride(i))
-        - shiftedIt.GetCenterPixel() ) * neighborhoodScales[i];
-      dx_backward = ( shiftedIt.GetCenterPixel()
-        - shiftedIt.GetPixel(center - m_NeighborList.GetStride(i)) ) * neighborhoodScales[i];
+      // Interpolate on the (shifted) input image values at this index to
+      // assign an active layer value in the output image.
+      shiftedIt.SetLocation( activeIt->m_Value );
 
-// FIXME     if ( vnl_math_abs(dx_forward) > vnl_math_abs(dx_backward) )
-// FIXME       {
-// FIXME       length += dx_forward * dx_forward;
-// FIXME       }
-// FIXME     else
-// FIXME       {
-// FIXME       length += dx_backward * dx_backward;
-// FIXME       }
+      length = m_ValueZero;
+      for (i = 0; i < ImageDimension; ++i)
+        {
+        dx_forward = ( shiftedIt.GetPixel(center + m_NeighborList.GetStride(i))
+          - shiftedIt.GetCenterPixel() ) * neighborhoodScales[i];
+        dx_backward = ( shiftedIt.GetCenterPixel()
+          - shiftedIt.GetPixel(center - m_NeighborList.GetStride(i)) ) * neighborhoodScales[i];
+
+  // FIXME     if ( vnl_math_abs(dx_forward) > vnl_math_abs(dx_backward) )
+  // FIXME       {
+  // FIXME       length += dx_forward * dx_forward;
+  // FIXME       }
+  // FIXME     else
+  // FIXME       {
+  // FIXME       length += dx_backward * dx_backward;
+  // FIXME       }
+        }
+  // FIXME   length = vcl_sqrt((double)length) + MIN_NORM;
+  // FIXME   distance = shiftedIt.GetCenterPixel() / length;
+  // FIXME
+  // FIXME   output->SetPixel( activeIt->m_Value , 
+  // FIXME                     vnl_math_min(vnl_math_max(-CHANGE_FACTOR, distance), CHANGE_FACTOR) );
       }
-// FIXME   length = vcl_sqrt((double)length) + MIN_NORM;
-// FIXME   distance = shiftedIt.GetCenterPixel() / length;
-// FIXME
-// FIXME   output->SetPixel( activeIt->m_Value , 
-// FIXME                     vnl_math_min(vnl_math_max(-CHANGE_FACTOR, distance), CHANGE_FACTOR) );
     }
   
 }
@@ -1130,22 +1131,23 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::PropagateAllLayerValues(unsigned int component)
+::PropagateAllLayerValues()
 {
-  unsigned int i;
-
-  // Update values in the first inside and first outside layers using the
-  // active layer as a seed. Inside layers are odd numbers, outside layers are
-  // even numbers. 
-  this->PropagateLayerValues(0, 1, 3, 1, component); // first inside
-  this->PropagateLayerValues(0, 2, 4, 2, component); // first outside
-
-  LayerListType & layers = this->m_LayersComponents[component];
-
-  // Update the rest of the layers.
-  for (i = 1; i < layers.size() - 2; ++i)
+  for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
     {
-    this->PropagateLayerValues(i, i+2, i+4, (i+2)%2, component);
+    // Update values in the first inside and first outside layers using the
+    // active layer as a seed. Inside layers are odd numbers, outside layers are
+    // even numbers. 
+    this->PropagateLayerValues(0, 1, 3, 1, component); // first inside
+    this->PropagateLayerValues(0, 2, 4, 2, component); // first outside
+
+    LayerListType & layers = this->m_LayersComponents[component];
+
+    // Update the rest of the layers.
+    for( unsigned int i = 1; i < layers.size() - 2; ++i )
+      {
+      this->PropagateLayerValues(i, i+2, i+4, (i+2)%2, component);
+      }
     }
 }
 
