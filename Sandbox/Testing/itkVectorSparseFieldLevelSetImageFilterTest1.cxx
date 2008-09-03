@@ -268,9 +268,54 @@ int main( int argc, char * argv [] )
     }
 
    
-  typedef HelperFilterType::LayerType  LayerType;
+  typedef HelperFilterType::LayerType      LayerType;
+  typedef HelperFilterType::LayerNodeType  LayerNodeType;
+
+  HelperFilterType::IndexType index1;
+  HelperFilterType::IndexType index2;
+  HelperFilterType::IndexType index3;
+  HelperFilterType::IndexType index4;
+  HelperFilterType::IndexType index5;
+
+  index1[0] = 5;  index1[1] = 2;
+  index2[0] = 5;  index2[1] = 3;
+  index3[0] = 5;  index3[1] = 4;
+  index4[0] = 5;  index4[1] = 5;
+  index5[0] = 5;  index5[1] = 6;
+
+  LayerNodeType node1;
+  LayerNodeType node2;
+  LayerNodeType node3;
+  LayerNodeType node4;
+  LayerNodeType node5;
+
+  node1.m_Value  = index1;
+  node1.Previous = NULL;
+  node1.Next     = &node2;
+
+  node2.m_Value  = index2;
+  node2.Previous = &node1;
+  node2.Next     = &node3;
+
+  node3.m_Value  = index3;
+  node3.Previous = &node2;
+  node3.Next     = &node4;
+
+  node4.m_Value  = index4;
+  node4.Previous = &node3;
+  node4.Next     = &node5;
+
+  node5.m_Value  = index5;
+  node5.Previous = &node4;
+  node5.Next     = NULL;
 
   LayerType::Pointer outsideList = LayerType::New();
+
+  outsideList->PushFront( &node1 );
+  outsideList->PushFront( &node2 );
+  outsideList->PushFront( &node3 );
+  outsideList->PushFront( &node4 );
+  outsideList->PushFront( &node5 );
 
   HelperFilterType::StatusType changeToStatus;
 
