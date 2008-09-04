@@ -855,18 +855,18 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
         offset_index = center_index
           + m_NeighborList.GetNeighborhoodOffset(i);
 
-        if ( outputIt.GetPixel(m_NeighborList.GetArrayIndex(i)) != m_ValueZero)
+        if( outputIt.GetPixel(m_NeighborList.GetArrayIndex(i)) != m_ValueZero )
           {
           value = shiftedIt.GetPixel(m_NeighborList.GetArrayIndex(i));
 
-// FIXME         if ( value < m_ValueZero ) // Assign to first inside layer.
-// FIXME           {
-// FIXME           layer_number = 1;
-// FIXME           }
-// FIXME         else // Assign to first outside layer
-// FIXME           {
-// FIXME           layer_number = 2;
-// FIXME           }
+          if( value[component] < m_ScalarValueZero ) // Assign to first inside layer.
+            {
+            layer_number = 1;
+            }
+          else // Assign to first outside layer
+            {
+            layer_number = 2;
+            }
                   
           statusIt.SetPixel( m_NeighborList.GetArrayIndex(i),
                              layer_number, bounds_status );

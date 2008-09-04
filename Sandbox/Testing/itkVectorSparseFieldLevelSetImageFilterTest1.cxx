@@ -317,7 +317,7 @@ int main( int argc, char * argv [] )
   outsideList->PushFront( &node4 );
   outsideList->PushFront( &node5 );
 
-  HelperFilterType::StatusType changeToStatus;
+  HelperFilterType::StatusType changeToStatus = 0;;
 
   helperFilter->SetInput( inputLevelSet );
 
