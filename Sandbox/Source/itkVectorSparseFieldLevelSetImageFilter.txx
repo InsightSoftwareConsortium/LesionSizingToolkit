@@ -374,11 +374,13 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     statusIt.NeedToUseBoundaryConditionOff();
     }
   
+  LayerListType & layers = this->m_LayersComponents[component];
+
   counter =0;
   rms_change_accumulator = m_ScalarValueZero;
-  layerIt = m_Layers[0]->Begin();
+  layerIt = layers[0]->Begin();
   updateIt = m_UpdateBuffer.begin();
-  while (layerIt != m_Layers[0]->End() )
+  while (layerIt != layers[0]->End() )
     {
     outputIt.SetLocation(layerIt->m_Value);
     statusIt.SetLocation(layerIt->m_Value);
@@ -448,7 +450,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       // Now remove this index from the active list.
       release_node = layerIt.GetPointer();
       ++layerIt;          
-      m_Layers[0]->Unlink(release_node);
+      layers[0]->Unlink(release_node);
       m_LayerNodeStore->Return( release_node );
       }
 
@@ -502,7 +504,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       // Now remove this index from the active list.
       release_node = layerIt.GetPointer();
       ++layerIt;
-      m_Layers[0]->Unlink(release_node);
+      layers[0]->Unlink(release_node);
       m_LayerNodeStore->Return( release_node );
       }
     else
@@ -598,6 +600,17 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
 std::cout << "NUMBER OF COMPONENTS = " << this->m_NumberOfComponents << std::endl;
 
+  this->m_LayersComponents.resize( this->m_NumberOfComponents );
+  this->m_DifferenceFunctions.resize( this->m_NumberOfComponents );
+
+  // Initialize the pointers to NULL, in this case, the user can set only some
+  // of the functions, and leave NULL the ones corresponding to components that
+  // are not to be updated.
+  for( unsigned int c = 0; c < this->m_NumberOfComponents; c++ )
+    {
+    this->m_DifferenceFunctions[c] = NULL;
+    }
+
   // Allocate the status image.
   m_StatusImage = StatusImageType::New();
   m_StatusImage->SetRegions(this->GetOutput()->GetRequestedRegion());
@@ -641,12 +654,12 @@ std::cout << "NUMBER OF COMPONENTS = " << this->m_NumberOfComponents << std::end
     LayerListType & layers = this->m_LayersComponents[component];
 
     // Erase all existing layer lists.
-    for (i = 0; i < layers.size(); ++i)
+    for( unsigned int k = 0; k < layers.size(); ++k )
       {
-      while (! layers[i]->Empty() )
+      while (! layers[k]->Empty() )
         {
-        m_LayerNodeStore->Return(layers[i]->Front());
-        layers[i]->PopFront();
+        m_LayerNodeStore->Return(layers[k]->Front());
+        layers[k]->PopFront();
         }
       }
     
@@ -671,9 +684,9 @@ std::cout << "NUMBER OF COMPONENTS = " << this->m_NumberOfComponents << std::end
 
     // Construct the rest of the non-active set layers using the first two
     // layers. Inside layers are odd numbers, outside layers are even numbers.
-    for (i = 1; i < layers.size() - 2; ++i)
+    for(unsigned int k = 1; k < layers.size() - 2; ++k)
       {
-      this->ConstructLayer(i, i+2,component);
+      this->ConstructLayer(k, k+2,component);
       }
     
     }
@@ -768,7 +781,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::ConstructActiveLayer(unsigned int phase)
+::ConstructActiveLayer(unsigned int component)
 {
   //
   // We find the active layer by searching for 0's in the zero crossing image
@@ -782,7 +795,8 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   // this is the case, then we need to do active bounds checking in the solver.
   //
   
-  unsigned int i;
+  LayerListType & layers = this->m_LayersComponents[component];
+
   NeighborhoodIterator<OutputImageType>
     shiftedIt(m_NeighborList.GetRadius(), m_ShiftedImage,
               this->GetOutput()->GetRequestedRegion());
@@ -813,7 +827,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
       // Check to see if any of the sparse field touches a boundary.  If so,
       // then activate bounds checking.
-      for (i = 0; i < ImageDimension; i++)
+      for( unsigned int i = 0; i < ImageDimension; i++ )
         {
         if (center_index[i] + static_cast<long>(m_NumberOfLayers) >= (upperBounds[i] - 1)
             || center_index[i] - static_cast<long>(m_NumberOfLayers) <= lowerBounds[i])
@@ -828,7 +842,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
       // Add the node to the active list and set the status in the status
       // image.
-      m_Layers[0]->PushFront( node );
+      layers[0]->PushFront( node );
       statusIt.SetCenterPixel( 0 );
 
       // Grab the neighborhood in the image of shifted input values.
@@ -836,7 +850,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
           
       // Search the neighborhood pixels for first inside & outside layer
       // members.  Construct these lists and set status list values. 
-      for (i = 0; i < m_NeighborList.GetSize(); ++i)
+      for( unsigned int i = 0; i < m_NeighborList.GetSize(); ++i )
         {
         offset_index = center_index
           + m_NeighborList.GetNeighborhoodOffset(i);
@@ -860,7 +874,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
             {
             node = m_LayerNodeStore->Borrow();
             node->m_Value = offset_index;
-            m_Layers[layer_number]->PushFront( node );
+            layers[layer_number]->PushFront( node );
             } // else do nothing.
           }
         }
@@ -1019,6 +1033,11 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     {
     VectorDifferenceFunctionPointer df = this->m_DifferenceFunctions[component];
 
+    if( df.IsNull() )
+      {
+      continue;
+      }
+
     typename VectorDifferenceFunctionType::FloatOffsetType offset;
 
     ValueType norm_grad_phi_squared;
@@ -1066,7 +1085,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       // iteration.  Iterates through the active layer index list, applying 
       // the level set function to the output image (level set image) at each
       // index.  Update values are stored in the update buffer.
-      for (layerIt = m_Layers[0]->Begin(); layerIt != m_Layers[0]->End(); ++layerIt)
+      for (layerIt = layers[0]->Begin(); layerIt != layers[0]->End(); ++layerIt)
         {
         outputIt.SetLocation(layerIt->m_Value);
 
@@ -1343,16 +1362,21 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 {
   Superclass::PrintSelf(os, indent);
 
-  unsigned int i;
   os << indent << "m_IsoSurfaceValue: " << m_IsoSurfaceValue << std::endl;
   os << indent << "m_LayerNodeStore: " << std::endl;
     m_LayerNodeStore->Print(os,indent.GetNextIndent());
   os << indent << "m_BoundsCheckingActive: " << m_BoundsCheckingActive;
-  for (i=0; i < m_Layers.size(); i++)
+
+  for( unsigned int c = 0; c < this->m_NumberOfComponents; c++ )
     {
-    os << indent << "m_Layers[" << i << "]: size="
-       << m_Layers[i]->Size() << std::endl;
-    os << indent << m_Layers[i];
+    const LayerListType & layers = this->m_LayersComponents[c];
+
+    for( unsigned int i=0; i < layers.size(); i++)
+      {
+      os << indent << "layers[" << i << "]: size="
+         << layers[i]->Size() << std::endl;
+      os << indent << layers[i];
+      }
     }
   os << indent << "m_UpdateBuffer: size=" << static_cast<unsigned long>(m_UpdateBuffer.size())
      << " capacity=" << static_cast<unsigned long>( m_UpdateBuffer.capacity()) << std::endl;

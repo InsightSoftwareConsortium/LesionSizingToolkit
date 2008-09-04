@@ -481,7 +481,7 @@ protected:
    * field. Layers are organized as follows: m_Layer[0] = active layer, 
    * m_Layer[i:odd] = inside layer (i+1)/2, m_Layer[i:even] = outside layer i/2
   */
-  LayerListType m_Layers;  // FIXME: DEPRECATED: Replaced with m_LayersComponents 
+  //  LayerListType m_Layers;  // FIXME: DEPRECATED: Replaced with m_LayersComponents 
   LayerListComponentsType   m_LayersComponents;
 
   /** The number of layers to use in the sparse field.  Sparse field will
