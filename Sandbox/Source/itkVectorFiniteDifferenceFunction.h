@@ -51,7 +51,7 @@ public:
   typedef double TimeStepType;
   typedef typename Superclass::ImageType  ImageType;
   typedef typename Superclass::PixelType  PixelType;
-  typedef                      PixelType  ScalarValueType;
+  typedef typename NumericTraits< PixelType >::ScalarRealType   ScalarValueType;
   typedef typename Superclass::PixelRealType  PixelRealType;
   typedef typename Superclass::RadiusType RadiusType;
   typedef typename Superclass::NeighborhoodType NeighborhoodType;
@@ -73,9 +73,10 @@ public:
   };
 
   /** Compute the equation value. */
-  virtual PixelType ComputeUpdate(const NeighborhoodType &neighborhood,
+  virtual ScalarValueType ComputeUpdate(const NeighborhoodType &neighborhood,
                                   void *globalData,
-                                  const FloatOffsetType& = FloatOffsetType(0.0));
+                                  unsigned int component,
+                                  const FloatOffsetType& = FloatOffsetType(0.0) ) const;
 
   virtual TimeStepType ComputeGlobalTimeStep(void *GlobalData) const;
 
@@ -99,6 +100,18 @@ protected:
 private:
   VectorFiniteDifferenceFunction(const Self&); //purposely not implemented
   void operator=(const Self&);   //purposely not implemented
+
+  /** Declare this function just to satisfy the pure virtual declaration in the
+   * superclass. This function however, is not intended to be used at all.
+   * Instead the version that returns a scalar must be used. */
+  virtual PixelType ComputeUpdate(const NeighborhoodType &neighborhood,
+                                  void *globalData,
+                                  const FloatOffsetType& = FloatOffsetType(0.0) ) 
+  {
+    return itk::NumericTraits< PixelType >::ZeroValue();
+  }
+
+
 };
 
 } // namespace itk

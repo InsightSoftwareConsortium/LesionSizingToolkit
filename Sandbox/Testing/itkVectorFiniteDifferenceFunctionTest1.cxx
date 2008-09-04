@@ -63,8 +63,19 @@ int main( int argc, char * argv [] )
   FunctionType::NeighborhoodType neigborhood(radius, inputLevelSet, region);
 
   FunctionType::TimeStepType timeStep = function->ComputeGlobalTimeStep( gds );
+  
+  std::cout << "Time Step: " << timeStep << std::endl;
+  
+  FunctionType::FloatOffsetType offset;
 
-  function->ComputeUpdate( neigborhood, gds );
+  offset[0] = 0.0;
+  offset[1] = 0.0;
+
+  for( unsigned int component = 0; component < NumberOfPhases; component++ )
+    {
+    double update = function->ComputeUpdate( neigborhood, gds, component, offset );
+    std::cout << "Component : " << component << "  update = " << update << std::endl;
+    }
 
   function->ReleaseGlobalDataPointer( gds );
 

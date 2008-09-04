@@ -523,15 +523,10 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     }
   else
     {
-    ScalarValueType rmsTotal = 0;
+    double rmsTotal = 
+      vcl_sqrt((double)(rms_change_accumulator / static_cast<ScalarValueType>(counter)) );
 
-    for( i = 0; i < this->m_NumberOfComponents; i++ )
-      {
-      rmsTotal += rms_change_accumulator[i];
-      }
-
-    this->SetRMSChange(
-      static_cast<double>( vcl_sqrt((double)(rmsTotal / static_cast<ScalarValueType>(counter)) )) );
+    this->SetRMSChange( rmsTotal );
     }
 }
 
@@ -1016,128 +1011,139 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::TimeStepType
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::CalculateChange()
 {
-  const typename Superclass::FiniteDifferenceFunctionType::Pointer df
-    = this->GetDifferenceFunction();
-  typename Superclass::FiniteDifferenceFunctionType::FloatOffsetType offset;
+  // the time step will be computed as the smallest of all the time steps
+  // computed across all image components.
+  TimeStepType timeStep = NumericTraits<TimeStepType>::max();
 
-  ValueType norm_grad_phi_squared;
-  ValueType dx_forward;
-  ValueType dx_backward;
-  ValueType forwardValue;
-  ValueType backwardValue;
-  ValueType centerValue;
-
-  unsigned i;
-  ScalarValueType MIN_NORM      = 1.0e-6;
-
-  if( this->GetUseImageSpacing() )
+  for(unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
     {
-    double minSpacing = NumericTraits<double>::max();
-    for (i=0; i<ImageDimension; i++)
+    VectorDifferenceFunctionPointer df = this->m_DifferenceFunctions[component];
+
+    typename VectorDifferenceFunctionType::FloatOffsetType offset;
+
+    ValueType norm_grad_phi_squared;
+    ValueType dx_forward;
+    ValueType dx_backward;
+    ValueType forwardValue;
+    ValueType backwardValue;
+    ValueType centerValue;
+
+    unsigned i;
+    ScalarValueType MIN_NORM      = 1.0e-6;
+
+    if( this->GetUseImageSpacing() )
       {
-      minSpacing = vnl_math_min(minSpacing,this->GetInput()->GetSpacing()[i]);
-      }
-    MIN_NORM *= minSpacing;
-    }
-
-  void *globalData = df->GetGlobalDataPointer();
-  
-  typename LayerType::ConstIterator layerIt;
-  NeighborhoodIterator<OutputImageType> outputIt(df->GetRadius(),
-                    this->GetOutput(), this->GetOutput()->GetRequestedRegion());
-  TimeStepType timeStep;
-
-  const NeighborhoodScalesType neighborhoodScales = this->GetDifferenceFunction()->ComputeNeighborhoodScales();
-
-  if ( m_BoundsCheckingActive == false )
-    {
-    outputIt.NeedToUseBoundaryConditionOff();
-    }
-  
-
-  for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
-    {
-    LayerListType & layers = this->m_LayersComponents[component];
-
-    m_UpdateBuffer.clear();
-    m_UpdateBuffer.reserve(layers[0]->Size());
-
-    // Calculates the update values for the active layer indicies in this
-    // iteration.  Iterates through the active layer index list, applying 
-    // the level set function to the output image (level set image) at each
-    // index.  Update values are stored in the update buffer.
-    for (layerIt = m_Layers[0]->Begin(); layerIt != m_Layers[0]->End(); ++layerIt)
-      {
-      outputIt.SetLocation(layerIt->m_Value);
-
-      // Calculate the offset to the surface from the center of this
-      // neighborhood.  This is used by some level set functions in sampling a
-      // speed, advection, or curvature term.
-      if (this->GetInterpolateSurfaceLocation()
-                     && (centerValue = outputIt.GetCenterPixel()) != 0.0 )
+      double minSpacing = NumericTraits<double>::max();
+      for (i=0; i<ImageDimension; i++)
         {
-        // Surface is at the zero crossing, so distance to surface is:
-        // phi(x) / norm(grad(phi)), where phi(x) is the center of the
-        // neighborhood.  The location is therefore
-        // (i,j,k) - ( phi(x) * grad(phi(x)) ) / norm(grad(phi))^2
-        norm_grad_phi_squared = 0.0;
-        for (i = 0; i < ImageDimension; ++i)
-          {
-          forwardValue  = outputIt.GetNext(i);
-          backwardValue = outputIt.GetPrevious(i);
-              
-          if (forwardValue * backwardValue >= 0)
-            { //  Neighbors are same sign OR at least one neighbor is zero.
-            dx_forward  = forwardValue - centerValue;
-            dx_backward = centerValue - backwardValue;
+        minSpacing = vnl_math_min(minSpacing,this->GetInput()->GetSpacing()[i]);
+        }
+      MIN_NORM *= minSpacing;
+      }
 
-            // Pick the larger magnitude derivative.
-  // FIXME         if (::vnl_math_abs(dx_forward) > ::vnl_math_abs(dx_backward) )
-  // FIXME           {
-  // FIXME           offset[i] = dx_forward;
-  // FIXME           }
-  // FIXME         else
-  // FIXME           {
-  // FIXME           offset[i] = dx_backward;
-  // FIXME           }
-            }
-          else //Neighbors are opposite sign, pick the direction of the 0 surface.
+    void *globalData = df->GetGlobalDataPointer();
+    
+    typename LayerType::ConstIterator layerIt;
+    NeighborhoodIterator<OutputImageType> outputIt(df->GetRadius(),
+                      this->GetOutput(), this->GetOutput()->GetRequestedRegion());
+
+    const NeighborhoodScalesType neighborhoodScales = this->GetDifferenceFunction()->ComputeNeighborhoodScales();
+
+    if ( m_BoundsCheckingActive == false )
+      {
+      outputIt.NeedToUseBoundaryConditionOff();
+      }
+    
+
+    for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
+      {
+      LayerListType & layers = this->m_LayersComponents[component];
+
+      m_UpdateBuffer.clear();
+      m_UpdateBuffer.reserve(layers[0]->Size());
+
+      // Calculates the update values for the active layer indicies in this
+      // iteration.  Iterates through the active layer index list, applying 
+      // the level set function to the output image (level set image) at each
+      // index.  Update values are stored in the update buffer.
+      for (layerIt = m_Layers[0]->Begin(); layerIt != m_Layers[0]->End(); ++layerIt)
+        {
+        outputIt.SetLocation(layerIt->m_Value);
+
+        // Calculate the offset to the surface from the center of this
+        // neighborhood.  This is used by some level set functions in sampling a
+        // speed, advection, or curvature term.
+        if (this->GetInterpolateSurfaceLocation()
+                       && (centerValue = outputIt.GetCenterPixel()) != 0.0 )
+          {
+          // Surface is at the zero crossing, so distance to surface is:
+          // phi(x) / norm(grad(phi)), where phi(x) is the center of the
+          // neighborhood.  The location is therefore
+          // (i,j,k) - ( phi(x) * grad(phi(x)) ) / norm(grad(phi))^2
+          norm_grad_phi_squared = 0.0;
+          for (i = 0; i < ImageDimension; ++i)
             {
-  // FIXME         if (forwardValue * centerValue < 0)
-  // FIXME           {
-  // FIXME           offset[i] = forwardValue - centerValue;
-  // FIXME           }
-  // FIXME         else
-  // FIXME           {
-  // FIXME           offset[i] = centerValue - backwardValue;
-  // FIXME           }
+            forwardValue  = outputIt.GetNext(i);
+            backwardValue = outputIt.GetPrevious(i);
+                
+            if (forwardValue * backwardValue >= 0)
+              { //  Neighbors are same sign OR at least one neighbor is zero.
+              dx_forward  = forwardValue - centerValue;
+              dx_backward = centerValue - backwardValue;
+
+              // Pick the larger magnitude derivative.
+    // FIXME         if (::vnl_math_abs(dx_forward) > ::vnl_math_abs(dx_backward) )
+    // FIXME           {
+    // FIXME           offset[i] = dx_forward;
+    // FIXME           }
+    // FIXME         else
+    // FIXME           {
+    // FIXME           offset[i] = dx_backward;
+    // FIXME           }
+              }
+            else //Neighbors are opposite sign, pick the direction of the 0 surface.
+              {
+    // FIXME         if (forwardValue * centerValue < 0)
+    // FIXME           {
+    // FIXME           offset[i] = forwardValue - centerValue;
+    // FIXME           }
+    // FIXME         else
+    // FIXME           {
+    // FIXME           offset[i] = centerValue - backwardValue;
+    // FIXME           }
+              }
+            
+            norm_grad_phi_squared += offset[i] * offset[i];
             }
           
-          norm_grad_phi_squared += offset[i] * offset[i];
+          for (i = 0; i < ImageDimension; ++i)
+            {
+    // FIXME        offset[i] = (offset[i] * centerValue) / (norm_grad_phi_squared + MIN_NORM);
+            }
+              
+              //  FIXME: Change GetDifferenceFunction() to GetComponentDifferenceFunction() ??
+              //  FIXME: OR... have multiple DifferenceFunctions() one per component...?
+          m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData, component, offset ) );
           }
-        
-        for (i = 0; i < ImageDimension; ++i)
+        else // Don't do interpolation
           {
-  // FIXME        offset[i] = (offset[i] * centerValue) / (norm_grad_phi_squared + MIN_NORM);
+          m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData, component, 0.0 ) );
           }
-            
-            //  FIXME: Change GetDifferenceFunction() to GetComponentDifferenceFunction() ??
-            //  FIXME: OR... have multiple DifferenceFunctions() one per component...?
-        m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData, offset, component) );
-        }
-      else // Don't do interpolation
-        {
-        m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData, 0.0, component) );
         }
       }
-    }
-    
-  // Ask the finite difference function to compute the time step for
-  // this iteration.  We give it the global data pointer to use, then
-  // ask it to free the global data memory.
-  timeStep = df->ComputeGlobalTimeStep(globalData);
+      
+    // Ask the finite difference function to compute the time step for
+    // this iteration.  We give it the global data pointer to use, then
+    // ask it to free the global data memory.
+    TimeStepType partialTimeStep = df->ComputeGlobalTimeStep( globalData );
 
-  df->ReleaseGlobalDataPointer(globalData);
+    if( partialTimeStep < timeStep )
+      {
+      timeStep = partialTimeStep;
+      }
+
+    df->ReleaseGlobalDataPointer(globalData);
+    }
   
   return timeStep;                            
 }

@@ -35,15 +35,15 @@ VectorFiniteDifferenceFunction<TImageType>
 }
 
 template< class TImageType >
-typename VectorFiniteDifferenceFunction< TImageType >::PixelType
+typename VectorFiniteDifferenceFunction< TImageType >::ScalarValueType
 VectorFiniteDifferenceFunction< TImageType >
 ::ComputeUpdate(const NeighborhoodType &it, void *globalData,
-                const FloatOffsetType& offset)
+                unsigned int component, const FloatOffsetType& offset ) const
 {
-  const ScalarValueType center_value  = it.GetCenterPixel();
+  const ScalarValueType center_value  = it.GetCenterPixel()[component];
 
   // Return the combination of all the terms.
-  return ( PixelType ) ( center_value ); // FIXME: replace this with a real computation.
+  return ( center_value ); // FIXME: replace this with a real computation.
 }
 
 template <class TImageType>

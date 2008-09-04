@@ -60,18 +60,18 @@ public:
     return this->Superclass::GetScalarValueZero(); 
     }
 
-  virtual ValueType CalculateUpdateValue(
+  virtual ScalarValueType CalculateUpdateValue(
     const IndexType &idx,
     const TimeStepType &dt,
-    const ValueType &value,
-    const ValueType &change)
+    const ScalarValueType &value,
+    const ScalarValueType &change)
   { 
   return this->Superclass::CalculateUpdateValue(idx,dt,value,change);
   }
 
-  void ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus)
+  void ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus, unsigned int component)
     {
-    this->Superclass::ProcessOutsideList( OutsideList, ChangeToStatus );
+    this->Superclass::ProcessOutsideList( OutsideList, ChangeToStatus, component );
     };
 
   void Initialize()
@@ -239,15 +239,15 @@ int main( int argc, char * argv [] )
   change[1] = 3;
   change[2] = 4;
 
-  HelperFilterType::ValueType updatedValue = 
-    helperFilter->CalculateUpdateValue( idx, timeDelta, value, change );
+  HelperFilterType::ScalarValueType updatedValue; 
 
   const double tolerance = 1e-5;
 
   for( unsigned int f = 0; f < NumberOfPhases; f++ )
     {
+    updatedValue = helperFilter->CalculateUpdateValue( idx, timeDelta, value[f], change[f] );
     double newValue = value[f] + timeDelta * change[f];
-    if( vcl_abs( updatedValue[f] - newValue ) > tolerance )
+    if( vcl_abs( updatedValue - newValue ) > tolerance )
       {
       std::cerr << "Error in CalculateUpdateValue() " << std::endl;
       return EXIT_FAILURE;
@@ -328,6 +328,9 @@ int main( int argc, char * argv [] )
   helperFilter->CopyInputToOutput();
   helperFilter->Initialize();
 
-  helperFilter->ProcessOutsideList( outsideList, changeToStatus );
+  for(unsigned int component = 0; component < NumberOfPhases; component++ )
+    {
+    helperFilter->ProcessOutsideList( outsideList, changeToStatus, component );
+    }
 
 }
