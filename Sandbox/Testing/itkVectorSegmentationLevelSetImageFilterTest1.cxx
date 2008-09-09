@@ -177,6 +177,14 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
+  speedImageBack = filter->GetSpeedImage();
+
+  if( speedImageBack != speedImage.GetPointer() )
+    {
+    std::cerr << "Error in ImageFilter Set/GetSpeedImage() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
   typedef FunctionType::VectorImageType      AdvectionImageType;
   AdvectionImageType::Pointer advectionImage = AdvectionImageType::New();
 
@@ -188,6 +196,14 @@ int main( int argc, char * argv [] )
 
   const AdvectionImageType * advectionImageBack = 
     differenceFunction->GetAdvectionImage( component );
+
+  if( advectionImageBack != advectionImage.GetPointer() )
+    {
+    std::cerr << "Error in function Set/GetAdvectionImage() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  advectionImageBack = filter->GetAdvectionImage( component );
 
   if( advectionImageBack != advectionImage.GetPointer() )
     {
@@ -211,6 +227,69 @@ int main( int argc, char * argv [] )
   //
   differenceFunction->CalculateSpeedImage();
   differenceFunction->CalculateAdvectionImage();
+
+
+  //
+  //  Exercise ReverseExpansionDirection methods
+  //
+  filter->SetReverseExpansionDirection( true );
+  if( !filter->GetReverseExpansionDirection() )
+    {
+    std::cerr << "Error in function Set/GetReverseExpansionDirection() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  filter->SetReverseExpansionDirection( false );
+  if( filter->GetReverseExpansionDirection() )
+    {
+    std::cerr << "Error in function Set/GetReverseExpansionDirection() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  filter->ReverseExpansionDirectionOn();
+  if( !filter->GetReverseExpansionDirection() )
+    {
+    std::cerr << "Error in function Set/GetReverseExpansionDirection() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  filter->ReverseExpansionDirectionOff();
+  if( filter->GetReverseExpansionDirection() )
+    {
+    std::cerr << "Error in function Set/GetReverseExpansionDirection() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  //
+  //  Exercise AutoGenerateSpeedAdvection methods
+  //
+  filter->SetAutoGenerateSpeedAdvection( true );
+  if( !filter->GetAutoGenerateSpeedAdvection() )
+    {
+    std::cerr << "Error in function Set/GetAutoGenerateSpeedAdvection() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  filter->SetAutoGenerateSpeedAdvection( false );
+  if( filter->GetAutoGenerateSpeedAdvection() )
+    {
+    std::cerr << "Error in function Set/GetAutoGenerateSpeedAdvection() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  filter->AutoGenerateSpeedAdvectionOn();
+  if( !filter->GetAutoGenerateSpeedAdvection() )
+    {
+    std::cerr << "Error in function Set/GetAutoGenerateSpeedAdvection() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  filter->AutoGenerateSpeedAdvectionOff();
+  if( filter->GetAutoGenerateSpeedAdvection() )
+    {
+    std::cerr << "Error in function Set/GetAutoGenerateSpeedAdvection() " << std::endl;
+    return EXIT_FAILURE;
+    }
 
   return EXIT_SUCCESS;
 }
