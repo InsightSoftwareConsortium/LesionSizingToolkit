@@ -123,6 +123,7 @@ int main( int argc, char * argv [] )
   filter->Print( std::cout );
 
   std::cout << "Name of Class = " << filter->GetNameOfClass() << std::endl;
+  std::cout << "Name of Superclass = " << filter->Superclass::GetNameOfClass() << std::endl;
 
   FeatureImageType::Pointer featureImage = FeatureImageType::New();
 
@@ -139,6 +140,13 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
+  if( featureImageBack != differenceFunction->GetFeatureImage() )
+    {
+    std::cerr << "Error in Set/GetFeatureImage() in finite difference function" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+
   try
     {
     filter->Update();
@@ -149,6 +157,47 @@ int main( int argc, char * argv [] )
     }
 
   std::cout << "Number of elapsed iterations = " << filter->GetElapsedIterations() << std::endl;
+
+
+  typedef FunctionType::ImageType      SpeedImageType;
+  SpeedImageType::Pointer speedImage = SpeedImageType::New();
+
+  speedImage->SetRegions( region );
+  speedImage->Allocate();
+
+  differenceFunction->SetSpeedImage( speedImage );
+
+  const SpeedImageType * speedImageBack = differenceFunction->GetSpeedImage();
+
+  if( speedImageBack != speedImage.GetPointer() )
+    {
+    std::cerr << "Error in function Set/GetSpeedImage() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  typedef FunctionType::VectorImageType      AdvectionImageType;
+  AdvectionImageType::Pointer advectionImage = AdvectionImageType::New();
+
+  advectionImage->SetRegions( region );
+  advectionImage->Allocate();
+
+  unsigned int component = 0;
+  differenceFunction->SetAdvectionImage( component, advectionImage );
+
+  const AdvectionImageType * advectionImageBack = 
+    differenceFunction->GetAdvectionImage( component );
+
+  if( advectionImageBack != advectionImage.GetPointer() )
+    {
+    std::cerr << "Error in function Set/GetAdvectionImage() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  //
+  // Exercise the Calculate Methods
+  //
+  differenceFunction->CalculateSpeedImage();
+  differenceFunction->CalculateAdvectionImage();
 
   return EXIT_SUCCESS;
 }

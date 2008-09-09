@@ -34,7 +34,7 @@ void VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
 ::SetAdvectionImage( unsigned int component, VectorImageType *s )
 {
   m_AdvectionImage[component] = s;
-  m_VectorInterpolator->SetInputImage(m_AdvectionImage);
+  m_VectorInterpolator->SetInputImage(this->m_AdvectionImage[component]);
 }
   
 template <class TImageType, class TFeatureImageType>
