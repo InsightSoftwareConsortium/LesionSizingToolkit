@@ -195,6 +195,17 @@ int main( int argc, char * argv [] )
     }
 
   //
+  // Exercise 'SetInitialImage()'
+  //
+  filter->SetInitialImage( inputLevelSet );
+
+  //
+  // Exercise 'Generate' methods
+  //
+  filter->GenerateSpeedImage();
+  filter->GenerateAdvectionImage();
+
+  //
   // Exercise the Calculate Methods
   //
   differenceFunction->CalculateSpeedImage();
