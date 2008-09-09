@@ -154,6 +154,7 @@ int main( int argc, char * argv [] )
   catch( itk::ExceptionObject & excp )
     {
     std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
     }
 
   std::cout << "Number of elapsed iterations = " << filter->GetElapsedIterations() << std::endl;

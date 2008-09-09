@@ -239,13 +239,6 @@ public:
   virtual const VectorImageType *GetAdvectionImage(unsigned int component) const
   { return m_SegmentationFunction->GetAdvectionImage(component); }
 
-  void SetUseNegativeFeaturesOff()
-  {
-    itkWarningMacro( << "SetUseNegativeFeaturesOff has been deprecated.  Please use ReverseExpansionDirectionOff() instead" );
-    this->ReverseExpansionDirectionOff();
-  }
-
-
   /** Turn On/Off the flag which determines whether Positive or Negative speed
    * terms will cause surface expansion.  If set to TRUE then negative speed
    * terms will cause the surface to expand and positive speed terms will cause

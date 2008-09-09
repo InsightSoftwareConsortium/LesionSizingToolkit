@@ -72,10 +72,6 @@ void
 VectorSegmentationLevelSetImageFilter<TInputImage, TFeatureImage, TOutputImage>
 ::GenerateData()
 {
-  if (m_SegmentationFunction == 0)
-    {
-    itkExceptionMacro("No finite difference function was specified.");
-    }  
 
   // A positive speed value causes surface expansion, the opposite of the
   // default.  Flip the sign of the propagation and advection weights.
