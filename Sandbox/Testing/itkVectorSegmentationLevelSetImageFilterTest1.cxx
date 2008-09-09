@@ -158,6 +158,7 @@ int main( int argc, char * argv [] )
 
   std::cout << "Number of elapsed iterations = " << filter->GetElapsedIterations() << std::endl;
 
+  filter->GenerateAdvectionImage();
 
   typedef FunctionType::ImageType      SpeedImageType;
   SpeedImageType::Pointer speedImage = SpeedImageType::New();

@@ -74,8 +74,11 @@ void VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
 
   const unsigned int numberOfComponents = MeasurementVectorTraits::GetLength( ftr.Get() );
 
+  this->m_AdvectionImage.resize( numberOfComponents );
+
   for( unsigned int component = 0; component < numberOfComponents; component++)
     {
+    m_AdvectionImage[component] = VectorImageType::New();
     m_AdvectionImage[component]->SetRequestedRegion(m_FeatureImage->GetRequestedRegion());
     m_AdvectionImage[component]->SetBufferedRegion(m_FeatureImage->GetBufferedRegion());
     m_AdvectionImage[component]->SetLargestPossibleRegion(m_FeatureImage->GetLargestPossibleRegion());
