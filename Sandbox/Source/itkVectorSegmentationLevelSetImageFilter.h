@@ -175,7 +175,7 @@ public:
   SegmentationFunctionType;
     
   /** The type used for the advection field */
-  typedef typename SegmentationFunctionType::MatrixImageType MatrixImageType;
+  typedef typename SegmentationFunctionType::VectorImageType VectorImageType;
   typedef typename SegmentationFunctionType::ImageType       SpeedImageType;
   
   /** Run-time type information (and related methods). */
@@ -226,7 +226,7 @@ public:
   /** This function is for advanced applications.  Set the image sampled as the
    * advection term of this segmentation method.  In general, the advection image
    * is generated automatically by a subclass of this filter. */
-  void SetAdvectionImage( MatrixImageType *v)
+  void SetAdvectionImage( unsigned int component, VectorImageType *v )
   { m_SegmentationFunction->SetAdvectionImage( v ); }
 
   /** Return a pointer to the image sampled as the speed term of the
@@ -236,8 +236,8 @@ public:
 
   /** Return a pointer to the image sampled as the advection term of the
    * segmentation algorithm. */
-  virtual const MatrixImageType *GetAdvectionImage() const
-  { return m_SegmentationFunction->GetAdvectionImage(); }
+  virtual const VectorImageType *GetAdvectionImage(unsigned int component) const
+  { return m_SegmentationFunction->GetAdvectionImage(component); }
 
   void SetUseNegativeFeaturesOff()
   {
@@ -358,20 +358,17 @@ public:
    *  itk::Command objects access. The method is inline to avoid a
    *  problem with the gcc 2.95 compiler matching the declaration with 
    *  the definition. */
-  virtual void SetSegmentationFunction(SegmentationFunctionType *s)
+  virtual void SetSegmentationFunction( SegmentationFunctionType *s )
   {
-    m_SegmentationFunction = s; 
-  
-    typename SegmentationFunctionType::RadiusType r;
-    r.Fill( 1 );
-  
-    m_SegmentationFunction->Initialize(r);
+    this->m_SegmentationFunction = s; 
     this->SetDifferenceFunction(m_SegmentationFunction);
     this->Modified();
   }
 
-  virtual SegmentationFunctionType *GetSegmentationFunction()
-  { return m_SegmentationFunction; }
+  virtual SegmentationFunctionType *GetSegmentationFunction() const
+  { 
+    return m_SegmentationFunction;
+  }
 
   
   /** Set/Get the maximum constraint for the curvature term factor in the time step
@@ -455,6 +452,14 @@ protected:
 private:
   VectorSegmentationLevelSetImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
+  /** Make the SetDifferenceFunction() private to enforce the use of the
+   * derived API SetVectorSegmentationLevelSetFunction(). */
+  typedef typename Superclass::FiniteDifferenceFunctionType  FiniteDifferenceFunctionType;
+  void SetDifferenceFunction( FiniteDifferenceFunctionType * f )
+    {
+    this->Superclass::SetDifferenceFunction( f );
+    }
 
   SegmentationFunctionType *m_SegmentationFunction;
 };

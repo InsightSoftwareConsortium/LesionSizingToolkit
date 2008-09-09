@@ -125,9 +125,9 @@ public:
   };
 
   /** Advection field.  Default implementation returns a vector of zeros. */
-  virtual MatrixType AdvectionField(const NeighborhoodType &,
-                                    const FloatOffsetType &, GlobalDataStruct * = 0)  const
-    { return m_ZeroMatrixConstant; }
+  virtual VectorType AdvectionField(const NeighborhoodType &,
+                                    const FloatOffsetType &, unsigned int component, GlobalDataStruct * = 0)  const
+    { return m_ZeroVectorConstant; }
 
   /** Propagation speed.  This term controls surface expansion/contraction.
    *  Default implementation returns zero. */ 
@@ -315,10 +315,10 @@ protected:
 
   /** This method's only purpose is to initialize the zero vector
    * constant. */
-  static MatrixType InitializeZeroMatrixConstant();
+  static VectorType InitializeZeroVectorConstant();
   
   /** Zero vector constant. */
-  static MatrixType m_ZeroMatrixConstant;
+  static VectorType m_ZeroVectorConstant;
 
   /** Epsilon magnitude controls the lower limit for gradient magnitude. */
   ScalarValueType m_EpsilonMagnitude;
@@ -338,6 +338,17 @@ protected:
 private:
   VectorLevelSetFunction(const Self&); //purposely not implemented
   void operator=(const Self&);   //purposely not implemented
+
+  /** Method provided only to satisfy the base class API of a virtual method.
+   * This method is not expected to be used. Instead the ComputeUpdate() with
+   * component identifier should be used.*/
+  virtual PixelType  ComputeUpdate(const NeighborhoodType &neighborhood,
+                                   void *globalData,
+                                   const FloatOffsetType &offset = FloatOffsetType(0.0))
+                                   {
+                                   PixelType output;
+                                   return output;
+                                   }
 };
 
 } // namespace itk

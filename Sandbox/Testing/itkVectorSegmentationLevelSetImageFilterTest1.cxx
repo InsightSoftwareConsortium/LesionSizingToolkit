@@ -14,7 +14,7 @@
 =========================================================================*/
 
 #include "itkVectorSegmentationLevelSetImageFilter.h"
-#include "itkVectorFiniteDifferenceFunction.h"
+#include "itkVectorSegmentationLevelSetFunction.h"
 #include "itkImage.h"
 #include "itkVector.h"
 
@@ -39,6 +39,38 @@ public:
      VectorSegmentationLevelSetImageFilter);
 };
 
+template <class TInputImage, class TFeatureImage>
+class HelperVectorSegmentationLevelSetFunction
+  : public VectorSegmentationLevelSetFunction<TInputImage, TFeatureImage>
+{
+public:
+  typedef HelperVectorSegmentationLevelSetFunction    Self;
+  typedef VectorSegmentationLevelSetFunction<
+    TInputImage, TFeatureImage >                      Superclass;
+  typedef SmartPointer<Self>                          Pointer;
+  typedef SmartPointer<const Self>                    ConstPointer;
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  /** Runtime information support. */
+  itkTypeMacro(HelperVectorSegmentationLevelSetFunction, 
+     VectorSegmentationLevelSetFunction);
+
+  typedef typename Superclass::PixelType              PixelType;
+  typedef typename Superclass::NeighborhoodType       NeighborhoodType;
+  typedef typename Superclass::FloatOffsetType        FloatOffsetType;
+
+  virtual PixelType  ComputeUpdate(
+    const NeighborhoodType &neighborhood, void *globalData,
+    const FloatOffsetType &offset = FloatOffsetType(0.0))
+      {
+      PixelType output;
+      return output;
+      }
+};
+
+
 } // end namespace itk
 
 
@@ -57,7 +89,8 @@ int main( int argc, char * argv [] )
   typedef itk::HelperVectorSegmentationLevelSetImageFilter< 
     LevelSetImageType, FeatureImageType, LevelSetImageType >      FilterType;
 
-  typedef itk::VectorFiniteDifferenceFunction<LevelSetImageType>  FunctionType;
+  typedef itk::HelperVectorSegmentationLevelSetFunction<
+    LevelSetImageType, FeatureImageType >                         FunctionType;
 
   FilterType::Pointer filter = FilterType::New();
 
@@ -84,10 +117,27 @@ int main( int argc, char * argv [] )
 
   filter->SetNumberOfIterations( 5 );
 
-  filter->SetDifferenceFunction( differenceFunction );
+  filter->SetSegmentationFunction( differenceFunction.GetPointer() );
 
   // Exercise the Print method 
   filter->Print( std::cout );
+
+  std::cout << "Name of Class = " << filter->GetNameOfClass() << std::endl;
+
+  FeatureImageType::Pointer featureImage = FeatureImageType::New();
+
+  featureImage->SetRegions( region );
+  featureImage->Allocate();
+
+  filter->SetFeatureImage( featureImage );
+
+  const FeatureImageType * featureImageBack = filter->GetFeatureImage();
+
+  if( featureImageBack != featureImage.GetPointer() )
+    {
+    std::cerr << "Error in Set/GetFeatureImage() " << std::endl;
+    return EXIT_FAILURE;
+    }
 
   try
     {

@@ -19,9 +19,8 @@
 
 #include "itkVectorLevelSetFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
-#include "itkMatrixLinearInterpolateImageFunction.h"
-#include "itkMatrixCastImageFilter.h"
-#include "itkMatrix.h"
+#include "itkVectorLinearInterpolateImageFunction.h"
+#include "itkVectorCastImageFilter.h"
 
 namespace itk {
 
@@ -72,16 +71,19 @@ public:
   /** Extract some parameters from the superclass. */
   itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
-  /** Define an image type for the advection field. */
-  typedef typename Superclass::MatrixType            MatrixType;
-  typedef typename Superclass::MatrixImageType       MatrixImageType;
-
+  /** Define an image type for the advection field, corresponding to one
+   * component. Given that there are N components, this function will hold an
+   * array of N advection field images, each one of them being a vector image.
+   * An array of vector images is preferable to a matrix image because given
+   * the sparse representation of the level sets, not all components will be
+   * needed at the same time.  */
+  typedef Image<VectorType, itkGetStaticConstMacro(ImageDimension)> VectorImageType;
 
   /** Define a scalar interpolator */
   typedef LinearInterpolateImageFunction<ImageType>  InterpolatorType;
 
   /** Define a vector interpolator */
-  typedef MatrixLinearInterpolateImageFunction<MatrixImageType> MatrixInterpolatorType;
+  typedef VectorLinearInterpolateImageFunction<VectorImageType> VectorInterpolatorType;
   
   /** Continuous index type recognized by the interpolator */
   typedef typename InterpolatorType::ContinuousIndexType ContinuousIndexType;
@@ -98,9 +100,9 @@ public:
   void SetSpeedImage( ImageType *s );
   
   /** Get/Set the image used as the advection field in the level set equation */
-  virtual MatrixImageType * GetAdvectionImage() const
-  { return m_AdvectionImage.GetPointer(); } 
-  void SetAdvectionImage( MatrixImageType *s );
+  virtual VectorImageType * GetAdvectionImage( unsigned int component ) const
+  { return m_AdvectionImage[component].GetPointer(); } 
+  void SetAdvectionImage( unsigned int component, VectorImageType *s );
   
   
   /** This method creates the appropriate member variable operators for the
@@ -148,32 +150,40 @@ protected:
   typename ImageType::Pointer        m_SpeedImage;
 
   /** The image holding the advection field for front propation */
-  typename MatrixImageType::Pointer  m_AdvectionImage;
+  typedef typename VectorImageType::Pointer       VectorImagePointer;
+  typedef std::vector< VectorImagePointer >       VectorImageArray; 
+  
+  VectorImageArray                   m_AdvectionImage;
 
   /** A casting functor to convert between vector types.  */
-  Functor::MatrixCast< ITK_TYPENAME MatrixInterpolatorType::OutputType,
-                       MatrixType > m_MatrixCast;
+  Functor::VectorCast< ITK_TYPENAME VectorInterpolatorType::OutputType,
+                       VectorType > m_VectorCast;
 
   /** Returns the propagation speed from the precalculated speed image.*/
   virtual ScalarValueType PropagationSpeed(const NeighborhoodType &,
-                                           const FloatOffsetType &, GlobalDataStruct *gd) const;
+                                           const FloatOffsetType &, unsigned int component, GlobalDataStruct *gd) const;
 
   /** Advection field.  Returns a vector from the computed advectionfield.*/
-  virtual MatrixType AdvectionField(const NeighborhoodType &,
-                                    const FloatOffsetType &, GlobalDataStruct *gd) const;
+  virtual VectorType AdvectionField(const NeighborhoodType &,
+                                    const FloatOffsetType &, unsigned int component, GlobalDataStruct *gd) const;
   
   
   virtual ~VectorSegmentationLevelSetFunction() {}
   VectorSegmentationLevelSetFunction()
   {
     m_SpeedImage = ImageType::New();
-    m_AdvectionImage = MatrixImageType::New();
+   // FIXME:    m_AdvectionImage = MatrixImageType::New(); Initialize as soon as we know about the number of components
     m_Interpolator = InterpolatorType::New();
-    m_MatrixInterpolator = MatrixInterpolatorType::New();
+    m_VectorInterpolator = VectorInterpolatorType::New();
+
+    RadiusType r;
+    r.Fill( 1 );
+  
+    this->Initialize(r);
   }
 
   typename InterpolatorType::Pointer m_Interpolator;
-  typename MatrixInterpolatorType::Pointer m_MatrixInterpolator;
+  typename VectorInterpolatorType::Pointer m_VectorInterpolator;
 
  
 private:

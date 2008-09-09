@@ -182,18 +182,18 @@ VectorLevelSetFunction<TImageType>::ComputeMeanCurvature(
 }
 
 template <class TImageType>
-typename VectorLevelSetFunction<TImageType>::MatrixType
-VectorLevelSetFunction<TImageType>::InitializeZeroMatrixConstant()
+typename VectorLevelSetFunction<TImageType>::VectorType
+VectorLevelSetFunction<TImageType>::InitializeZeroVectorConstant()
 {
-  MatrixType ans;
-  ans.fill( NumericTraits<ScalarValueType>::Zero );
+  VectorType ans;
+  ans.Fill( NumericTraits<ScalarValueType>::Zero );
   return ans;
 }
 
 template <class TImageType>
-typename VectorLevelSetFunction<TImageType>::MatrixType
-VectorLevelSetFunction<TImageType>::m_ZeroMatrixConstant =
-VectorLevelSetFunction<TImageType>::InitializeZeroMatrixConstant();
+typename VectorLevelSetFunction<TImageType>::VectorType
+VectorLevelSetFunction<TImageType>::m_ZeroVectorConstant =
+VectorLevelSetFunction<TImageType>::InitializeZeroVectorConstant();
 
 template <class TImageType>
 void
@@ -321,14 +321,18 @@ VectorLevelSetFunction< TImageType >
     const unsigned int positionB = 
       static_cast<unsigned int>( m_Center - m_xStride[i]);    
 
-    gd->m_dx[i] = 0.5 * (it.GetPixel( positionA ) - 
-                         it.GetPixel( positionB ) ) * neighborhoodScales[i]; 
-    gd->m_dxy[i][i] = ( it.GetPixel( positionA )
-                      + it.GetPixel( positionB ) - 2.0 * center_value ) *
-                                            vnl_math_sqr(neighborhoodScales[i]) ;
+    PixelType pixelA = it.GetPixel( positionA );
+    PixelType pixelB = it.GetPixel( positionB );
 
-    gd->m_dx_forward[i]  = ( it.GetPixel( positionA ) - center_value ) * neighborhoodScales[i];
-    gd->m_dx_backward[i] = ( center_value - it.GetPixel( positionB ) ) * neighborhoodScales[i];
+    ScalarValueType pixelAc = pixelA[component];
+    ScalarValueType pixelBc = pixelB[component];
+    ScalarValueType centerVc = center_value[component];
+
+    gd->m_dx[i] = 0.5 * ( pixelAc - pixelBc ) * neighborhoodScales[i]; 
+    gd->m_dxy[i][i] =   ( pixelAc + pixelBc - 2.0 * centerVc ) * vnl_math_sqr(neighborhoodScales[i]) ;
+
+    gd->m_dx_forward[i]  = ( pixelAc - centerVc ) * neighborhoodScales[i];
+    gd->m_dx_backward[i] = ( centerVc - pixelBc ) * neighborhoodScales[i];
     gd->m_GradMagSqr += gd->m_dx[i] * gd->m_dx[i];
 
     for( j = i+1; j < ImageDimension; j++ )
@@ -342,10 +346,10 @@ VectorLevelSetFunction< TImageType >
       const unsigned int positionDa = static_cast<unsigned int>( 
         m_Center + m_xStride[i] + m_xStride[j] );
 
-      gd->m_dxy[i][j] = gd->m_dxy[j][i] = 0.25 * ( it.GetPixel( positionAa )
-                                                 - it.GetPixel( positionBa )
-                                                 - it.GetPixel( positionCa )
-                                                 + it.GetPixel( positionDa ) )
+      gd->m_dxy[i][j] = gd->m_dxy[j][i] = 0.25 * ( it.GetPixel( positionAa )[component]
+                                                 - it.GetPixel( positionBa )[component]
+                                                 - it.GetPixel( positionCa )[component]
+                                                 + it.GetPixel( positionDa )[component] )
                                           * neighborhoodScales[i] * neighborhoodScales[j] ;
       }
     }
@@ -372,7 +376,7 @@ VectorLevelSetFunction< TImageType >
   if (m_AdvectionWeight != ZERO)
     {
     
-    advection_field = this->AdvectionField(it, offset, gd);
+    advection_field = this->AdvectionField(it, offset, component, gd);
     advection_term = ZERO;
     
     for(i = 0; i < ImageDimension; i++)

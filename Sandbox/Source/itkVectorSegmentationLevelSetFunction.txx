@@ -31,10 +31,10 @@ void VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
 
 template <class TImageType, class TFeatureImageType>
 void VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
-::SetAdvectionImage( MatrixImageType *s )
+::SetAdvectionImage( unsigned int component, VectorImageType *s )
 {
-  m_AdvectionImage = s;
-  m_MatrixInterpolator->SetInputImage(m_AdvectionImage);
+  m_AdvectionImage[component] = s;
+  m_VectorInterpolator->SetInputImage(m_AdvectionImage);
 }
   
 template <class TImageType, class TFeatureImageType>
@@ -67,18 +67,28 @@ template <class TImageType, class TFeatureImageType>
 void VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
 ::AllocateAdvectionImage()
 {
-  m_AdvectionImage->SetRequestedRegion(m_FeatureImage->GetRequestedRegion());
-  m_AdvectionImage->SetBufferedRegion(m_FeatureImage->GetBufferedRegion());
-  m_AdvectionImage->SetLargestPossibleRegion(m_FeatureImage->GetLargestPossibleRegion());
-  m_AdvectionImage->Allocate();
-  m_MatrixInterpolator->SetInputImage(m_AdvectionImage);
+
+  typedef ImageRegionConstIterator< FeatureImageType > FeatureIterator;
+  FeatureIterator ftr( m_FeatureImage, m_FeatureImage->GetBufferedRegion() );
+  ftr.GoToBegin();
+
+  const unsigned int numberOfComponents = MeasurementVectorTraits::GetLength( ftr.Get() );
+
+  for( unsigned int component = 0; component < numberOfComponents; component++)
+    {
+    m_AdvectionImage[component]->SetRequestedRegion(m_FeatureImage->GetRequestedRegion());
+    m_AdvectionImage[component]->SetBufferedRegion(m_FeatureImage->GetBufferedRegion());
+    m_AdvectionImage[component]->SetLargestPossibleRegion(m_FeatureImage->GetLargestPossibleRegion());
+    m_AdvectionImage[component]->Allocate();
+    }
+  m_VectorInterpolator->SetInputImage(m_AdvectionImage[0]);
 }
 
 template <class TImageType, class TFeatureImageType>
 typename VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>::ScalarValueType
 VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
 ::PropagationSpeed(const NeighborhoodType &neighborhood,
-                   const FloatOffsetType &offset, GlobalDataStruct *) const
+                   const FloatOffsetType &offset, unsigned int component, GlobalDataStruct *) const
 {
   IndexType idx = neighborhood.GetIndex();
 
@@ -91,16 +101,17 @@ VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
   if ( m_Interpolator->IsInsideBuffer(cdx) )
     {
     return (static_cast<ScalarValueType>(
-              m_Interpolator->EvaluateAtContinuousIndex(cdx)));
+              m_Interpolator->EvaluateAtContinuousIndex(cdx)[component]));
     }
-  else return ( static_cast<ScalarValueType>(m_SpeedImage->GetPixel(idx)) );
+
+  return ( static_cast<ScalarValueType>( m_SpeedImage->GetPixel(idx)[component] ));
 }
 
 template <class TImageType, class TFeatureImageType>
-typename VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>::MatrixType
+typename VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>::VectorType
 VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
 ::AdvectionField(const NeighborhoodType &neighborhood,
-                 const FloatOffsetType &offset, GlobalDataStruct *)  const
+                 const FloatOffsetType &offset, unsigned int component, GlobalDataStruct *)  const
 {
   IndexType idx = neighborhood.GetIndex();
   ContinuousIndexType cdx;
@@ -108,12 +119,16 @@ VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
     {
     cdx[i] = static_cast<double>(idx[i]) - offset[i];
     }
-  if ( m_MatrixInterpolator->IsInsideBuffer(cdx) )
+
+  this->m_VectorInterpolator->SetInputImage( this->m_AdvectionImage[component]);
+
+  if ( this->m_VectorInterpolator->IsInsideBuffer(cdx) )
     {
-    return ( m_MatrixCast(m_MatrixInterpolator->EvaluateAtContinuousIndex(cdx)));
+    return ( m_VectorCast(this->m_VectorInterpolator->EvaluateAtContinuousIndex(cdx)));
     }
+
   //Just return the default else
-    return ( m_AdvectionImage->GetPixel(idx) );
+  return ( this->m_AdvectionImage[component]->GetPixel(idx) );
   
 }
 
