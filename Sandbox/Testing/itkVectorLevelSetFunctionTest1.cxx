@@ -52,7 +52,8 @@ int main( int argc, char * argv [] )
   // Exercise the Print method 
   function->Print( std::cout );
 
-  typedef FunctionType::GlobalDataStruct GlobalDataStruct;
+  typedef FunctionType::GlobalDataStruct    GlobalDataStruct;
+  typedef FunctionType::VectorType          VectorType;
 
   GlobalDataStruct * gds = static_cast< GlobalDataStruct * >( function->GetGlobalDataPointer() );
    
@@ -73,8 +74,13 @@ int main( int argc, char * argv [] )
 
   for( unsigned int component = 0; component < NumberOfPhases; component++ )
     {
-    double update = function->ComputeUpdate( neigborhood, gds, component, offset );
-    std::cout << component << " : " << update << std::endl;
+    double update        = function->ComputeUpdate( neigborhood, gds, component, offset );
+    VectorType advection = function->AdvectionField( neigborhood, offset, component, gds );
+    double speed = function->PropagationSpeed( neigborhood, offset, component, gds );
+    double curvature = function->CurvatureSpeed( neigborhood, offset, component, gds );
+    double laplacian = function->LaplacianSmoothingSpeed( neigborhood, offset, component, gds );
+    std::cout << component << " : " << update << " : " << advection << " : ";
+    std::cout << speed << " : " << curvature <<  " : " << laplacian << std::endl;
     }
 
   function->ReleaseGlobalDataPointer( gds );

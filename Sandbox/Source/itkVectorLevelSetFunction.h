@@ -133,13 +133,13 @@ public:
    *  Default implementation returns zero. */ 
   virtual ScalarValueType PropagationSpeed(
     const NeighborhoodType& ,
-    const FloatOffsetType &, GlobalDataStruct * = 0 ) const
+    const FloatOffsetType &, unsigned int component, GlobalDataStruct * = 0 ) const
     { return NumericTraits<ScalarValueType>::Zero; }
 
   /** Curvature speed.  Can be used to spatially modify the effects of
       curvature . The default implementation returns one. */
   virtual ScalarValueType CurvatureSpeed(const NeighborhoodType &,
-                                         const FloatOffsetType &, GlobalDataStruct * = 0
+                                         const FloatOffsetType &, unsigned int component, GlobalDataStruct * = 0
                                          ) const
     { return NumericTraits<ScalarValueType>::One; }
 
@@ -147,7 +147,7 @@ public:
       effects of laplacian smoothing of the level set function */
   virtual ScalarValueType LaplacianSmoothingSpeed(
     const NeighborhoodType &,
-    const FloatOffsetType &, GlobalDataStruct * = 0) const
+    const FloatOffsetType &, unsigned int component, GlobalDataStruct * = 0) const
     { return NumericTraits<ScalarValueType>::One; }
 
   /** Alpha.  Scales all advection term values.*/ 
@@ -225,20 +225,24 @@ public:
   /**  */
   virtual ScalarValueType ComputeCurvatureTerm(const NeighborhoodType &,
                                                const FloatOffsetType &,
+                                               unsigned int component,
                                                GlobalDataStruct *gd = 0
                                                );
   virtual ScalarValueType ComputeMeanCurvature(const NeighborhoodType &,
                                                const FloatOffsetType &,
+                                               unsigned int component,
                                                GlobalDataStruct *gd = 0
                                                );
 
   virtual ScalarValueType ComputeMinimalCurvature(const NeighborhoodType &,
                                                   const FloatOffsetType &,
+                                                  unsigned int component,
                                                   GlobalDataStruct *gd = 0
                                                   );
   
   virtual ScalarValueType Compute3DMinimalCurvature(const NeighborhoodType &,
                                                     const FloatOffsetType &,
+                                                    unsigned int component,
                                                     GlobalDataStruct *gd = 0
                                                     );
   

@@ -25,25 +25,25 @@ namespace itk {
 template <class TImageType>
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction<TImageType>::ComputeCurvatureTerm(const NeighborhoodType &neighborhood,
-                                                   const FloatOffsetType &offset, GlobalDataStruct *gd)
+                                                   const FloatOffsetType &offset, unsigned int component, GlobalDataStruct *gd)
 {
   if ( m_UseMinimalCurvature == false )
     {
-    return this->ComputeMeanCurvature(neighborhood, offset, gd);
+    return this->ComputeMeanCurvature(neighborhood, offset, component, gd);
     }
   else
     {
     if (ImageDimension == 3)
       {
-      return this->ComputeMinimalCurvature(neighborhood, offset, gd);
+      return this->ComputeMinimalCurvature(neighborhood, offset, component, gd);
       }
     else if (ImageDimension == 2)
       {
-      return this->ComputeMeanCurvature(neighborhood, offset, gd);
+      return this->ComputeMeanCurvature(neighborhood, offset, component, gd);
       }
     else
       {
-      return this->ComputeMinimalCurvature(neighborhood, offset, gd);
+      return this->ComputeMinimalCurvature(neighborhood, offset, component, gd);
       }
     }
 }
@@ -54,7 +54,7 @@ typename VectorLevelSetFunction< TImageType >::ScalarValueType
 VectorLevelSetFunction< TImageType >
 ::ComputeMinimalCurvature(
   const NeighborhoodType &itkNotUsed(neighborhood),
-  const FloatOffsetType& itkNotUsed(offset), GlobalDataStruct *gd)
+  const FloatOffsetType& itkNotUsed(offset), unsigned int component, GlobalDataStruct *gd)
 {
 
   unsigned int i, j, n;
@@ -125,9 +125,9 @@ template< class TImageType>
 typename VectorLevelSetFunction< TImageType >::ScalarValueType
 VectorLevelSetFunction< TImageType >
 ::Compute3DMinimalCurvature(const NeighborhoodType &neighborhood,
-                            const FloatOffsetType& offset, GlobalDataStruct *gd)
+                            const FloatOffsetType& offset, unsigned int component, GlobalDataStruct *gd)
 {
-  ScalarValueType mean_curve = this->ComputeMeanCurvature(neighborhood, offset, gd);
+  ScalarValueType mean_curve = this->ComputeMeanCurvature(neighborhood, offset, component, gd);
   
   int i0 = 0, i1 = 1, i2 = 2;
   ScalarValueType gauss_curve =
@@ -159,7 +159,7 @@ template <class TImageType>
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction<TImageType>::ComputeMeanCurvature(
   const NeighborhoodType &itkNotUsed(neighborhood),
-  const FloatOffsetType &itkNotUsed(offset), GlobalDataStruct *gd)
+  const FloatOffsetType &itkNotUsed(offset), unsigned int component, GlobalDataStruct *gd)
 {
   // Calculate the mean curvature
   ScalarValueType curvature_term = NumericTraits<ScalarValueType>::Zero;
@@ -356,8 +356,8 @@ VectorLevelSetFunction< TImageType >
 
   if ( m_CurvatureWeight != ZERO )
     {
-    curvature_term = this->ComputeCurvatureTerm(it, offset, gd) * m_CurvatureWeight
-      * this->CurvatureSpeed(it, offset);
+    curvature_term = this->ComputeCurvatureTerm(it, offset, component, gd) * m_CurvatureWeight
+      * this->CurvatureSpeed(it, offset, component );
 
     gd->m_MaxCurvatureChange = vnl_math_max(gd->m_MaxCurvatureChange,
                    vnl_math_abs(curvature_term));
@@ -407,7 +407,7 @@ VectorLevelSetFunction< TImageType >
   if (m_PropagationWeight != ZERO)
     {
     // Get the propagation speed
-    propagation_term = m_PropagationWeight * this->PropagationSpeed(it, offset, gd);
+    propagation_term = m_PropagationWeight * this->PropagationSpeed(it, offset, component, gd);
       
     //
     // Construct upwind gradient values for use in the propagation speed term:
@@ -457,7 +457,7 @@ VectorLevelSetFunction< TImageType >
 
     // Scale the laplacian by its speed and weight
     laplacian_term = 
-      laplacian * m_LaplacianSmoothingWeight * LaplacianSmoothingSpeed(it,offset, gd);
+      laplacian * m_LaplacianSmoothingWeight * LaplacianSmoothingSpeed(it,offset, component, gd);
     }
   else 
     {
