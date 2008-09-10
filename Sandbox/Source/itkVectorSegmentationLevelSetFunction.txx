@@ -18,6 +18,7 @@
 #define __itkVectorSegmentationLevelSetFunction_txx_
 
 #include "itkVectorSegmentationLevelSetFunction.h"
+#include "itkMeasurementVectorTraits.h"
 
 namespace itk {
   
