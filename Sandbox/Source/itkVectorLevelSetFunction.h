@@ -183,8 +183,8 @@ public:
   /** Compute the equation value. */
   virtual ScalarValueType ComputeUpdate(const NeighborhoodType &neighborhood,
                                   void *globalData,
-                                  const FloatOffsetType& = FloatOffsetType(0.0),
-                                  unsigned int component = 0);
+                                  unsigned int component = 0,
+                                  const FloatOffsetType& = FloatOffsetType(0.0));
 
  /** Computes the time step for an update given a global data structure.
    * The data used in the computation may take different forms depending on

@@ -290,7 +290,7 @@ template< class TImageType >
 typename VectorLevelSetFunction< TImageType >::ScalarValueType
 VectorLevelSetFunction< TImageType >
 ::ComputeUpdate(const NeighborhoodType &it, void *globalData,
-                const FloatOffsetType& offset, unsigned int component)
+                unsigned int component, const FloatOffsetType& offset)
 {
   unsigned int i, j;  
   const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
