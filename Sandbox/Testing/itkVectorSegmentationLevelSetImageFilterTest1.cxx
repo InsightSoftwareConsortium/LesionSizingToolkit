@@ -307,5 +307,24 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
+  //
+  // Set the weights and run the filter again.
+  //
+  differenceFunction->SetPropagationWeight( 10.0 );
+  differenceFunction->SetAdvectionWeight( 10.0 );
+
+  // Force the filter to run again
+  inputLevelSet->Modified();
+
+  try
+    {
+    filter->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
+
   return EXIT_SUCCESS;
 }
