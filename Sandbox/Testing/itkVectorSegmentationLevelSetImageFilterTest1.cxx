@@ -60,12 +60,21 @@ public:
   typedef typename Superclass::PixelType              PixelType;
   typedef typename Superclass::NeighborhoodType       NeighborhoodType;
   typedef typename Superclass::FloatOffsetType        FloatOffsetType;
+  typedef typename Superclass::ScalarValueType        ScalarValueType;
+  typedef typename Superclass::VectorType             VectorType;
+  typedef typename Superclass::GlobalDataStruct       GlobalDataStruct;
 
   virtual PixelType  ComputeUpdate(
     const NeighborhoodType &neighborhood, void *globalData,
     const FloatOffsetType &offset = FloatOffsetType(0.0))
       {
       PixelType output;
+      const unsigned int component = 0;
+      GlobalDataStruct * data = static_cast<GlobalDataStruct *>( globalData );
+      ScalarValueType propagationSpeed = this->PropagationSpeed( neighborhood, offset, component, data );
+      ScalarValueType curvatureSpeed   = this->CurvatureSpeed(   neighborhood, offset, component, data );
+      VectorType      advectionField   = this->AdvectionField(   neighborhood, offset, component, data );
+      std::cout << propagationSpeed << " " << curvatureSpeed << std::endl;
       return output;
       }
 };

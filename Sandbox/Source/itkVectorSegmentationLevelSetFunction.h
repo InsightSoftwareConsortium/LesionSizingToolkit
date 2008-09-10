@@ -163,6 +163,10 @@ protected:
   virtual ScalarValueType PropagationSpeed(const NeighborhoodType &,
                                            const FloatOffsetType &, unsigned int component, GlobalDataStruct *gd) const;
 
+  /** Returns the propagation speed from the precalculated speed image.*/
+  virtual ScalarValueType CurvatureSpeed(const NeighborhoodType &,
+                                           const FloatOffsetType &, unsigned int component, GlobalDataStruct *gd) const;
+
   /** Advection field.  Returns a vector from the computed advectionfield.*/
   virtual VectorType AdvectionField(const NeighborhoodType &,
                                     const FloatOffsetType &, unsigned int component, GlobalDataStruct *gd) const;

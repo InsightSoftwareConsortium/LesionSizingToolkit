@@ -110,6 +110,19 @@ VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
   return ( static_cast<ScalarValueType>( m_SpeedImage->GetPixel(idx)[component] ));
 }
 
+
+template <class TImageType, class TFeatureImageType>
+typename VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>::ScalarValueType
+VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
+::CurvatureSpeed(const NeighborhoodType &neighborhood,
+                   const FloatOffsetType &offset, unsigned int component, GlobalDataStruct *) const
+{
+  IndexType idx = neighborhood.GetIndex();
+  // FIXME : TO BE IMPLEMENTED
+  return ( static_cast<ScalarValueType>( m_SpeedImage->GetPixel(idx)[component] ));
+}
+
+
 template <class TImageType, class TFeatureImageType>
 typename VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>::VectorType
 VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
