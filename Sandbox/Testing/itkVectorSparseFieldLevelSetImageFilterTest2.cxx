@@ -140,6 +140,9 @@ int main( int argc, char * argv [] )
   featureImage->Allocate();
 
 
+  //
+  // Initializing the Feature image
+  //
   typedef itk::ImageRegionIteratorWithIndex< FeatureImageType > FeatureIteratorType;
 
   FeatureImageType::PointType    point;
@@ -151,11 +154,14 @@ int main( int argc, char * argv [] )
   const double radius1 = ( spacing[0] * size[0] / 2.0 ) * 0.95; // 95% of half the image
   const double squaredRadius1 = radius1 * radius1;
 
+  const float ZeroValue = 0.0;
+  const float UnitValue = 1.0;
+
   FeaturePixelType unitVector;
   FeaturePixelType zeroVector;
 
-  zeroVector.Fill( 0.0 );
-  unitVector.Fill( 1.0 );
+  zeroVector.Fill( ZeroValue );
+  unitVector.Fill( UnitValue );
 
   FeatureIteratorType ftr( featureImage, region );
 
@@ -173,6 +179,59 @@ int main( int argc, char * argv [] )
       ftr.Set( unitVector );
       }
     ++ftr;
+    }
+
+  //
+  // Initializing the Feature image
+  //
+  typedef itk::ImageRegionIteratorWithIndex< LevelSetImageType > LevelSetIteratorType;
+
+  LevelSetImageType::PointType  center2;
+
+  center2[0] = size[0] * spacing[0] * 0.25 + origin[0];  // circle on the left side of the image
+  center2[1] = size[1] * spacing[1] * 0.50 + origin[1];
+
+  const double radius2 = ( spacing[0] * size[0] / 4.0 ) * 0.95; // 95% of a quarter of the image
+  const double squaredRadius2 = radius2 * radius2;
+
+  LevelSetImageType::PointType  center3;
+
+  center3[0] = size[0] * spacing[0] * 0.75 + origin[0];  // circle on the left side of the image
+  center3[1] = size[1] * spacing[1] * 0.50 + origin[1];
+
+  const double radius3 = ( spacing[0] * size[0] / 4.0 ) * 0.95; // 95% of a quarter of the image
+  const double squaredRadius3 = radius3 * radius3;
+
+  LevelSetIteratorType ltr( inputLevelSet, region );
+
+  ltr.GoToBegin();
+
+  LevelSetPixelType pixelVector;
+
+  while( !ltr.IsAtEnd() )
+    {
+    inputLevelSet->TransformIndexToPhysicalPoint( ltr.GetIndex(), point );
+
+    if( point.SquaredEuclideanDistanceTo( center2 ) > squaredRadius2 )
+      {
+      pixelVector[0] = ZeroValue;
+      }
+    else
+      {
+      pixelVector[0] = UnitValue;
+      }
+
+    if( point.SquaredEuclideanDistanceTo( center3 ) > squaredRadius3 )
+      {
+      pixelVector[1] = ZeroValue;
+      }
+    else
+      {
+      pixelVector[1] = UnitValue;
+      }
+
+    ltr.Set( pixelVector );
+    ++ltr;
     }
 
   const unsigned int numberOfLayers = 5;
