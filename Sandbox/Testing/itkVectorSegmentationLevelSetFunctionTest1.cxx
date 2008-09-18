@@ -99,6 +99,16 @@ int main( int argc, char * argv [] )
   inputLevelSet->SetRegions( region );
   inputLevelSet->Allocate();
 
+  LevelSetImageType::Pointer featureImage = LevelSetImageType::New();
+
+  featureImage->SetRegions( region );
+  featureImage->Allocate();
+
+  function->SetFeatureImage( featureImage );
+
+  function->AllocateSpeedImage();
+  function->AllocateAdvectionImage();
+
   // Exercise the Print method 
   function->Print( std::cout );
 
