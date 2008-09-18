@@ -240,12 +240,6 @@ public:
                                                   GlobalDataStruct *gd = 0
                                                   );
   
-  virtual ScalarValueType Compute3DMinimalCurvature(const NeighborhoodType &,
-                                                    const FloatOffsetType &,
-                                                    unsigned int component,
-                                                    GlobalDataStruct *gd = 0
-                                                    );
-  
   /** */
   void SetUseMinimalCurvature( bool b )
   {

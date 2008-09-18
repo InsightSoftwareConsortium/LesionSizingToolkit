@@ -120,41 +120,6 @@ VectorLevelSetFunction< TImageType >
   return ( mincurve / gradMag );  
 }
 
-
-template< class TImageType>
-typename VectorLevelSetFunction< TImageType >::ScalarValueType
-VectorLevelSetFunction< TImageType >
-::Compute3DMinimalCurvature(const NeighborhoodType &neighborhood,
-                            const FloatOffsetType& offset, unsigned int component, GlobalDataStruct *gd)
-{
-  ScalarValueType mean_curve = this->ComputeMeanCurvature(neighborhood, offset, component, gd);
-  
-  int i0 = 0, i1 = 1, i2 = 2;
-  ScalarValueType gauss_curve =
-    (2*(gd->m_dx[i0]*gd->m_dx[i1]*(gd->m_dxy[i2][i0]
-                                   *gd->m_dxy[i1][i2]-gd->m_dxy[i0][i1]*gd->m_dxy[i2][i2]) +
-        gd->m_dx[i1]*gd->m_dx[i2]*(gd->m_dxy[i2][i0]
-                                   *gd->m_dxy[i0][i1]-gd->m_dxy[i1][i2]*gd->m_dxy[i0][i0]) +
-        gd->m_dx[i0]*gd->m_dx[i2]*(gd->m_dxy[i1][i2]
-                                   *gd->m_dxy[i0][i1]-gd->m_dxy[i2][i0]*gd->m_dxy[i1][i1])) +
-     gd->m_dx[i0]*gd->m_dx[i0]*(gd->m_dxy[i1][i1]
-                                *gd->m_dxy[i2][i2]-gd->m_dxy[i1][i2]*gd->m_dxy[i1][i2]) +
-     gd->m_dx[i1]*gd->m_dx[i1]*(gd->m_dxy[i0][i0]
-                                *gd->m_dxy[i2][i2]-gd->m_dxy[i2][i0]*gd->m_dxy[i2][i0]) +
-     gd->m_dx[i2]*gd->m_dx[i2]*(gd->m_dxy[i1][i1]
-                                *gd->m_dxy[i0][i0]-gd->m_dxy[i0][i1]*gd->m_dxy[i0][i1]))/
-    (gd->m_dx[i0]*gd->m_dx[i0] + gd->m_dx[i1]*gd->m_dx[i1] + gd->m_dx[i2]*gd->m_dx[i2]);
-  
-  ScalarValueType discriminant = mean_curve * mean_curve-gauss_curve;
-  if (discriminant < 0.0)
-    {
-    discriminant = 0.0;
-    }
-  discriminant = vcl_sqrt(discriminant);
-  return  (mean_curve - discriminant);
-}
-
-
 template <class TImageType>
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction<TImageType>::ComputeMeanCurvature(
