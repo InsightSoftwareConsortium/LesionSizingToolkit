@@ -333,4 +333,5 @@ int main( int argc, char * argv [] )
     helperFilter->ProcessOutsideList( outsideList, changeToStatus, component );
     }
 
+  return EXIT_SUCCESS;
 }

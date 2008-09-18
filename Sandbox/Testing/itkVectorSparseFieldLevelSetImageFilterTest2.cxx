@@ -439,4 +439,16 @@ int main( int argc, char * argv [] )
     helperFilter->ProcessOutsideList( outsideList, changeToStatus, component );
     }
 
+  try
+    {
+    helperFilter->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS;
 }
+
