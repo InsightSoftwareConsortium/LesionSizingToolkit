@@ -83,8 +83,23 @@ int main( int argc, char * argv [] )
   
   FunctionType::FloatOffsetType offset;
 
+  // Set the 2D components
   offset[0] = 0.0;
   offset[1] = 0.0;
+
+  for( unsigned int component = 0; component < NumberOfPhases; component++ )
+    {
+    double update        = function->ComputeUpdate( neigborhood, gds, component, offset );
+    VectorType advection = function->AdvectionField( neigborhood, offset, component, gds );
+    double speed = function->PropagationSpeed( neigborhood, offset, component, gds );
+    double curvature = function->CurvatureSpeed( neigborhood, offset, component, gds );
+    double laplacian = function->LaplacianSmoothingSpeed( neigborhood, offset, component, gds );
+    std::cout << component << " : " << update << " : " << advection << " : ";
+    std::cout << speed << " : " << curvature <<  " : " << laplacian << std::endl;
+    }
+
+  // Now exercise the options of Minimal curvature.
+  function->UseMinimalCurvatureOn();
 
   for( unsigned int component = 0; component < NumberOfPhases; component++ )
     {
