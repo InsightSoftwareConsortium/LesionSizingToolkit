@@ -24,7 +24,6 @@ int main( int argc, char * argv [] )
   const unsigned int NumberOfPhases = 2;
 
   typedef itk::Vector< float, NumberOfPhases >           LevelSetPixelType;
-  typedef itk::Vector< float, NumberOfPhases >           FeaturePixelType;
 
   typedef itk::Image< LevelSetPixelType, Dimension >     LevelSetImageType;
 
@@ -48,6 +47,21 @@ int main( int argc, char * argv [] )
 
   inputLevelSet->SetRegions( region );
   inputLevelSet->Allocate();
+
+  FunctionType::ScalarValueType curvatureWeight = 10.0;
+
+  // First set a trivial number
+  function->SetCurvatureWeight( 1.0 );
+  // Then set the real value
+  function->SetCurvatureWeight( curvatureWeight );
+  // Then check if the value was stored correctly
+  if( function->GetCurvatureWeight() != curvatureWeight )
+    {
+    std::cerr << "Error in SetCurvatureWeight()/GetCurvatureWeight() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+
 
   // Exercise the Print method 
   function->Print( std::cout );

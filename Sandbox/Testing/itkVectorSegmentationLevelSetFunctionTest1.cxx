@@ -99,7 +99,7 @@ int main( int argc, char * argv [] )
   inputLevelSet->SetRegions( region );
   inputLevelSet->Allocate();
 
-  LevelSetImageType::Pointer featureImage = LevelSetImageType::New();
+  FeatureImageType::Pointer featureImage = FeatureImageType::New();
 
   featureImage->SetRegions( region );
   featureImage->Allocate();
