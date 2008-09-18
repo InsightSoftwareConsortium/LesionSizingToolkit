@@ -48,8 +48,13 @@ int main( int argc, char * argv [] )
   inputLevelSet->SetRegions( region );
   inputLevelSet->Allocate();
 
-  FunctionType::ScalarValueType curvatureWeight = 10.0;
+  FunctionType::ScalarValueType curvatureWeight   = 10.0;
+  FunctionType::ScalarValueType propagationWeight = 10.0;
+  FunctionType::ScalarValueType advectionWeight   = 10.0;
 
+  //
+  // Test Set/GetCurvatureWeight()
+  //
   // First set a trivial number
   function->SetCurvatureWeight( 1.0 );
   // Then set the real value
@@ -61,6 +66,35 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
+
+  //
+  // Test Set/GetPropagationWeight()
+  //
+  // First set a trivial number
+  function->SetPropagationWeight( 1.0 );
+  // Then set the real value
+  function->SetPropagationWeight( propagationWeight );
+  // Then check if the value was stored correctly
+  if( function->GetPropagationWeight() != propagationWeight )
+    {
+    std::cerr << "Error in SetPropagationWeight()/GetPropagationWeight() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+
+  //
+  // Test Set/GetAdvectionWeight()
+  //
+  // First set a trivial number
+  function->SetAdvectionWeight( 1.0 );
+  // Then set the real value
+  function->SetAdvectionWeight( advectionWeight );
+  // Then check if the value was stored correctly
+  if( function->GetAdvectionWeight() != advectionWeight )
+    {
+    std::cerr << "Error in SetAdvectionWeight()/GetAdvectionWeight() " << std::endl;
+    return EXIT_FAILURE;
+    }
 
 
   // Exercise the Print method 
@@ -110,6 +144,23 @@ int main( int argc, char * argv [] )
     double laplacian = function->LaplacianSmoothingSpeed( neigborhood, offset, component, gds );
     std::cout << component << " : " << update << " : " << advection << " : ";
     std::cout << speed << " : " << curvature <<  " : " << laplacian << std::endl;
+    }
+
+  //
+  // Exercise combinations of all weights being zero or non-zero
+  //
+  for(unsigned int weightCombination = 0; weightCombination < 8; weightCombination++ )
+    {
+    curvatureWeight   = 10.0 * ( weightCombination & 1 );
+    propagationWeight = 10.0 * ( weightCombination & 2 );
+    advectionWeight   = 10.0 * ( weightCombination & 4 );
+    function->SetCurvatureWeight( curvatureWeight );
+    function->SetPropagationWeight( propagationWeight );
+    function->SetAdvectionWeight( advectionWeight );
+    for( unsigned int component = 0; component < NumberOfPhases; component++ )
+      {
+      function->ComputeUpdate( neigborhood, gds, component, offset );
+      }
     }
 
   function->ReleaseGlobalDataPointer( gds );
