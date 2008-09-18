@@ -122,7 +122,7 @@ int main( int argc, char * argv [] )
   LevelSetImageType::PointType      origin;
 
   start.Fill( 0 );
-  size.Fill( 100 );
+  size.Fill( 10 );
 
   spacing.Fill(  2.0 );  // Purposely not using 1.0; better for testing
   origin.Fill( 150.0 );  // Purposely not using 0.0; better for testing
@@ -207,6 +207,7 @@ int main( int argc, char * argv [] )
   ltr.GoToBegin();
 
   LevelSetPixelType pixelVector;
+  pixelVector.Fill( ZeroValue );
 
   while( !ltr.IsAtEnd() )
     {
