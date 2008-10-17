@@ -957,10 +957,10 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
   const NeighborhoodScalesType neighborhoodScales = this->GetDifferenceFunction()->ComputeNeighborhoodScales();
 
-  ValueType dx_forward;
-  ValueType dx_backward;
-  ValueType length;
-  ValueType distance;
+  ScalarValueType dx_forward;
+  ScalarValueType dx_backward;
+  ScalarValueType length;
+  ScalarValueType distance;
 
   for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
     {
@@ -977,25 +977,30 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       length = m_ValueZero;
       for (i = 0; i < ImageDimension; ++i)
         {
-        dx_forward = ( shiftedIt.GetPixel(center + m_NeighborList.GetStride(i))
-          - shiftedIt.GetCenterPixel() ) * neighborhoodScales[i];
-        dx_backward = ( shiftedIt.GetCenterPixel()
-          - shiftedIt.GetPixel(center - m_NeighborList.GetStride(i)) ) * neighborhoodScales[i];
+        ValueType centerPixelValue   = shiftedIt.GetCenterPixel();
+        ValueType forwardPixelValue  = shiftedIt.GetPixel(center + m_NeighborList.GetStride(i));
+        ValueType backwardPixelValue = shiftedIt.GetPixel(center - m_NeighborList.GetStride(i));
 
-  // FIXME     if ( vnl_math_abs(dx_forward) > vnl_math_abs(dx_backward) )
-  // FIXME       {
-  // FIXME       length += dx_forward * dx_forward;
-  // FIXME       }
-  // FIXME     else
-  // FIXME       {
-  // FIXME       length += dx_backward * dx_backward;
-  // FIXME       }
+        dx_forward  = ( forwardPixelValue[component] - centerPixelValue[component]   ) * neighborhoodScales[i];
+        dx_backward = ( centerPixelValue[component]  - backwardPixelValue[component] ) * neighborhoodScales[i];
+
+        if ( vnl_math_abs(dx_forward) > vnl_math_abs(dx_backward) )
+          {
+          length += dx_forward * dx_forward;
+          }
+        else
+          {
+          length += dx_backward * dx_backward;
+          }
         }
-  // FIXME   length = vcl_sqrt((double)length) + MIN_NORM;
-  // FIXME   distance = shiftedIt.GetCenterPixel() / length;
-  // FIXME
-  // FIXME   output->SetPixel( activeIt->m_Value , 
-  // FIXME                     vnl_math_min(vnl_math_max(-CHANGE_FACTOR, distance), CHANGE_FACTOR) );
+      length = vcl_sqrt((double)length) + MIN_NORM;
+      distance = shiftedIt.GetCenterPixel() / length;
+    
+      ValueType outpuPixel = output->GetPixel( activeIt->m_Value );
+
+      outpuPixel[component] = vnl_math_min(vnl_math_max(-CHANGE_FACTOR, distance), CHANGE_FACTOR);
+
+      output->SetPixel( activeIt->m_Value , outpuPixel );
       }
     }
   
