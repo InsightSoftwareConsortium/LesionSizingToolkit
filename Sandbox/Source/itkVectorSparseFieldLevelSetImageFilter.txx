@@ -932,7 +932,7 @@ void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::InitializeActiveLayerValues()
 {
-  const ValueType CHANGE_FACTOR = m_ConstantGradientValue / 2.0;
+  const ScalarValueType CHANGE_FACTOR = m_ConstantGradientValue / 2.0;
   ScalarValueType MIN_NORM      = 1.0e-6;
 
   if (this->GetUseImageSpacing())
@@ -974,15 +974,20 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       // assign an active layer value in the output image.
       shiftedIt.SetLocation( activeIt->m_Value );
 
-      length = m_ValueZero;
+      const ValueType centerPixelValue   = shiftedIt.GetCenterPixel();
+      const ScalarValueType centerPixelValueComponent   = centerPixelValue[component];
+
+      length = m_ScalarValueZero;
       for (i = 0; i < ImageDimension; ++i)
         {
-        ValueType centerPixelValue   = shiftedIt.GetCenterPixel();
-        ValueType forwardPixelValue  = shiftedIt.GetPixel(center + m_NeighborList.GetStride(i));
-        ValueType backwardPixelValue = shiftedIt.GetPixel(center - m_NeighborList.GetStride(i));
+        const ValueType forwardPixelValue  = shiftedIt.GetPixel(center + m_NeighborList.GetStride(i));
+        const ValueType backwardPixelValue = shiftedIt.GetPixel(center - m_NeighborList.GetStride(i));
 
-        dx_forward  = ( forwardPixelValue[component] - centerPixelValue[component]   ) * neighborhoodScales[i];
-        dx_backward = ( centerPixelValue[component]  - backwardPixelValue[component] ) * neighborhoodScales[i];
+        const ScalarValueType forwardPixelValueComponent  = forwardPixelValue[component];
+        const ScalarValueType backwardPixelValueComponent = backwardPixelValue[component];
+
+        dx_forward  = ( forwardPixelValueComponent - centerPixelValueComponent   ) * neighborhoodScales[i];
+        dx_backward = ( centerPixelValueComponent  - backwardPixelValueComponent ) * neighborhoodScales[i];
 
         if ( vnl_math_abs(dx_forward) > vnl_math_abs(dx_backward) )
           {
@@ -994,7 +999,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
           }
         }
       length = vcl_sqrt((double)length) + MIN_NORM;
-      distance = shiftedIt.GetCenterPixel() / length;
+      distance = centerPixelValueComponent / length;
     
       ValueType outpuPixel = output->GetPixel( activeIt->m_Value );
 
