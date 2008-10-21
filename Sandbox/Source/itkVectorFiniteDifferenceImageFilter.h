@@ -18,6 +18,8 @@
 #define __itkVectorFiniteDifferenceImageFilter_h_
 
 #include "itkFiniteDifferenceImageFilter.h"
+#include "itkVectorFiniteDifferenceFunction.h"
+#include <vector>
 
 namespace itk {
 
@@ -45,9 +47,29 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorFiniteDifferenceImageFilter, FiniteDifferenceImageFilter);
 
+  typedef typename Superclass::OutputPixelValueType               OutputPixelValueType;
+  typedef typename Superclass::OutputImageType                    OutputImageType;
+  
+  /** Type of the function used for computing the updates at a given pixel.
+   * Note that this function does not derive from the
+   * itk::FiniteDifferenceFunction because the signature of its ComputeUpdate()
+   * method is not appropriate for the case of images with multiple components.
+   * */
+  typedef VectorFiniteDifferenceFunction< TInputImage >        VectorDifferenceFunctionType;
+  typedef typename VectorDifferenceFunctionType::Pointer  VectorDifferenceFunctionPointer;
+
+  /** List of difference functions. We expect to have one function per
+   * component of the input image */
+  typedef std::vector< VectorDifferenceFunctionPointer >       VectorDifferenceFunctionListType;
+  
 protected:
   VectorFiniteDifferenceImageFilter();
   ~VectorFiniteDifferenceImageFilter();
+
+  /** This is the high-level algorithm for calculating finite difference 
+   * solutions. It calls virtual methods in its subclasses to implement the 
+   * major steps of the algorithm. */
+  virtual void GenerateData();
 
   virtual void PrintSelf(std::ostream& os, Indent indent) const;
 
@@ -73,8 +95,25 @@ protected:
    * implementation. */
   virtual void CopyInputToOutput();
 
-private:
+  /** The number of components per pixel in the input vector image. This is an
+   * auxiliary variable used to cache the number of components. */
+  unsigned int m_NumberOfComponents;
 
+  /** List of finite difference functions that will compute the updates at
+   * every pixel. There should be one function per component of the input
+   * image. For example, if the input image has 5 components, this filter
+   * expects to receive from the user, 5 finite difference functions. Each one
+   * of the functions will compute the update for its respective pixel
+   * component. This couldn't be factorized in a single function that computes
+   * the updates in a single step, because this filter uses an internal sparce
+   * representation and most of the time the sparce representation of one
+   * component will not overlap with the sparce representation of the other,
+   * meaning that while one of the components can be updated at a particular
+   * pixel, the values of the other components may not be relevant nor needed
+   * at that same pixel. */
+  VectorDifferenceFunctionListType   m_DifferenceFunctions;  
+
+private:
   VectorFiniteDifferenceImageFilter(const Self&);//purposely not implemented
   void operator=(const Self&);      //purposely not implemented
 

@@ -590,26 +590,9 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     m_ConstantGradientValue = 1.0;
     }
 
-  // Find the number of components per pixel
-  typedef ImageRegionConstIterator< OutputImageType > OutputImageIteratorType;
-  const OutputImageType * outputImage = this->GetOutput();
-  OutputImageIteratorType otr( outputImage, outputImage->GetBufferedRegion() );
-  otr.GoToBegin();
-
-  this->m_NumberOfComponents = MeasurementVectorTraits::GetLength( otr.Get() );
-
-std::cout << "NUMBER OF COMPONENTS = " << this->m_NumberOfComponents << std::endl;
 
   this->m_LayersComponents.resize( this->m_NumberOfComponents );
-  this->m_DifferenceFunctions.resize( this->m_NumberOfComponents );
 
-  // Initialize the pointers to NULL, in this case, the user can set only some
-  // of the functions, and leave NULL the ones corresponding to components that
-  // are not to be updated.
-  for( unsigned int c = 0; c < this->m_NumberOfComponents; c++ )
-    {
-    this->m_DifferenceFunctions[c] = NULL;
-    }
 
   // Allocate the status image.
   m_StatusImage = StatusImageType::New();

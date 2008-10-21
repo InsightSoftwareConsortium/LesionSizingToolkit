@@ -17,14 +17,13 @@
 #ifndef __itkVectorSparseFieldLevelSetImageFilter_h_
 #define __itkVectorSparseFieldLevelSetImageFilter_h_
 
-#include "itkFiniteDifferenceImageFilter.h"
+#include "itkVectorFiniteDifferenceImageFilter.h"
 #include "itkMultiThreader.h"
 #include "itkSparseFieldLayer.h"
 #include "itkObjectStore.h"
 #include <vector>
 #include "itkNeighborhoodIterator.h"
 #include "itkMeasurementVectorTraits.h"
-#include "itkVectorFiniteDifferenceFunction.h"
 
 namespace itk {
 
@@ -226,44 +225,34 @@ private:
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT VectorSparseFieldLevelSetImageFilter :
-  public FiniteDifferenceImageFilter<TInputImage, TOutputImage>
+  public VectorFiniteDifferenceImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs */
   typedef VectorSparseFieldLevelSetImageFilter  Self;
-  typedef FiniteDifferenceImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef VectorFiniteDifferenceImageFilter<TInputImage, TOutputImage> Superclass;
   typedef SmartPointer<Self>  Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
-
-  /**Typedefs from the superclass */
-  typedef typename Superclass::TimeStepType TimeStepType;
-  typedef typename Superclass::RadiusType RadiusType;
-  typedef typename Superclass::NeighborhoodScalesType NeighborhoodScalesType;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorSparseFieldLevelSetImageFilter, FiniteDifferenceImageFilter);
+  itkTypeMacro(VectorSparseFieldLevelSetImageFilter, VectorFiniteDifferenceImageFilter);
 
+  /**Typedefs from the superclass */
+  typedef typename Superclass::TimeStepType TimeStepType;
+  typedef typename Superclass::RadiusType RadiusType;
+  typedef typename Superclass::NeighborhoodScalesType NeighborhoodScalesType;
+  typedef typename Superclass::VectorDifferenceFunctionPointer VectorDifferenceFunctionPointer;
+  typedef typename Superclass::VectorDifferenceFunctionType VectorDifferenceFunctionType;
+  
   /** Information derived from the image types. */
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
   typedef typename OutputImageType::IndexType IndexType;
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
-
-  /** Type of the function used for computing the updates at a given pixel.
-   * Note that this function does not derive from the
-   * itk::FiniteDifferenceFunction because the signature of its ComputeUpdate()
-   * method is not appropriate for the case of images with multiple components.
-   * */
-  typedef VectorFiniteDifferenceFunction< TInputImage >        VectorDifferenceFunctionType;
-  typedef typename VectorDifferenceFunctionType::ConstPointer  VectorDifferenceFunctionPointer;
-
-  /** List of difference functions. We expect to have one function per
-   * component of the input image */
-  typedef std::vector< VectorDifferenceFunctionPointer >       VectorDifferenceFunctionListType;
 
   /** The data type used in numerical computations.  Derived from the output
    *  image type. */
@@ -489,10 +478,6 @@ protected:
    * This active layer is the interface of interest, i.e. the zero level set.*/
   unsigned int m_NumberOfLayers;
 
-  /** The number of components per pixel in the input vector image. This is an
-   * auxiliary variable used to cache the number of components. */
-  unsigned int m_NumberOfComponents;
-
   /** An image of status values used internally by the algorithm. */
   typename StatusImageType::Pointer m_StatusImage;
 
@@ -524,20 +509,6 @@ private:
   /** This flag is true when methods need to check boundary conditions and
       false when methods do not need to check for boundary conditions. */
   bool m_BoundsCheckingActive;
-
-  /** List of finite difference functions that will compute the updates at
-   * every pixel. There should be one function per component of the input
-   * image. For example, if the input image has 5 components, this filter
-   * expects to receive from the user, 5 finite difference functions. Each one
-   * of the functions will compute the update for its respective pixel
-   * component. This couldn't be factorized in a single function that computes
-   * the updates in a single step, because this filter uses an internal spare
-   * representation and most of the time the spare representation of one
-   * component will not overlap with the spare representation of the other,
-   * meaning that while one of the components can be updated at a particular
-   * pixel, the values of the other components may not be relevant nor needed
-   * at that same pixel. */
-  VectorDifferenceFunctionListType   m_DifferenceFunctions;
 };
   
   
