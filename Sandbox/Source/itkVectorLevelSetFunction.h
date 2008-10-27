@@ -17,8 +17,10 @@
 #ifndef __itkVectorLevelSetFunction_h_
 #define __itkVectorLevelSetFunction_h_
 
-#include "itkFiniteDifferenceFunction.h"
+#include "itkVectorFiniteDifferenceFunction.h"
 #include "itkMatrix.h"
+#include "itkVariableSizeMatrix.h"
+#include "itkVariableLengthVector.h"
 
 namespace itk {
 
@@ -62,12 +64,12 @@ namespace itk {
  */
 template <class TImageType>
 class ITK_EXPORT VectorLevelSetFunction
-  : public FiniteDifferenceFunction<TImageType>
+  : public VectorFiniteDifferenceFunction<TImageType>
 {
 public:
   /** Standard class typedefs. */
   typedef VectorLevelSetFunction Self;
-  typedef FiniteDifferenceFunction<TImageType> Superclass;
+  typedef VectorFiniteDifferenceFunction<TImageType> Superclass;
   typedef SmartPointer<Self> Pointer;
   typedef SmartPointer<const Self> ConstPointer;
 
@@ -75,7 +77,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro( VectorLevelSetFunction, FiniteDifferenceFunction );
+  itkTypeMacro( VectorLevelSetFunction, VectorFiniteDifferenceFunction );
 
   /** Extract some parameters from the superclass. */
   itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
@@ -90,22 +92,23 @@ public:
   typedef typename Superclass::NeighborhoodType NeighborhoodType;
   typedef typename Superclass::NeighborhoodScalesType NeighborhoodScalesType;
   typedef typename Superclass::FloatOffsetType FloatOffsetType;
+  typedef VariableLengthVector< ScalarValueType > VectorValueType;
+  typedef VariableSizeMatrix< ScalarValueType >   MatrixValueType;
 
   /** The vector type that will be used in the calculations. */
   //  typedef
   typedef FixedArray<ScalarValueType, itkGetStaticConstMacro(ImageDimension)> VectorType;
 
-  /** Define an image type for the advection field. */
-  typedef Matrix< double, ImageDimension, ImageDimension >             MatrixType;
-  typedef Image< MatrixType, itkGetStaticConstMacro(ImageDimension)>   MatrixImageType;
-
   /** A global data type for this class of equations.  Used to store
    * values that are needed in calculating the time step and other intermediate
    * products such as derivatives that may be used by virtual functions called
    * from ComputeUpdate.  Caching these values here allows the ComputeUpdate
-   * function to be const and thread safe.*/
-  struct GlobalDataStruct
-  {
+   * function to be const and thread safe.
+   * The structure has as many components as the number of phases. The 
+   * structure is pre-allocated to a length of the number of components when 
+   * GetGlobalDataPointer() is invoked for the first time. */
+  struct PhaseDataStruct
+    {
     ScalarValueType m_MaxAdvectionChange;
     ScalarValueType m_MaxPropagationChange;
     ScalarValueType m_MaxCurvatureChange;
@@ -120,59 +123,71 @@ public:
     
     ScalarValueType m_dx_forward[itkGetStaticConstMacro(ImageDimension)];
     ScalarValueType m_dx_backward[itkGetStaticConstMacro(ImageDimension)];
-    
+
     ScalarValueType m_GradMagSqr;
-  };
+    };  
+  struct GlobalDataStruct
+    {
+    PhaseDataStruct * m_PhaseData;
+    };
+  
+
+  /** Define an image type for the advection field. */
+  typedef Matrix< double, ImageDimension, ImageDimension >             MatrixType;
+  typedef Image< MatrixType, itkGetStaticConstMacro(ImageDimension)>   MatrixImageType;
 
   /** Advection field.  Default implementation returns a vector of zeros. */
-  virtual VectorType AdvectionField(const NeighborhoodType &,
-                                    const FloatOffsetType &, unsigned int component, GlobalDataStruct * = 0)  const
+  virtual VectorType AdvectionField( const NeighborhoodType &,
+                                     const FloatOffsetType &, 
+                                     unsigned int component, 
+                                     GlobalDataStruct * = 0)  const
     { return m_ZeroVectorConstant; }
 
   /** Propagation speed.  This term controls surface expansion/contraction.
    *  Default implementation returns zero. */ 
-  virtual ScalarValueType PropagationSpeed(
-    const NeighborhoodType& ,
-    const FloatOffsetType &, unsigned int component, GlobalDataStruct * = 0 ) const
+  virtual ScalarValueType PropagationSpeed( const NeighborhoodType& ,
+                                            const FloatOffsetType &, 
+                                            unsigned int component, 
+                                            GlobalDataStruct * = 0 ) const
     { return NumericTraits<ScalarValueType>::Zero; }
 
   /** Curvature speed.  Can be used to spatially modify the effects of
       curvature . The default implementation returns one. */
-  virtual ScalarValueType CurvatureSpeed(const NeighborhoodType &,
-                                         const FloatOffsetType &, unsigned int component, GlobalDataStruct * = 0
-                                         ) const
+  virtual ScalarValueType CurvatureSpeed( const NeighborhoodType &,
+                                          const FloatOffsetType &, 
+                                          unsigned int component, 
+                                          GlobalDataStruct * = 0 ) const
     { return NumericTraits<ScalarValueType>::One; }
 
     /** Laplacian smoothing speed.  Can be used to spatially modify the 
       effects of laplacian smoothing of the level set function */
-  virtual ScalarValueType LaplacianSmoothingSpeed(
-    const NeighborhoodType &,
-    const FloatOffsetType &, unsigned int component, GlobalDataStruct * = 0) const
+  virtual ScalarValueType LaplacianSmoothingSpeed( const NeighborhoodType &,
+                                                   const FloatOffsetType &, 
+                                                   unsigned int component, 
+                                                   GlobalDataStruct * = 0) const
     { return NumericTraits<ScalarValueType>::One; }
 
-  /** Alpha.  Scales all advection term values.*/ 
-  virtual void SetAdvectionWeight(const ScalarValueType a)
-    { m_AdvectionWeight = a; }
-  ScalarValueType GetAdvectionWeight() const
-    { return m_AdvectionWeight; }
+  /** Alpha.  Scales all advection term values in each phase. */ 
+  virtual void SetAdvectionWeights(const VectorValueType a)
+    { m_AdvectionWeights = a; }
+  itkGetMacro( AdvectionWeights, VectorValueType );
   
-  /** Beta.  Scales all propagation term values. */
-  virtual void SetPropagationWeight(const ScalarValueType p)
-    { m_PropagationWeight = p; }
-  ScalarValueType GetPropagationWeight() const
-    { return m_PropagationWeight; }
+  /** Beta.  Scales all propagation term values in each phase. */
+  virtual void SetPropagationWeights(const VectorValueType p)
+    { m_PropagationWeights = p; }
+  itkGetMacro( PropagationWeights, VectorValueType );
   
-  /** Gamma. Scales all curvature weight values */
-  virtual void SetCurvatureWeight(const ScalarValueType c)
-    { m_CurvatureWeight = c; }
-  ScalarValueType GetCurvatureWeight() const
-    { return m_CurvatureWeight; }
+  /** Gamma. Scales all curvature weight values. The number of weights supplied
+   * is a matrix of size NPhases * NPhases. A diagonal matrix implies that
+   * none of the phases interact with one another. */
+  virtual void SetCurvatureWeights(const VariableSizeMatrix c)
+    { m_CurvatureWeights = c; }
+  itkGetMacro( CurvatureWeights, MatrixValueType );
   
-  /** Weight of the laplacian smoothing term */
-  void SetLaplacianSmoothingWeight(const ScalarValueType c)
-    { m_LaplacianSmoothingWeight = c; }
-  ScalarValueType GetLaplacianSmoothingWeight() const
-    { return m_LaplacianSmoothingWeight; }
+  /** Weight of the laplacian smoothing term for each phase */
+  void SetLaplacianSmoothingWeights(const VectorValueType c)
+    { m_LaplacianSmoothingWeights = c; }
+  itkGetMacro( LaplacianSmoothingWeights, VectorValueType );
   
   /** Epsilon. */
   void SetEpsilonMagnitude(const ScalarValueType e)
@@ -201,14 +216,7 @@ public:
    * data should also be initialized in this method.  Global data can be used
    * for caching any values used or reused by the FunctionObject.  Each thread
    * should receive its own global data struct. */
-  virtual void *GetGlobalDataPointer() const
-    {
-      GlobalDataStruct *ans = new GlobalDataStruct();
-      ans->m_MaxAdvectionChange   = NumericTraits<ScalarValueType>::Zero;
-      ans->m_MaxPropagationChange = NumericTraits<ScalarValueType>::Zero;
-      ans->m_MaxCurvatureChange   = NumericTraits<ScalarValueType>::Zero;
-      return ans; 
-    }
+  virtual void *GetGlobalDataPointer() const;
 
   /** This method creates the appropriate member variable operators for the
    * level-set calculations.  The argument to this function is a the radius
@@ -219,9 +227,13 @@ public:
    * data pointer, it passes it to this method, which frees the memory.
    * The solver cannot free the memory because it does not know the type
    * to which the pointer points. */
-  virtual void ReleaseGlobalDataPointer(void *GlobalData) const
-    { delete (GlobalDataStruct *) GlobalData; }
+  virtual void ReleaseGlobalDataPointer(void *GlobalData) const;
 
+  virtual ScalarValueType ComputeCurvatureTerms( const NeighborhoodType &,
+                                                 const FloatOffsetType &,
+                                                 unsigned int component,
+                                                 GlobalDataStruct *gd = 0 );
+  
   /**  */
   virtual ScalarValueType ComputeCurvatureTerm(const NeighborhoodType &,
                                                const FloatOffsetType &,
@@ -284,6 +296,12 @@ public:
     return m_WaveDT;
   }
 
+  /** Fills up the global data struct with derivatives for every phase. Currently the
+   * phase argument is ignored, as this is done for every phase. In practice, this
+   * needs to be computed only for those phases that have crosstalk with the phase
+   * passed in as argument (FIXME) */
+  virtual void ComputeDerivativesForPhase( unsigned int phase );
+
 protected:
   VectorLevelSetFunction()
   {
@@ -322,16 +340,16 @@ protected:
   ScalarValueType m_EpsilonMagnitude;
   
   /** Alpha. */
-  ScalarValueType m_AdvectionWeight;
+  ScalarValueType m_AdvectionWeights;
 
   /** Beta. */
-  ScalarValueType m_PropagationWeight;
+  ScalarValueType m_PropagationWeights;
 
   /** Gamma. */
-  ScalarValueType m_CurvatureWeight;
+  MatrixValueType m_CurvatureWeights;
 
   /** Laplacean smoothing term */
-  ScalarValueType m_LaplacianSmoothingWeight;
+  ScalarValueType m_LaplacianSmoothingWeights;
 
 private:
   VectorLevelSetFunction(const Self&); //purposely not implemented

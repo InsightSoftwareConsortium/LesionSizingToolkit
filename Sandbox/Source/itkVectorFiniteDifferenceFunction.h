@@ -38,9 +38,6 @@ public:
   typedef SmartPointer<Self>                        Pointer;
   typedef SmartPointer<const Self>                  ConstPointer;
 
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
-
   /** Run-time type information (and related methods) */
   itkTypeMacro( VectorFiniteDifferenceFunction, FiniteDifferenceFunction );
 
@@ -62,16 +59,6 @@ public:
   //  typedef
   typedef FixedArray<ScalarValueType, itkGetStaticConstMacro(ImageDimension)> VectorType;
 
-  /** A global data type for this class of equations.  Used to store
-   * values that are needed in calculating the time step and other intermediate
-   * products such as derivatives that may be used by virtual functions called
-   * from ComputeUpdate.  Caching these values here allows the ComputeUpdate
-   * function to be const and thread safe.*/
-  struct GlobalDataStruct
-  {
-
-  };
-
   /** Compute the equation value. */
   virtual ScalarValueType ComputeUpdate(const NeighborhoodType &neighborhood,
                                   void *globalData,
@@ -80,19 +67,14 @@ public:
 
   virtual TimeStepType ComputeGlobalTimeStep(void *GlobalData) const;
 
-  virtual void *GetGlobalDataPointer() const
-    {
-    GlobalDataStruct *ans = new GlobalDataStruct();
-    return ans; 
-    }
-
-  virtual void ReleaseGlobalDataPointer(void *GlobalData) const
-    { delete (GlobalDataStruct *) GlobalData; }
+  /** Be sure to set the number of components before setting the number of the
+   * levelset before calling GetGlobalDataPointer(), since it makes allocations
+   * one time based on it. */
+  virtual void *GetGlobalDataPointer() const = 0;
+  virtual void ReleaseGlobalDataPointer(void *GlobalData) const =0;
 
 protected:
-  VectorFiniteDifferenceFunction()
-  {
-  }
+  VectorFiniteDifferenceFunction() {}
   virtual ~VectorFiniteDifferenceFunction() {}
   void PrintSelf(std::ostream &s, Indent indent) const;
   
@@ -111,6 +93,7 @@ private:
     return itk::NumericTraits< PixelType >::ZeroValue();
   }
 
+  unsigned int m_NumberOfComponents;
 
 };
 
