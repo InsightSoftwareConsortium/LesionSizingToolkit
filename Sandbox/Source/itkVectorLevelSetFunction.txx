@@ -41,6 +41,15 @@ VectorLevelSetFunction<TImageType>
                                                     phase, gd );
       } 
     }
+
+  // the cuvature speed can be used to spatially modify the effects of 
+  // cuvature. FIXME check if this needs more weighting.
+  curvature *= this->CurvatureSpeed( it, offset, phase );
+
+  gd->m_MaxCurvatureChange = vnl_math_max( gd->m_MaxCurvatureChange,
+                                           vnl_math_abs(curvature) );
+  
+  return curvature;
 }
   
 template <class TImageType>
@@ -82,7 +91,6 @@ VectorLevelSetFunction< TImageType >
   unsigned int phase, 
   GlobalDataStruct *gd)
 {
-
   unsigned int i, j, n;
   ScalarValueType gradMag = vcl_sqrt(gd->m_GradMagSqr);
   ScalarValueType Pgrad[ImageDimension][ImageDimension];
@@ -321,19 +329,7 @@ VectorLevelSetFunction< TImageType >
     this->ComputeDerivativesForPhase( i );
     }
 
-  if ( m_CurvatureWeight != ZERO )
-    {
-    curvature_term = this->ComputeCurvatureTerm(it, offset, phase, gd) 
-                     * m_CurvatureWeight
-      * this->CurvatureSpeed(it, offset, phase );
-
-    gd->m_MaxCurvatureChange = vnl_math_max(gd->m_MaxCurvatureChange,
-                   vnl_math_abs(curvature_term));
-    }
-  else
-    {
-    curvature_term = ZERO;
-    }
+  curvature_term = this->ComputeCurvatureTerms( it, offset, phase, gd );
 
   // Calculate the advection term.
   //  $\alpha \stackrel{\rightharpoonup}{F}(\mathbf{x})\cdot\nabla\phi $

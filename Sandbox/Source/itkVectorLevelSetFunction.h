@@ -155,7 +155,7 @@ public:
       curvature . The default implementation returns one. */
   virtual ScalarValueType CurvatureSpeed( const NeighborhoodType &,
                                           const FloatOffsetType &, 
-                                          unsigned int component, 
+                                          unsigned int phase, 
                                           GlobalDataStruct * = 0 ) const
     { return NumericTraits<ScalarValueType>::One; }
 
@@ -229,9 +229,15 @@ public:
    * to which the pointer points. */
   virtual void ReleaseGlobalDataPointer(void *GlobalData) const;
 
+  /** Compute the curvature terms for all phases that affect the phase in
+   * question. This method internally calles ComputeCurvatureTerm on each
+   * such phase and aggregates them according to the curvature weights
+   * specified using
+   *   \[ \sum_{j \in \mathbf{NPhases}} weight_{phase, i} Curvature_{i} \]
+   */
   virtual ScalarValueType ComputeCurvatureTerms( const NeighborhoodType &,
                                                  const FloatOffsetType &,
-                                                 unsigned int component,
+                                                 unsigned int phase,
                                                  GlobalDataStruct *gd = 0 );
   
   /**  */
