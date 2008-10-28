@@ -31,6 +31,9 @@ GradientMagnitudeSigmoidFeatureGenerator<NDimension>
 ::GradientMagnitudeSigmoidFeatureGenerator()
 {
   this->SetNumberOfRequiredOutputs( 1 );  // for the Transform
+
+  this->m_GradientFilter = GradientFilterType::New();
+  this->m_SigmoidFilter = SigmoidImageFilter::New();
 }
 
 
@@ -87,7 +90,9 @@ void
 GradientMagnitudeSigmoidFeatureGenerator<NDimension>
 ::GenerateData()
 {
-
+  const InputImageType inputImage;
+  this->m_GradientFilter->SetInput( inputImage );
+  this->m_SigmoidFilter->SetInput( this->m_GradientFilter->GetOutput() );
 }
 
 } // end namespace itk
