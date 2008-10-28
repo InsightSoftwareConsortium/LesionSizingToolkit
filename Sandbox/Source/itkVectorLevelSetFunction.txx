@@ -335,24 +335,7 @@ VectorLevelSetFunction< TImageType >
 
   propagation_term = this->ComputePropagationTerm( it, offset, phase, gd );
 
-  if(m_LaplacianSmoothingWeight != ZERO)
-    {
-    laplacian = ZERO;
-    
-    // Compute the laplacian using the existing second derivative values
-    for(i = 0;i < ImageDimension; i++)
-      {
-      laplacian += gd->m_dxy[i][i];
-      }
-
-    // Scale the laplacian by its speed and weight
-    laplacian_term = 
-      laplacian * m_LaplacianSmoothingWeight * LaplacianSmoothingSpeed(it,offset, phase, gd);
-    }
-  else 
-    {
-    laplacian_term = ZERO;
-    }
+  laplacian_term = this->ComputeLaplacianTerm( it, offset, phase, gd );
 
   // Return the combination of all the terms.
   return ( ScalarValueType ) ( curvature_term - propagation_term - advection_term - laplacian_term );
@@ -554,6 +537,36 @@ VectorLevelSetFunction< TImageType >
     }
 
   return propagation_term;
+}
+
+template< class TImageType > 
+typename VectorLevelSetFunction<TImageType>::ScalarValueType
+VectorLevelSetFunction< TImageType >
+::ComputeLaplacianTerm( const NeighborhoodType &it,
+                        const FloatOffsetType &offset, 
+                        unsigned int phase, 
+                        GlobalDataStruct * gd) const
+{
+  ScalarValueType laplacian_term = ZERO;
+  if(m_LaplacianSmoothingWeight[phase] != ZERO)
+    {
+    ScalarValueType laplacian = ZERO;
+    
+    // Compute the laplacian using the existing second derivative values
+    for(i = 0;i < ImageDimension; i++)
+      {
+      laplacian += gd->m_PhaseData[phase].m_dxy[i][i];
+      }
+
+    // Scale the laplacian by its speed and weight
+    laplacian_term = laplacian * 
+                     m_LaplacianSmoothingWeight[phase] * 
+                     LaplacianSmoothingSpeed(it,offset, phase, gd);
+    }
+
+  return laplacian_term;
+}
+
 } // end namespace itk
 
 #endif

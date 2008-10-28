@@ -259,6 +259,13 @@ public:
                                                   const FloatOffsetType &,
                                                   unsigned int phase,
                                                   GlobalDataStruct *gd = 0 );
+
+  /** Compute the laplacian term on the respective phase. This is computed
+   * from the second derivatives and the laplacian weights.*/
+  virtual ScalarValueType ComputeLaplacianTerm( const NeighborhoodType &,
+                                                const FloatOffsetType &,
+                                                unsigned int phase,
+                                                GlobalDataStruct *gd = 0 );
   
   /**  */
   virtual ScalarValueType ComputeCurvatureTerm(const NeighborhoodType &,
