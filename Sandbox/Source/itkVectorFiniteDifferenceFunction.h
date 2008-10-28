@@ -26,6 +26,10 @@ namespace itk {
   * \brief The VectorFiniteDifferenceFunction class is a generic function
   * object intended to test whether the FiniteDifferenceSolver can be used with
   * images of multiple components.
+  *
+  * The distinction between components and phases is important. The function
+  * can take a speed image of multiple components. The function can also 
+  * update N level sets, where N is the number of phases.
  */
 template <class TImageType>
 class ITK_EXPORT VectorFiniteDifferenceFunction
@@ -73,8 +77,16 @@ public:
   virtual void *GetGlobalDataPointer() const = 0;
   virtual void ReleaseGlobalDataPointer(void *GlobalData) const =0;
 
+  /** Set the number of components (number of speed images) */
+  itkSetMacro( NumberOfComponents, unsigned int );
+  itkGetMacro( NumberOfComponents, unsigned int );
+
+  /** Set the number of phases (number of level sets) */
+  itkSetMacro( NumberOfPhases, unsigned int );
+  itkGetMacro( NumberOfPhases, unsigned int );
+
 protected:
-  VectorFiniteDifferenceFunction() {}
+  VectorFiniteDifferenceFunction();
   virtual ~VectorFiniteDifferenceFunction() {}
   void PrintSelf(std::ostream &s, Indent indent) const;
   
@@ -94,6 +106,7 @@ private:
   }
 
   unsigned int m_NumberOfComponents;
+  unsigned int m_NumberOfPhases;
 
 };
 

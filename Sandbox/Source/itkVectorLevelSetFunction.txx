@@ -23,6 +23,14 @@ PURPOSE.  See the above copyright notices for more information.
 namespace itk {
 
 template <class TImageType>
+VectorLevelSetFunction<TImageType>
+::VectorLevelSetFunction() 
+{
+  m_EpsilonMagnitude = 1.0e-5;
+  m_UseMinimalCurvature = false;
+}
+
+template <class TImageType>
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction<TImageType>
 ::ComputeCurvatureTerms( const NeighborhoodType &neighborhood,
@@ -30,12 +38,12 @@ VectorLevelSetFunction<TImageType>
                          unsigned int phase, 
                          GlobalDataStruct *gd )
 {
-  ScalarValueType curvature = ZERO;
+  ScalarValueType curvature = NumericTraits<ScalarValueType>::Zero;
   for (unsigned int i = 0; i < this->m_NumberOfPhases; i++)
     {
     // Curvature weight due to interaction of phases: 'phase' and 'i'
     ScalarValueType cw = this->m_CurvatureWeights( phase, i );
-    if (cw != ZERO)
+    if (cw != NumericTraits<ScalarValueType>::Zero)
       {
       curvature += cw * this->ComputeCurvatureTerm( neighborhood, offset,
                                                     i, gd );
@@ -44,7 +52,7 @@ VectorLevelSetFunction<TImageType>
 
   // the cuvature speed can be used to spatially modify the effects of 
   // cuvature. FIXME check if this needs more weighting.
-  curvature *= this->CurvatureSpeed( it, offset, phase );
+  curvature *= this->CurvatureSpeed( neighborhood, offset, phase );
 
   gd->m_MaxCurvatureChange = vnl_math_max( gd->m_MaxCurvatureChange,
                                            vnl_math_abs(curvature) );
@@ -326,7 +334,7 @@ VectorLevelSetFunction< TImageType >
   // terms needs to be done as a speedup step.
   for (i = 0; i < this->m_NumberOfPhases; i++)
     {
-    this->ComputeDerivativesForPhase( i );
+    this->ComputeDerivativesForPhase( it, offset, i, gd );
     }
 
   curvature_term = this->ComputeCurvatureTerms( it, offset, phase, gd );
@@ -344,7 +352,7 @@ VectorLevelSetFunction< TImageType >
 template< class TImageType >
 void *
 VectorLevelSetFunction< TImageType >
-::GetGlobalDataPointer()
+::GetGlobalDataPointer() const
 {
   if (this->m_NumberOfPhases == 0)
     {
@@ -365,10 +373,13 @@ VectorLevelSetFunction< TImageType >
 }
 
 
-template< class TI.mageType > 
+template< class TImageType > 
 void
 VectorLevelSetFunction< TImageType >
-::ComputeDerivativesForPhase( unsigned int pid )
+::ComputeDerivativesForPhase( const NeighborhoodType &it,
+                              const FloatOffsetType &offset,
+                              unsigned int pid,
+                              GlobalDataStruct *gd )
 {
   // Compute the Hessian matrix and various other derivatives.  Some of these
   // derivatives may be used by overloaded virtual functions.
@@ -415,7 +426,7 @@ VectorLevelSetFunction< TImageType >
     }  
 }
 
-template< class TI.mageType > 
+template< class TImageType > 
 void
 VectorLevelSetFunction< TImageType >
 ::ReleaseGlobalDataPointer( void *GlobalData ) const
@@ -433,6 +444,8 @@ VectorLevelSetFunction< TImageType >
                         unsigned int phase, 
                         GlobalDataStruct * gd) const
 { 
+  const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
+
   // Calculate the advection term.
   //  $\alpha \stackrel{\rightharpoonup}{F}(\mathbf{x})\cdot\nabla\phi $
   //
@@ -481,6 +494,7 @@ VectorLevelSetFunction< TImageType >
                          unsigned int phase, 
                          GlobalDataStruct * gd) const
 {
+  const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
   ScalarValueType propagation_term = ZERO;
 
   for (unsigned int i = 0; i < this->m_NumberOfComponents; i++)
@@ -547,6 +561,7 @@ VectorLevelSetFunction< TImageType >
                         unsigned int phase, 
                         GlobalDataStruct * gd) const
 {
+  const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
   ScalarValueType laplacian_term = ZERO;
   if(m_LaplacianSmoothingWeight[phase] != ZERO)
     {

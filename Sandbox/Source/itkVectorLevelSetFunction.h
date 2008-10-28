@@ -183,7 +183,7 @@ public:
   /** Gamma. Scales all curvature weight values. The number of weights supplied
    * is a matrix of size NPhases * NPhases. A diagonal matrix implies that
    * none of the phases interact with one another. */
-  virtual void SetCurvatureWeights(const VariableSizeMatrix c)
+  virtual void SetCurvatureWeights(const MatrixValueType & c)
     { m_CurvatureWeights = c; }
   itkGetMacro( CurvatureWeights, MatrixValueType );
   
@@ -333,17 +333,13 @@ public:
    * phase argument is ignored, as this is done for every phase. In practice, this
    * needs to be computed only for those phases that have crosstalk with the phase
    * passed in as argument (FIXME) */
-  virtual void ComputeDerivativesForPhase( unsigned int phase );
+  virtual void ComputeDerivativesForPhase( const NeighborhoodType &,
+                                           const FloatOffsetType &,
+                                           unsigned int phase,
+                                           GlobalDataStruct *gd = 0 );
 
 protected:
-  VectorLevelSetFunction()
-  {
-    m_EpsilonMagnitude = 1.0e-5;
-    m_AdvectionWeight = m_PropagationWeight 
-      = m_CurvatureWeight = m_LaplacianSmoothingWeight 
-      = NumericTraits<ScalarValueType>::Zero;
-    m_UseMinimalCurvature = false;
-  }
+  VectorLevelSetFunction();
   virtual ~VectorLevelSetFunction() {}
   void PrintSelf(std::ostream &s, Indent indent) const;
   

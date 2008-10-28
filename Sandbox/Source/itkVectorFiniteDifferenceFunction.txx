@@ -23,6 +23,13 @@ PURPOSE.  See the above copyright notices for more information.
 namespace itk {
 
 template< class TImageType >
+VectorFiniteDifferenceFunction<TImageType>
+::VectorFiniteDifferenceFunction()
+{
+  this->m_NumberOfPhases = this->m_NumberOfComponents = 0;
+}
+
+template< class TImageType >
 typename VectorFiniteDifferenceFunction< TImageType >::TimeStepType
 VectorFiniteDifferenceFunction<TImageType>
 ::ComputeGlobalTimeStep(void *GlobalData) const
