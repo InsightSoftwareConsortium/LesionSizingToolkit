@@ -32,6 +32,11 @@ int main( int argc, char * argv [] )
 
   segmentationMethod->SetRegionOfInterest( regionOfInterest );
 
+  ImageMaskSpatialObjectType::Pointer initialSegmentation = ImageMaskSpatialObjectType::New();
+
+  segmentationMethod->SetInitialSegmentation( initialSegmentation );
+
+
   segmentationMethod->Print( std::cout );
 
   

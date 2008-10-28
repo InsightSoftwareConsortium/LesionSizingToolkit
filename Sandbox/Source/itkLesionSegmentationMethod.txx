@@ -53,6 +53,8 @@ LesionSegmentationMethod<NDimension>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
+  os << "Region of Interest " << this->m_RegionOfInterest << std::endl;
+  os << "Initial Segmentation " << this->m_InitialSegmentation << std::endl;
 }
 
 

@@ -63,6 +63,12 @@ public:
   itkSetObjectMacro( RegionOfInterest, SpatialObjectType );
   itkGetConstObjectMacro( RegionOfInterest, SpatialObjectType );
 
+  /** SpatialObject that defines the initial segmentation. This will be
+   * used to initialize the segmentation process driven by the
+   * LesionSegmentationMethod. */
+  itkSetObjectMacro( InitialSegmentation, SpatialObjectType );
+  itkGetConstObjectMacro( InitialSegmentation, SpatialObjectType );
+
 
 protected:
   LesionSegmentationMethod();
@@ -78,6 +84,8 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   SpatialObjectPointer        m_RegionOfInterest;
+  SpatialObjectPointer        m_InitialSegmentation;
+
 };
 
 } // end namespace itk
