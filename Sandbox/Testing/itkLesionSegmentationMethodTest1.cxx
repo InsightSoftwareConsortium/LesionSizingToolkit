@@ -19,7 +19,11 @@
 
 int main( int argc, char * argv [] )
 {
-  const unsigned int Dimension = 3;
+  typedef itk::LesionSegmentationMethod   MethodType;
+
+  MethodType::Pointer  segmentationMethod = MethodType::New();
+
+  segmentationMethod->Print( std::cout );
 
   return EXIT_SUCCESS;
 }
