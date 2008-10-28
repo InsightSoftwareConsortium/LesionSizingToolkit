@@ -3,8 +3,10 @@ SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 SET(TEST_DATA_ROOT ${LesionSizingKitSandbox_SOURCE_DIR})
 SET(TEMP ${LesionSizingKitSandbox_BINARY_DIR}/Testing/Temporary)
 
-#ADD_EXECUTABLE(itkSystemInformation itkSystemInformation.cxx )
-#TARGET_LINK_LIBRARIES(itkSystemInformation LesionSizingSandbox)
+ADD_EXECUTABLE(itkSystemInformation itkSystemInformation.cxx )
+TARGET_LINK_LIBRARIES(itkSystemInformation LesionSizingSandbox)
+
+IF( ITK_USE_MULTI_PHASE_FRAMEWORK )
 
 ADD_EXECUTABLE(itkVectorFiniteDifferenceImageFilterTest1 itkVectorFiniteDifferenceImageFilterTest1.cxx )
 TARGET_LINK_LIBRARIES(itkVectorFiniteDifferenceImageFilterTest1 LesionSizingSandbox)
@@ -55,7 +57,6 @@ ADD_EXECUTABLE(itkLesionSegmentationMethodTest1 itkLesionSegmentationMethodTest1
 TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest1 LesionSizingSandbox)
 
 
-ADD_TEST(itkSystemInformation ${CXX_TEST_PATH}/itkSystemInformation )
 ADD_TEST(itkVectorFiniteDifferenceImageFilterTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceImageFilterTest1 )
 ADD_TEST(itkVectorFiniteDifferenceFunctionTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceFunctionTest1 )
 ADD_TEST(itkVectorSegmentationLevelSetFunctionTest1 ${CXX_TEST_PATH}/itkVectorSegmentationLevelSetFunctionTest1 )
@@ -71,5 +72,10 @@ ADD_TEST(itkMatrixLinearInterpolateImageFunctionTest1 ${CXX_TEST_PATH}/itkMatrix
 ADD_TEST(itkMatrixInterpolateImageFunctionTest1 ${CXX_TEST_PATH}/itkMatrixInterpolateImageFunctionTest1 )
 ADD_TEST(itkVectorShiftScaleImageFilterText1 ${CXX_TEST_PATH}/itkVectorShiftScaleImageFilterText1 )
 ADD_TEST(itkVectorZeroCrossingImageFilterTest1 ${CXX_TEST_PATH}/itkVectorZeroCrossingImageFilterTest1 )
+
+ENDIF( ITK_USE_MULTI_PHASE_FRAMEWORK )
+
+ADD_TEST(itkSystemInformation ${CXX_TEST_PATH}/itkSystemInformation )
+
 ADD_TEST(itkLesionSegmentationMethodTest1 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest1 )
 

@@ -11,6 +11,9 @@ INCLUDE(${ITK_USE_FILE})
 SET(EXECUTABLE_OUTPUT_PATH ${LesionSizingKitSandbox_BINARY_DIR}/bin CACHE INTERNAL "Where to put the executables") 
 SET(LIBRARY_OUTPUT_PATH ${LesionSizingKitSandbox_BINARY_DIR}/bin CACHE INTERNAL "Where to put the libraries") 
 
+
+OPTION(ITK_USE_MULTI_PHASE_FRAMEWORK "Enable multi-phase level sets" ON)
+
 ENABLE_TESTING()
 INCLUDE(CTest)
 
