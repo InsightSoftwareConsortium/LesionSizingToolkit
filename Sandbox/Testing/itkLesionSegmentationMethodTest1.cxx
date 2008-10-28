@@ -15,15 +15,25 @@
 
 #include "itkLesionSegmentationMethod.h"
 #include "itkImage.h"
-#include "itkVector.h"
+#include "itkSpatialObject.h"
+#include "itkImageMaskSpatialObject.h"
 
 int main( int argc, char * argv [] )
 {
-  typedef itk::LesionSegmentationMethod   MethodType;
+  const unsigned int Dimension = 3;
+
+  typedef itk::LesionSegmentationMethod< Dimension >   MethodType;
 
   MethodType::Pointer  segmentationMethod = MethodType::New();
+  
+  typedef itk::ImageMaskSpatialObject< Dimension > ImageMaskSpatialObjectType;
+
+  ImageMaskSpatialObjectType::Pointer regionOfInterest = ImageMaskSpatialObjectType::New();
+
+  segmentationMethod->SetRegionOfInterest( regionOfInterest );
 
   segmentationMethod->Print( std::cout );
 
+  
   return EXIT_SUCCESS;
 }

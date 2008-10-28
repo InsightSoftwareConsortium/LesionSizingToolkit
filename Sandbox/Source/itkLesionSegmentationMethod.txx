@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    itkLesionSegmentationMethod.cxx
+  Module:    itkLesionSegmentationMethod.txx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -14,6 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __itkLesionSegmentationMethod_txx
+#define __itkLesionSegmentationMethod_txx
 
 #include "itkLesionSegmentationMethod.h"
 
@@ -24,7 +26,8 @@ namespace itk
 /*
  * Constructor
  */
-LesionSegmentationMethod
+template <unsigned int NDimension>
+LesionSegmentationMethod<NDimension>
 ::LesionSegmentationMethod()
 {
   this->SetNumberOfRequiredOutputs( 1 );  // for the Transform
@@ -34,7 +37,8 @@ LesionSegmentationMethod
 /*
  * Destructor
  */
-LesionSegmentationMethod
+template <unsigned int NDimension>
+LesionSegmentationMethod<NDimension>
 ::~LesionSegmentationMethod()
 {
 }
@@ -43,8 +47,9 @@ LesionSegmentationMethod
 /*
  * PrintSelf
  */
+template <unsigned int NDimension>
 void
-LesionSegmentationMethod
+LesionSegmentationMethod<NDimension>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
@@ -54,11 +59,14 @@ LesionSegmentationMethod
 /*
  * Generate Data
  */
+template <unsigned int NDimension>
 void
-LesionSegmentationMethod
+LesionSegmentationMethod<NDimension>
 ::GenerateData()
 {
 
 }
 
 } // end namespace itk
+
+#endif
