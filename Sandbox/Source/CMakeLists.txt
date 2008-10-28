@@ -1,5 +1,6 @@
 SET(LesionSizingSandbox_SRCS
   itkNumericTraitsMatrixPixel.cxx
+  itkLesionSegmentationMethod.cxx
   )
 
 ADD_LIBRARY(LesionSizingSandbox ${LesionSizingSandbox_SRCS})

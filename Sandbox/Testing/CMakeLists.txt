@@ -51,6 +51,10 @@ TARGET_LINK_LIBRARIES(itkVectorShiftScaleImageFilterText1 LesionSizingSandbox)
 ADD_EXECUTABLE(itkVectorZeroCrossingImageFilterTest1 itkVectorZeroCrossingImageFilterTest1.cxx )
 TARGET_LINK_LIBRARIES(itkVectorZeroCrossingImageFilterTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkLesionSegmentationMethodTest1 itkLesionSegmentationMethodTest1.cxx )
+TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest1 LesionSizingSandbox)
+
+
 ADD_TEST(itkSystemInformation ${CXX_TEST_PATH}/itkSystemInformation )
 ADD_TEST(itkVectorFiniteDifferenceImageFilterTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceImageFilterTest1 )
 ADD_TEST(itkVectorFiniteDifferenceFunctionTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceFunctionTest1 )
@@ -62,9 +66,10 @@ ADD_TEST(itkVectorSparseFieldLevelSetImageFilterTest2 ${CXX_TEST_PATH}/itkVector
 ADD_TEST(itkVectorSparseFieldLevelSetNodeTest1 ${CXX_TEST_PATH}/itkVectorSparseFieldLevelSetNodeTest1 )
 ADD_TEST(itkVectorSparseFieldCityBlockNeighborListTest1 ${CXX_TEST_PATH}/itkVectorSparseFieldCityBlockNeighborListTest1 )
 ADD_TEST(itkVectorSegmentationLevelSetImageFilterTest1 ${CXX_TEST_PATH}/itkVectorSegmentationLevelSetImageFilterTest1 )
-ADD_TEST(itkNumericTraitsMatrixPixelTest1.cxx ${CXX_TEST_PATH}/itkNumericTraitsMatrixPixelTest1 )
-ADD_TEST(itkMatrixLinearInterpolateImageFunctionTest1.cxx ${CXX_TEST_PATH}/itkMatrixLinearInterpolateImageFunctionTest1 )
-ADD_TEST(itkMatrixInterpolateImageFunctionTest1.cxx ${CXX_TEST_PATH}/itkMatrixInterpolateImageFunctionTest1 )
-ADD_TEST(itkVectorShiftScaleImageFilterText1.cxx ${CXX_TEST_PATH}/itkVectorShiftScaleImageFilterText1 )
-ADD_TEST(itkVectorZeroCrossingImageFilterTest1.cxx ${CXX_TEST_PATH}/itkVectorZeroCrossingImageFilterTest1 )
+ADD_TEST(itkNumericTraitsMatrixPixelTest1 ${CXX_TEST_PATH}/itkNumericTraitsMatrixPixelTest1 )
+ADD_TEST(itkMatrixLinearInterpolateImageFunctionTest1 ${CXX_TEST_PATH}/itkMatrixLinearInterpolateImageFunctionTest1 )
+ADD_TEST(itkMatrixInterpolateImageFunctionTest1 ${CXX_TEST_PATH}/itkMatrixInterpolateImageFunctionTest1 )
+ADD_TEST(itkVectorShiftScaleImageFilterText1 ${CXX_TEST_PATH}/itkVectorShiftScaleImageFilterText1 )
+ADD_TEST(itkVectorZeroCrossingImageFilterTest1 ${CXX_TEST_PATH}/itkVectorZeroCrossingImageFilterTest1 )
+ADD_TEST(itkLesionSegmentationMethodTest1 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest1 )
 
