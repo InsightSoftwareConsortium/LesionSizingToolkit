@@ -250,6 +250,15 @@ public:
                                                 const FloatOffsetType &,
                                                 unsigned int phase,
                                                 GlobalDataStruct *gd = 0 );
+
+  /** Compute the propagation term. Internally calls PropagationSpeed on 
+   * components based on the weights in the Nphases x Ncomponents 
+   * matrix of propagation weights.
+   */
+  virtual ScalarValueType ComputePropagationTerm( const NeighborhoodType &,
+                                                  const FloatOffsetType &,
+                                                  unsigned int phase,
+                                                  GlobalDataStruct *gd = 0 );
   
   /**  */
   virtual ScalarValueType ComputeCurvatureTerm(const NeighborhoodType &,

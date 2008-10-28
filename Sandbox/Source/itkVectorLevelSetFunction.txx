@@ -34,11 +34,11 @@ VectorLevelSetFunction<TImageType>
   for (unsigned int i = 0; i < this->m_NumberOfPhases; i++)
     {
     // Curvature weight due to interaction of phases: 'phase' and 'i'
-    cw = this->m_CurvatureWeights( phase, i );
+    ScalarValueType cw = this->m_CurvatureWeights( phase, i );
     if (cw != ZERO)
       {
       curvature += cw * this->ComputeCurvatureTerm( neighborhood, offset,
-                                                    phase, gd );
+                                                    i, gd );
       } 
     }
 
@@ -333,47 +333,7 @@ VectorLevelSetFunction< TImageType >
 
   advection_term = this->ComputeAdvectionTerm( it, offset, phase, gd );
 
-
-  if (m_PropagationWeight != ZERO)
-    {
-    // Get the propagation speed
-    propagation_term = m_PropagationWeight * this->PropagationSpeed(it, offset, phase, gd);
-      
-    //
-    // Construct upwind gradient values for use in the propagation speed term:
-    //  $\beta G(\mathbf{x})\mid\nabla\phi\mid$
-    //
-    // The following scheme for ``upwinding'' in the normal direction is taken
-    // from Sethian, Ch. 6 as referenced above.
-    //
-    propagation_gradient = ZERO;
-    
-    if ( propagation_term > ZERO )
-      {
-      for(i = 0; i< ImageDimension; i++)
-        {
-        propagation_gradient += vnl_math_sqr( vnl_math_max(gd->m_dx_backward[i], ZERO) )
-          + vnl_math_sqr( vnl_math_min(gd->m_dx_forward[i],  ZERO) );
-        }
-      }
-    else
-      {
-      for(i = 0; i< ImageDimension; i++)
-        {
-        propagation_gradient += vnl_math_sqr( vnl_math_min(gd->m_dx_backward[i], ZERO) )
-          + vnl_math_sqr( vnl_math_max(gd->m_dx_forward[i],  ZERO) );
-        }        
-      }
-    
-    // Collect energy change from propagation term.  This will be used in
-    // calculating the maximum time step that can be taken for this iteration.
-    gd->m_MaxPropagationChange =
-      vnl_math_max(gd->m_MaxPropagationChange,
-                   vnl_math_abs(propagation_term));
-    
-    propagation_term *= vcl_sqrt( propagation_gradient );
-    }
-  else propagation_term = ZERO;
+  propagation_term = this->ComputePropagationTerm( it, offset, phase, gd );
 
   if(m_LaplacianSmoothingWeight != ZERO)
     {
@@ -482,7 +442,7 @@ VectorLevelSetFunction< TImageType >
   delete gd; 
 }
 
-template< class TI.mageType > 
+template< class TImageType > 
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction< TImageType >
 ::ComputeAdvectionTerm( const NeighborhoodType &it,
@@ -530,8 +490,70 @@ VectorLevelSetFunction< TImageType >
   return advection_term;
 }
 
+template< class TImageType > 
+typename VectorLevelSetFunction<TImageType>::ScalarValueType
+VectorLevelSetFunction< TImageType >
+::ComputePropagationTerm( const NeighborhoodType &it,
+                         const FloatOffsetType &offset, 
+                         unsigned int phase, 
+                         GlobalDataStruct * gd) const
+{
+  ScalarValueType propagation_term = ZERO;
 
+  for (unsigned int i = 0; i < this->m_NumberOfComponents; i++)
+    {
+ 
+    // Propagation weight due to interaction of phases: 'phase' and 'i'
+    ScalarValueType w = this->m_PropagationWeights( phase, i );
 
+    if (w != ZERO)
+      {
+      ScalarValueType propagationSpeed = 
+        this->PropagationSpeed(it, offset, i, gd);
+      propagation_term += w * propagationSpeed;
+      }
+    }
+
+  if (propagation_term != ZERO)
+    {
+
+    // Construct upwind gradient values for use in the propagation speed term:
+    //  $\beta G(\mathbf{x})\mid\nabla\phi\mid$
+    //
+    // The following scheme for ``upwinding'' in the normal direction is taken
+    // from Sethian, Ch. 6 as referenced above.
+    //
+    propagation_gradient = ZERO;
+    
+    if ( propagation_term > ZERO )
+      {
+      for(i = 0; i< ImageDimension; i++)
+        {
+        propagation_gradient += 
+          vnl_math_sqr( vnl_math_max( gd->m_PhaseData[phase].m_dx_backward[i], ZERO) )
+          + vnl_math_sqr( vnl_math_min(gd->m_PhaseData[phase].m_dx_forward[i], ZERO) );
+        }
+      }
+    else
+      {
+      for(i = 0; i< ImageDimension; i++)
+        {
+        propagation_gradient += 
+          vnl_math_sqr( vnl_math_min(gd->m_PhaseData[phase].m_dx_backward[i], ZERO) )
+          + vnl_math_sqr( vnl_math_max(gd->m_PhaseData[phase].m_dx_forward[i],  ZERO) );
+        }        
+      }
+    
+    // Collect energy change from propagation term.  This will be used in
+    // calculating the maximum time step that can be taken for this iteration.
+    gd->m_PhaseData[phase].m_MaxPropagationChange =
+      vnl_math_max(gd->m_PhaseData[phase].m_MaxPropagationChange,
+                   vnl_math_abs(propagation_term));
+    
+    propagation_term *= vcl_sqrt( propagation_gradient );
+    }
+
+  return propagation_term;
 } // end namespace itk
 
 #endif
