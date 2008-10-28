@@ -45,6 +45,19 @@ LesionSegmentationMethod<NDimension>
 
 
 /*
+ * Add a feature generator that will compute the Nth feature to be passed to
+ * the segmentation module.
+ */
+template <unsigned int NDimension>
+void
+LesionSegmentationMethod<NDimension>
+::AddFeatureGenerator( FeatureGeneratorType * generator ) 
+{
+  this->m_FeatureGenerators.push_back( generator );
+}
+
+
+/*
  * PrintSelf
  */
 template <unsigned int NDimension>
@@ -66,8 +79,30 @@ void
 LesionSegmentationMethod<NDimension>
 ::GenerateData()
 {
-
+  this->UpdateAllFeatureGenerators();
 }
+
+
+/*
+ * Update feature generators
+ */
+template <unsigned int NDimension>
+void
+LesionSegmentationMethod<NDimension>
+::UpdateAllFeatureGenerators()
+{
+  typedef typename FeatureGeneratorArrayType::iterator     FeatureGeneratorIterator;
+  
+  FeatureGeneratorIterator gitr = this->m_FeatureGenerators.begin();
+  FeatureGeneratorIterator gend = this->m_FeatureGenerators.end();
+
+  while( gitr != gend )
+    {
+    (*gitr)->Update();
+    ++gitr;
+    }
+}
+
 
 } // end namespace itk
 

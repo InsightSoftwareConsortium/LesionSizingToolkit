@@ -21,6 +21,7 @@
 #include "itkImage.h"
 #include "itkDataObjectDecorator.h"
 #include "itkSpatialObject.h"
+#include "itkFeatureGenerator.h"
 
 namespace itk
 {
@@ -69,6 +70,15 @@ public:
   itkSetObjectMacro( InitialSegmentation, SpatialObjectType );
   itkGetConstObjectMacro( InitialSegmentation, SpatialObjectType );
 
+  /** Type of the class that will generate input features in the form of
+   * spatial objects. */
+  typedef FeatureGenerator< Dimension >         FeatureGeneratorType;
+
+  /*
+   * Method for adding a feature generator that will compute the Nth feature to
+   * be passed to the segmentation module.
+   */
+  void AddFeatureGenerator( FeatureGeneratorType * generator ); 
 
 protected:
   LesionSegmentationMethod();
@@ -85,6 +95,14 @@ private:
 
   SpatialObjectPointer        m_RegionOfInterest;
   SpatialObjectPointer        m_InitialSegmentation;
+  
+  typedef typename FeatureGeneratorType::Pointer   FeatureGeneratorPointer;
+  typedef std::vector< FeatureGeneratorPointer >   FeatureGeneratorArrayType;
+
+  FeatureGeneratorArrayType   m_FeatureGenerators;
+
+
+  void UpdateAllFeatureGenerators();
 
 };
 

@@ -14,6 +14,7 @@
 =========================================================================*/
 
 #include "itkLesionSegmentationMethod.h"
+#include "itkFeatureGenerator.h"
 #include "itkImage.h"
 #include "itkSpatialObject.h"
 #include "itkImageMaskSpatialObject.h"
@@ -36,6 +37,13 @@ int main( int argc, char * argv [] )
 
   segmentationMethod->SetInitialSegmentation( initialSegmentation );
 
+  typedef itk::FeatureGenerator< Dimension > FeatureGeneratorType;
+
+  FeatureGeneratorType::Pointer featureGenerator = FeatureGeneratorType::New();
+
+  segmentationMethod->AddFeatureGenerator( featureGenerator );
+
+  segmentationMethod->Update();
 
   segmentationMethod->Print( std::cout );
 
