@@ -136,12 +136,15 @@ public:
   typedef Matrix< double, ImageDimension, ImageDimension >             MatrixType;
   typedef Image< MatrixType, itkGetStaticConstMacro(ImageDimension)>   MatrixImageType;
 
-  /** Advection field.  Default implementation returns a vector of zeros. */
+  /** Advection field. Default implementation returns a vector of zeros. This
+   * returns an array of advection fields, one for each phase.*/
   virtual VectorType AdvectionField( const NeighborhoodType &,
                                      const FloatOffsetType &, 
-                                     unsigned int component, 
+                                     unsigned int phase, 
                                      GlobalDataStruct * = 0)  const
-    { return m_ZeroVectorConstant; }
+    { 
+    return this->m_ZeroVectorConstant;
+    }
 
   /** Propagation speed.  This term controls surface expansion/contraction.
    *  Default implementation returns zero. */ 
@@ -239,6 +242,14 @@ public:
                                                  const FloatOffsetType &,
                                                  unsigned int phase,
                                                  GlobalDataStruct *gd = 0 );
+
+  /** Compute the advection term. Internally calls AdvectionField on 
+   *   the respective phase.
+   */
+  virtual ScalarValueType ComputeAdvectionTerm( const NeighborhoodType &,
+                                                const FloatOffsetType &,
+                                                unsigned int phase,
+                                                GlobalDataStruct *gd = 0 );
   
   /**  */
   virtual ScalarValueType ComputeCurvatureTerm(const NeighborhoodType &,

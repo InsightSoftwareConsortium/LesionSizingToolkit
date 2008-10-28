@@ -331,42 +331,8 @@ VectorLevelSetFunction< TImageType >
 
   curvature_term = this->ComputeCurvatureTerms( it, offset, phase, gd );
 
-  // Calculate the advection term.
-  //  $\alpha \stackrel{\rightharpoonup}{F}(\mathbf{x})\cdot\nabla\phi $
-  //
-  // Here we can use a simple upwinding scheme since we know the
-  // sign of each directional phase of the advective force.
-  //
-  if (m_AdvectionWeight != ZERO)
-    {
-    
-    advection_field = this->AdvectionField(it, offset, phase, gd);
-    advection_term = ZERO;
-    
-    for(i = 0; i < ImageDimension; i++)
-      {
-      
-      x_energy = m_AdvectionWeight * advection_field[i];
-      
-      if (x_energy > ZERO)
-        {
-        advection_term += advection_field[i] * gd->m_dx_backward[i];
-        }
-      else
-        {
-        advection_term += advection_field[i] * gd->m_dx_forward[i];
-        }
-        
-      gd->m_MaxAdvectionChange
-        = vnl_math_max(gd->m_MaxAdvectionChange, vnl_math_abs(x_energy)); 
-      }
-    advection_term *= m_AdvectionWeight;
-    
-    }
-  else
-    {
-    advection_term = ZERO;
-    }
+  advection_term = this->ComputeAdvectionTerm( it, offset, phase, gd );
+
 
   if (m_PropagationWeight != ZERO)
     {
@@ -515,6 +481,55 @@ VectorLevelSetFunction< TImageType >
   delete [] gd->m_PhaseData;
   delete gd; 
 }
+
+template< class TI.mageType > 
+typename VectorLevelSetFunction<TImageType>::ScalarValueType
+VectorLevelSetFunction< TImageType >
+::ComputeAdvectionTerm( const NeighborhoodType &it,
+                        const FloatOffsetType &offset, 
+                        unsigned int phase, 
+                        GlobalDataStruct * gd) const
+{ 
+  // Calculate the advection term.
+  //  $\alpha \stackrel{\rightharpoonup}{F}(\mathbf{x})\cdot\nabla\phi $
+  //
+  // Here we can use a simple upwinding scheme since we know the
+  // sign of each directional phase of the advective force.
+  //
+  if (m_AdvectionWeight[phase] != ZERO)
+    {
+    advection_field = this->AdvectionField(it, offset, phase, gd);
+    advection_term = ZERO;
+    
+    for(i = 0; i < ImageDimension; i++)
+      {
+      
+      x_energy = m_AdvectionWeight[phase] * advection_field[i];
+      
+      if (x_energy > ZERO)
+        {
+        advection_term += advection_field[i] * gd->m_PhaseData[i].m_dx_backward[i];
+        }
+      else
+        {
+        advection_term += advection_field[i] * gd->m_PhaseData[i].m_dx_forward[i];
+        }
+        
+      gd->m_PhaseData[i].m_MaxAdvectionChange
+        = vnl_math_max( gd->m_PhaseData[i].m_MaxAdvectionChange, 
+                        vnl_math_abs(x_energy)); 
+      }
+    advection_term *= m_AdvectionWeight[phase];
+    
+    }
+  else
+    {
+    advection_term = ZERO;
+    }
+ 
+  return advection_term;
+}
+
 
 
 } // end namespace itk

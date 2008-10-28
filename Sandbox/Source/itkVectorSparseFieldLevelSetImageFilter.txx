@@ -115,28 +115,28 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
                                                              TOutputImage>::ScalarValueType >::Zero;
 
 template<class TInputImage, class TOutputImage>
-ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusType
+ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusValueType
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::m_StatusNull = NumericTraits<ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage,
-                                                              TOutputImage>::StatusType >::NonpositiveMin();
+                                                              TOutputImage>::StatusValueType >::NonpositiveMin();
 
 template<class TInputImage, class TOutputImage>
-ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusType
+ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusValueType
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::m_StatusChanging = -1;
 
 template<class TInputImage, class TOutputImage>
-ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusType
+ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusValueType
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::m_StatusActiveChangingUp = -2;
 
 template<class TInputImage, class TOutputImage>
-ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusType
+ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusValueType
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::m_StatusActiveChangingDown = -3;
 
 template<class TInputImage, class TOutputImage>
-ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusType
+ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusValueType
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::m_StatusBoundaryPixel = -4;
 
@@ -568,41 +568,32 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
  
   this->GraftOutput(zeroCrossingFilter->GetOutput());
 }
-  
+
 template<class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::Initialize()
+::InitializeStatusImage()
 {
-  unsigned int i;
-
-  if (this->GetUseImageSpacing())
-    {
-    double minSpacing = NumericTraits<double>::max();
-    for (i=0; i<ImageDimension; i++)
-      {
-      minSpacing = vnl_math_min(minSpacing,this->GetInput()->GetSpacing()[i]);
-      }
-    m_ConstantGradientValue = minSpacing;
-    }
-  else
-    {
-    m_ConstantGradientValue = 1.0;
-    }
-
-
-  this->m_LayersComponents.resize( this->m_NumberOfComponents );
-
-
+  this->m_StatusNull.SetSize( this->m_NumberOfComponents );
+  this->m_StatusNull.Fill( this->m_StatusNullValue );
+  this->m_StatusChanging.SetSize( this->m_NumberOfComponents );
+  this->m_StatusChanging.Fill( this->m_StatusChangingValue );
+  this->m_StatusActiveChangingUp.SetSize( this->m_NumberOfComponents );
+  this->m_StatusActiveChangingUp.Fill( this->m_StatusActiveChangingUpValue );
+  this->m_StatusActiveChangingDown.SetSize( this->m_NumberOfComponents );
+  this->m_StatusActiveChangingDown.Fill( this->m_StatusActiveChangingDownValue );
+  this->m_StatusBoundaryPixel.SetSize( this->m_NumberOfComponents );
+  this->m_StatusBoundaryPixel.Fill( this->m_StatusBoundaryPixelValue );
+  
   // Allocate the status image.
   m_StatusImage = StatusImageType::New();
+  m_StatusImage->SetVectorLength( this->m_NumberOfComponents );
   m_StatusImage->SetRegions(this->GetOutput()->GetRequestedRegion());
   m_StatusImage->Allocate();
 
   // Initialize the status image to contain all m_StatusNull values.
   ImageRegionIterator<StatusImageType>
     statusIt(m_StatusImage, m_StatusImage->GetRequestedRegion());
-
   for (statusIt.GoToBegin(); ! statusIt.IsAtEnd(); ++statusIt)
     {
     statusIt.Set( m_StatusNull );
@@ -630,7 +621,35 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       {
       statusIt.Set( m_StatusBoundaryPixel );
       }
+    }  
+}
+
+template<class TInputImage, class TOutputImage>
+void
+VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
+::Initialize()
+{
+  unsigned int i;
+
+  if (this->GetUseImageSpacing())
+    {
+    double minSpacing = NumericTraits<double>::max();
+    for (i=0; i<ImageDimension; i++)
+      {
+      minSpacing = vnl_math_min(minSpacing,this->GetInput()->GetSpacing()[i]);
+      }
+    m_ConstantGradientValue = minSpacing;
     }
+  else
+    {
+    m_ConstantGradientValue = 1.0;
+    }
+
+
+  this->m_LayersComponents.resize( this->m_NumberOfComponents );
+  
+  // Allocate and initialize the status image and the status vectors
+  this->InitializeStatusImage();
 
   for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
     {
@@ -669,7 +688,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     // layers. Inside layers are odd numbers, outside layers are even numbers.
     for(unsigned int k = 1; k < layers.size() - 2; ++k)
       {
-      this->ConstructLayer(k, k+2,component);
+      this->ConstructLayer(k, k+2, component);
       }
     
     }
@@ -793,7 +812,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   LayerNodeType *node;
   bool bounds_status;
   ValueType value;
-  StatusType layer_number;
+  StatusValueType layer_number;
 
   typename OutputImageType::IndexType upperBounds, lowerBounds;
   lowerBounds = this->GetOutput()->GetRequestedRegion().GetIndex();

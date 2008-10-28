@@ -21,9 +21,10 @@
 #include "itkMultiThreader.h"
 #include "itkSparseFieldLayer.h"
 #include "itkObjectStore.h"
-#include <vector>
 #include "itkNeighborhoodIterator.h"
 #include "itkMeasurementVectorTraits.h"
+#include "itkVectorImage.h"
+#include <vector>
 
 namespace itk {
 
@@ -274,12 +275,15 @@ public:
   typedef std::vector<LayerListType>  LayerListComponentsType;
   
   /** Type used for storing status information */
-  typedef signed char StatusType;
+  typedef signed char StatusValueType;
   
-  /** The type of the image used to index status information.  Necessary for
-   *  the internals of the algorithm. */
-  typedef Image<StatusType, itkGetStaticConstMacro(ImageDimension)>
+  /** The type of the image used to index status information. Each phase has 
+   *  a status associated with it. */
+  typedef VectorImage< StatusValueType, itkGetStaticConstMacro(ImageDimension)>
   StatusImageType;
+
+  /** Type of the status pixel */
+  typedef StatusImageType::PixelType StatusType;
 
   /** Memory pre-allocator used to manage layer nodes in a multi-threaded
    *  environment. */
@@ -354,6 +358,10 @@ protected:
   /** Constructs the sparse field layers and initializes their values. */
   void Initialize();
 
+  /** Allocate and initialize the status image and the status vectors. Called
+   *  internally from Initialize() */
+  void InitializeStatusImage();
+  
   /** Copies the input to the output image.  Processing occurs on the output
    * image, so the data type of the output image determines the precision of
    * the calculations (i.e. double or float).  This method overrides the
@@ -443,23 +451,28 @@ protected:
 
   /** Special status value which indicates pending change to another sparse
    *  field layer. */
-  static StatusType m_StatusChanging;
+  static StatusValueType m_StatusChangingValue;
+  StatusType             m_StatusChanging;
 
   /** Special status value which indicates a pending change to a more positive
    *  sparse field. */
-  static StatusType m_StatusActiveChangingUp;
+  static StatusValueType m_StatusActiveChangingUpValue;
+  StatusType             m_StatusActiveChangingUp;
 
   /** Special status value which indicates a pending change to a more negative
    *  sparse field. */
-  static StatusType m_StatusActiveChangingDown;
+  static StatusValueType m_StatusActiveChangingDownValue;
+  StatusType             m_StatusActiveChangingDown;
 
   /** Special status value which indicates a pixel is on the boundary of the
    *  image */
-  static StatusType m_StatusBoundaryPixel;
+  static StatusValueType m_StatusBoundaryPixelValue;
+  StatusType             m_StatusBoundaryPixel;
 
   /** Special status value used as a default for indicies which have no
       meaningful status. */
-  static StatusType m_StatusNull;
+  static StatusValueType m_StatusNullValue;
+  StatusType             m_StatusNull;
     
   /** This image is a copy of the input with m_IsoSurfaceValue subtracted from
    * each pixel.  This way we only need to consider the zero level set in our
