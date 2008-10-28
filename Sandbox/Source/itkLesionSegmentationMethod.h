@@ -22,6 +22,7 @@
 #include "itkDataObjectDecorator.h"
 #include "itkSpatialObject.h"
 #include "itkFeatureGenerator.h"
+#include "itkSegmentationModule.h"
 
 namespace itk
 {
@@ -74,11 +75,24 @@ public:
    * spatial objects. */
   typedef FeatureGenerator< Dimension >         FeatureGeneratorType;
 
-  /*
+  /**
    * Method for adding a feature generator that will compute the Nth feature to
    * be passed to the segmentation module.
    */
   void AddFeatureGenerator( FeatureGeneratorType * generator ); 
+
+  /** Type of the segmentation module that encapsulate the actual segmentation
+   * algorithm. */
+  typedef SegmentationModule< Dimension >             SegmentationModuleType;
+  typedef typename SegmentationModuleType::Pointer    SegmentationModulePointer;
+
+
+  /**
+   * Method for setting the class that encapsulates the actual segmentation
+   * algorithm.
+   */
+  void SetSegmentationModule( SegmentationModuleType * segmentor ); 
+
 
 protected:
   LesionSegmentationMethod();
@@ -93,13 +107,17 @@ private:
   LesionSegmentationMethod(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  SpatialObjectPointer        m_RegionOfInterest;
-  SpatialObjectPointer        m_InitialSegmentation;
+  SpatialObjectPointer                      m_RegionOfInterest;
+  SpatialObjectPointer                      m_InitialSegmentation;
   
-  typedef typename FeatureGeneratorType::Pointer   FeatureGeneratorPointer;
-  typedef std::vector< FeatureGeneratorPointer >   FeatureGeneratorArrayType;
+  typedef typename FeatureGeneratorType::Pointer                FeatureGeneratorPointer;
+  typedef std::vector< FeatureGeneratorPointer >                FeatureGeneratorArrayType;
+  typedef typename FeatureGeneratorArrayType::iterator          FeatureGeneratorIterator;
+  typedef typename FeatureGeneratorArrayType::const_iterator    FeatureGeneratorConstIterator;
 
-  FeatureGeneratorArrayType   m_FeatureGenerators;
+  FeatureGeneratorArrayType                 m_FeatureGenerators;
+
+  SegmentationModulePointer                 m_SegmentationModule;
 
 
   void UpdateAllFeatureGenerators();

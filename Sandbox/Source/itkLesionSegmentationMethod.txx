@@ -68,6 +68,19 @@ LesionSegmentationMethod<NDimension>
   Superclass::PrintSelf( os, indent );
   os << "Region of Interest " << this->m_RegionOfInterest << std::endl;
   os << "Initial Segmentation " << this->m_InitialSegmentation << std::endl;
+  os << "Segmentation Module " << this->m_SegmentationModule << std::endl;
+
+  os << "Feature generators = ";
+  
+  FeatureGeneratorConstIterator gitr = this->m_FeatureGenerators.begin();
+  FeatureGeneratorConstIterator gend = this->m_FeatureGenerators.end();
+
+  while( gitr != gend )
+    {
+    os << gitr->GetPointer() << std::endl;
+    ++gitr;
+    }
+
 }
 
 
@@ -91,8 +104,6 @@ void
 LesionSegmentationMethod<NDimension>
 ::UpdateAllFeatureGenerators()
 {
-  typedef typename FeatureGeneratorArrayType::iterator     FeatureGeneratorIterator;
-  
   FeatureGeneratorIterator gitr = this->m_FeatureGenerators.begin();
   FeatureGeneratorIterator gend = this->m_FeatureGenerators.end();
 
