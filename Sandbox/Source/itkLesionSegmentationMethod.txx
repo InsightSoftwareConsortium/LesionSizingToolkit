@@ -66,9 +66,9 @@ LesionSegmentationMethod<NDimension>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
-  os << "Region of Interest " << this->m_RegionOfInterest << std::endl;
-  os << "Initial Segmentation " << this->m_InitialSegmentation << std::endl;
-  os << "Segmentation Module " << this->m_SegmentationModule << std::endl;
+  os << "Region of Interest " << this->m_RegionOfInterest.GetPointer() << std::endl;
+  os << "Initial Segmentation " << this->m_InitialSegmentation.GetPointer() << std::endl;
+  os << "Segmentation Module " << this->m_SegmentationModule.GetPointer() << std::endl;
 
   os << "Feature generators = ";
   
