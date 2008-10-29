@@ -1,4 +1,5 @@
 .git*            export-ignore
 
+*.mha           -crlf
 *.odp           -crlf
 *.png           -crlf
