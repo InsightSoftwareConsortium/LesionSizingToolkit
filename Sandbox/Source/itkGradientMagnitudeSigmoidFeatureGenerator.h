@@ -17,10 +17,9 @@
 #ifndef __itkGradientMagnitudeSigmoidFeatureGenerator_h
 #define __itkGradientMagnitudeSigmoidFeatureGenerator_h
 
-#include "itkProcessObject.h"
+#include "itkFeatureGenerator.h"
 #include "itkImage.h"
-#include "itkDataObjectDecorator.h"
-#include "itkSpatialObject.h"
+#include "itkImageSpatialObject.h"
 #include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
 #include "itkSigmoidImageFilter.h"
 
@@ -39,12 +38,12 @@ namespace itk
  * \ingroup SpatialObjectFilters
  */
 template <unsigned int NDimension>
-class ITK_EXPORT GradientMagnitudeSigmoidFeatureGenerator : public ProcessObject
+class ITK_EXPORT GradientMagnitudeSigmoidFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
   /** Standard class typedefs. */
   typedef GradientMagnitudeSigmoidFeatureGenerator          Self;
-  typedef ProcessObject                                     Superclass;
+  typedef FeatureGenerator<NDimension>                      Superclass;
   typedef SmartPointer<Self>                                Pointer;
   typedef SmartPointer<const Self>                          ConstPointer;
 
@@ -52,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GradientMagnitudeSigmoidFeatureGenerator, ProcessObject);
+  itkTypeMacro(GradientMagnitudeSigmoidFeatureGenerator, FeatureGenerator);
 
   /** Dimension of the space */
   itkStaticConstMacro(Dimension, unsigned int, NDimension);
@@ -63,6 +62,7 @@ public:
   typedef Image< InputPixelType, Dimension >                InputImageType;
   typedef ImageSpatialObject< NDimension, InputPixelType >  ImageSpatialObjectType;
   typedef typename ImageSpatialObjectType::Pointer          ImageSpatialObjectPointer;
+  typedef typename Superclass::SpatialObjectType            SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   void SetInput( const SpatialObjectType * input );
