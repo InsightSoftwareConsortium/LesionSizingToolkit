@@ -1,6 +1,6 @@
 
 SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
-SET(TEST_DATA_ROOT ${LesionSizingKitSandbox_SOURCE_DIR})
+SET(TEST_DATA_ROOT ${LesionSizingKitSandbox_SOURCE_DIR}/../Data/)
 SET(TEMP ${LesionSizingKitSandbox_BINARY_DIR}/Testing/Temporary)
 
 ADD_EXECUTABLE(itkSystemInformationSandbox itkSystemInformation.cxx )
@@ -105,7 +105,10 @@ ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1
 
 ADD_TEST(itkSatoVesselnessFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
-  ${ITK_SOURCE_DIR}/Examples/Data/BrainProtonDensitySlice.png
+  ${TEST_DATA_ROOT}/Input/DataCropped.mha
   ${TEMP}/SatoVesselnessFeatureGeneratorTest1_1.mhd
+  1.0
+  0.5
+  2.0
   )
 
