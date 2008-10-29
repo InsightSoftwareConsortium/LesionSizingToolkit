@@ -94,9 +94,28 @@ void
 GradientMagnitudeSigmoidFeatureGenerator<NDimension>
 ::GenerateData()
 {
-  const InputImageType * inputImage = NULL;
+  typename InputImageSpatialObjectType::ConstPointer inputObject = 
+    dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
+
+  if( !inputObject )
+    {
+    itkExceptionMacro("Missing input spatial object");
+    }
+
+  const InputImageType * inputImage = inputObject->GetImage();
+
+  if( !inputImage )
+    {
+    itkExceptionMacro("Missing input image");
+    }
+
+  std::cout << "INPUT IMAGE" << std::endl;
+  inputImage->Print( std::cout );
+
   this->m_GradientFilter->SetInput( inputImage );
   this->m_SigmoidFilter->SetInput( this->m_GradientFilter->GetOutput() );
+
+  this->m_SigmoidFilter->Update();
 
   typename OutputImageType::Pointer outputImage = this->m_SigmoidFilter->GetOutput();
 
