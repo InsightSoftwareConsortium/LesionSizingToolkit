@@ -84,6 +84,9 @@ TARGET_LINK_LIBRARIES(itkFeatureGeneratorTest1 LesionSizingSandbox)
 ADD_EXECUTABLE(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 itkGradientMagnitudeSigmoidFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkSatoVesselnessFeatureGeneratorTest1 itkSatoVesselnessFeatureGeneratorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkSatoVesselnessFeatureGeneratorTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkSegmentationModuleTest1 itkSegmentationModuleTest1.cxx )
 TARGET_LINK_LIBRARIES(itkSegmentationModuleTest1 LesionSizingSandbox)
 
@@ -98,5 +101,11 @@ ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   1.0
   -1.0
   5.0
+  )
+
+ADD_TEST(itkSatoVesselnessFeatureGeneratorTest1 
+  ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
+  ${ITK_SOURCE_DIR}/Examples/Data/BrainProtonDensitySlice.png
+  ${TEMP}/SatoVesselnessFeatureGeneratorTest1_1.mhd
   )
 
