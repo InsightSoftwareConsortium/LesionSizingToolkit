@@ -90,5 +90,10 @@ TARGET_LINK_LIBRARIES(itkSegmentationModuleTest1 LesionSizingSandbox)
 ADD_TEST(itkLesionSegmentationMethodTest1 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest1 )
 ADD_TEST(itkFeatureGeneratorTest1 ${CXX_TEST_PATH}/itkFeatureGeneratorTest1 )
 ADD_TEST(itkSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSegmentationModuleTest1 )
-ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1 )
+
+ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 
+  ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
+  ${ITK_SOURCE_DIR}/Examples/Data/BrainProtonDensitySlice.png
+  ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
+  )
 
