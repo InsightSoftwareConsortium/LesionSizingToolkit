@@ -60,8 +60,8 @@ public:
    * feature generator. */
   typedef signed short                                      InputPixelType;
   typedef Image< InputPixelType, Dimension >                InputImageType;
-  typedef ImageSpatialObject< NDimension, InputPixelType >  ImageSpatialObjectType;
-  typedef typename ImageSpatialObjectType::Pointer          ImageSpatialObjectPointer;
+  typedef ImageSpatialObject< NDimension, InputPixelType >  InputImageSpatialObjectType;
+  typedef typename InputImageSpatialObjectType::Pointer     InputImageSpatialObjectPointer;
   typedef typename Superclass::SpatialObjectType            SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
@@ -89,12 +89,17 @@ private:
   typedef float                                       InternalPixelType;
   typedef Image< InternalPixelType, Dimension >       InternalImageType;
 
+  typedef InternalPixelType                           OutputPixelType;
+  typedef InternalImageType                           OutputImageType;
+
+  typedef ImageSpatialObject< NDimension, OutputPixelType >  OutputImageSpatialObjectType;
+
   typedef GradientMagnitudeRecursiveGaussianImageFilter< 
     InputImageType, InternalImageType >               GradientFilterType;
   typedef typename GradientFilterType::Pointer        GradientFilterPointer;
 
   typedef SigmoidImageFilter<                               
-    InternalImageType, InternalImageType >            SigmoidFilterType;
+    InternalImageType, OutputImageType >              SigmoidFilterType;
   typedef typename SigmoidFilterType::Pointer         SigmoidFilterPointer;
 
   GradientFilterPointer           m_GradientFilter;

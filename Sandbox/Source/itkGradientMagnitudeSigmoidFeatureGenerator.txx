@@ -30,10 +30,14 @@ template <unsigned int NDimension>
 GradientMagnitudeSigmoidFeatureGenerator<NDimension>
 ::GradientMagnitudeSigmoidFeatureGenerator()
 {
-  this->SetNumberOfRequiredOutputs( 1 );  // for the Transform
+  this->SetNumberOfRequiredInputs( 1 );
 
   this->m_GradientFilter = GradientFilterType::New();
   this->m_SigmoidFilter = SigmoidFilterType::New();
+
+  typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
+
+  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
 }
 
 
@@ -52,7 +56,7 @@ GradientMagnitudeSigmoidFeatureGenerator<NDimension>
 ::SetInput( const SpatialObjectType * spatialObject )
 {
   // Process object is not const-correct so the const casting is required.
-  this->SetNthInput(1, const_cast<SpatialObjectType *>( spatialObject ));
+  this->SetNthInput(0, const_cast<SpatialObjectType *>( spatialObject ));
 }
 
 template <unsigned int NDimension>
@@ -93,6 +97,17 @@ GradientMagnitudeSigmoidFeatureGenerator<NDimension>
   const InputImageType * inputImage = NULL;
   this->m_GradientFilter->SetInput( inputImage );
   this->m_SigmoidFilter->SetInput( this->m_GradientFilter->GetOutput() );
+
+  typename OutputImageType::Pointer outputImage = this->m_SigmoidFilter->GetOutput();
+
+  outputImage->DisconnectPipeline();
+
+  typedef itk::ImageSpatialObject< Dimension, OutputPixelType > OutputImageSpatialObjectType;
+
+  OutputImageSpatialObjectType * outputObject =
+    dynamic_cast< OutputImageSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+
+  outputObject->SetImage( outputImage );
 }
 
 } // end namespace itk

@@ -30,7 +30,7 @@ template <unsigned int NDimension>
 FeatureGenerator<NDimension>
 ::FeatureGenerator()
 {
-  this->SetNumberOfRequiredOutputs( 1 );  // for the Transform
+  this->SetNumberOfRequiredOutputs( 1 );
 }
 
 

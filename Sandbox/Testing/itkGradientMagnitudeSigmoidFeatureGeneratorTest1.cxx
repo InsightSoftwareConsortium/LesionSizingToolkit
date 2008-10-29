@@ -19,6 +19,7 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageMaskSpatialObject.h"
 #include "itkImageFileReader.h"
+#include "itkImageFileWriter.h"
 
 int main( int argc, char * argv [] )
 {
@@ -30,12 +31,19 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  const unsigned int Dimension = 3;
+  const unsigned int Dimension = 2;
 
   typedef signed short    InputPixelType;
-  typedef itk::Image< InputPixelType, Dimension >    InputImageType;
+  typedef float           OutputPixelType;
+
+  typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
 
   typedef itk::ImageFileReader< InputImageType >     ReaderType;
+  typedef itk::ImageFileWriter< OutputImageType >    WriterType;
+
+  typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
+  typedef itk::ImageSpatialObject< Dimension, OutputPixelType > OutputImageSpatialObjectType;
 
   ReaderType::Pointer reader = ReaderType::New();
 
@@ -56,9 +64,8 @@ int main( int argc, char * argv [] )
 
   GradientMagnitudeSigmoidFeatureGeneratorType::Pointer  featureGenerator = GradientMagnitudeSigmoidFeatureGeneratorType::New();
   
-  typedef itk::ImageSpatialObject< Dimension, signed short > ImageSpatialObjectType;
 
-  ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
+  InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
   InputImageType::Pointer inputImage = reader->GetOutput();
 
@@ -68,12 +75,43 @@ int main( int argc, char * argv [] )
 
   featureGenerator->SetInput( inputObject );
 
-  featureGenerator->Update();
+
+  try 
+    {
+    featureGenerator->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
+
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
+  OutputImageSpatialObjectType::ConstPointer outputObject = 
+    dynamic_cast< const OutputImageSpatialObjectType * >( feature.GetPointer() );
+
+  OutputImageType::ConstPointer outputImage = outputObject->GetImage();
+
+  WriterType::Pointer writer = WriterType::New();
+
+  writer->SetFileName( argv[2] );
+  writer->SetInput( outputImage );
+
+
+  try 
+    {
+    writer->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
+
   featureGenerator->Print( std::cout );
 
-  
+ 
   return EXIT_SUCCESS;
 }
