@@ -23,7 +23,7 @@
 #include "itkHessianRecursiveGaussianImageFilter.h"
 #include "itkSymmetricSecondRankTensor.h"
 #include "itkSymmetricEigenAnalysisImageFilter.h"
-#include "itkLocalStructureImageFilter.h"
+#include "itkDescoteauxSheetnessImageFilter.h"
 
 namespace itk
 {
@@ -77,13 +77,17 @@ public:
   itkSetMacro( Sigma, double );
   itkGetMacro( Sigma, double );
 
-  /** Alpha value to be used in the Sato Vesselness filter. */
-  itkSetMacro( Alpha, double );
-  itkGetMacro( Alpha, double );
+  /** Sheetness normalization value to be used in the Descoteaux sheetness filter. */
+  itkSetMacro( SheetnessNormalization, double );
+  itkGetMacro( SheetnessNormalization, double );
 
-  /** Gamma value to be used in the Sato Vesselness filter. */
-  itkSetMacro( Gamma, double );
-  itkGetMacro( Gamma, double );
+  /** Bloobiness normalization value to be used in the Descoteaux sheetness filter. */
+  itkSetMacro( BloobinessNormalization, double );
+  itkGetMacro( BloobinessNormalization, double );
+
+  /** Noise normalization value to be used in the Descoteaux sheetness filter. */
+  itkSetMacro( NoiseNormalization, double );
+  itkGetMacro( NoiseNormalization, double );
 
 protected:
   DescoteauxSheetnessFeatureGenerator();
@@ -115,15 +119,16 @@ private:
 
   typedef  SymmetricEigenAnalysisImageFilter< HessianImageType, EigenValueImageType >     EigenAnalysisFilterType;
  
-  typedef  LocalStructureImageFilter< EigenValueImageType, OutputImageType >     LocalStructureFilterType;
+  typedef  DescoteauxSheetnessImageFilter< EigenValueImageType, OutputImageType >         SheetnessFilterType;
 
   typename HessianFilterType::Pointer             m_HessianFilter;
   typename EigenAnalysisFilterType::Pointer       m_EigenAnalysisFilter;
-  typename LocalStructureFilterType::Pointer      m_LocalStructureFilter;
+  typename SheetnessFilterType::Pointer           m_SheetnessFilter;
 
   double      m_Sigma;
-  double      m_Alpha;
-  double      m_Gamma;
+  double      m_SheetnessNormalization;
+  double      m_BloobinessNormalization;
+  double      m_NoiseNormalization;
 };
 
 } // end namespace itk

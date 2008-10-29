@@ -128,15 +128,15 @@ public:
   }
   void SetAlpha( double value )
     {
-    this->m_Alpha;
+    this->m_Alpha = value;
     }
   void SetGamma( double value )
     {
-    this->m_Gamma;
+    this->m_Gamma = value;
     }
   void SetC( double value )
     {
-    this->m_C;
+    this->m_C = value;
     }
 
 private:

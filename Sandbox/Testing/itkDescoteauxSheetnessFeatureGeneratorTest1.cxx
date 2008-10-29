@@ -27,7 +27,7 @@ int main( int argc, char * argv [] )
   if( argc < 3 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [sigma alpha gamma]" << std::endl;
+    std::cerr << argv[0] << " inputImage outputImage [sigma sheetness bloobiness noise ]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -82,12 +82,17 @@ int main( int argc, char * argv [] )
 
   if( argc > 4 )
     {
-    featureGenerator->SetAlpha( atof( argv[4] ) );
+    featureGenerator->SetSheetnessNormalization( atof( argv[4] ) );
     }
 
-  if( argc > 4 )
+  if( argc > 5 )
     {
-    featureGenerator->SetGamma( atof( argv[4] ) );
+    featureGenerator->SetBloobinessNormalization( atof( argv[5] ) );
+    }
+
+  if( argc > 6 )
+    {
+    featureGenerator->SetNoiseNormalization( atof( argv[6] ) );
     }
 
 

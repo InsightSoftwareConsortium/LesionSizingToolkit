@@ -34,7 +34,7 @@ DescoteauxSheetnessFeatureGenerator<NDimension>
 
   this->m_HessianFilter = HessianFilterType::New();
   this->m_EigenAnalysisFilter = EigenAnalysisFilterType::New();
-  this->m_LocalStructureFilter = LocalStructureFilterType::New();
+  this->m_SheetnessFilter = SheetnessFilterType::New();
 
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
@@ -114,16 +114,17 @@ DescoteauxSheetnessFeatureGenerator<NDimension>
 
   this->m_HessianFilter->SetInput( inputImage );
   this->m_EigenAnalysisFilter->SetInput( this->m_HessianFilter->GetOutput() );
-  this->m_LocalStructureFilter->SetInput( this->m_EigenAnalysisFilter->GetOutput() );
+  this->m_SheetnessFilter->SetInput( this->m_EigenAnalysisFilter->GetOutput() );
 
   this->m_HessianFilter->SetSigma( this->m_Sigma );
   this->m_EigenAnalysisFilter->SetDimension( Dimension );
-  this->m_LocalStructureFilter->SetAlpha( this->m_Alpha );
-  this->m_LocalStructureFilter->SetGamma( this->m_Gamma );
+  this->m_SheetnessFilter->SetSheetnessNormalization( this->m_SheetnessNormalization );
+  this->m_SheetnessFilter->SetBloobinessNormalization( this->m_BloobinessNormalization );
+  this->m_SheetnessFilter->SetNoiseNormalization( this->m_NoiseNormalization );
 
-  this->m_LocalStructureFilter->Update();
+  this->m_SheetnessFilter->Update();
 
-  typename OutputImageType::Pointer outputImage = this->m_LocalStructureFilter->GetOutput();
+  typename OutputImageType::Pointer outputImage = this->m_SheetnessFilter->GetOutput();
 
   outputImage->DisconnectPipeline();
 
