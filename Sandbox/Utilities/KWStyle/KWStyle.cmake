@@ -37,6 +37,6 @@ IF (LesionSizingToolkit_USE_KWSTYLE)
     ARGS    ${KWSTYLE_ARGUMENTS}
     COMMENT "Coding Style Checker"
     )
-  ADD_CUSTOM_TARGET(StyleCheck DEPENDS ${StatisticsRefactoring_BINARY_DIR}/KWStyleReport.txt)
-  ADD_TEST(KWStyleTest ${KWSTYLE_EXECUTABLE} ${KWSTYLE_ARGUMENTS})
+  ADD_CUSTOM_TARGET(StyleCheckSandbox DEPENDS ${StatisticsRefactoring_BINARY_DIR}/KWStyleReport.txt)
+  ADD_TEST(KWStyleSandboxTest ${KWSTYLE_EXECUTABLE} ${KWSTYLE_ARGUMENTS})
 ENDIF ( LesionSizingToolkit_USE_KWSTYLE )

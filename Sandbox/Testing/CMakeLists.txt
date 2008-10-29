@@ -3,8 +3,8 @@ SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 SET(TEST_DATA_ROOT ${LesionSizingKitSandbox_SOURCE_DIR})
 SET(TEMP ${LesionSizingKitSandbox_BINARY_DIR}/Testing/Temporary)
 
-ADD_EXECUTABLE(itkSystemInformation itkSystemInformation.cxx )
-TARGET_LINK_LIBRARIES(itkSystemInformation LesionSizingSandbox)
+ADD_EXECUTABLE(itkSystemInformationSandbox itkSystemInformation.cxx )
+TARGET_LINK_LIBRARIES(itkSystemInformationSandbox LesionSizingSandbox)
 
 IF( ITK_USE_MULTI_PHASE_FRAMEWORK )
 
@@ -72,7 +72,7 @@ ADD_TEST(itkVectorZeroCrossingImageFilterTest1 ${CXX_TEST_PATH}/itkVectorZeroCro
 
 ENDIF( ITK_USE_MULTI_PHASE_FRAMEWORK )
 
-ADD_TEST(itkSystemInformation ${CXX_TEST_PATH}/itkSystemInformation )
+ADD_TEST(itkSystemInformationSandbox ${CXX_TEST_PATH}/itkSystemInformationSandbox )
 
 
 ADD_EXECUTABLE(itkLesionSegmentationMethodTest1 itkLesionSegmentationMethodTest1.cxx )
