@@ -90,6 +90,9 @@ TARGET_LINK_LIBRARIES(itkSatoVesselnessFeatureGeneratorTest1 LesionSizingSandbox
 ADD_EXECUTABLE(itkSatoLocalStructureFeatureGeneratorTest1 itkSatoLocalStructureFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkSatoLocalStructureFeatureGeneratorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkDescoteauxSheetnessFeatureGeneratorTest1 itkDescoteauxSheetnessFeatureGeneratorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkDescoteauxSheetnessFeatureGeneratorTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkSegmentationModuleTest1 itkSegmentationModuleTest1.cxx )
 TARGET_LINK_LIBRARIES(itkSegmentationModuleTest1 LesionSizingSandbox)
 
@@ -119,6 +122,15 @@ ADD_TEST(itkSatoLocalStructureFeatureGeneratorTest1
   ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/DataCropped.mha
   ${TEMP}/SatoLocalStructureFeatureGeneratorTest1_1.mhd
+  1.0
+  0.5
+  2.0
+  )
+
+ADD_TEST(itkDescoteauxSheetnessFeatureGeneratorTest1 
+  ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
+  ${TEST_DATA_ROOT}/Input/DataCropped.mha
+  ${TEMP}/DescoteauxSheetnessFeatureGeneratorTest1_1.mhd
   1.0
   0.5
   2.0
