@@ -113,11 +113,15 @@ GradientMagnitudeSigmoidFeatureGenerator<NDimension>
     itkExceptionMacro("Missing input image");
     }
 
-  std::cout << "INPUT IMAGE" << std::endl;
-  inputImage->Print( std::cout );
-
   this->m_GradientFilter->SetInput( inputImage );
   this->m_SigmoidFilter->SetInput( this->m_GradientFilter->GetOutput() );
+
+  this->m_GradientFilter->SetSigma( this->m_Sigma );
+  this->m_SigmoidFilter->SetAlpha( this->m_Alpha );
+  this->m_SigmoidFilter->SetBeta( this->m_Beta );
+
+  this->m_SigmoidFilter->SetOutputMinimum( 0.0 );
+  this->m_SigmoidFilter->SetOutputMaximum( 1.0 );
 
   this->m_SigmoidFilter->Update();
 
