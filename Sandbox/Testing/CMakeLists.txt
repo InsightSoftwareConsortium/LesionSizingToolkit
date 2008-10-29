@@ -95,5 +95,8 @@ ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   ${ITK_SOURCE_DIR}/Examples/Data/BrainProtonDensitySlice.png
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
+  1.0
+  -1.0
+  5.0
   )
 

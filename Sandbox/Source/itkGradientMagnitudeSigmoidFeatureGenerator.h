@@ -72,6 +72,18 @@ public:
    * SpatialObject. */
   const SpatialObjectType * GetFeature() const;
 
+  /** Sigma value to be used in the Gaussian smoothing preceeding the gradient
+   * magnitude computation. */
+  itkSetMacro( Sigma, double );
+  itkGetMacro( Sigma, double );
+
+  /** Alpha value to be used in the Sigmoid filter. */
+  itkSetMacro( Alpha, double );
+  itkGetMacro( Alpha, double );
+
+  /** Beta value to be used in the Sigmoid filter. */
+  itkSetMacro( Beta, double );
+  itkGetMacro( Beta, double );
 
 protected:
   GradientMagnitudeSigmoidFeatureGenerator();
@@ -105,6 +117,9 @@ private:
   GradientFilterPointer           m_GradientFilter;
   SigmoidFilterPointer            m_SigmoidFilter;
 
+  double                          m_Sigma;
+  double                          m_Alpha;
+  double                          m_Beta;
 };
 
 } // end namespace itk

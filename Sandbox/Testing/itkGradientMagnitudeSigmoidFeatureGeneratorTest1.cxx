@@ -27,7 +27,7 @@ int main( int argc, char * argv [] )
   if( argc < 3 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage " << std::endl;
+    std::cerr << argv[0] << " inputImage outputImage [sigma alpha beta]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -74,6 +74,22 @@ int main( int argc, char * argv [] )
   inputObject->SetImage( inputImage );
 
   featureGenerator->SetInput( inputObject );
+
+  if( argc > 3 )
+    {
+    featureGenerator->SetSigma( atof( argv[3] ) );
+    }
+
+  if( argc > 4 )
+    {
+    featureGenerator->SetAlpha( atof( argv[4] ) );
+    }
+
+  if( argc > 4 )
+    {
+    featureGenerator->SetBeta( atof( argv[4] ) );
+    }
+
 
 
   try 

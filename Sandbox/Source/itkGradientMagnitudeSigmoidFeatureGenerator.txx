@@ -38,6 +38,10 @@ GradientMagnitudeSigmoidFeatureGenerator<NDimension>
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+
+  this->m_Sigma =  1.0;
+  this->m_Alpha = -1.0;
+  this->m_Beta = 128.0;
 }
 
 
