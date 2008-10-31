@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    itkSegmentationModule.h
+  Module:    itkRegionGrowingSegmentationModule.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -14,64 +14,48 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSegmentationModule_h
-#define __itkSegmentationModule_h
+#ifndef __itkRegionGrowingSegmentationModule_h
+#define __itkRegionGrowingSegmentationModule_h
 
-#include "itkProcessObject.h"
-#include "itkImage.h"
-#include "itkDataObjectDecorator.h"
-#include "itkSpatialObject.h"
+#include "itkSegmentationModule.h"
 
 namespace itk
 {
 
-/** \class SegmentationModule
- * \brief Class provides the abstract interface of the segmentation methods.
- *
- * The typical use of this class would be to generate a binary mask spatial
- * object representing a segmented object.
+/** \class RegionGrowingSegmentationModule
+ * \brief Class applies a region growing segmentation method
  *
  * SpatialObjects are used as inputs and outputs of this class.
  *
  * \ingroup SpatialObjectFilters
  */
 template <unsigned int NDimension>
-class ITK_EXPORT SegmentationModule : public ProcessObject
+class ITK_EXPORT RegionGrowingSegmentationModule : public SegmentationModule<NDimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef SegmentationModule            Self;
-  typedef ProcessObject                 Superclass;
-  typedef SmartPointer<Self>            Pointer;
-  typedef SmartPointer<const Self>      ConstPointer;
+  typedef RegionGrowingSegmentationModule       Self;
+  typedef SegmentationModule<NDimension>        Superclass;
+  typedef SmartPointer<Self>                    Pointer;
+  typedef SmartPointer<const Self>              ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SegmentationModule, ProcessObject);
+  itkTypeMacro(RegionGrowingSegmentationModule, SegmentationModule);
 
   /** Dimension of the space */
   itkStaticConstMacro(Dimension, unsigned int, NDimension);
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef SpatialObject< NDimension >           SpatialObjectType;
-  typedef typename SpatialObjectType::Pointer   SpatialObjectPointer;
-
-  /** Input data that will be used for generating the feature. */
-  void SetInput( const SpatialObjectType * input );
-
-  /** Input data that carries the feature in the form of a
-   * SpatialObject. */
-  void SetFeature( const SpatialObjectType * feature );
-
-  /** Output segmentation represented as a SpatialObject. */
-  const SpatialObjectType * GetOutput() const;
+  typedef typename Superclass::SpatialObjectType         SpatialObjectType;
+  typedef typename Superclass::SpatialObjectPointer      SpatialObjectPointer;
 
 protected:
-  SegmentationModule();
-  virtual ~SegmentationModule();
+  RegionGrowingSegmentationModule();
+  virtual ~RegionGrowingSegmentationModule();
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   /** Method invoked by the pipeline in order to trigger the computation of
@@ -79,7 +63,7 @@ protected:
   void  GenerateData ();
 
 private:
-  SegmentationModule(const Self&); //purposely not implemented
+  RegionGrowingSegmentationModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 };
@@ -87,7 +71,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkSegmentationModule.txx"
+# include "itkRegionGrowingSegmentationModule.txx"
 #endif
 
 #endif

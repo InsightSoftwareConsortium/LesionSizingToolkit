@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Lesion Sizing Toolkit
-  Module:    itkSegmentationModuleTest1.cxx
+  Module:    itkRegionGrowingSegmentationModuleTest1.cxx
 
   Copyright (c) Kitware Inc. 
   All rights reserved.
@@ -13,7 +13,7 @@
 
 =========================================================================*/
 
-#include "itkSegmentationModule.h"
+#include "itkRegionGrowingSegmentationModule.h"
 #include "itkImage.h"
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
@@ -23,7 +23,7 @@ int main( int argc, char * argv [] )
 {
   const unsigned int Dimension = 3;
 
-  typedef itk::SegmentationModule< Dimension >   SegmentationModuleType;
+  typedef itk::RegionGrowingSegmentationModule< Dimension >   SegmentationModuleType;
   typedef SegmentationModuleType::SpatialObjectType    SpatialObjectType;
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();

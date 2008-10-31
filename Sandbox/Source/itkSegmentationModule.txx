@@ -30,7 +30,7 @@ template <unsigned int NDimension>
 SegmentationModule<NDimension>
 ::SegmentationModule()
 {
-  this->SetNumberOfRequiredOutputs( 1 );  // for the Transform
+  this->SetNumberOfRequiredOutputs( 1 );
 }
 
 
@@ -49,13 +49,24 @@ SegmentationModule<NDimension>
 ::SetInput( const SpatialObjectType * spatialObject )
 {
   // Process object is not const-correct so the const casting is required.
+  this->SetNthInput(0, const_cast<SpatialObjectType *>( spatialObject ));
+}
+
+
+template <unsigned int NDimension>
+void
+SegmentationModule<NDimension>
+::SetFeature( const SpatialObjectType * spatialObject )
+{
+  // Process object is not const-correct so the const casting is required.
   this->SetNthInput(1, const_cast<SpatialObjectType *>( spatialObject ));
 }
+
 
 template <unsigned int NDimension>
 const typename SegmentationModule<NDimension>::SpatialObjectType *
 SegmentationModule<NDimension>
-::GetFeature() const
+::GetOutput() const
 {
   if (this->GetNumberOfOutputs() < 1)
     {
@@ -63,7 +74,6 @@ SegmentationModule<NDimension>
     }
 
   return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
-
 }
 
 
