@@ -3,8 +3,16 @@ SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 SET(TEST_DATA_ROOT ${LesionSizingKitSandbox_SOURCE_DIR}/../Data/)
 SET(TEMP ${LesionSizingKitSandbox_BINARY_DIR}/Testing/Temporary)
 
+FIND_PATH(TEST_CORNELL_DATA_ROOT README.txt DOC "Directory with data from the Cornell ELCAP database")
+
 ADD_EXECUTABLE(itkSystemInformationSandbox itkSystemInformation.cxx )
 TARGET_LINK_LIBRARIES(itkSystemInformationSandbox LesionSizingSandbox)
+
+ADD_EXECUTABLE(DicomSeriesReadImageWrite DicomSeriesReadImageWrite.cxx )
+TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite ITKIO)
+
+ADD_EXECUTABLE(ImageReadRegionOfInterestWrite ImageReadRegionOfInterestWrite.cxx )
+TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite ITKIO)
 
 IF( ITK_USE_MULTI_PHASE_FRAMEWORK )
 
@@ -151,4 +159,20 @@ ADD_TEST(itkFrangiTubularnessFeatureGeneratorTest1
   0.5
   2.0
   )
+
+IF(TEST_CORNELL_DATA_ROOT)
+
+ADD_TEST(Read001 
+  ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
+  ${TEST_CORNELL_DATA_ROOT}/CornellPartSolid2/SM0055-20000101/SM0055/20000101-122401-2-1
+  ${TEMP}/CornellPartSolid2_1.mhd
+  )
+
+ADD_TEST(Read002 
+  ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
+  ${TEST_CORNELL_DATA_ROOT}/CornellPartSolid3/SL0074-20000101/SL0074/20000101-134856-2-1
+  ${TEMP}/CornellPartSolid3_1.mhd
+  )
+
+ENDIF(TEST_CORNELL_DATA_ROOT)
 
