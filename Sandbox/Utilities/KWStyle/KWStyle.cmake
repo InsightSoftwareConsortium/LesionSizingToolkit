@@ -32,11 +32,11 @@ IF (LesionSizingToolkit_USE_KWSTYLE)
   ENDIF(KWSTYLE_USE_MSVC_FORMAT)
 
   ADD_CUSTOM_COMMAND(
-    OUTPUT ${StatisticsRefactoring_BINARY_DIR}/KWStyleReport.txt
+    OUTPUT ${LesionSizingKitSandbox_BINARY_DIR}/KWStyleReport.txt
     COMMAND ${KWSTYLE_EXECUTABLE}
     ARGS    ${KWSTYLE_ARGUMENTS}
     COMMENT "Coding Style Checker"
     )
-  ADD_CUSTOM_TARGET(StyleCheckSandbox DEPENDS ${StatisticsRefactoring_BINARY_DIR}/KWStyleReport.txt)
+  ADD_CUSTOM_TARGET(StyleCheckSandbox DEPENDS ${LesionSizingKitSandbox_BINARY_DIR}/KWStyleReport.txt)
   ADD_TEST(KWStyleSandboxTest ${KWSTYLE_EXECUTABLE} ${KWSTYLE_ARGUMENTS})
 ENDIF ( LesionSizingToolkit_USE_KWSTYLE )
