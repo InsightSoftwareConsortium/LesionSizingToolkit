@@ -113,11 +113,15 @@ TARGET_LINK_LIBRARIES(itkSegmentationModuleTest1 LesionSizingSandbox)
 ADD_EXECUTABLE(itkRegionGrowingSegmentationModuleTest1 itkRegionGrowingSegmentationModuleTest1.cxx )
 TARGET_LINK_LIBRARIES(itkRegionGrowingSegmentationModuleTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkConnectedThresholdSegmentationModuleTest1 itkConnectedThresholdSegmentationModuleTest1.cxx )
+TARGET_LINK_LIBRARIES(itkConnectedThresholdSegmentationModuleTest1 LesionSizingSandbox)
+
 ADD_TEST(itkLesionSegmentationMethodTest1 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest1 )
 ADD_TEST(itkLesionSegmentationMethodTest2 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest2 )
 ADD_TEST(itkFeatureGeneratorTest1 ${CXX_TEST_PATH}/itkFeatureGeneratorTest1 )
 ADD_TEST(itkSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSegmentationModuleTest1 )
 ADD_TEST(itkRegionGrowingSegmentationModuleTest1 ${CXX_TEST_PATH}/itkRegionGrowingSegmentationModuleTest1 )
+ADD_TEST(itkConnectedThresholdSegmentationModuleTest1 ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1 )
 
 ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
@@ -286,6 +290,16 @@ ADD_TEST(FTFGTest002
   2.0
   )
 
+#
+#  Region Growing tests
+#
+ADD_TEST(CTRGTest001
+  ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1
+  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  ${TEMP}/CTRGTest001_01.mhd
+  100
+  200
+  )
 
 ENDIF(TEST_CORNELL_DATA_ROOT)
 
