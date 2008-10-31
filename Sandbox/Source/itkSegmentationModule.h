@@ -61,10 +61,12 @@ public:
 
   /** Input data that will be used for generating the feature. */
   void SetInput( const SpatialObjectType * input );
+  const SpatialObjectType * GetInput() const;
 
   /** Input data that carries the feature in the form of a
    * SpatialObject. */
   void SetFeature( const SpatialObjectType * feature );
+  const SpatialObjectType * GetFeature() const;
 
   /** Output segmentation represented as a SpatialObject. */
   const SpatialObjectType * GetOutput() const;
@@ -77,6 +79,10 @@ protected:
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
   void  GenerateData ();
+
+  /** Output segmentation represented as a SpatialObject. Non-const version
+   * only for internal use. */
+  SpatialObjectType * GetInternalOutput();
 
 private:
   SegmentationModule(const Self&); //purposely not implemented

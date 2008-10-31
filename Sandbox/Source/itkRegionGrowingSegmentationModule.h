@@ -62,6 +62,10 @@ protected:
    * the segmentation. */
   void  GenerateData ();
 
+  /** Type of the output image */
+  typedef unsigned char                                 OutputPixelType;
+  typedef itk::Image< OutputPixelType, NDimension >     OutputImageType;
+
 private:
   RegionGrowingSegmentationModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

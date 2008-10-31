@@ -17,33 +17,36 @@
 #ifndef __itkConnectedThresholdSegmentationModule_h
 #define __itkConnectedThresholdSegmentationModule_h
 
-#include "itkSegmentationModule.h"
+#include "itkRegionGrowingSegmentationModule.h"
+#include "itkConnectedThresholdImageFilter.h"
 
 namespace itk
 {
 
 /** \class ConnectedThresholdSegmentationModule
- * \brief Class applies a region growing segmentation method
+ * \brief This class applies the connected threshold region growing
+ * segmentation method.
  *
  * SpatialObjects are used as inputs and outputs of this class.
  *
  * \ingroup SpatialObjectFilters
  */
 template <unsigned int NDimension>
-class ITK_EXPORT ConnectedThresholdSegmentationModule : public SegmentationModule<NDimension>
+class ITK_EXPORT ConnectedThresholdSegmentationModule : 
+  public RegionGrowingSegmentationModule<NDimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef ConnectedThresholdSegmentationModule       Self;
-  typedef SegmentationModule<NDimension>        Superclass;
-  typedef SmartPointer<Self>                    Pointer;
-  typedef SmartPointer<const Self>              ConstPointer;
+  typedef ConnectedThresholdSegmentationModule              Self;
+  typedef RegionGrowingSegmentationModule<NDimension>       Superclass;
+  typedef SmartPointer<Self>                                Pointer;
+  typedef SmartPointer<const Self>                          ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ConnectedThresholdSegmentationModule, SegmentationModule);
+  itkTypeMacro(ConnectedThresholdSegmentationModule, RegionGrowingSegmentationModule);
 
   /** Dimension of the space */
   itkStaticConstMacro(Dimension, unsigned int, NDimension);
@@ -61,6 +64,9 @@ protected:
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
   void  GenerateData ();
+
+  /** Type of the output image */
+  typedef typename Superclass::OutputImageType        OutputImageType;
 
 private:
   ConnectedThresholdSegmentationModule(const Self&); //purposely not implemented
