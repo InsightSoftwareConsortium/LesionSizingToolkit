@@ -9,13 +9,13 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkVectorShiftScaleImageFilter_txx
-#define _itkVectorShiftScaleImageFilter_txx
+#ifndef __itkVectorShiftScaleImageFilter_txx
+#define __itkVectorShiftScaleImageFilter_txx
 #include "itkVectorShiftScaleImageFilter.h"
 
 #include "itkImageRegionIterator.h"
@@ -80,16 +80,16 @@ template<class TInputImage, class TOutputImage>
 void
 VectorShiftScaleImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId) 
+                       int threadId)
 {
 
   RealType value;
   ImageRegionConstIterator<TInputImage>  it (this->GetInput(), outputRegionForThread);
   ImageRegionIterator<TOutputImage> ot (this->GetOutput(), outputRegionForThread);
-  
+
   // support progress methods/callbacks
   ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-          
+
   const unsigned int numberOfComponents = itk::MeasurementVectorTraits::GetLength( it.Get() );
 
   // shift and scale the input pixels
@@ -109,9 +109,9 @@ VectorShiftScaleImageFilter<TInputImage, TOutputImage>
         m_ThreadOverflow[threadId]++;
         }
       }
-    
+
     ot.Set( static_cast<OutputImagePixelType>( value ) );
-   
+
     ++it;
     ++ot;
 
@@ -120,7 +120,7 @@ VectorShiftScaleImageFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 VectorShiftScaleImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {

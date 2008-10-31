@@ -106,11 +106,11 @@ private:
 
   typedef ImageSpatialObject< NDimension, OutputPixelType >  OutputImageSpatialObjectType;
 
-  typedef GradientMagnitudeRecursiveGaussianImageFilter< 
+  typedef GradientMagnitudeRecursiveGaussianImageFilter<
     InputImageType, InternalImageType >               GradientFilterType;
   typedef typename GradientFilterType::Pointer        GradientFilterPointer;
 
-  typedef SigmoidImageFilter<                               
+  typedef SigmoidImageFilter<
     InternalImageType, OutputImageType >              SigmoidFilterType;
   typedef typename SigmoidFilterType::Pointer         SigmoidFilterPointer;
 

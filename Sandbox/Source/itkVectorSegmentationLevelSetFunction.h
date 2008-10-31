@@ -9,13 +9,13 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVectorSegmentationLevelSetFunction_h_
-#define __itkVectorSegmentationLevelSetFunction_h_
+#ifndef __itkVectorSegmentationLevelSetFunction_h
+#define __itkVectorSegmentationLevelSetFunction_h
 
 #include "itkVectorLevelSetFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
@@ -40,7 +40,7 @@ namespace itk {
   \sa VectorSegmentationLevelSetImageFilter
   \sa VectorLevelSetFunction
 */
-  
+
 template <class TImageType, class TFeatureImageType = TImageType>
 class ITK_EXPORT VectorSegmentationLevelSetFunction
   : public VectorLevelSetFunction<TImageType>
@@ -56,17 +56,17 @@ public:
   itkTypeMacro( VectorSegmentationLevelSetFunction, VectorLevelSetFunction );
 
   /** Extract some parameters from the superclass. */
-  typedef typename Superclass::ImageType ImageType;
-  typedef typename Superclass::RadiusType RadiusType;
-  typedef typename Superclass::PixelRealType PixelRealType;
-  typedef TFeatureImageType FeatureImageType;
-  typedef typename Superclass::FloatOffsetType FloatOffsetType;
-  typedef typename Superclass::ScalarValueType ScalarValueType;
-  typedef typename Superclass::NeighborhoodType NeighborhoodType;
-  typedef typename FeatureImageType::PixelType FeatureScalarType;
-  typedef typename ImageType::IndexType IndexType;
-  typedef typename Superclass::VectorType VectorType;
-  typedef typename Superclass::GlobalDataStruct GlobalDataStruct;
+  typedef typename Superclass::ImageType          ImageType;
+  typedef typename Superclass::RadiusType         RadiusType;
+  typedef typename Superclass::PixelRealType      PixelRealType;
+  typedef TFeatureImageType                       FeatureImageType;
+  typedef typename Superclass::FloatOffsetType    FloatOffsetType;
+  typedef typename Superclass::ScalarValueType    ScalarValueType;
+  typedef typename Superclass::NeighborhoodType   NeighborhoodType;
+  typedef typename FeatureImageType::PixelType    FeatureScalarType;
+  typedef typename ImageType::IndexType           IndexType;
+  typedef typename Superclass::VectorType         VectorType;
+  typedef typename Superclass::GlobalDataStruct   GlobalDataStruct;
 
   /** Extract some parameters from the superclass. */
   itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
@@ -84,27 +84,29 @@ public:
 
   /** Define a vector interpolator */
   typedef VectorLinearInterpolateImageFunction<VectorImageType> VectorInterpolatorType;
-  
+
   /** Continuous index type recognized by the interpolator */
   typedef typename InterpolatorType::ContinuousIndexType ContinuousIndexType;
-  
+
   /** Set/Get the image which will be used to calculate the speed function. */
   virtual const FeatureImageType *GetFeatureImage() const
   { return m_FeatureImage.GetPointer(); }
   virtual void SetFeatureImage(const FeatureImageType *f)
   {    m_FeatureImage = f;  }
-  
+
   /** Get/Set the image used as the speed function in the level set equation */
-  virtual ImageType *GetSpeedImage() 
-  { return m_SpeedImage.GetPointer(); }
+  virtual ImageType *GetSpeedImage()
+    {
+    return m_SpeedImage.GetPointer();
+    }
   void SetSpeedImage( ImageType *s );
-  
+
   /** Get/Set the image used as the advection field in the level set equation */
   virtual VectorImageType * GetAdvectionImage( unsigned int component ) const
-  { return m_AdvectionImage[component].GetPointer(); } 
+  { return m_AdvectionImage[component].GetPointer(); }
   void SetAdvectionImage( unsigned int component, VectorImageType *s );
-  
-  
+
+
   /** This method creates the appropriate member variable operators for the
    * level-set calculations.  The argument to this function is a the radius
    * necessary for performing the level-set calculations. */
@@ -141,7 +143,7 @@ public:
    * subclassing you may need to override this function so that your new terms
    * will be properly adjusted. */
   virtual void ReverseExpansionDirection();
-  
+
 protected:
   /** The image whose features will be used to create a speed image */
   typename FeatureImageType::ConstPointer m_FeatureImage;
@@ -151,8 +153,8 @@ protected:
 
   /** The image holding the advection field for front propation */
   typedef typename VectorImageType::Pointer       VectorImagePointer;
-  typedef std::vector< VectorImagePointer >       VectorImageArray; 
-  
+  typedef std::vector< VectorImagePointer >       VectorImageArray;
+
   VectorImageArray                   m_AdvectionImage;
 
   /** A casting functor to convert between vector types.  */
@@ -170,26 +172,26 @@ protected:
   /** Advection field.  Returns a vector from the computed advectionfield.*/
   virtual VectorType AdvectionField(const NeighborhoodType &,
                                     const FloatOffsetType &, unsigned int component, GlobalDataStruct *gd) const;
-  
-  
+
+
   virtual ~VectorSegmentationLevelSetFunction() {}
   VectorSegmentationLevelSetFunction()
-  {
+    {
     m_SpeedImage = ImageType::New();
-   // FIXME:    m_AdvectionImage = MatrixImageType::New(); Initialize as soon as we know about the number of components
+    // FIXME:    m_AdvectionImage = MatrixImageType::New(); Initialize as soon as we know about the number of components
     m_Interpolator = InterpolatorType::New();
     m_VectorInterpolator = VectorInterpolatorType::New();
 
     RadiusType r;
     r.Fill( 1 );
-  
+
     this->Initialize(r);
-  }
+    }
 
-  typename InterpolatorType::Pointer m_Interpolator;
-  typename VectorInterpolatorType::Pointer m_VectorInterpolator;
+  typename InterpolatorType::Pointer          m_Interpolator;
+  typename VectorInterpolatorType::Pointer    m_VectorInterpolator;
 
- 
+
 private:
   VectorSegmentationLevelSetFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

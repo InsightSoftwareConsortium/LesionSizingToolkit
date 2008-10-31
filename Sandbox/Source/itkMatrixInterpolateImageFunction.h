@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,9 +34,9 @@ template <typename T>
 struct GetDimension
 {
   itkStaticConstMacro(Dimension, int, T::Dimension);
-}; 
+};
 
-  
+
 /** \class MatrixInterpolateImageFunction
  * \brief Base class for all vector image interpolaters.
  *
@@ -47,10 +47,10 @@ struct GetDimension
  * This class is templated input image type and the coordinate
  * representation type.
  *
- * \warning This hierarchy of functions work only for images 
- * with Vector-based pixel types. For scalar images use 
+ * \warning This hierarchy of functions work only for images
+ * with Vector-based pixel types. For scalar images use
  * InterpolateImageFunction.
- * 
+ *
  * \sa InterpolateImageFunction
  * \ingroup ImageFunctions ImageInterpolators
  */
@@ -67,27 +67,27 @@ public:
                       TInputImage::PixelType::RowDimensions);
   itkStaticConstMacro(ColumnDimensions, unsigned int,
                       TInputImage::PixelType::ColumnDimensions);
-  
+
   /** Dimension underlying input image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension);
 
   /** Standard class typedefs. */
-  typedef MatrixInterpolateImageFunction Self;
+  typedef MatrixInterpolateImageFunction                          Self;
   typedef ImageFunction<TInputImage,
-    ITK_TYPENAME NumericTraits<typename TInputImage::PixelType>::RealType,
-    TCoordRep > Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
-  
+    ITK_TYPENAME NumericTraits<
+      typename TInputImage::PixelType>::RealType, TCoordRep >     Superclass;
+  typedef SmartPointer<Self>                                      Pointer;
+  typedef SmartPointer<const Self>                                ConstPointer;
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(MatrixInterpolateImageFunction, ImageFunction);
 
   /** InputImageType typedef support. */
-  typedef typename Superclass::InputImageType InputImageType;
-  typedef typename InputImageType::PixelType  PixelType;
-  typedef typename PixelType::ValueType       ValueType;
-  typedef typename NumericTraits<ValueType>::RealType  RealType;
+  typedef typename Superclass::InputImageType               InputImageType;
+  typedef typename InputImageType::PixelType                PixelType;
+  typedef typename PixelType::ValueType                     ValueType;
+  typedef typename NumericTraits<ValueType>::RealType       RealType;
 
   /** Point typedef support. */
   typedef typename Superclass::PointType PointType;
@@ -104,7 +104,7 @@ public:
   /** CoordRep typedef support. */
   typedef TCoordRep CoordRepType;
 
-  /** Returns the interpolated image intensity at a 
+  /** Returns the interpolated image intensity at a
    * specified point position. No bounds checking is done.
    * The point is assume to lie within the image buffer.
    * ImageFunction::IsInsideBuffer() can be used to check bounds before
@@ -118,7 +118,7 @@ public:
 
   /** Interpolate the image at a continuous index position
    *
-   * Returns the interpolated image intensity at a 
+   * Returns the interpolated image intensity at a
    * specified index position. No bounds checking is done.
    * The point is assume to lie within the image buffer.
    *
@@ -126,7 +126,7 @@ public:
    *
    * ImageFunction::IsInsideBuffer() can be used to check bounds before
    * calling the method. */
-  virtual OutputType EvaluateAtContinuousIndex( 
+  virtual OutputType EvaluateAtContinuousIndex(
     const ContinuousIndexType & index ) const = 0;
 
   /** Interpolate the image at an index position.
@@ -165,5 +165,3 @@ private:
 } // end namespace itk
 
 #endif
-
-

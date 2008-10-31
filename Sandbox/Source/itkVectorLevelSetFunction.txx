@@ -9,13 +9,13 @@ Version:   $Revision$
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVectorLevelSetFunction_txx_
-#define __itkVectorLevelSetFunction_txx_
+#ifndef __itkVectorLevelSetFunction_txx
+#define __itkVectorLevelSetFunction_txx
 
 #include "itkVectorLevelSetFunction.h"
 #include "vnl/algo/vnl_symmetric_eigensystem.h"
@@ -24,7 +24,7 @@ namespace itk {
 
 template <class TImageType>
 VectorLevelSetFunction<TImageType>
-::VectorLevelSetFunction() 
+::VectorLevelSetFunction()
 {
   m_EpsilonMagnitude = 1.0e-5;
   m_UseMinimalCurvature = false;
@@ -34,8 +34,8 @@ template <class TImageType>
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction<TImageType>
 ::ComputeCurvatureTerms( const NeighborhoodType &neighborhood,
-                         const FloatOffsetType &offset, 
-                         unsigned int phase, 
+                         const FloatOffsetType &offset,
+                         unsigned int phase,
                          GlobalDataStruct *gd )
 {
   ScalarValueType curvature = NumericTraits<ScalarValueType>::Zero;
@@ -47,25 +47,25 @@ VectorLevelSetFunction<TImageType>
       {
       curvature += cw * this->ComputeCurvatureTerm( neighborhood, offset,
                                                     i, gd );
-      } 
+      }
     }
 
-  // the cuvature speed can be used to spatially modify the effects of 
+  // the cuvature speed can be used to spatially modify the effects of
   // cuvature. FIXME check if this needs more weighting.
   curvature *= this->CurvatureSpeed( neighborhood, offset, phase );
 
   gd->m_MaxCurvatureChange = vnl_math_max( gd->m_MaxCurvatureChange,
                                            vnl_math_abs(curvature) );
-  
+
   return curvature;
 }
-  
+
 template <class TImageType>
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction<TImageType>
 ::ComputeCurvatureTerm( const NeighborhoodType &neighborhood,
-                        const FloatOffsetType &offset, 
-                        unsigned int phase, 
+                        const FloatOffsetType &offset,
+                        unsigned int phase,
                         GlobalDataStruct *gd)
 {
   if ( m_UseMinimalCurvature == false )
@@ -95,8 +95,8 @@ typename VectorLevelSetFunction< TImageType >::ScalarValueType
 VectorLevelSetFunction< TImageType >
 ::ComputeMinimalCurvature(
   const NeighborhoodType &itkNotUsed(neighborhood),
-  const FloatOffsetType& itkNotUsed(offset), 
-  unsigned int phase, 
+  const FloatOffsetType& itkNotUsed(offset),
+  unsigned int phase,
   GlobalDataStruct *gd)
 {
   unsigned int i, j, n;
@@ -107,7 +107,7 @@ VectorLevelSetFunction< TImageType >
   vnl_matrix_fixed<ScalarValueType, ImageDimension, ImageDimension> Curve;
   const ScalarValueType MIN_EIG = NumericTraits<ScalarValueType>::min();
 
-  ScalarValueType mincurve; 
+  ScalarValueType mincurve;
 
   for (i = 0; i < ImageDimension; i++)
     {
@@ -125,7 +125,7 @@ VectorLevelSetFunction< TImageType >
     for (j = i; j < ImageDimension; j++)
       {
       tmp_matrix[i][j]= ZERO;
-      for (n = 0 ; n < ImageDimension; n++)
+      for (n = 0; n < ImageDimension; n++)
         {
         tmp_matrix[i][j] += Pgrad[i][n] * gd->m_dxy[n][j];
         }
@@ -138,7 +138,7 @@ VectorLevelSetFunction< TImageType >
     for (j = i; j < ImageDimension; j++)
       {
       Curve(i,j) = ZERO;
-      for (n = 0 ; n < ImageDimension; n++)
+      for (n = 0; n < ImageDimension; n++)
         {
         Curve(i,j) += tmp_matrix[i][n] * Pgrad[n][j];
         }
@@ -159,7 +159,7 @@ VectorLevelSetFunction< TImageType >
       }
     }
 
-  return ( mincurve / gradMag );  
+  return ( mincurve / gradMag );
 }
 
 template <class TImageType>
@@ -172,11 +172,11 @@ VectorLevelSetFunction<TImageType>::ComputeMeanCurvature(
   ScalarValueType curvature_term = NumericTraits<ScalarValueType>::Zero;
   unsigned int i, j;
 
-  
+
   for (i = 0; i < ImageDimension; i++)
-    {      
+    {
     for(j = 0; j < ImageDimension; j++)
-      {      
+      {
       if(j != i)
         {
         curvature_term -= gd->m_dx[i] * gd->m_dx[j] * gd->m_dxy[i][j];
@@ -184,7 +184,7 @@ VectorLevelSetFunction<TImageType>::ComputeMeanCurvature(
         }
       }
     }
-  
+
   return (curvature_term / gd->m_GradMagSqr );
 }
 
@@ -234,7 +234,7 @@ VectorLevelSetFunction<TImageType>
   GlobalDataStruct *d = (GlobalDataStruct *)GlobalData;
 
   d->m_MaxAdvectionChange += d->m_MaxPropagationChange;
-  
+
   if (vnl_math_abs(d->m_MaxCurvatureChange) > 0.0)
     {
     if (d->m_MaxAdvectionChange > 0.0)
@@ -251,9 +251,9 @@ VectorLevelSetFunction<TImageType>
     {
     if (d->m_MaxAdvectionChange > 0.0)
       {
-      dt = m_WaveDT / d->m_MaxAdvectionChange; 
+      dt = m_WaveDT / d->m_MaxAdvectionChange;
       }
-    else 
+    else
       {
       dt = 0.0;
       }
@@ -265,26 +265,26 @@ VectorLevelSetFunction<TImageType>
     maxScaleCoefficient = vnl_math_max(this->m_ScaleCoefficients[i],maxScaleCoefficient);
     }
   dt /= maxScaleCoefficient;
- 
-  // reset the values  
+
+  // reset the values
   d->m_MaxAdvectionChange   = NumericTraits<ScalarValueType>::Zero;
   d->m_MaxPropagationChange = NumericTraits<ScalarValueType>::Zero;
   d->m_MaxCurvatureChange   = NumericTraits<ScalarValueType>::Zero;
-  
+
   return dt;
 }
- 
+
 template< class TImageType >
 void
 VectorLevelSetFunction< TImageType>
 ::Initialize(const RadiusType &r)
 {
   this->SetRadius(r);
-  
+
   // Dummy neighborhood.
   NeighborhoodType it;
   it.SetRadius( r );
-  
+
   // Find the center index of the neighborhood.
   m_Center =  it.Size() / 2;
 
@@ -292,16 +292,16 @@ VectorLevelSetFunction< TImageType>
   for(unsigned int i = 0; i < ImageDimension; i++)
     {  m_xStride[i] = it.GetStride(i); }
 }
-  
+
 template< class TImageType >
 typename VectorLevelSetFunction< TImageType >::ScalarValueType
 VectorLevelSetFunction< TImageType >
-::ComputeUpdate( const NeighborhoodType &it, 
+::ComputeUpdate( const NeighborhoodType &it,
                  void *globalData,
                  unsigned int phase,
                  const FloatOffsetType& offset )
 {
-  unsigned int i, j;  
+  unsigned int i, j;
   const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
   const PixelType center_value  = it.GetCenterPixel();
 
@@ -347,7 +347,7 @@ VectorLevelSetFunction< TImageType >
 
   // Return the combination of all the terms.
   return ( ScalarValueType ) ( curvature_term - propagation_term - advection_term - laplacian_term );
-} 
+}
 
 template< class TImageType >
 void *
@@ -356,7 +356,7 @@ VectorLevelSetFunction< TImageType >
 {
   if (this->m_NumberOfPhases == 0)
     {
-    itkExceptionMacro( << 
+    itkExceptionMacro( <<
       "Number of phases in a VectorLevelSet must be at least 1." );
     }
   GlobalDataStruct *ans = new GlobalDataStruct();
@@ -369,11 +369,11 @@ VectorLevelSetFunction< TImageType >
     ans->m_PhaseData[i].m_MaxPropagationChange = NumericTraits<ScalarValueType>::Zero;
     ans->m_PhaseData[i].m_MaxCurvatureChange   = NumericTraits<ScalarValueType>::Zero;
     }
-  return ans; 
+  return ans;
 }
 
 
-template< class TImageType > 
+template< class TImageType >
 void
 VectorLevelSetFunction< TImageType >
 ::ComputeDerivativesForPhase( const NeighborhoodType &it,
@@ -385,12 +385,12 @@ VectorLevelSetFunction< TImageType >
   // derivatives may be used by overloaded virtual functions.
   PhaseDataStruct *pd = &(gd->m_PhaseData[pid]);
 
-  for (unsigned int i = 0 ; i < ImageDimension; i++)
+  for (unsigned int i = 0; i < ImageDimension; i++)
     {
-    const unsigned int positionA = 
-      static_cast<unsigned int>( m_Center + m_xStride[i]);    
-    const unsigned int positionB = 
-      static_cast<unsigned int>( m_Center - m_xStride[i]);    
+    const unsigned int positionA =
+      static_cast<unsigned int>( m_Center + m_xStride[i]);
+    const unsigned int positionB =
+      static_cast<unsigned int>( m_Center - m_xStride[i]);
 
     PixelType pixelA = it.GetPixel( positionA );
     PixelType pixelB = it.GetPixel( positionB );
@@ -399,8 +399,8 @@ VectorLevelSetFunction< TImageType >
     ScalarValueType pixelBc = pixelB[pid];
     ScalarValueType centerVc = center_value[pid];
 
-    pd->m_dx[i] = 0.5 * ( pixelAc - pixelBc ) * neighborhoodScales[i]; 
-    pd->m_dxy[i][i] =   ( pixelAc + pixelBc - 2.0 * centerVc ) * vnl_math_sqr(neighborhoodScales[i]) ;
+    pd->m_dx[i] = 0.5 * ( pixelAc - pixelBc ) * neighborhoodScales[i];
+    pd->m_dxy[i][i] =   ( pixelAc + pixelBc - 2.0 * centerVc ) * vnl_math_sqr(neighborhoodScales[i]);
 
     pd->m_dx_forward[i]  = ( pixelAc - centerVc ) * neighborhoodScales[i];
     pd->m_dx_backward[i] = ( centerVc - pixelBc ) * neighborhoodScales[i];
@@ -408,42 +408,42 @@ VectorLevelSetFunction< TImageType >
 
     for( j = i+1; j < ImageDimension; j++ )
       {
-      const unsigned int positionAa = static_cast<unsigned int>( 
+      const unsigned int positionAa = static_cast<unsigned int>(
         m_Center - m_xStride[i] - m_xStride[j] );
-      const unsigned int positionBa = static_cast<unsigned int>( 
+      const unsigned int positionBa = static_cast<unsigned int>(
         m_Center - m_xStride[i] + m_xStride[j] );
-      const unsigned int positionCa = static_cast<unsigned int>( 
+      const unsigned int positionCa = static_cast<unsigned int>(
         m_Center + m_xStride[i] - m_xStride[j] );
-      const unsigned int positionDa = static_cast<unsigned int>( 
+      const unsigned int positionDa = static_cast<unsigned int>(
         m_Center + m_xStride[i] + m_xStride[j] );
 
       pd->m_dxy[i][j] = pd->m_dxy[j][i] = 0.25 * ( it.GetPixel( positionAa )[pid]
                                                  - it.GetPixel( positionBa )[pid]
                                                  - it.GetPixel( positionCa )[pid]
                                                  + it.GetPixel( positionDa )[pid] )
-                                          * neighborhoodScales[i] * neighborhoodScales[j] ;
+                                          * neighborhoodScales[i] * neighborhoodScales[j];
       }
-    }  
+    }
 }
 
-template< class TImageType > 
+template< class TImageType >
 void
 VectorLevelSetFunction< TImageType >
 ::ReleaseGlobalDataPointer( void *GlobalData ) const
-{ 
+{
   GlobalDataStruct * gd = (GlobalDataStruct *)gd;
   delete [] gd->m_PhaseData;
-  delete gd; 
+  delete gd;
 }
 
-template< class TImageType > 
+template< class TImageType >
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction< TImageType >
 ::ComputeAdvectionTerm( const NeighborhoodType &it,
-                        const FloatOffsetType &offset, 
-                        unsigned int phase, 
+                        const FloatOffsetType &offset,
+                        unsigned int phase,
                         GlobalDataStruct * gd) const
-{ 
+{
   const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
 
   // Calculate the advection term.
@@ -456,12 +456,12 @@ VectorLevelSetFunction< TImageType >
     {
     advection_field = this->AdvectionField(it, offset, phase, gd);
     advection_term = ZERO;
-    
+
     for(i = 0; i < ImageDimension; i++)
       {
-      
+
       x_energy = m_AdvectionWeight[phase] * advection_field[i];
-      
+
       if (x_energy > ZERO)
         {
         advection_term += advection_field[i] * gd->m_PhaseData[i].m_dx_backward[i];
@@ -470,28 +470,28 @@ VectorLevelSetFunction< TImageType >
         {
         advection_term += advection_field[i] * gd->m_PhaseData[i].m_dx_forward[i];
         }
-        
+
       gd->m_PhaseData[i].m_MaxAdvectionChange
-        = vnl_math_max( gd->m_PhaseData[i].m_MaxAdvectionChange, 
-                        vnl_math_abs(x_energy)); 
+        = vnl_math_max( gd->m_PhaseData[i].m_MaxAdvectionChange,
+                        vnl_math_abs(x_energy));
       }
     advection_term *= m_AdvectionWeight[phase];
-    
+
     }
   else
     {
     advection_term = ZERO;
     }
- 
+
   return advection_term;
 }
 
-template< class TImageType > 
+template< class TImageType >
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction< TImageType >
 ::ComputePropagationTerm( const NeighborhoodType &it,
-                         const FloatOffsetType &offset, 
-                         unsigned int phase, 
+                         const FloatOffsetType &offset,
+                         unsigned int phase,
                          GlobalDataStruct * gd) const
 {
   const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
@@ -499,13 +499,13 @@ VectorLevelSetFunction< TImageType >
 
   for (unsigned int i = 0; i < this->m_NumberOfComponents; i++)
     {
- 
+
     // Propagation weight due to interaction of phases: 'phase' and 'i'
     ScalarValueType w = this->m_PropagationWeights( phase, i );
 
     if (w != ZERO)
       {
-      ScalarValueType propagationSpeed = 
+      ScalarValueType propagationSpeed =
         this->PropagationSpeed(it, offset, i, gd);
       propagation_term += w * propagationSpeed;
       }
@@ -521,12 +521,12 @@ VectorLevelSetFunction< TImageType >
     // from Sethian, Ch. 6 as referenced above.
     //
     propagation_gradient = ZERO;
-    
+
     if ( propagation_term > ZERO )
       {
       for(i = 0; i< ImageDimension; i++)
         {
-        propagation_gradient += 
+        propagation_gradient +=
           vnl_math_sqr( vnl_math_max( gd->m_PhaseData[phase].m_dx_backward[i], ZERO) )
           + vnl_math_sqr( vnl_math_min(gd->m_PhaseData[phase].m_dx_forward[i], ZERO) );
         }
@@ -535,30 +535,30 @@ VectorLevelSetFunction< TImageType >
       {
       for(i = 0; i< ImageDimension; i++)
         {
-        propagation_gradient += 
+        propagation_gradient +=
           vnl_math_sqr( vnl_math_min(gd->m_PhaseData[phase].m_dx_backward[i], ZERO) )
           + vnl_math_sqr( vnl_math_max(gd->m_PhaseData[phase].m_dx_forward[i],  ZERO) );
-        }        
+        }
       }
-    
+
     // Collect energy change from propagation term.  This will be used in
     // calculating the maximum time step that can be taken for this iteration.
     gd->m_PhaseData[phase].m_MaxPropagationChange =
       vnl_math_max(gd->m_PhaseData[phase].m_MaxPropagationChange,
                    vnl_math_abs(propagation_term));
-    
+
     propagation_term *= vcl_sqrt( propagation_gradient );
     }
 
   return propagation_term;
 }
 
-template< class TImageType > 
+template< class TImageType >
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction< TImageType >
 ::ComputeLaplacianTerm( const NeighborhoodType &it,
-                        const FloatOffsetType &offset, 
-                        unsigned int phase, 
+                        const FloatOffsetType &offset,
+                        unsigned int phase,
                         GlobalDataStruct * gd) const
 {
   const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
@@ -566,7 +566,7 @@ VectorLevelSetFunction< TImageType >
   if(m_LaplacianSmoothingWeight[phase] != ZERO)
     {
     ScalarValueType laplacian = ZERO;
-    
+
     // Compute the laplacian using the existing second derivative values
     for(i = 0;i < ImageDimension; i++)
       {
@@ -574,8 +574,8 @@ VectorLevelSetFunction< TImageType >
       }
 
     // Scale the laplacian by its speed and weight
-    laplacian_term = laplacian * 
-                     m_LaplacianSmoothingWeight[phase] * 
+    laplacian_term = laplacian *
+                     m_LaplacianSmoothingWeight[phase] *
                      LaplacianSmoothingSpeed(it,offset, phase, gd);
     }
 

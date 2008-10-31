@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,42 +40,42 @@ class ITK_EXPORT VectorShiftScaleImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorShiftScaleImageFilter         Self;
-  typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef VectorShiftScaleImageFilter                     Self;
+  typedef ImageToImageFilter<TInputImage,TOutputImage>    Superclass;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Typedef to describe the output and input image region types. */
-  typedef typename TInputImage::RegionType InputImageRegionType;
-  typedef typename TOutputImage::RegionType OutputImageRegionType;
+  typedef typename TInputImage::RegionType      InputImageRegionType;
+  typedef typename TOutputImage::RegionType     OutputImageRegionType;
 
-  /** Typedef to describe the pointer to the input/output. */  
-  typedef typename TInputImage::Pointer InputImagePointer;
-  typedef typename TOutputImage::Pointer OutputImagePointer;
+  /** Typedef to describe the pointer to the input/output. */
+  typedef typename TInputImage::Pointer         InputImagePointer;
+  typedef typename TOutputImage::Pointer        OutputImagePointer;
 
   /** Typedef to describe the type of pixel. */
-  typedef typename TInputImage::PixelType InputImagePixelType;
-  typedef typename TOutputImage::PixelType OutputImagePixelType;
+  typedef typename TInputImage::PixelType       InputImagePixelType;
+  typedef typename TOutputImage::PixelType      OutputImagePixelType;
 
   /** Typedef to describe the output and input image index and size types. */
-  typedef typename TInputImage::IndexType InputImageIndexType;
-  typedef typename TInputImage::SizeType InputImageSizeType;
-  typedef typename TInputImage::OffsetType InputImageOffsetType;
-  typedef typename TOutputImage::IndexType OutputImageIndexType;
-  typedef typename TOutputImage::SizeType OutputImageSizeType;
-  typedef typename TOutputImage::OffsetType OutputImageOffsetType;
+  typedef typename TInputImage::IndexType       InputImageIndexType;
+  typedef typename TInputImage::SizeType        InputImageSizeType;
+  typedef typename TInputImage::OffsetType      InputImageOffsetType;
+  typedef typename TOutputImage::IndexType      OutputImageIndexType;
+  typedef typename TOutputImage::SizeType       OutputImageSizeType;
+  typedef typename TOutputImage::OffsetType     OutputImageOffsetType;
 
   /** Type to use form computations. */
   typedef typename NumericTraits<OutputImagePixelType>::RealType          RealType;
   typedef typename NumericTraits<OutputImagePixelType>::ScalarRealType    ScalarRealType;
   typedef typename NumericTraits<OutputImagePixelType>::ValueType         ScalarOutputImagePixelType;
-      
+
   /** Image related typedefs. */
   itkStaticConstMacro(ImageDimension, unsigned int,
-                      TInputImage::ImageDimension ) ;
+                      TInputImage::ImageDimension );
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorShiftScaleImageFilter, ImageToImageFilter);
@@ -104,32 +104,32 @@ protected:
 
   /** Initialize some accumulators before the threads run. */
   void BeforeThreadedGenerateData ();
-  
+
   /** Tally accumulated in threads. */
   void AfterThreadedGenerateData ();
-  
+
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData (const OutputImageRegionType& 
+  void  ThreadedGenerateData (const OutputImageRegionType&
                               outputRegionForThread,
-                              int threadId) ;
+                              int threadId);
 private:
   VectorShiftScaleImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  RealType m_Shift;
-  RealType m_Scale;
+  RealType                  m_Shift;
+  RealType                  m_Scale;
 
-  unsigned long m_UnderflowCount;
-  unsigned long m_OverflowCount;
-  Array<unsigned long> m_ThreadUnderflow;
-  Array<unsigned long> m_ThreadOverflow;
+  unsigned long             m_UnderflowCount;
+  unsigned long             m_OverflowCount;
+  Array<unsigned long>      m_ThreadUnderflow;
+  Array<unsigned long>      m_ThreadOverflow;
 };
 
-  
+
 } // end namespace itk
-  
+
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkVectorShiftScaleImageFilter.txx"
 #endif
-  
+
 #endif

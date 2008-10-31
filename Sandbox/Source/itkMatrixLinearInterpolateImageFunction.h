@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@
 namespace itk
 {
 
-/** 
+/**
  * \class MatrixLinearInterpolateImageFunction
  * \brief Linearly interpolate a vector image at specified positions.
  *
@@ -37,24 +37,24 @@ namespace itk
  * scalar images use LinearInterpolateImageFunction.
  *
  * \ingroup ImageFunctions ImageInterpolators
- * 
+ *
  */
 template <class TInputImage, class TCoordRep = double>
-class ITK_EXPORT MatrixLinearInterpolateImageFunction : 
-  public MatrixInterpolateImageFunction<TInputImage,TCoordRep> 
+class ITK_EXPORT MatrixLinearInterpolateImageFunction :
+  public MatrixInterpolateImageFunction<TInputImage,TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef MatrixLinearInterpolateImageFunction Self;
+  typedef MatrixLinearInterpolateImageFunction                  Self;
   typedef MatrixInterpolateImageFunction<TInputImage,TCoordRep> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
-  
+  typedef SmartPointer<Self>                                    Pointer;
+  typedef SmartPointer<const Self>                              ConstPointer;
+
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MatrixLinearInterpolateImageFunction, 
+  itkTypeMacro(MatrixLinearInterpolateImageFunction,
     MatrixInterpolateImageFunction);
 
   /** InputImageType typedef support. */
@@ -62,7 +62,7 @@ public:
   typedef typename Superclass::PixelType      PixelType;
   typedef typename Superclass::ValueType      ValueType;
   typedef typename Superclass::RealType       RealType;
-    
+
   /** Grab the vector dimension from the superclass. */
   itkStaticConstMacro(RowDimensions, unsigned int, Superclass::RowDimensions);
   itkStaticConstMacro(ColumnDimensions, unsigned int, Superclass::ColumnDimensions);
@@ -81,13 +81,13 @@ public:
 
   /** Evaluate the function at a ContinuousIndex position
    *
-   * Returns the linearly interpolated image intensity at a 
+   * Returns the linearly interpolated image intensity at a
    * specified point position. No bounds checking is done.
    * The point is assume to lie within the image buffer.
    *
    * ImageFunction::IsInsideBuffer() can be used to check bounds before
    * calling the method. */
-  virtual OutputType EvaluateAtContinuousIndex( 
+  virtual OutputType EvaluateAtContinuousIndex(
     const ContinuousIndexType & index ) const;
 
 protected:
@@ -100,7 +100,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Number of neighbors used in the interpolation */
-  static const unsigned long  m_Neighbors;  
+  static const unsigned long  m_Neighbors;
 
 };
 

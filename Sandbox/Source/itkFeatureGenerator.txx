@@ -23,7 +23,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template <unsigned int NDimension>
@@ -34,7 +34,7 @@ FeatureGenerator<NDimension>
 }
 
 
-/*
+/**
  * Destructor
  */
 template <unsigned int NDimension>

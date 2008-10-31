@@ -9,23 +9,23 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVectorSegmentationLevelSetFunction_txx_
-#define __itkVectorSegmentationLevelSetFunction_txx_
+#ifndef __itkVectorSegmentationLevelSetFunction_txx
+#define __itkVectorSegmentationLevelSetFunction_txx
 
 #include "itkVectorSegmentationLevelSetFunction.h"
 #include "itkMeasurementVectorTraits.h"
 
 namespace itk {
-  
+
 template <class TImageType, class TFeatureImageType>
 void VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
 ::SetSpeedImage( ImageType *s )
-{ 
+{
   m_SpeedImage = s;
   m_Interpolator->SetInputImage(m_SpeedImage);
 }
@@ -37,7 +37,7 @@ void VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
   m_AdvectionImage[component] = s;
   m_VectorInterpolator->SetInputImage(this->m_AdvectionImage[component]);
 }
-  
+
 template <class TImageType, class TFeatureImageType>
 void VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
 ::ReverseExpansionDirection()
@@ -50,7 +50,7 @@ template <class TImageType, class TFeatureImageType>
 void VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
 ::Initialize(const RadiusType &r)
 {
-  Superclass::Initialize(r);  
+  Superclass::Initialize(r);
 }
 
 template <class TImageType, class TFeatureImageType>
@@ -146,7 +146,7 @@ VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
 
   //Just return the default else
   return ( this->m_AdvectionImage[component]->GetPixel(idx) );
-  
+
 }
 
 } // end namespace itk

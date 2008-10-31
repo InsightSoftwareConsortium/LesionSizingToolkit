@@ -9,13 +9,13 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVectorFiniteDifferenceFunction_h_
-#define __itkVectorFiniteDifferenceFunction_h_
+#ifndef __itkVectorFiniteDifferenceFunction_h
+#define __itkVectorFiniteDifferenceFunction_h
 
 #include "itkFiniteDifferenceFunction.h"
 #include "vnl/vnl_matrix_fixed.h"
@@ -28,7 +28,7 @@ namespace itk {
   * images of multiple components.
   *
   * The distinction between components and phases is important. The function
-  * can take a speed image of multiple components. The function can also 
+  * can take a speed image of multiple components. The function can also
   * update N level sets, where N is the number of phases.
  */
 template <class TImageType>
@@ -49,15 +49,15 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
 
   /** Convenient typedefs. */
-  typedef double TimeStepType;
-  typedef typename Superclass::ImageType  ImageType;
-  typedef typename Superclass::PixelType  PixelType;
+  typedef double                                                TimeStepType;
+  typedef typename Superclass::ImageType                        ImageType;
+  typedef typename Superclass::PixelType                        PixelType;
   typedef typename NumericTraits< PixelType >::ScalarRealType   ScalarValueType;
-  typedef typename Superclass::PixelRealType  PixelRealType;
-  typedef typename Superclass::RadiusType RadiusType;
-  typedef typename Superclass::NeighborhoodType NeighborhoodType;
-  typedef typename Superclass::NeighborhoodScalesType NeighborhoodScalesType;
-  typedef typename Superclass::FloatOffsetType FloatOffsetType;
+  typedef typename Superclass::PixelRealType                    PixelRealType;
+  typedef typename Superclass::RadiusType                       RadiusType;
+  typedef typename Superclass::NeighborhoodType                 NeighborhoodType;
+  typedef typename Superclass::NeighborhoodScalesType           NeighborhoodScalesType;
+  typedef typename Superclass::FloatOffsetType                  FloatOffsetType;
 
   /** The vector type that will be used in the calculations. */
   //  typedef
@@ -89,7 +89,7 @@ protected:
   VectorFiniteDifferenceFunction();
   virtual ~VectorFiniteDifferenceFunction() {}
   void PrintSelf(std::ostream &s, Indent indent) const;
-  
+
 
 private:
   VectorFiniteDifferenceFunction(const Self&); //purposely not implemented
@@ -100,10 +100,10 @@ private:
    * Instead the version that returns a scalar must be used. */
   virtual PixelType ComputeUpdate(const NeighborhoodType &neighborhood,
                                   void *globalData,
-                                  const FloatOffsetType& = FloatOffsetType(0.0) ) 
-  {
+                                  const FloatOffsetType& = FloatOffsetType(0.0) )
+    {
     return itk::NumericTraits< PixelType >::ZeroValue();
-  }
+    }
 
   unsigned int m_NumberOfComponents;
   unsigned int m_NumberOfPhases;
@@ -117,4 +117,3 @@ private:
 #endif
 
 #endif
-

@@ -61,15 +61,15 @@ public:
     return *this;
     }
   bool operator!=( const Tubularness & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Tubularness & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A )
-  {
+    {
     double tubularness = 0.0;
     
     double a1 = static_cast<double>( A[0] );
@@ -93,7 +93,7 @@ public:
       a2 = tmpa;
       }
 
-     if( l1 > l2 )
+    if( l1 > l2 )
       {
       double tmp = l1;
       l1 = l2;
@@ -148,8 +148,8 @@ public:
     tubularness *= (       vcl_exp( - ( Rb * Rb ) / ( 2.0 * m_Beta  * m_Beta  ) ) ); 
     tubularness *= ( 1.0 - vcl_exp( - ( Rn * Rn ) / ( 2.0 * m_Gamma * m_Gamma ) ) ); 
 
-   return static_cast<TOutput>( tubularness );
-  }
+    return static_cast<TOutput>( tubularness );
+    }
 
   void SetAlpha( double value )
     {
@@ -186,12 +186,14 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef FrangiTubularnessImageFilter  Self;
-  typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                  Function::Tubularness< typename TInputImage::PixelType, 
-                                                 typename TOutputImage::PixelType> > Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef FrangiTubularnessImageFilter          Self;
+  typedef UnaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Function::Tubularness< 
+      typename TInputImage::PixelType, 
+      typename TOutputImage::PixelType> >       Superclass;
+  typedef SmartPointer<Self>                    Pointer;
+  typedef SmartPointer<const Self>              ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

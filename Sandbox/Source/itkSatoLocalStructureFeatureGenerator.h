@@ -42,7 +42,7 @@ class ITK_EXPORT SatoLocalStructureFeatureGenerator : public FeatureGenerator<ND
 {
 public:
   /** Standard class typedefs. */
-  typedef SatoLocalStructureFeatureGenerator          Self;
+  typedef SatoLocalStructureFeatureGenerator                Self;
   typedef FeatureGenerator<NDimension>                      Superclass;
   typedef SmartPointer<Self>                                Pointer;
   typedef SmartPointer<const Self>                          ConstPointer;
@@ -114,7 +114,7 @@ private:
   typedef  Image< EigenValueArrayType, Dimension >             EigenValueImageType;
 
   typedef  SymmetricEigenAnalysisImageFilter< HessianImageType, EigenValueImageType >     EigenAnalysisFilterType;
- 
+
   typedef  LocalStructureImageFilter< EigenValueImageType, OutputImageType >     LocalStructureFilterType;
 
   typename HessianFilterType::Pointer             m_HessianFilter;

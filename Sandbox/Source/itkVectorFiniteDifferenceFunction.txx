@@ -14,8 +14,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVectorFiniteDifferenceFunction_txx_
-#define __itkVectorFiniteDifferenceFunction_txx_
+#ifndef __itkVectorFiniteDifferenceFunction_txx
+#define __itkVectorFiniteDifferenceFunction_txx
 
 #include "itkVectorFiniteDifferenceFunction.h"
 #include "vnl/algo/vnl_symmetric_eigensystem.h"

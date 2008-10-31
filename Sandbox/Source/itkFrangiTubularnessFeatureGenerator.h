@@ -43,9 +43,9 @@ class ITK_EXPORT FrangiTubularnessFeatureGenerator : public FeatureGenerator<NDi
 public:
   /** Standard class typedefs. */
   typedef FrangiTubularnessFeatureGenerator          Self;
-  typedef FeatureGenerator<NDimension>                      Superclass;
-  typedef SmartPointer<Self>                                Pointer;
-  typedef SmartPointer<const Self>                          ConstPointer;
+  typedef FeatureGenerator<NDimension>               Superclass;
+  typedef SmartPointer<Self>                         Pointer;
+  typedef SmartPointer<const Self>                   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

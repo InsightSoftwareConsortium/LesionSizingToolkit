@@ -9,13 +9,13 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVectorLevelSetFunction_h_
-#define __itkVectorLevelSetFunction_h_
+#ifndef __itkVectorLevelSetFunction_h
+#define __itkVectorLevelSetFunction_h
 
 #include "itkVectorFiniteDifferenceFunction.h"
 #include "itkMatrix.h"
@@ -68,10 +68,10 @@ class ITK_EXPORT VectorLevelSetFunction
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorLevelSetFunction Self;
-  typedef VectorFiniteDifferenceFunction<TImageType> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef VectorLevelSetFunction                        Self;
+  typedef VectorFiniteDifferenceFunction<TImageType>    Superclass;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -83,17 +83,17 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
 
   /** Convenient typedefs. */
-  typedef double TimeStepType;
-  typedef typename Superclass::ImageType  ImageType;
-  typedef typename Superclass::PixelType  PixelType;
+  typedef double                                                TimeStepType;
+  typedef typename Superclass::ImageType                        ImageType;
+  typedef typename Superclass::PixelType                        PixelType;
   typedef typename NumericTraits< PixelType >::ScalarRealType   ScalarValueType;
-  typedef typename Superclass::PixelRealType  PixelRealType;
-  typedef typename Superclass::RadiusType RadiusType;
-  typedef typename Superclass::NeighborhoodType NeighborhoodType;
-  typedef typename Superclass::NeighborhoodScalesType NeighborhoodScalesType;
-  typedef typename Superclass::FloatOffsetType FloatOffsetType;
-  typedef VariableLengthVector< ScalarValueType > VectorValueType;
-  typedef VariableSizeMatrix< ScalarValueType >   MatrixValueType;
+  typedef typename Superclass::PixelRealType                    PixelRealType;
+  typedef typename Superclass::RadiusType                       RadiusType;
+  typedef typename Superclass::NeighborhoodType                 NeighborhoodType;
+  typedef typename Superclass::NeighborhoodScalesType           NeighborhoodScalesType;
+  typedef typename Superclass::FloatOffsetType                  FloatOffsetType;
+  typedef VariableLengthVector< ScalarValueType >               VectorValueType;
+  typedef VariableSizeMatrix< ScalarValueType >                 MatrixValueType;
 
   /** The vector type that will be used in the calculations. */
   //  typedef
@@ -104,8 +104,8 @@ public:
    * products such as derivatives that may be used by virtual functions called
    * from ComputeUpdate.  Caching these values here allows the ComputeUpdate
    * function to be const and thread safe.
-   * The structure has as many components as the number of phases. The 
-   * structure is pre-allocated to a length of the number of components when 
+   * The structure has as many components as the number of phases. The
+   * structure is pre-allocated to a length of the number of components when
    * GetGlobalDataPointer() is invoked for the first time. */
   struct PhaseDataStruct
     {
@@ -117,20 +117,20 @@ public:
     vnl_matrix_fixed<ScalarValueType,
                      itkGetStaticConstMacro(ImageDimension),
                      itkGetStaticConstMacro(ImageDimension)> m_dxy;
-    
+
     /** Array of first derivatives*/
     ScalarValueType m_dx[itkGetStaticConstMacro(ImageDimension)];
-    
+
     ScalarValueType m_dx_forward[itkGetStaticConstMacro(ImageDimension)];
     ScalarValueType m_dx_backward[itkGetStaticConstMacro(ImageDimension)];
 
     ScalarValueType m_GradMagSqr;
-    };  
+    };
   struct GlobalDataStruct
     {
     PhaseDataStruct * m_PhaseData;
     };
-  
+
 
   /** Define an image type for the advection field. */
   typedef Matrix< double, ImageDimension, ImageDimension >             MatrixType;
@@ -139,59 +139,59 @@ public:
   /** Advection field. Default implementation returns a vector of zeros. This
    * returns an array of advection fields, one for each phase.*/
   virtual VectorType AdvectionField( const NeighborhoodType &,
-                                     const FloatOffsetType &, 
-                                     unsigned int phase, 
+                                     const FloatOffsetType &,
+                                     unsigned int phase,
                                      GlobalDataStruct * = 0)  const
-    { 
+    {
     return this->m_ZeroVectorConstant;
     }
 
   /** Propagation speed.  This term controls surface expansion/contraction.
-   *  Default implementation returns zero. */ 
+   *  Default implementation returns zero. */
   virtual ScalarValueType PropagationSpeed( const NeighborhoodType& ,
-                                            const FloatOffsetType &, 
-                                            unsigned int component, 
+                                            const FloatOffsetType &,
+                                            unsigned int component,
                                             GlobalDataStruct * = 0 ) const
     { return NumericTraits<ScalarValueType>::Zero; }
 
   /** Curvature speed.  Can be used to spatially modify the effects of
       curvature . The default implementation returns one. */
   virtual ScalarValueType CurvatureSpeed( const NeighborhoodType &,
-                                          const FloatOffsetType &, 
-                                          unsigned int phase, 
+                                          const FloatOffsetType &,
+                                          unsigned int phase,
                                           GlobalDataStruct * = 0 ) const
     { return NumericTraits<ScalarValueType>::One; }
 
-    /** Laplacian smoothing speed.  Can be used to spatially modify the 
+    /** Laplacian smoothing speed.  Can be used to spatially modify the
       effects of laplacian smoothing of the level set function */
   virtual ScalarValueType LaplacianSmoothingSpeed( const NeighborhoodType &,
-                                                   const FloatOffsetType &, 
-                                                   unsigned int component, 
+                                                   const FloatOffsetType &,
+                                                   unsigned int component,
                                                    GlobalDataStruct * = 0) const
     { return NumericTraits<ScalarValueType>::One; }
 
-  /** Alpha.  Scales all advection term values in each phase. */ 
+  /** Alpha.  Scales all advection term values in each phase. */
   virtual void SetAdvectionWeights(const VectorValueType a)
     { m_AdvectionWeights = a; }
   itkGetMacro( AdvectionWeights, VectorValueType );
-  
+
   /** Beta.  Scales all propagation term values in each phase. */
   virtual void SetPropagationWeights(const VectorValueType p)
     { m_PropagationWeights = p; }
   itkGetMacro( PropagationWeights, VectorValueType );
-  
+
   /** Gamma. Scales all curvature weight values. The number of weights supplied
    * is a matrix of size NPhases * NPhases. A diagonal matrix implies that
    * none of the phases interact with one another. */
   virtual void SetCurvatureWeights(const MatrixValueType & c)
     { m_CurvatureWeights = c; }
   itkGetMacro( CurvatureWeights, MatrixValueType );
-  
+
   /** Weight of the laplacian smoothing term for each phase */
   void SetLaplacianSmoothingWeights(const VectorValueType c)
     { m_LaplacianSmoothingWeights = c; }
   itkGetMacro( LaplacianSmoothingWeights, VectorValueType );
-  
+
   /** Epsilon. */
   void SetEpsilonMagnitude(const ScalarValueType e)
     { m_EpsilonMagnitude = e; }
@@ -204,7 +204,7 @@ public:
                                   unsigned int component = 0,
                                   const FloatOffsetType& = FloatOffsetType(0.0));
 
- /** Computes the time step for an update given a global data structure.
+  /** Computes the time step for an update given a global data structure.
    * The data used in the computation may take different forms depending on
    * the nature of the equations.  This global data cannot be kept in the
    * instance of the equation object itself since the equation object must
@@ -225,7 +225,7 @@ public:
    * level-set calculations.  The argument to this function is a the radius
    * necessary for performing the level-set calculations. */
   virtual void Initialize(const RadiusType &r);
-  
+
   /** When the finite difference solver filter has finished using a global
    * data pointer, it passes it to this method, which frees the memory.
    * The solver cannot free the memory because it does not know the type
@@ -243,7 +243,7 @@ public:
                                                  unsigned int phase,
                                                  GlobalDataStruct *gd = 0 );
 
-  /** Compute the advection term. Internally calls AdvectionField on 
+  /** Compute the advection term. Internally calls AdvectionField on
    *   the respective phase.
    */
   virtual ScalarValueType ComputeAdvectionTerm( const NeighborhoodType &,
@@ -251,8 +251,8 @@ public:
                                                 unsigned int phase,
                                                 GlobalDataStruct *gd = 0 );
 
-  /** Compute the propagation term. Internally calls PropagationSpeed on 
-   * components based on the weights in the Nphases x Ncomponents 
+  /** Compute the propagation term. Internally calls PropagationSpeed on
+   * components based on the weights in the Nphases x Ncomponents
    * matrix of propagation weights.
    */
   virtual ScalarValueType ComputePropagationTerm( const NeighborhoodType &,
@@ -266,7 +266,7 @@ public:
                                                 const FloatOffsetType &,
                                                 unsigned int phase,
                                                 GlobalDataStruct *gd = 0 );
-  
+
   /**  */
   virtual ScalarValueType ComputeCurvatureTerm(const NeighborhoodType &,
                                                const FloatOffsetType &,
@@ -284,50 +284,50 @@ public:
                                                   unsigned int component,
                                                   GlobalDataStruct *gd = 0
                                                   );
-  
+
   /** */
   void SetUseMinimalCurvature( bool b )
-  {
+    {
     m_UseMinimalCurvature = b;
-  }
+    }
   bool GetUseMinimalCurvature() const
-  {
+    {
     return m_UseMinimalCurvature;
-  }
+    }
   void UseMinimalCurvatureOn()
-  {
+    {
     this->SetUseMinimalCurvature(true);
-  }
+    }
   void UseMinimalCurvatureOff()
-  {
+    {
     this->SetUseMinimalCurvature(false);
-  }
+    }
 
   /** Set/Get the maximum constraint for the curvature term factor in the time step
       calculation.  Changing this value from the default is not recommended or
       necessary, but can be used to speed up the surface evolution at the risk
       of creating an unstable solution.*/
   static void SetMaximumCurvatureTimeStep(double n)
-  {
+    {
     m_DT = n;
-  }
+    }
   static double GetMaximumCurvatureTimeStep()
-  {
+    {
     return m_DT;
-  }
+    }
 
   /** Set/Get the maximum constraint for the scalar/vector term factor of the time step
       calculation.  Changing this value from the default is not recommended or
       necessary, but can be used to speed up the surface evolution at the risk
       of creating an unstable solution.*/
   static void SetMaximumPropagationTimeStep(double n)
-  {
+    {
     m_WaveDT = n;
-  }
+    }
   static double GetMaximumPropagationTimeStep()
-  {
+    {
     return m_WaveDT;
-  }
+    }
 
   /** Fills up the global data struct with derivatives for every phase. Currently the
    * phase argument is ignored, as this is done for every phase. In practice, this
@@ -342,7 +342,7 @@ protected:
   VectorLevelSetFunction();
   virtual ~VectorLevelSetFunction() {}
   void PrintSelf(std::ostream &s, Indent indent) const;
-  
+
   /** Constants used in the time step calculation. */
   static double m_WaveDT;
   static double m_DT;
@@ -361,13 +361,13 @@ protected:
   /** This method's only purpose is to initialize the zero vector
    * constant. */
   static VectorType InitializeZeroVectorConstant();
-  
+
   /** Zero vector constant. */
   static VectorType m_ZeroVectorConstant;
 
   /** Epsilon magnitude controls the lower limit for gradient magnitude. */
   ScalarValueType m_EpsilonMagnitude;
-  
+
   /** Alpha. */
   ScalarValueType m_AdvectionWeights;
 
@@ -387,13 +387,14 @@ private:
   /** Method provided only to satisfy the base class API of a virtual method.
    * This method is not expected to be used. Instead the ComputeUpdate() with
    * component identifier should be used.*/
-  virtual PixelType  ComputeUpdate(const NeighborhoodType &neighborhood,
-                                   void *globalData,
-                                   const FloatOffsetType &offset = FloatOffsetType(0.0))
-                                   {
-                                   PixelType output;
-                                   return output;
-                                   }
+  virtual PixelType  ComputeUpdate(
+    const NeighborhoodType &neighborhood,
+    void *globalData,
+    const FloatOffsetType &offset = FloatOffsetType(0.0))
+    {
+    PixelType output;
+    return output;
+    }
 };
 
 } // namespace itk
@@ -414,4 +415,3 @@ private:
 #endif
 
 #endif
-

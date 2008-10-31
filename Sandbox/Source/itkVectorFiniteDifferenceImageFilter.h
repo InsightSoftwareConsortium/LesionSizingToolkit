@@ -9,13 +9,13 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVectorFiniteDifferenceImageFilter_h_
-#define __itkVectorFiniteDifferenceImageFilter_h_
+#ifndef __itkVectorFiniteDifferenceImageFilter_h
+#define __itkVectorFiniteDifferenceImageFilter_h
 
 #include "itkFiniteDifferenceImageFilter.h"
 #include "itkVectorFiniteDifferenceFunction.h"
@@ -49,7 +49,7 @@ public:
 
   typedef typename Superclass::OutputPixelValueType               OutputPixelValueType;
   typedef typename Superclass::OutputImageType                    OutputImageType;
-  
+
   /** Type of the function used for computing the updates at a given pixel.
    * Note that this function does not derive from the
    * itk::FiniteDifferenceFunction because the signature of its ComputeUpdate()
@@ -61,13 +61,13 @@ public:
   /** List of difference functions. We expect to have one function per
    * component of the input image */
   typedef std::vector< VectorDifferenceFunctionPointer >       VectorDifferenceFunctionListType;
-  
+
 protected:
   VectorFiniteDifferenceImageFilter();
   ~VectorFiniteDifferenceImageFilter();
 
-  /** This is the high-level algorithm for calculating finite difference 
-   * solutions. It calls virtual methods in its subclasses to implement the 
+  /** This is the high-level algorithm for calculating finite difference
+   * solutions. It calls virtual methods in its subclasses to implement the
    * major steps of the algorithm. */
   virtual void GenerateData();
 
@@ -82,7 +82,7 @@ protected:
    * from an update buffer and a time step value "dt".
    * \param dt Time step value. */
   virtual void ApplyUpdate(TimeStepType dt);
-  
+
   /** This method is defined by a subclass to populate an update buffer
    * with changes for the pixels in the output.  It returns a time
    * step value to be used for the update.
@@ -111,14 +111,14 @@ protected:
    * meaning that while one of the components can be updated at a particular
    * pixel, the values of the other components may not be relevant nor needed
    * at that same pixel. */
-  VectorDifferenceFunctionListType   m_DifferenceFunctions;  
+  VectorDifferenceFunctionListType   m_DifferenceFunctions;
 
 private:
   VectorFiniteDifferenceImageFilter(const Self&);//purposely not implemented
   void operator=(const Self&);      //purposely not implemented
 
 };
-  
+
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION

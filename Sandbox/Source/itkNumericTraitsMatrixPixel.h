@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkNumericTraitsMatrix_h
-#define __itkNumericTraitsMatrix_h
+#ifndef __itkNumericTraitsMatrixPixel_h
+#define __itkNumericTraitsMatrixPixel_h
 
 #include "itkNumericTraits.h"
 #include "itkMatrix.h"
@@ -113,7 +113,7 @@ itkNumericTraitsMatrixPixelMacro( double );
 // For all the other good compilers, we provide here a generic implementation
 // based on creating types of Matrices whose components are the types of the
 // NumericTraits from the original Matrices components. This implementation
-// doesn't require specializations, since it is based on the concept that 
+// doesn't require specializations, since it is based on the concept that
 //
 //    NumericTraits< Matrix< T, M, N > >  is defined piecewise by
 //    Matrix< NumericTraits< T >, M, N >
@@ -133,7 +133,6 @@ itkNumericTraitsMatrixPixelMacro( T, M, N );
 #endif
 
 
-
 //
 // Finally, to avoid contamination of other files with the symbols defined
 // here, we undefine the helper macros
@@ -145,4 +144,3 @@ itkNumericTraitsMatrixPixelMacro( T, M, N );
 } // end namespace itk
 
 #endif // __itkNumericTraitsMatrix_h
-

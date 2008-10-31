@@ -9,13 +9,13 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVectorSegmentationLevelSetImageFilter_h_
-#define __itkVectorSegmentationLevelSetImageFilter_h_
+#ifndef __itkVectorSegmentationLevelSetImageFilter_h
+#define __itkVectorSegmentationLevelSetImageFilter_h
 
 #include "itkVectorSparseFieldLevelSetImageFilter.h"
 #include "itkVectorSegmentationLevelSetFunction.h"
@@ -26,7 +26,7 @@ namespace itk {
 /**
  *
  * \class VectorSegmentationLevelSetImageFilter
- * 
+ *
  * \brief A base class which defines the API for implementing a special class of
  * image segmentation filters using level set methods.
  *
@@ -42,7 +42,7 @@ namespace itk {
  *
  * \par TEMPLATE PARAMETERS
  * There are two required and one optional template parameter for these
- * filters. 
+ * filters.
  *
  * TInputImage is the image type of the initial model you will input to the
  * filter using SetInput() or SetInitialImage().
@@ -67,7 +67,7 @@ namespace itk {
  * value f.  Note that the front is always represented by isosurface zero in
  * the output and not the isosurface you specified for the input.  This is
  * because, for simplicity, the filter will shift your input image so that the
- * active front has zero values. 
+ * active front has zero values.
  *
  * \par
  * Depending on the particular application and filter that you are using, the
@@ -134,7 +134,7 @@ namespace itk {
  * \warning This is an abstract class. It is not intended to be instantiated
  * by itself. Instead, you should use the derived classes. This is the reason
  * why the New() operator (itkNewMacro) is missing from the class API.
- * 
+ *
  * \par
  *  See LevelSetFunction for more information.*/
 template <class TInputImage,
@@ -155,17 +155,18 @@ public:
   /** Output image type typedefs */
   typedef TOutputImage                              OutputImageType;
   typedef typename OutputImageType::PixelType       OutputPixelType;
-  
+
   /** Standard class typedefs */
-  typedef VectorSparseFieldLevelSetImageFilter<TInputImage, OutputImageType> Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef VectorSparseFieldLevelSetImageFilter<
+    TInputImage, OutputImageType>                   Superclass;
+  typedef SmartPointer<Self>                        Pointer;
+  typedef SmartPointer<const Self>                  ConstPointer;
 
   /** Inherited typedef from the superclass. */
-  typedef typename Superclass::ValueType ValueType;
-  typedef typename Superclass::IndexType IndexType;
-  typedef typename Superclass::TimeStepType TimeStepType;
-  typedef typename Superclass::InputImageType  InputImageType;
+  typedef typename Superclass::ValueType            ValueType;
+  typedef typename Superclass::IndexType            IndexType;
+  typedef typename Superclass::TimeStepType         TimeStepType;
+  typedef typename Superclass::InputImageType       InputImageType;
 
   /** Local image typedefs */
   typedef TFeatureImage FeatureImageType;
@@ -173,55 +174,59 @@ public:
   /** The generic level set function type */
   typedef VectorSegmentationLevelSetFunction<OutputImageType, FeatureImageType>
   SegmentationFunctionType;
-    
+
   /** The type used for the advection field */
   typedef typename SegmentationFunctionType::VectorImageType VectorImageType;
   typedef typename SegmentationFunctionType::ImageType       SpeedImageType;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorSegmentationLevelSetImageFilter, VectorSparseFieldLevelSetImageFilter);
 
   /** Set/Get the maximum number of iterations allowed for the solver.  This
    *  prevents infinite loops if a solution "bounces". */
   void SetMaximumIterations (unsigned int i)
-  {
+    {
     itkWarningMacro("SetMaximumIterations is deprecated.  Please use SetNumberOfIterations instead.");
     this->SetNumberOfIterations(i);
-  }
+    }
   unsigned int GetMaximumIterations()
-  {
+    {
     itkWarningMacro("GetMaximumIterations is deprecated. Please use GetNumberOfIterations instead.");
     return this->GetNumberOfIterations();
-  }
+    }
 
   /** Set/Get the feature image to be used for speed function of the level set
    *  equation.  Equivalent to calling Set/GetInput(1, ..) */
   virtual void SetFeatureImage(const FeatureImageType *f)
-  {
+    {
     this->ProcessObject::SetNthInput( 1, const_cast< FeatureImageType * >(f) );
     m_SegmentationFunction->SetFeatureImage(f);
-  }
+    }
   virtual FeatureImageType * GetFeatureImage()
-  { return ( static_cast< FeatureImageType *>(this->ProcessObject::GetInput(1)) ); }
+    {
+    return ( static_cast< FeatureImageType *>(this->ProcessObject::GetInput(1)) );
+    }
 
   /** Set/Get the initial level set model.  Equivalent to calling SetInput(..)
    */
   virtual void SetInitialImage(InputImageType *f)
-  {
+    {
     this->SetInput(f);
-  }
+    }
 
-   /** Set the feature image */
+  /** Set the feature image */
   void SetInput2(const FeatureImageType *input)
-     {
-     this->SetFeatureImage( input );
-     }
+    {
+    this->SetFeatureImage( input );
+    }
 
   /** This function is for advanced applications.  Set the image sampled as the
-   * speed term of this segmentation method.  In  general, the speed image is 
+   * speed term of this segmentation method.  In  general, the speed image is
    * generated automatically by a subclass of this filter. */
   void SetSpeedImage( SpeedImageType *s )
-  {  m_SegmentationFunction->SetSpeedImage( s ); }
+    {
+    m_SegmentationFunction->SetSpeedImage( s );
+    }
 
   /** This function is for advanced applications.  Set the image sampled as the
    * advection term of this segmentation method.  In general, the advection image
@@ -259,144 +264,144 @@ public:
   itkSetMacro(AutoGenerateSpeedAdvection, bool);
   itkGetMacro(AutoGenerateSpeedAdvection, bool);
   itkBooleanMacro(AutoGenerateSpeedAdvection);
-  
+
   /** Combined scaling of the propagation and advection speed
       terms. You should use either this -or- Get/SetPropagationScaling and
       Get/SetAdvectionScaling (if appropriate).  See subclasses for details
       on when and whether to set these parameters.*/
   void SetFeatureScaling(ValueType v)
-  {
+    {
     if (v != m_SegmentationFunction->GetPropagationWeight())
-      {        
+      {
       this->SetPropagationScaling(v);
       }
     if (v != m_SegmentationFunction->GetAdvectionWeight())
       {
       this->SetAdvectionScaling(v);
       }
-  }
+    }
 
   /** Set/Get the scaling of the propagation speed.  Setting the FeatureScaling
       parameter overrides any previous values set for PropagationScaling. */
   void SetPropagationScaling(ValueType v)
-  {
+    {
     if (v != m_SegmentationFunction->GetPropagationWeight())
-      {        
+      {
       m_SegmentationFunction->SetPropagationWeight(v);
       this->Modified();
       }
-  }
+    }
   ValueType GetPropagationScaling() const
-  {
+    {
     return m_SegmentationFunction->GetPropagationWeight();
-  }
+    }
 
   /** Set/Get the scaling of the advection field.  Setting the FeatureScaling
       parameter will override any existing value for AdvectionScaling. */
   void SetAdvectionScaling(ValueType v)
-  {
+    {
     if (v != m_SegmentationFunction->GetAdvectionWeight())
-      {        
+      {
       m_SegmentationFunction->SetAdvectionWeight(v);
       this->Modified();
       }
-  }
+    }
   ValueType GetAdvectionScaling() const
-  {
+    {
     return m_SegmentationFunction->GetAdvectionWeight();
-  }
+    }
 
   /** Set/Get the scaling of the curvature. Use this parameter to increase the
       influence of curvature on the movement of the surface.  Higher values
       relative to Advection and Propagation values will give smoother surfaces. */
   void SetCurvatureScaling(ValueType v)
-  {
+    {
     if (v != m_SegmentationFunction->GetCurvatureWeight())
-      {        
+      {
       m_SegmentationFunction->SetCurvatureWeight(v);
       this->Modified();
       }
-  }
+    }
   ValueType GetCurvatureScaling() const
-  {
+    {
     return m_SegmentationFunction->GetCurvatureWeight();
-  }
+    }
 
 
   /** */
   void SetUseMinimalCurvature( bool b )
-  {
+    {
     if ( m_SegmentationFunction->GetUseMinimalCurvature() != b)
       {
       m_SegmentationFunction->SetUseMinimalCurvature( b );
       this->Modified();
       }
-  }
+    }
   bool GetUseMinimalCurvature() const
-  {
+    {
     return m_SegmentationFunction->GetUseMinimalCurvature();
-  }
+    }
   void UseMinimalCurvatureOn()
-  {
+    {
     this->SetUseMinimalCurvature(true);
-  }
+    }
   void UseMinimalCurvatureOff()
-  {
+    {
     this->SetUseMinimalCurvature(false);
-  }
-  
-  
+    }
+
+
   /** Set the segmentation function.  In general, this should only be
    *  called by a subclass of this object. It is made public to allow
    *  itk::Command objects access. The method is inline to avoid a
-   *  problem with the gcc 2.95 compiler matching the declaration with 
+   *  problem with the gcc 2.95 compiler matching the declaration with
    *  the definition. */
   virtual void SetSegmentationFunction( SegmentationFunctionType *s )
-  {
-    this->m_SegmentationFunction = s; 
+    {
+    this->m_SegmentationFunction = s;
     this->SetDifferenceFunction(m_SegmentationFunction);
     this->Modified();
-  }
+    }
 
   virtual SegmentationFunctionType *GetSegmentationFunction() const
-  { 
+    {
     return m_SegmentationFunction;
-  }
+    }
 
-  
+
   /** Set/Get the maximum constraint for the curvature term factor in the time step
    *  calculation.  Changing this value from the default is not recommended or
    *   necessary but could be used to speed up the surface evolution at the risk
    *   of creating an unstable solution.*/
   void SetMaximumCurvatureTimeStep(double n)
-  {
+    {
     if ( n != m_SegmentationFunction->GetMaximumCurvatureTimeStep() )
       {
       m_SegmentationFunction->SetMaximumCurvatureTimeStep(n);
       this->Modified();
       }
-  }
+    }
   double GetMaximumCurvatureTimeStep() const
-  {
+    {
     return m_SegmentationFunction->GetMaximumCurvatureTimeStep();
-  }
+    }
 
   /** Set/Get the maximum constraint for the scalar/vector term factor of the time step
    *  calculation.  Changing this value from the default is not recommended or
    *  necessary but could be used to speed up the surface evolution at the risk
    *  of creating an unstable solution.*/
   void SetMaximumPropagationTimeStep(double n)
-  {
+    {
     if (n != m_SegmentationFunction->GetMaximumPropagationTimeStep() )
       {
       m_SegmentationFunction->SetMaximumPropagationTimeStep(n);
       this->Modified();
       }
-  }
+    }
   double GetMaximumPropagationTimeStep() const
-  {
+    {
     return m_SegmentationFunction->GetMaximumPropagationTimeStep();
-  }
+    }
 
   /** Allocate and calculate the speed term image in the SegmentationFunction
       object.  This method is called automatically on filter execution
@@ -407,7 +412,7 @@ public:
       SegmentationFunction object  This method is called automatically on
       filter execution unless AutoGenerateSpeedAdvection is set to Off.*/
   void GenerateAdvectionImage();
-  
+
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   /** End concept checking */
@@ -421,13 +426,13 @@ protected:
 
   /** Overrides parent implementation */
   virtual void InitializeIteration()
-  {
+    {
     Superclass::InitializeIteration();
     // Estimate the progress of the filter
     this->SetProgress( (float) ((float)this->GetElapsedIterations()
                                 / (float)this->GetNumberOfIterations()) );
-  }
-  
+    }
+
   /** Overridden from ProcessObject to set certain values before starting the
    * finite difference solver and then create an appropriate output */
   void GenerateData();
@@ -441,7 +446,7 @@ protected:
    *  be explicitly set or GenerateSpeedImage() and/or GenerateAdvectionImage()
    *  called directly before updating the filter */
   bool m_AutoGenerateSpeedAdvection;
-  
+
 private:
   VectorSegmentationLevelSetImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -464,4 +469,3 @@ private:
 #endif
 
 #endif
-

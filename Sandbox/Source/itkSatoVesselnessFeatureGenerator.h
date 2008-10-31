@@ -44,9 +44,9 @@ class ITK_EXPORT SatoVesselnessFeatureGenerator : public FeatureGenerator<NDimen
 public:
   /** Standard class typedefs. */
   typedef SatoVesselnessFeatureGenerator          Self;
-  typedef FeatureGenerator<NDimension>                      Superclass;
-  typedef SmartPointer<Self>                                Pointer;
-  typedef SmartPointer<const Self>                          ConstPointer;
+  typedef FeatureGenerator<NDimension>            Superclass;
+  typedef SmartPointer<Self>                      Pointer;
+  typedef SmartPointer<const Self>                ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

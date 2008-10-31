@@ -9,13 +9,13 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVectorSparseFieldLevelSetImageFilter_txx_
-#define __itkVectorSparseFieldLevelSetImageFilter_txx_
+#ifndef __itkVectorSparseFieldLevelSetImageFilter_txx
+#define __itkVectorSparseFieldLevelSetImageFilter_txx
 
 #include "itkVectorSparseFieldLevelSetImageFilter.h"
 #include "itkVectorZeroCrossingImageFilter.h"
@@ -37,7 +37,7 @@ SparseFieldCityBlockNeighborList<TNeighborhoodType>
   unsigned int i, nCenter;
   int d;
   OffsetType zero_offset;
-    
+
   for (i = 0; i < Dimension; ++i)
     {
     m_Radius[i] = 1;
@@ -164,7 +164,7 @@ void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::ApplyUpdate(TimeStepType dt)
 {
- 
+
   for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
     {
     unsigned int j;
@@ -175,7 +175,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     StatusType up_search;
     StatusType down_to;
     StatusType down_search;
- 
+
     LayerPointerType UpList[2];
     LayerPointerType DownList[2];
 
@@ -184,7 +184,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       UpList[i]   = LayerType::New();
       DownList[i] = LayerType::New();
       }
-    
+
     // Process the active layer.  This step will update the values in the active
     // layer as well as the values at indicies that *will* become part of the
     // active layer when they are promoted/demoted.  Also records promotions,
@@ -196,11 +196,11 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     // Process the status up/down lists.  This is an iterative process which
     // proceeds outwards from the active layer.  Each iteration generates the
     // list for the next iteration.
-    
+
     // First process the status lists generated on the active layer.
     this->ProcessStatusList(UpList[0], UpList[1], 2, 1, component);
     this->ProcessStatusList(DownList[0], DownList[1], 1, 2, component);
-    
+
     down_to = up_to = 0;
     up_search       = 3;
     down_search     = 4;
@@ -218,19 +218,19 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       else            up_to += 2;
       down_to += 2;
 
-      up_search   += 2;
+      up_search += 2;
       down_search += 2;
 
       // Swap the lists so we can re-use the empty one.
       t = j;
       j = k;
-      k = t;      
+      k = t;
       }
 
     // Process the outermost inside/outside layers in the sparse field.
     this->ProcessStatusList(UpList[j], UpList[k], up_to, m_StatusNull, component);
     this->ProcessStatusList(DownList[j], DownList[k], down_to, m_StatusNull, component);
-    
+
     // Now we are left with the lists of indicies which must be
     // brought into the outermost layers.  Bring UpList into last inside layer
     // and DownList into last outside layer.
@@ -249,7 +249,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus, unsigned int component)
 {
   LayerNodeType *node;
-  
+
   LayerListType & layers = this->m_LayersComponents[component];
 
   // Push each index in the input list into its appropriate status layer
@@ -282,7 +282,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     {
     statusIt.NeedToUseBoundaryConditionOff();
     }
-  
+
   LayerListType & layers = this->m_LayersComponents[component];
 
   // Push each index in the input list into its appropriate status layer
@@ -294,10 +294,10 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     statusIt.SetLocation(InputList->Front()->m_Value);
     statusIt.SetCenterPixel(ChangeToStatus);
 
-    node = InputList->Front();  // Must unlink from the input list 
+    node = InputList->Front();  // Must unlink from the input list
     InputList->PopFront();      // _before_ transferring to another list.
     layers[ChangeToStatus]->PushFront(node);
-     
+
     for (i = 0; i < m_NeighborList.GetSize(); ++i)
       {
       neighbor_status = statusIt.GetPixel(m_NeighborList.GetArrayIndex(i));
@@ -373,7 +373,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     outputIt.NeedToUseBoundaryConditionOff();
     statusIt.NeedToUseBoundaryConditionOff();
     }
-  
+
   LayerListType & layers = this->m_LayersComponents[component];
 
   counter =0;
@@ -449,7 +449,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
       // Now remove this index from the active list.
       release_node = layerIt.GetPointer();
-      ++layerIt;          
+      ++layerIt;
       layers[0]->Unlink(release_node);
       m_LayerNodeStore->Return( release_node );
       }
@@ -473,12 +473,12 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
         {
         ++layerIt;
         ++updateIt;
-        continue;              
+        continue;
         }
-      
+
       rms_change_accumulator += vnl_math_sqr( new_value - outputIt.GetCenterPixel()[component] );
 
-   
+
       // Search the neighborhood for outside indicies.
       temp_value = new_value + m_ConstantGradientValue;
       for (i = 0; i < m_NeighborList.GetSize(); ++i)
@@ -517,15 +517,15 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     ++updateIt;
     ++counter;
     }
-  
+
   // Determine the average change during this iteration.
   if (counter == 0)
-    { 
+    {
     this->SetRMSChange(static_cast<double>(m_ScalarValueZero));
     }
   else
     {
-    double rmsTotal = 
+    double rmsTotal =
       vcl_sqrt((double)(rms_change_accumulator / static_cast<ScalarValueType>(counter)) );
 
     this->SetRMSChange( rmsTotal );
@@ -545,17 +545,17 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   // position of the zero level set.
 
   // First need to subtract the iso-surface value from the input image.
- 
-  // 
+
+  //
   //  Use the index cast filter to extract a component, process it and push it back.
-  // 
+  //
   typedef VectorShiftScaleImageFilter<InputImageType, OutputImageType> ShiftScaleFilterType;
   typename ShiftScaleFilterType::Pointer shiftScaleFilter = ShiftScaleFilterType::New();
   shiftScaleFilter->SetInput( this->GetInput()  );
   shiftScaleFilter->SetShift( - this->m_IsoSurfaceValue );
   // keep a handle to the shifted output
   this->m_ShiftedImage = shiftScaleFilter->GetOutput();
-   
+
   typename VectorZeroCrossingImageFilter<OutputImageType, OutputImageType>::Pointer
     zeroCrossingFilter = VectorZeroCrossingImageFilter<OutputImageType,
     OutputImageType>::New();
@@ -563,9 +563,9 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   zeroCrossingFilter->GraftOutput(this->GetOutput());
   zeroCrossingFilter->SetBackgroundValue(m_ScalarValueOne);
   zeroCrossingFilter->SetForegroundValue(m_ScalarValueZero);
- 
+
   zeroCrossingFilter->Update();
- 
+
   this->GraftOutput(zeroCrossingFilter->GetOutput());
 }
 
@@ -584,7 +584,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   this->m_StatusActiveChangingDown.Fill( this->m_StatusActiveChangingDownValue );
   this->m_StatusBoundaryPixel.SetSize( this->m_NumberOfComponents );
   this->m_StatusBoundaryPixel.Fill( this->m_StatusBoundaryPixelValue );
-  
+
   // Allocate the status image.
   m_StatusImage = StatusImageType::New();
   m_StatusImage->SetVectorLength( this->m_NumberOfComponents );
@@ -609,7 +609,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   typename BFCType::FaceListType faceList;
   typename BFCType::SizeType sz;
   typename BFCType::FaceListType::iterator fit;
-  
+
   sz.Fill(1);
   faceList = faceCalculator(m_StatusImage, m_StatusImage->GetRequestedRegion(), sz);
   fit = faceList.begin();
@@ -621,7 +621,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       {
       statusIt.Set( m_StatusBoundaryPixel );
       }
-    }  
+    }
 }
 
 template<class TInputImage, class TOutputImage>
@@ -647,7 +647,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
 
   this->m_LayersComponents.resize( this->m_NumberOfComponents );
-  
+
   // Allocate and initialize the status image and the status vectors
   this->InitializeStatusImage();
 
@@ -664,7 +664,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
         layers[k]->PopFront();
         }
       }
-    
+
     // Allocate the layers for the sparse field.
     layers.clear();
     layers.reserve( 2 * m_NumberOfLayers + 1 );
@@ -673,13 +673,13 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       {
       layers.push_back( LayerType::New() );
       }
-    
+
     // Throw an exception if we don't have enough layers.
     if (layers.size() < 3)
       {
       itkExceptionMacro( << "Not enough layers have been allocated for the sparse field.  Requires at least one layer.");
       }
-    
+
     // Construct the active layer and initialize the first layers inside and
     // outside of the active layer.
     this->ConstructActiveLayer(component);
@@ -690,12 +690,12 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       {
       this->ConstructLayer(k, k+2, component);
       }
-    
+
     }
 
   // Set the values in the output image for the active layer.
   this->InitializeActiveLayerValues();
- 
+
   // Initialize layer values using the active layer as seeds.
   this->PropagateAllLayerValues();
 
@@ -719,7 +719,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
   const ScalarValueType outside_value =  (max_layer+1) * m_ConstantGradientValue;
   const ScalarValueType inside_value  = -(max_layer+1) * m_ConstantGradientValue;
- 
+
   ImageRegionConstIterator<StatusImageType> statusIt(m_StatusImage,
                                                      this->GetOutput()->GetRequestedRegion());
 
@@ -728,7 +728,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
   ImageRegionConstIterator<OutputImageType> shiftedIt(m_ShiftedImage,
                                                       this->GetOutput()->GetRequestedRegion());
-  
+
   typename OutputImageType::PixelType outputValue;
   typename OutputImageType::PixelType pixelValue;
 
@@ -796,7 +796,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   // set (or the active set itself) is sitting on a boundary pixel location. If
   // this is the case, then we need to do active bounds checking in the solver.
   //
-  
+
   LayerListType & layers = this->m_LayersComponents[component];
 
   NeighborhoodIterator<OutputImageType>
@@ -837,7 +837,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
           m_BoundsCheckingActive = true;
           }
         }
-      
+
       // Borrow a node from the store and set its value.
       node = m_LayerNodeStore->Borrow();
       node->m_Value = center_index;
@@ -849,9 +849,9 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
       // Grab the neighborhood in the image of shifted input values.
       shiftedIt.SetLocation( center_index );
-          
+
       // Search the neighborhood pixels for first inside & outside layer
-      // members.  Construct these lists and set status list values. 
+      // members.  Construct these lists and set status list values.
       for( unsigned int i = 0; i < m_NeighborList.GetSize(); ++i )
         {
         offset_index = center_index
@@ -869,7 +869,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
             {
             layer_number = 2;
             }
-                  
+
           statusIt.SetPixel( m_NeighborList.GetArrayIndex(i),
                              layer_number, bounds_status );
           if ( bounds_status == true ) // In bounds.
@@ -898,7 +898,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   NeighborhoodIterator<StatusImageType>
     statusIt(m_NeighborList.GetRadius(), m_StatusImage,
              this->GetOutput()->GetRequestedRegion() );
-  
+
   LayerListType & layers = this->m_LayersComponents[component];
 
   // For all indicies in the "from" layer...
@@ -953,7 +953,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   ConstNeighborhoodIterator<OutputImageType>
     shiftedIt( m_NeighborList.GetRadius(), m_ShiftedImage,
                this->GetOutput()->GetRequestedRegion() );
-  
+
   center = shiftedIt.Size() /2;
   typename OutputImageType::Pointer output = this->GetOutput();
 
@@ -1002,7 +1002,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
         }
       length = vcl_sqrt((double)length) + MIN_NORM;
       distance = centerPixelValueComponent / length;
-    
+
       ValueType outpuPixel = output->GetPixel( activeIt->m_Value );
 
       outpuPixel[component] = vnl_math_min(vnl_math_max(-CHANGE_FACTOR, distance), CHANGE_FACTOR);
@@ -1010,7 +1010,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       output->SetPixel( activeIt->m_Value , outpuPixel );
       }
     }
-  
+
 }
 
 template <class TInputImage, class TOutputImage>
@@ -1073,7 +1073,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       }
 
     void *globalData = df->GetGlobalDataPointer();
-    
+
     typename LayerType::ConstIterator layerIt;
     NeighborhoodIterator<OutputImageType> outputIt(df->GetRadius(),
                       this->GetOutput(), this->GetOutput()->GetRequestedRegion());
@@ -1084,7 +1084,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       {
       outputIt.NeedToUseBoundaryConditionOff();
       }
-    
+
 
     for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
       {
@@ -1094,7 +1094,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       m_UpdateBuffer.reserve(layers[0]->Size());
 
       // Calculates the update values for the active layer indicies in this
-      // iteration.  Iterates through the active layer index list, applying 
+      // iteration.  Iterates through the active layer index list, applying
       // the level set function to the output image (level set image) at each
       // index.  Update values are stored in the update buffer.
       for (layerIt = layers[0]->Begin(); layerIt != layers[0]->End(); ++layerIt)
@@ -1116,7 +1116,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
             {
             forwardValue  = outputIt.GetNext(i);
             backwardValue = outputIt.GetPrevious(i);
-                
+
             if (forwardValue * backwardValue >= 0)
               { //  Neighbors are same sign OR at least one neighbor is zero.
               dx_forward  = forwardValue - centerValue;
@@ -1143,15 +1143,15 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     // FIXME           offset[i] = centerValue - backwardValue;
     // FIXME           }
               }
-            
+
             norm_grad_phi_squared += offset[i] * offset[i];
             }
-          
+
           for (i = 0; i < ImageDimension; ++i)
             {
     // FIXME        offset[i] = (offset[i] * centerValue) / (norm_grad_phi_squared + MIN_NORM);
             }
-              
+
               //  FIXME: Change GetDifferenceFunction() to GetComponentDifferenceFunction() ??
               //  FIXME: OR... have multiple DifferenceFunctions() one per component...?
           m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData, component, offset ) );
@@ -1162,7 +1162,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
           }
         }
       }
-      
+
     // Ask the finite difference function to compute the time step for
     // this iteration.  We give it the global data pointer to use, then
     // ask it to free the global data memory.
@@ -1175,8 +1175,8 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
     df->ReleaseGlobalDataPointer(globalData);
     }
-  
-  return timeStep;                            
+
+  return timeStep;
 }
 
 
@@ -1189,7 +1189,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     {
     // Update values in the first inside and first outside layers using the
     // active layer as a seed. Inside layers are odd numbers, outside layers are
-    // even numbers. 
+    // even numbers.
     this->PropagateLayerValues(0, 1, 3, 1, component); // first inside
     this->PropagateLayerValues(0, 2, 4, 2, component); // first outside
 
@@ -1219,18 +1219,18 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   LayerListType & layers = this->m_LayersComponents[component];
 
   StatusType past_end = static_cast<StatusType>( layers.size() ) - 1;
-  
+
   // Are we propagating values inward (more negative) or outward (more
   // positive)?
   if (InOrOut == 1)
     {
     delta = - m_ConstantGradientValue;
     }
-  else 
+  else
     {
     delta = m_ConstantGradientValue;
     }
- 
+
   NeighborhoodIterator<OutputImageType>
     outputIt(m_NeighborList.GetRadius(), this->GetOutput(),
              this->GetOutput()->GetRequestedRegion() );
@@ -1243,7 +1243,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     outputIt.NeedToUseBoundaryConditionOff();
     statusIt.NeedToUseBoundaryConditionOff();
     }
-  
+
   toIt  = layers[to]->Begin();
   while ( toIt != layers[to]->End() )
     {
@@ -1260,7 +1260,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       m_LayerNodeStore->Return( node );
       continue;
       }
-      
+
     outputIt.SetLocation( toIt->m_Value );
 
     found_neighbor_flag = false;
@@ -1343,7 +1343,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
   const ValueType inside_value  = (max_layer+1) * m_ConstantGradientValue;
   const ValueType outside_value = -(max_layer+1) * m_ConstantGradientValue;
- 
+
   ImageRegionConstIterator<StatusImageType> statusIt(m_StatusImage,
                                                      this->GetOutput()->GetRequestedRegion());
 

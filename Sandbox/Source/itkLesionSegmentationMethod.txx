@@ -23,7 +23,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template <unsigned int NDimension>
@@ -34,7 +34,7 @@ LesionSegmentationMethod<NDimension>
 }
 
 
-/*
+/**
  * Destructor
  */
 template <unsigned int NDimension>
@@ -44,7 +44,7 @@ LesionSegmentationMethod<NDimension>
 }
 
 
-/*
+/**
  * Add a feature generator that will compute the Nth feature to be passed to
  * the segmentation module.
  */
@@ -57,7 +57,7 @@ LesionSegmentationMethod<NDimension>
 }
 
 
-/*
+/**
  * PrintSelf
  */
 template <unsigned int NDimension>
@@ -96,7 +96,7 @@ LesionSegmentationMethod<NDimension>
 }
 
 
-/*
+/**
  * Update feature generators
  */
 template <unsigned int NDimension>

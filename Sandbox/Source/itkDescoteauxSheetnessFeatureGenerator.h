@@ -43,9 +43,9 @@ class ITK_EXPORT DescoteauxSheetnessFeatureGenerator : public FeatureGenerator<N
 public:
   /** Standard class typedefs. */
   typedef DescoteauxSheetnessFeatureGenerator          Self;
-  typedef FeatureGenerator<NDimension>                      Superclass;
-  typedef SmartPointer<Self>                                Pointer;
-  typedef SmartPointer<const Self>                          ConstPointer;
+  typedef FeatureGenerator<NDimension>                 Superclass;
+  typedef SmartPointer<Self>                           Pointer;
+  typedef SmartPointer<const Self>                     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

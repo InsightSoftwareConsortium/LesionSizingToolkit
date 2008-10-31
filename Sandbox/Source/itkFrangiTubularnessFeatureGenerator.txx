@@ -23,7 +23,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template <unsigned int NDimension>
@@ -44,7 +44,7 @@ FrangiTubularnessFeatureGenerator<NDimension>
 }
 
 
-/*
+/**
  * Destructor
  */
 template <unsigned int NDimension>

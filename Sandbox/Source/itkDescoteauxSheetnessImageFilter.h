@@ -50,15 +50,15 @@ public:
     }
   ~Bifurcationess() {}
   bool operator!=( const Bifurcationess & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Bifurcationess & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A )
-  {
+    {
     double sheetness = 0.0;
 
     double a1 = static_cast<double>( A[0] );
@@ -82,7 +82,7 @@ public:
       a2 = tmpa;
       }
 
-     if( l1 > l2 )
+    if( l1 > l2 )
       {
       double tmp = l1;
       l1 = l2;
@@ -125,7 +125,7 @@ public:
     sheetness *= ( 1.0 - vcl_exp( - ( Rn * Rn ) / ( 2.0 * m_C     * m_C     ) ) ); 
 
     return static_cast<TOutput>( sheetness );
-  }
+    }
   void SetAlpha( double value )
     {
     this->m_Alpha = value;
@@ -155,12 +155,14 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef DescoteauxSheetnessImageFilter  Self;
-  typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                  Function::Bifurcationess< typename TInputImage::PixelType, 
-                                                 typename TOutputImage::PixelType> > Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef DescoteauxSheetnessImageFilter    Self;
+  typedef UnaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Function::Bifurcationess< 
+      typename TInputImage::PixelType, 
+      typename TOutputImage::PixelType> >   Superclass;
+  typedef SmartPointer<Self>                Pointer;
+  typedef SmartPointer<const Self>          ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

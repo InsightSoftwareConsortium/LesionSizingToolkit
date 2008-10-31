@@ -23,7 +23,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template <unsigned int NDimension>
@@ -34,7 +34,7 @@ RegionGrowingSegmentationModule<NDimension>
 }
 
 
-/*
+/**
  * Destructor
  */
 template <unsigned int NDimension>
@@ -44,7 +44,7 @@ RegionGrowingSegmentationModule<NDimension>
 }
 
 
-/*
+/**
  * PrintSelf
  */
 template <unsigned int NDimension>
@@ -56,7 +56,7 @@ RegionGrowingSegmentationModule<NDimension>
 }
 
 
-/*
+/**
  * Generate Data
  */
 template <unsigned int NDimension>

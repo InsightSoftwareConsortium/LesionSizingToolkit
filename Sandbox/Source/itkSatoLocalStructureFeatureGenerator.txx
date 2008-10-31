@@ -23,7 +23,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template <unsigned int NDimension>
@@ -40,7 +40,7 @@ SatoLocalStructureFeatureGenerator<NDimension>
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
 
-  this->m_Sigma =  1.0;
+  this->m_Sigma = 1.0;
 }
 
 
@@ -97,7 +97,7 @@ void
 SatoLocalStructureFeatureGenerator<NDimension>
 ::GenerateData()
 {
-  typename InputImageSpatialObjectType::ConstPointer inputObject = 
+  typename InputImageSpatialObjectType::ConstPointer inputObject =
     dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
 
   if( !inputObject )
