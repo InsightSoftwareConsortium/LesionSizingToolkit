@@ -131,6 +131,8 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
+  std::cout << "Name Of Class = " << featureGenerator->GetNameOfClass() << std::endl;
+
   featureGenerator->Print( std::cout );
 
  
