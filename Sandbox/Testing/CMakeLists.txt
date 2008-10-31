@@ -174,5 +174,114 @@ ADD_TEST(Read002
   ${TEMP}/CornellPartSolid3_1.mhd
   )
 
+ADD_TEST(ROI001 
+  ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
+  ${TEMP}/CornellPartSolid2_1.mhd
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  270 180 120 
+  160 100  69 
+  )
+
+ADD_TEST(ROI002 
+  ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
+  ${TEMP}/CornellPartSolid3_1.mhd
+  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  100 170 180 
+  100 120  64
+  )
+
+
+ADD_TEST(GMSFGTest001
+  ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/GMSFGTest001_01.mhd
+  1.0
+  -1.0
+  5.0
+  )
+
+ADD_TEST(SVFGTest001
+  ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/SVFGTest001_01.mhd
+  1.0
+  0.5
+  2.0
+  )
+
+ADD_TEST(SLSFGTest001
+  ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/SLSFGTest001_01.mhd
+  1.0
+  0.5
+  2.0
+  )
+
+ADD_TEST(DSFGTest001
+  ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/SLSFGTest001_01.mhd
+  1.0
+  0.5
+  2.0
+  )
+
+ADD_TEST(FTFGTest001
+  ${CXX_TEST_PATH}/itkFrangiTubularnessFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/SLSFGTest001_01.mhd
+  1.0
+  0.5
+  2.0
+  )
+
+
+ADD_TEST(GMSFGTest002
+  ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  ${TEMP}/GMSFGTest002_01.mhd
+  1.0
+  -1.0
+  5.0
+  )
+
+ADD_TEST(SVFGTest002
+  ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  ${TEMP}/SVFGTest002_01.mhd
+  1.0
+  0.5
+  2.0
+  )
+
+ADD_TEST(SLSFGTest002
+  ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  ${TEMP}/SLSFGTest002_01.mhd
+  1.0
+  0.5
+  2.0
+  )
+
+ADD_TEST(DSFGTest002
+  ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  ${TEMP}/SLSFGTest002_01.mhd
+  1.0
+  0.5
+  2.0
+  )
+
+ADD_TEST(FTFGTest002
+  ${CXX_TEST_PATH}/itkFrangiTubularnessFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  ${TEMP}/SLSFGTest002_01.mhd
+  1.0
+  0.5
+  2.0
+  )
+
+
 ENDIF(TEST_CORNELL_DATA_ROOT)
 
