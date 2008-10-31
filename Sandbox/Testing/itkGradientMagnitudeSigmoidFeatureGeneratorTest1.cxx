@@ -31,7 +31,7 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  const unsigned int Dimension = 2;
+  const unsigned int Dimension = 3;
 
   typedef signed short    InputPixelType;
   typedef float           OutputPixelType;

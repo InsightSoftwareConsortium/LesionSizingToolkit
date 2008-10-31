@@ -109,7 +109,7 @@ ADD_TEST(itkSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSegmentationModuleTest1 
 
 ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
-  ${ITK_SOURCE_DIR}/Examples/Data/BrainProtonDensitySlice.png
+  ${TEST_DATA_ROOT}/Input/DataCropped.mha
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
   1.0
   -1.0
