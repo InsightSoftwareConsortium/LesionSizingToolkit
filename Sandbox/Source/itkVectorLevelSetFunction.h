@@ -247,26 +247,26 @@ public:
   /** Compute the advection term. Internally calls AdvectionField on
    *   the respective phase.
    */
-  virtual ScalarValueType ComputeAdvectionTerm( const NeighborhoodType &,
-                                                const FloatOffsetType &,
-                                                unsigned int phase,
-                                                GlobalDataStruct *gd = 0 );
+  virtual ScalarValueType ComputeAdvectionTerms( const NeighborhoodType &,
+                                                 const FloatOffsetType &,
+                                                 unsigned int phase,
+                                                 GlobalDataStruct *gd = 0 ) const;
 
   /** Compute the propagation term. Internally calls PropagationSpeed on
    * components based on the weights in the Nphases x Ncomponents
    * matrix of propagation weights.
    */
-  virtual ScalarValueType ComputePropagationTerm( const NeighborhoodType &,
-                                                  const FloatOffsetType &,
-                                                  unsigned int phase,
-                                                  GlobalDataStruct *gd = 0 );
+  virtual ScalarValueType ComputePropagationTerms( const NeighborhoodType &,
+                                                   const FloatOffsetType &,
+                                                   unsigned int phase,
+                                                   GlobalDataStruct *gd = 0 ) const;
 
   /** Compute the laplacian term on the respective phase. This is computed
    * from the second derivatives and the laplacian weights.*/
   virtual ScalarValueType ComputeLaplacianTerms( const NeighborhoodType &,
-                                                const FloatOffsetType &,
-                                                unsigned int phase,
-                                                GlobalDataStruct *gd = 0 );
+                                                 const FloatOffsetType &,
+                                                 unsigned int phase,
+                                                 GlobalDataStruct *gd = 0 ) const;
 
   /**  */
   virtual ScalarValueType ComputeCurvatureTerm(const NeighborhoodType &,
@@ -399,6 +399,7 @@ private:
 
   // Cache the computation of neighborhood scales instead of computing them
   // for every phase. We assume that they are the same across phases.
+  typedef typename NeighborhoodScalesType::ComponentType NeighborhoodScaleType;
   NeighborhoodScaleType m_NeighborhoodScales;
 };
 

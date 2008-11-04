@@ -308,12 +308,10 @@ VectorLevelSetFunction< TImageType >
   m_NeighborhoodScales = this->ComputeNeighborhoodScales();
 
   ScalarValueType laplacian;
-  ScalarValueType x_energy;
   ScalarValueType laplacian_term;
   ScalarValueType propagation_term;
   ScalarValueType curvature_term;
   ScalarValueType advection_term;
-  ScalarValueType propagation_gradient;
 
   VectorType advection_field;
 
@@ -406,7 +404,7 @@ VectorLevelSetFunction< TImageType >
     pd->m_dx_backward[i] = ( centerVc - pixelBc ) * m_NeighborhoodScales[i];
     pd->m_GradMagSqr += pd->m_dx[i] * pd->m_dx[i];
 
-    for( j = i+1; j < ImageDimension; j++ )
+    for( unsigned int j = i+1; j < ImageDimension; j++ )
       {
       const unsigned int positionAa = static_cast<unsigned int>(
         m_Center - m_xStride[i] - m_xStride[j] );
@@ -453,12 +451,12 @@ VectorLevelSetFunction< TImageType >
     ScalarValueType w = this->m_AdvectionWeights( phase, component );
     if (w != ZERO)
       {
-      VectorType advection_field = this->AdvectionField( neighborhood, offset,
+      VectorType advection_field = this->AdvectionField( it, offset,
                                               component, gd );
 
       for (unsigned int i = 0; i < ImageDimension; i++)
         {
-        x_energy = w * advection_field[i];
+        ScalarValueType x_energy = w * advection_field[i];
 
         if (x_energy > ZERO)
           {
@@ -515,11 +513,11 @@ VectorLevelSetFunction< TImageType >
     // The following scheme for ``upwinding'' in the normal direction is taken
     // from Sethian, Ch. 6 as referenced above.
     //
-    propagation_gradient = ZERO;
+    ScalarValueType propagation_gradient = ZERO;
 
     if ( propagation_term > ZERO )
       {
-      for(i = 0; i< ImageDimension; i++)
+      for (unsigned int i = 0; i< ImageDimension; i++)
         {
         propagation_gradient +=
           vnl_math_sqr( vnl_math_max( gd->m_PhaseData[phase].m_dx_backward[i], ZERO) )
@@ -568,7 +566,7 @@ VectorLevelSetFunction< TImageType >
 
     if (w != ZERO)
       {
-      laplacian_term_for_component = 
+      ScalarValueType laplacian_term_for_component = 
         this->LaplacianSmoothingSpeed( it, offset, component, gd );
 
       laplacian_term += w * laplacian_term_for_component;
@@ -579,7 +577,7 @@ VectorLevelSetFunction< TImageType >
 
   // Compute the laplacian for this phase using the existing second 
   // derivative values
-  for(i = 0;i < ImageDimension; i++)
+  for (unsigned int i = 0;i < ImageDimension; i++)
     {
     laplacian += gd->m_PhaseData[phase].m_dxy[i][i];
     }
