@@ -170,15 +170,16 @@ public:
                                                    GlobalDataStruct * = 0) const
     { return NumericTraits<ScalarValueType>::One; }
 
-  /** Alpha.  Scales all advection term values in each phase. */
-  virtual void SetAdvectionWeights(const VectorValueType a)
+  /** Alpha.  Scales all advection term values in each phase. This will be a
+   *  NumberOfPhases (rows) x NumberOfComponents (cols) matrix.*/
+  virtual void SetAdvectionWeights(const MatrixValueType & a)
     { m_AdvectionWeights = a; }
-  itkGetMacro( AdvectionWeights, VectorValueType );
+  itkGetMacro( AdvectionWeights, MatrixValueType );
 
   /** Beta.  Scales all propagation term values in each phase. */
-  virtual void SetPropagationWeights(const VectorValueType p)
-    { m_PropagationWeights = p; }
-  itkGetMacro( PropagationWeights, VectorValueType );
+  virtual void SetPropagationWeights(const MatrixValueType & c)
+    { m_PropagationWeights = c; }
+  itkGetMacro( PropagationWeights,  MatrixValueType );
 
   /** Gamma. Scales all curvature weight values. The number of weights supplied
    * is a matrix of size NPhases * NPhases. A diagonal matrix implies that
@@ -188,9 +189,9 @@ public:
   itkGetMacro( CurvatureWeights, MatrixValueType );
 
   /** Weight of the laplacian smoothing term for each phase */
-  void SetLaplacianSmoothingWeights(const VectorValueType c)
+  void SetLaplacianSmoothingWeights(const MatrixValueType & c)
     { m_LaplacianSmoothingWeights = c; }
-  itkGetMacro( LaplacianSmoothingWeights, VectorValueType );
+  itkGetMacro( LaplacianSmoothingWeights, MatrixValueType );
 
   /** Epsilon. */
   void SetEpsilonMagnitude(const ScalarValueType e)
@@ -262,7 +263,7 @@ public:
 
   /** Compute the laplacian term on the respective phase. This is computed
    * from the second derivatives and the laplacian weights.*/
-  virtual ScalarValueType ComputeLaplacianTerm( const NeighborhoodType &,
+  virtual ScalarValueType ComputeLaplacianTerms( const NeighborhoodType &,
                                                 const FloatOffsetType &,
                                                 unsigned int phase,
                                                 GlobalDataStruct *gd = 0 );
@@ -369,16 +370,16 @@ protected:
   ScalarValueType m_EpsilonMagnitude;
 
   /** Alpha. */
-  ScalarValueType m_AdvectionWeights;
+  MatrixValueType m_AdvectionWeights;
 
   /** Beta. */
-  ScalarValueType m_PropagationWeights;
+  MatrixValueType m_PropagationWeights;
 
   /** Gamma. */
   MatrixValueType m_CurvatureWeights;
 
   /** Laplacean smoothing term */
-  ScalarValueType m_LaplacianSmoothingWeights;
+  MatrixValueType m_LaplacianSmoothingWeights;
 
 private:
   VectorLevelSetFunction(const Self&); //purposely not implemented
@@ -395,6 +396,10 @@ private:
     PixelType output;
     return output;
     }
+
+  // Cache the computation of neighborhood scales instead of computing them
+  // for every phase. We assume that they are the same across phases.
+  NeighborhoodScaleType m_NeighborhoodScales;
 };
 
 } // namespace itk

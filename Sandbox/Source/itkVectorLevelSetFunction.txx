@@ -305,7 +305,7 @@ VectorLevelSetFunction< TImageType >
   const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
   const PixelType center_value  = it.GetCenterPixel();
 
-  const NeighborhoodScalesType neighborhoodScales = this->ComputeNeighborhoodScales();
+  m_NeighborhoodScales = this->ComputeNeighborhoodScales();
 
   ScalarValueType laplacian;
   ScalarValueType x_energy;
@@ -337,13 +337,10 @@ VectorLevelSetFunction< TImageType >
     this->ComputeDerivativesForPhase( it, offset, i, gd );
     }
 
-  curvature_term = this->ComputeCurvatureTerms( it, offset, phase, gd );
-
-  advection_term = this->ComputeAdvectionTerm( it, offset, phase, gd );
-
-  propagation_term = this->ComputePropagationTerm( it, offset, phase, gd );
-
-  laplacian_term = this->ComputeLaplacianTerm( it, offset, phase, gd );
+  curvature_term   = this->ComputeCurvatureTerms  ( it, offset, phase, gd );
+  advection_term   = this->ComputeAdvectionTerms  ( it, offset, phase, gd );
+  propagation_term = this->ComputePropagationTerms( it, offset, phase, gd );
+  laplacian_term   = this->ComputeLaplacianTerms  ( it, offset, phase, gd );
 
   // Return the combination of all the terms.
   return ( ScalarValueType ) ( curvature_term - propagation_term - advection_term - laplacian_term );
@@ -381,6 +378,9 @@ VectorLevelSetFunction< TImageType >
                               unsigned int pid,
                               GlobalDataStruct *gd )
 {
+  // FIXME Could this could be computed outside this loop ?
+  const ScalarValueType center_value  = it.GetCenterPixel();
+
   // Compute the Hessian matrix and various other derivatives.  Some of these
   // derivatives may be used by overloaded virtual functions.
   PhaseDataStruct *pd = &(gd->m_PhaseData[pid]);
@@ -399,11 +399,11 @@ VectorLevelSetFunction< TImageType >
     ScalarValueType pixelBc = pixelB[pid];
     ScalarValueType centerVc = center_value[pid];
 
-    pd->m_dx[i] = 0.5 * ( pixelAc - pixelBc ) * neighborhoodScales[i];
-    pd->m_dxy[i][i] =   ( pixelAc + pixelBc - 2.0 * centerVc ) * vnl_math_sqr(neighborhoodScales[i]);
+    pd->m_dx[i] = 0.5 * ( pixelAc - pixelBc ) * m_NeighborhoodScales[i];
+    pd->m_dxy[i][i] =   ( pixelAc + pixelBc - 2.0 * centerVc ) * vnl_math_sqr(m_NeighborhoodScales[i]);
 
-    pd->m_dx_forward[i]  = ( pixelAc - centerVc ) * neighborhoodScales[i];
-    pd->m_dx_backward[i] = ( centerVc - pixelBc ) * neighborhoodScales[i];
+    pd->m_dx_forward[i]  = ( pixelAc - centerVc ) * m_NeighborhoodScales[i];
+    pd->m_dx_backward[i] = ( centerVc - pixelBc ) * m_NeighborhoodScales[i];
     pd->m_GradMagSqr += pd->m_dx[i] * pd->m_dx[i];
 
     for( j = i+1; j < ImageDimension; j++ )
@@ -421,7 +421,7 @@ VectorLevelSetFunction< TImageType >
                                                  - it.GetPixel( positionBa )[pid]
                                                  - it.GetPixel( positionCa )[pid]
                                                  + it.GetPixel( positionDa )[pid] )
-                                          * neighborhoodScales[i] * neighborhoodScales[j];
+                                          * m_NeighborhoodScales[i] * m_NeighborhoodScales[j];
       }
     }
 }
@@ -439,48 +439,41 @@ VectorLevelSetFunction< TImageType >
 template< class TImageType >
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction< TImageType >
-::ComputeAdvectionTerm( const NeighborhoodType &it,
-                        const FloatOffsetType &offset,
-                        unsigned int phase,
-                        GlobalDataStruct * gd) const
+::ComputeAdvectionTerms( const NeighborhoodType &it,
+                         const FloatOffsetType &offset,
+                         unsigned int phase,
+                         GlobalDataStruct * gd) const
 {
   const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
+  ScalarValueType advection_term = ZERO;
 
-  // Calculate the advection term.
-  //  $\alpha \stackrel{\rightharpoonup}{F}(\mathbf{x})\cdot\nabla\phi $
-  //
-  // Here we can use a simple upwinding scheme since we know the
-  // sign of each directional phase of the advective force.
-  //
-  if (m_AdvectionWeight[phase] != ZERO)
+  for (unsigned int component = 0; 
+      component < this->m_NumberOfComponents; component++)
     {
-    advection_field = this->AdvectionField(it, offset, phase, gd);
-    advection_term = ZERO;
-
-    for(i = 0; i < ImageDimension; i++)
+    ScalarValueType w = this->m_AdvectionWeights( phase, component );
+    if (w != ZERO)
       {
+      VectorType advection_field = this->AdvectionField( neighborhood, offset,
+                                              component, gd );
 
-      x_energy = m_AdvectionWeight[phase] * advection_field[i];
-
-      if (x_energy > ZERO)
+      for (unsigned int i = 0; i < ImageDimension; i++)
         {
-        advection_term += advection_field[i] * gd->m_PhaseData[i].m_dx_backward[i];
-        }
-      else
-        {
-        advection_term += advection_field[i] * gd->m_PhaseData[i].m_dx_forward[i];
-        }
+        x_energy = w * advection_field[i];
 
-      gd->m_PhaseData[i].m_MaxAdvectionChange
-        = vnl_math_max( gd->m_PhaseData[i].m_MaxAdvectionChange,
-                        vnl_math_abs(x_energy));
+        if (x_energy > ZERO)
+          {
+          advection_term += advection_field[i] * gd->m_PhaseData[phase].m_dx_backward[i];
+          }
+        else
+          {
+          advection_term += advection_field[i] * gd->m_PhaseData[phase].m_dx_forward[i];
+          }
+
+        gd->m_PhaseData[phase].m_MaxAdvectionChange
+          = vnl_math_max( gd->m_PhaseData[phase].m_MaxAdvectionChange,
+                          vnl_math_abs(x_energy));  
+        }
       }
-    advection_term *= m_AdvectionWeight[phase];
-
-    }
-  else
-    {
-    advection_term = ZERO;
     }
 
   return advection_term;
@@ -489,7 +482,7 @@ VectorLevelSetFunction< TImageType >
 template< class TImageType >
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction< TImageType >
-::ComputePropagationTerm( const NeighborhoodType &it,
+::ComputePropagationTerms( const NeighborhoodType &it,
                          const FloatOffsetType &offset,
                          unsigned int phase,
                          GlobalDataStruct * gd) const
@@ -497,20 +490,22 @@ VectorLevelSetFunction< TImageType >
   const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
   ScalarValueType propagation_term = ZERO;
 
-  for (unsigned int i = 0; i < this->m_NumberOfComponents; i++)
+  for (unsigned int component = 0; 
+      component < this->m_NumberOfComponents; component++)
     {
 
-    // Propagation weight due to interaction of phases: 'phase' and 'i'
-    ScalarValueType w = this->m_PropagationWeights( phase, i );
+    // Propagation weight due to interaction of phases: 'phase' and 'component'
+    ScalarValueType w = this->m_PropagationWeights( phase, component );
 
     if (w != ZERO)
       {
       ScalarValueType propagationSpeed =
-        this->PropagationSpeed(it, offset, i, gd);
+        this->PropagationSpeed(it, offset, component, gd);
       propagation_term += w * propagationSpeed;
       }
     }
 
+  // FIXME  Should we put this in the component loop or outside it ?
   if (propagation_term != ZERO)
     {
 
@@ -556,28 +551,41 @@ VectorLevelSetFunction< TImageType >
 template< class TImageType >
 typename VectorLevelSetFunction<TImageType>::ScalarValueType
 VectorLevelSetFunction< TImageType >
-::ComputeLaplacianTerm( const NeighborhoodType &it,
-                        const FloatOffsetType &offset,
-                        unsigned int phase,
-                        GlobalDataStruct * gd) const
+::ComputeLaplacianTerms( const NeighborhoodType &it,
+                         const FloatOffsetType &offset,
+                         unsigned int phase,
+                         GlobalDataStruct * gd) const
 {
   const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
   ScalarValueType laplacian_term = ZERO;
-  if(m_LaplacianSmoothingWeight[phase] != ZERO)
+
+  for (unsigned int component = 0; 
+      component < this->m_NumberOfComponents; component++)
     {
-    ScalarValueType laplacian = ZERO;
 
-    // Compute the laplacian using the existing second derivative values
-    for(i = 0;i < ImageDimension; i++)
+    // Propagation weight due to interaction of phases: 'phase' and 'component'
+    ScalarValueType w = this->m_LaplacianWeights( phase, component );
+
+    if (w != ZERO)
       {
-      laplacian += gd->m_PhaseData[phase].m_dxy[i][i];
-      }
+      laplacian_term_for_component = 
+        this->LaplacianSmoothingSpeed( it, offset, component, gd );
 
-    // Scale the laplacian by its speed and weight
-    laplacian_term = laplacian *
-                     m_LaplacianSmoothingWeight[phase] *
-                     LaplacianSmoothingSpeed(it,offset, phase, gd);
+      laplacian_term += w * laplacian_term_for_component;
+      }
     }
+
+  ScalarValueType laplacian = ZERO;
+
+  // Compute the laplacian for this phase using the existing second 
+  // derivative values
+  for(i = 0;i < ImageDimension; i++)
+    {
+    laplacian += gd->m_PhaseData[phase].m_dxy[i][i];
+    }
+
+  // Scale the laplacian by its speed and weight
+  laplacian_term *= laplacian;
 
   return laplacian_term;
 }
