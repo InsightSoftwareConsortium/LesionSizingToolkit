@@ -55,6 +55,8 @@ VectorLevelSetFunction<TImageType>
   curvature *= this->CurvatureSpeed( neighborhood, offset, phase );
 
   PhaseDataStruct *pd = &(gd->m_PhaseData[phase]);
+
+  // FIXME valgrind reports an uninitialized var on this line ?
   pd->m_MaxCurvatureChange = vnl_math_max( pd->m_MaxCurvatureChange,
                                            vnl_math_abs(curvature) );
 
@@ -449,7 +451,7 @@ void
 VectorLevelSetFunction< TImageType >
 ::ReleaseGlobalDataPointer( void *GlobalData ) const
 {
-  GlobalDataStruct * gd = (GlobalDataStruct *)gd;
+  GlobalDataStruct * gd = (GlobalDataStruct *)GlobalData;
   delete [] gd->m_PhaseData;
   delete gd;
 }

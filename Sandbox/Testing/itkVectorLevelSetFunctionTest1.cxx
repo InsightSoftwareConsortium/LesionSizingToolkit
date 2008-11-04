@@ -63,6 +63,11 @@ int main( int argc, char * argv [] )
   FunctionType::MatrixValueType advectionWeights( NumberOfPhases, NumberOfComponents );
   advectionWeights.SetIdentity();
   advectionWeights *= 10.0;
+
+  // Set Propagation weights
+  FunctionType::MatrixValueType laplacianSmoothingWeights( NumberOfPhases, NumberOfComponents );
+  laplacianSmoothingWeights.SetIdentity();
+  laplacianSmoothingWeights *= 10.0;
   
   //
   // Test Set/GetCurvatureWeight()
@@ -96,6 +101,17 @@ int main( int argc, char * argv [] )
   if( function->GetAdvectionWeights() != advectionWeights )
     {
     std::cerr << "Error in SetAdvectionWeight()/GetAdvectionWeight() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  //
+  // Test Set/GetLaplacianSmoothingWeight()
+  //
+  function->SetLaplacianSmoothingWeights( laplacianSmoothingWeights );
+  // Then check if the value was stored correctly
+  if( function->GetLaplacianSmoothingWeights() != laplacianSmoothingWeights )
+    {
+    std::cerr << "Error in SetLaplacianSmoothingWeight()/GetLaplacianSmoothingWeight() " << std::endl;
     return EXIT_FAILURE;
     }
 
