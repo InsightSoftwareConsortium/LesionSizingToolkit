@@ -24,13 +24,13 @@ int main( int argc, char * argv [] )
   const unsigned int NumberOfPhases = 2;
   const unsigned int NumberOfComponents = 2;
 
-  typedef itk::Vector< float, NumberOfPhases >           LevelSetPixelType;
-
-  typedef itk::Image< LevelSetPixelType, Dimension >     LevelSetImageType;
-
+  typedef itk::Vector< float, NumberOfPhases >              LevelSetPixelType;
+  typedef itk::Image< LevelSetPixelType, Dimension >        LevelSetImageType;
   typedef itk::VectorLevelSetFunction< LevelSetImageType >  FunctionType;
 
   FunctionType::Pointer function = FunctionType::New();
+  function->SetNumberOfComponents( NumberOfComponents );
+  function->SetNumberOfPhases( NumberOfPhases );
 
   std::cout << function->GetNameOfClass() << std::endl;
 
