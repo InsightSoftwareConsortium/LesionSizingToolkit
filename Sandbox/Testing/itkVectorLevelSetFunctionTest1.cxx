@@ -22,6 +22,7 @@ int main( int argc, char * argv [] )
 
   const unsigned int Dimension = 2;
   const unsigned int NumberOfPhases = 2;
+  const unsigned int NumberOfComponents = 2;
 
   typedef itk::Vector< float, NumberOfPhases >           LevelSetPixelType;
 
@@ -48,19 +49,27 @@ int main( int argc, char * argv [] )
   inputLevelSet->SetRegions( region );
   inputLevelSet->Allocate();
 
-  FunctionType::ScalarValueType curvatureWeight   = 10.0;
-  FunctionType::ScalarValueType propagationWeight = 10.0;
-  FunctionType::ScalarValueType advectionWeight   = 10.0;
+  // Set curvature weights.
+  FunctionType::MatrixValueType curvatureWeights( NumberOfPhases, NumberOfPhases );
+  curvatureWeights.SetIdentity();
+  curvatureWeights *= 10.0;
 
+  // Set Propagation weights
+  FunctionType::MatrixValueType propagationWeights( NumberOfPhases, NumberOfComponents );
+  propagationWeights.SetIdentity();
+  propagationWeights *= 10.0;
+
+  // Set Propagation weights
+  FunctionType::MatrixValueType advectionWeights( NumberOfPhases, NumberOfComponents );
+  advectionWeights.SetIdentity();
+  advectionWeights *= 10.0;
+  
   //
   // Test Set/GetCurvatureWeight()
-  //
-  // First set a trivial number
-  function->SetCurvatureWeight( 1.0 );
-  // Then set the real value
-  function->SetCurvatureWeight( curvatureWeight );
+  function->SetCurvatureWeights( curvatureWeights );
+
   // Then check if the value was stored correctly
-  if( function->GetCurvatureWeight() != curvatureWeight )
+  if( function->GetCurvatureWeights() != curvatureWeights )
     {
     std::cerr << "Error in SetCurvatureWeight()/GetCurvatureWeight() " << std::endl;
     return EXIT_FAILURE;
@@ -70,12 +79,9 @@ int main( int argc, char * argv [] )
   //
   // Test Set/GetPropagationWeight()
   //
-  // First set a trivial number
-  function->SetPropagationWeight( 1.0 );
-  // Then set the real value
-  function->SetPropagationWeight( propagationWeight );
+  function->SetPropagationWeights( propagationWeights );
   // Then check if the value was stored correctly
-  if( function->GetPropagationWeight() != propagationWeight )
+  if( function->GetPropagationWeights() != propagationWeights )
     {
     std::cerr << "Error in SetPropagationWeight()/GetPropagationWeight() " << std::endl;
     return EXIT_FAILURE;
@@ -85,12 +91,9 @@ int main( int argc, char * argv [] )
   //
   // Test Set/GetAdvectionWeight()
   //
-  // First set a trivial number
-  function->SetAdvectionWeight( 1.0 );
-  // Then set the real value
-  function->SetAdvectionWeight( advectionWeight );
+  function->SetAdvectionWeights( advectionWeights );
   // Then check if the value was stored correctly
-  if( function->GetAdvectionWeight() != advectionWeight )
+  if( function->GetAdvectionWeights() != advectionWeights )
     {
     std::cerr << "Error in SetAdvectionWeight()/GetAdvectionWeight() " << std::endl;
     return EXIT_FAILURE;
@@ -121,49 +124,33 @@ int main( int argc, char * argv [] )
   offset[0] = 0.0;
   offset[1] = 0.0;
 
-  for( unsigned int component = 0; component < NumberOfPhases; component++ )
+  for( unsigned int phase = 0; phase < NumberOfPhases; phase++ )
     {
-    double update        = function->ComputeUpdate( neigborhood, gds, component, offset );
-    VectorType advection = function->AdvectionField( neigborhood, offset, component, gds );
-    double speed = function->PropagationSpeed( neigborhood, offset, component, gds );
-    double curvature = function->CurvatureSpeed( neigborhood, offset, component, gds );
-    double laplacian = function->LaplacianSmoothingSpeed( neigborhood, offset, component, gds );
-    std::cout << component << " : " << update << " : " << advection << " : ";
+    double update        = function->ComputeUpdate( neigborhood, gds, phase, offset );
+    double advection = function->ComputeAdvectionTerms( neigborhood, offset, phase, gds );
+    double speed = function->ComputePropagationTerms( neigborhood, offset, phase, gds );
+    double curvature = function->ComputeCurvatureTerms( neigborhood, offset, phase, gds );
+    double laplacian = function->ComputeLaplacianTerms( neigborhood, offset, phase, gds );
+    std::cout << phase << " : " << update << " : " << advection << " : ";
     std::cout << speed << " : " << curvature <<  " : " << laplacian << std::endl;
     }
 
   // Now exercise the options of Minimal curvature.
   function->UseMinimalCurvatureOn();
 
-  for( unsigned int component = 0; component < NumberOfPhases; component++ )
+  for( unsigned int phase = 0; phase < NumberOfPhases; phase++ )
     {
-    double update        = function->ComputeUpdate( neigborhood, gds, component, offset );
-    VectorType advection = function->AdvectionField( neigborhood, offset, component, gds );
-    double speed = function->PropagationSpeed( neigborhood, offset, component, gds );
-    double curvature = function->CurvatureSpeed( neigborhood, offset, component, gds );
-    double laplacian = function->LaplacianSmoothingSpeed( neigborhood, offset, component, gds );
-    std::cout << component << " : " << update << " : " << advection << " : ";
+    double update        = function->ComputeUpdate( neigborhood, gds, phase, offset );
+    double advection = function->ComputeAdvectionTerms( neigborhood, offset, phase, gds );
+    double speed = function->ComputePropagationTerms( neigborhood, offset, phase, gds );
+    double curvature = function->ComputeCurvatureTerms( neigborhood, offset, phase, gds );
+    double laplacian = function->ComputeLaplacianTerms( neigborhood, offset, phase, gds );
+    std::cout << phase << " : " << update << " : " << advection << " : ";
     std::cout << speed << " : " << curvature <<  " : " << laplacian << std::endl;
-    }
-
-  //
-  // Exercise combinations of all weights being zero or non-zero
-  //
-  for(unsigned int weightCombination = 0; weightCombination < 8; weightCombination++ )
-    {
-    curvatureWeight   = 10.0 * ( weightCombination & 1 );
-    propagationWeight = 10.0 * ( weightCombination & 2 );
-    advectionWeight   = 10.0 * ( weightCombination & 4 );
-    function->SetCurvatureWeight( curvatureWeight );
-    function->SetPropagationWeight( propagationWeight );
-    function->SetAdvectionWeight( advectionWeight );
-    for( unsigned int component = 0; component < NumberOfPhases; component++ )
-      {
-      function->ComputeUpdate( neigborhood, gds, component, offset );
-      }
     }
 
   function->ReleaseGlobalDataPointer( gds );
 
   return EXIT_SUCCESS;
 }
+

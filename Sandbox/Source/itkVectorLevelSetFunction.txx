@@ -526,7 +526,7 @@ VectorLevelSetFunction< TImageType >
       }
     else
       {
-      for(i = 0; i< ImageDimension; i++)
+      for (unsigned int i = 0; i< ImageDimension; i++)
         {
         propagation_gradient +=
           vnl_math_sqr( vnl_math_min(gd->m_PhaseData[phase].m_dx_backward[i], ZERO) )
