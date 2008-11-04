@@ -78,18 +78,20 @@ public:
   virtual void ReleaseGlobalDataPointer(void *GlobalData) const =0;
 
   /** Set the number of components (number of speed images) */
-  itkSetMacro( NumberOfComponents, unsigned int );
-  itkGetMacro( NumberOfComponents, unsigned int );
+  virtual void SetNumberOfComponents( unsigned int n ) { m_NumberOfComponents = n; }
+  unsigned int GetNumberOfComponents() const { return m_NumberOfComponents; }
 
   /** Set the number of phases (number of level sets) */
-  itkSetMacro( NumberOfPhases, unsigned int );
-  itkGetMacro( NumberOfPhases, unsigned int );
+  virtual void SetNumberOfPhases( unsigned int n ) { m_NumberOfPhases = n; }
+  unsigned int GetNumberOfPhases() const { return m_NumberOfPhases; }
 
 protected:
   VectorFiniteDifferenceFunction();
   virtual ~VectorFiniteDifferenceFunction() {}
   void PrintSelf(std::ostream &s, Indent indent) const;
 
+  unsigned int m_NumberOfComponents;
+  unsigned int m_NumberOfPhases;
 
 private:
   VectorFiniteDifferenceFunction(const Self&); //purposely not implemented
@@ -104,10 +106,6 @@ private:
     {
     return itk::NumericTraits< PixelType >::ZeroValue();
     }
-
-  unsigned int m_NumberOfComponents;
-  unsigned int m_NumberOfPhases;
-
 };
 
 } // namespace itk

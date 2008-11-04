@@ -54,7 +54,8 @@ VectorLevelSetFunction<TImageType>
   // cuvature. FIXME check if this needs more weighting.
   curvature *= this->CurvatureSpeed( neighborhood, offset, phase );
 
-  gd->m_MaxCurvatureChange = vnl_math_max( gd->m_MaxCurvatureChange,
+  PhaseDataStruct *pd = &(gd->m_PhaseData[phase]);
+  pd->m_MaxCurvatureChange = vnl_math_max( pd->m_MaxCurvatureChange,
                                            vnl_math_abs(curvature) );
 
   return curvature;
@@ -99,8 +100,10 @@ VectorLevelSetFunction< TImageType >
   unsigned int phase,
   GlobalDataStruct *gd)
 {
+  PhaseDataStruct *pd = &(gd->m_PhaseData[phase]);
+
   unsigned int i, j, n;
-  ScalarValueType gradMag = vcl_sqrt(gd->m_GradMagSqr);
+  ScalarValueType gradMag = vcl_sqrt(pd->m_GradMagSqr);
   ScalarValueType Pgrad[ImageDimension][ImageDimension];
   ScalarValueType tmp_matrix[ImageDimension][ImageDimension];
   const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
@@ -111,10 +114,10 @@ VectorLevelSetFunction< TImageType >
 
   for (i = 0; i < ImageDimension; i++)
     {
-    Pgrad[i][i] = 1.0 - gd->m_dx[i] * gd->m_dx[i]/gradMag;
+    Pgrad[i][i] = 1.0 - pd->m_dx[i] * pd->m_dx[i]/gradMag;
     for (j = i+1; j < ImageDimension; j++)
       {
-      Pgrad[i][j]= gd->m_dx[i] * gd->m_dx[j]/gradMag;
+      Pgrad[i][j]= pd->m_dx[i] * pd->m_dx[j]/gradMag;
       Pgrad[j][i] = Pgrad[i][j];
       }
     }
@@ -127,7 +130,7 @@ VectorLevelSetFunction< TImageType >
       tmp_matrix[i][j]= ZERO;
       for (n = 0; n < ImageDimension; n++)
         {
-        tmp_matrix[i][j] += Pgrad[i][n] * gd->m_dxy[n][j];
+        tmp_matrix[i][j] += Pgrad[i][n] * pd->m_dxy[n][j];
         }
       tmp_matrix[j][i]=tmp_matrix[i][j];
       }
@@ -168,6 +171,8 @@ VectorLevelSetFunction<TImageType>::ComputeMeanCurvature(
   const NeighborhoodType &itkNotUsed(neighborhood),
   const FloatOffsetType &itkNotUsed(offset), unsigned int phase, GlobalDataStruct *gd)
 {
+  PhaseDataStruct *pd = &(gd->m_PhaseData[phase]);
+
   // Calculate the mean curvature
   ScalarValueType curvature_term = NumericTraits<ScalarValueType>::Zero;
   unsigned int i, j;
@@ -179,13 +184,13 @@ VectorLevelSetFunction<TImageType>::ComputeMeanCurvature(
       {
       if(j != i)
         {
-        curvature_term -= gd->m_dx[i] * gd->m_dx[j] * gd->m_dxy[i][j];
-        curvature_term += gd->m_dxy[j][j] * gd->m_dx[i] * gd->m_dx[i];
+        curvature_term -= pd->m_dx[i] * pd->m_dx[j] * pd->m_dxy[i][j];
+        curvature_term += pd->m_dxy[j][j] * pd->m_dx[i] * pd->m_dx[i];
         }
       }
     }
 
-  return (curvature_term / gd->m_GradMagSqr );
+  return (curvature_term / pd->m_GradMagSqr );
 }
 
 template <class TImageType>
@@ -229,9 +234,26 @@ typename VectorLevelSetFunction< TImageType >::TimeStepType
 VectorLevelSetFunction<TImageType>
 ::ComputeGlobalTimeStep(void *GlobalData) const
 {
-  TimeStepType dt;
+  // return the maximum of all the phases.
 
-  GlobalDataStruct *d = (GlobalDataStruct *)GlobalData;
+  TimeStepType dt = 0.0;
+  for (unsigned int i = 0 ; i < this->m_NumberOfPhases; i++)
+    {
+    double t = this->ComputeGlobalTimeStep( GlobalData, i );
+    dt = (dt > t) ? dt : t;
+    }
+  return dt;
+}
+
+template< class TImageType >
+typename VectorLevelSetFunction< TImageType >::TimeStepType
+VectorLevelSetFunction<TImageType>
+::ComputeGlobalTimeStep(void *GlobalData, unsigned int phase) const
+{
+  TimeStepType dt;
+  GlobalDataStruct *gd = (GlobalDataStruct *)GlobalData;
+
+  PhaseDataStruct *d = &(gd->m_PhaseData[phase]);
 
   d->m_MaxAdvectionChange += d->m_MaxPropagationChange;
 
@@ -301,13 +323,11 @@ VectorLevelSetFunction< TImageType >
                  unsigned int phase,
                  const FloatOffsetType& offset )
 {
-  unsigned int i, j;
-  const ScalarValueType ZERO = NumericTraits<ScalarValueType>::Zero;
+  unsigned int i;
   const PixelType center_value  = it.GetCenterPixel();
 
   m_NeighborhoodScales = this->ComputeNeighborhoodScales();
 
-  ScalarValueType laplacian;
   ScalarValueType laplacian_term;
   ScalarValueType propagation_term;
   ScalarValueType curvature_term;
@@ -377,7 +397,7 @@ VectorLevelSetFunction< TImageType >
                               GlobalDataStruct *gd )
 {
   // FIXME Could this could be computed outside this loop ?
-  const ScalarValueType center_value  = it.GetCenterPixel();
+  const PixelType center_value  = it.GetCenterPixel();
 
   // Compute the Hessian matrix and various other derivatives.  Some of these
   // derivatives may be used by overloaded virtual functions.
@@ -562,7 +582,7 @@ VectorLevelSetFunction< TImageType >
     {
 
     // Propagation weight due to interaction of phases: 'phase' and 'component'
-    ScalarValueType w = this->m_LaplacianWeights( phase, component );
+    ScalarValueType w = this->m_LaplacianSmoothingWeights( phase, component );
 
     if (w != ZERO)
       {

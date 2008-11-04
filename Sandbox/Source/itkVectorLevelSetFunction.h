@@ -174,24 +174,24 @@ public:
    *  NumberOfPhases (rows) x NumberOfComponents (cols) matrix.*/
   virtual void SetAdvectionWeights(const MatrixValueType & a)
     { m_AdvectionWeights = a; }
-  itkGetMacro( AdvectionWeights, MatrixValueType );
+  virtual MatrixValueType & GetAdvectionWeights() { return this->m_AdvectionWeights; }
 
   /** Beta.  Scales all propagation term values in each phase. */
   virtual void SetPropagationWeights(const MatrixValueType & c)
     { m_PropagationWeights = c; }
-  itkGetMacro( PropagationWeights,  MatrixValueType );
+  virtual MatrixValueType & GetPropagationWeights() { return this->m_PropagationWeights; }
 
   /** Gamma. Scales all curvature weight values. The number of weights supplied
    * is a matrix of size NPhases * NPhases. A diagonal matrix implies that
    * none of the phases interact with one another. */
   virtual void SetCurvatureWeights(const MatrixValueType & c)
     { m_CurvatureWeights = c; }
-  itkGetMacro( CurvatureWeights, MatrixValueType );
+  virtual MatrixValueType & GetCurvatureWeights() { return this->m_CurvatureWeights; }
 
   /** Weight of the laplacian smoothing term for each phase */
   void SetLaplacianSmoothingWeights(const MatrixValueType & c)
     { m_LaplacianSmoothingWeights = c; }
-  itkGetMacro( LaplacianSmoothingWeights, MatrixValueType );
+  virtual MatrixValueType & GetLaplacianSmoothingWeights() { return this->m_LaplacianSmoothingWeights; }
 
   /** Epsilon. */
   void SetEpsilonMagnitude(const ScalarValueType e)
@@ -212,6 +212,10 @@ public:
    * remain stateless for thread safety.  The global data is therefore managed
    * for each thread by the finite difference solver filters. */
   virtual TimeStepType ComputeGlobalTimeStep(void *GlobalData) const;
+
+  /** Computes the global time step for each phase */
+  virtual TimeStepType ComputeGlobalTimeStep(
+      void *GlobalData, unsigned int phase) const;
 
   /** Returns a pointer to a global data structure that is passed to this
    * object from the solver at each calculation.  The idea is that the solver
@@ -308,7 +312,7 @@ public:
       calculation.  Changing this value from the default is not recommended or
       necessary, but can be used to speed up the surface evolution at the risk
       of creating an unstable solution.*/
-  static void SetMaximumCurvatureTimeStep(double n)
+  static void SetMaximumCurvatureTimeStep( double n)
     {
     m_DT = n;
     }
@@ -321,7 +325,7 @@ public:
       calculation.  Changing this value from the default is not recommended or
       necessary, but can be used to speed up the surface evolution at the risk
       of creating an unstable solution.*/
-  static void SetMaximumPropagationTimeStep(double n)
+  static void SetMaximumPropagationTimeStep( double n)
     {
     m_WaveDT = n;
     }
@@ -400,7 +404,7 @@ private:
   // Cache the computation of neighborhood scales instead of computing them
   // for every phase. We assume that they are the same across phases.
   typedef typename NeighborhoodScalesType::ComponentType NeighborhoodScaleType;
-  NeighborhoodScaleType m_NeighborhoodScales;
+  NeighborhoodScalesType m_NeighborhoodScales;
 };
 
 } // namespace itk
