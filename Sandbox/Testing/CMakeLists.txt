@@ -92,6 +92,9 @@ TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest2 LesionSizingSandbox)
 ADD_EXECUTABLE(itkFeatureGeneratorTest1 itkFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkFeatureGeneratorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkCannyEdgesFeatureGeneratorTest1 itkCannyEdgesFeatureGeneratorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkCannyEdgesFeatureGeneratorTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 itkGradientMagnitudeSigmoidFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 LesionSizingSandbox)
 
@@ -130,6 +133,15 @@ ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   1.0
   -1.0
   5.0
+  )
+
+ADD_TEST(itkCannyEdgesFeatureGeneratorTest1 
+  ${CXX_TEST_PATH}/itkCannyEdgesFeatureGeneratorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/CannyEdgesFeatureGeneratorTest1_1.mhd
+  0.7 # Variance
+  150 # Upper hysteresis threshold
+  75  # Lower hysteresis threshold
   )
 
 ADD_TEST(itkSatoVesselnessFeatureGeneratorTest1 
