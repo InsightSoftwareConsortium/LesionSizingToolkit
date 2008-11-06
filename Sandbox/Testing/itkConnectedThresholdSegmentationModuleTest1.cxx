@@ -17,7 +17,6 @@
 #include "itkImage.h"
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
-#include "itkImageMaskSpatialObject.h"
 
 int main( int argc, char * argv [] )
 {

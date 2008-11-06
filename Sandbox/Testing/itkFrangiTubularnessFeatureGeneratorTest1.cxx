@@ -17,7 +17,6 @@
 #include "itkImage.h"
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
-#include "itkImageMaskSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 
