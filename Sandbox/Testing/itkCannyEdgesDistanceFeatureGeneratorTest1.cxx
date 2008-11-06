@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Lesion Sizing Toolkit
-  Module:    itkCannyEdgesFeatureGeneratorTest1.cxx
+  Module:    itkCannyEdgesDistanceFeatureGeneratorTest1.cxx
 
   Copyright (c) Kitware Inc. 
   All rights reserved.
@@ -13,7 +13,7 @@
 
 =========================================================================*/
 
-#include "itkCannyEdgesFeatureGenerator.h"
+#include "itkCannyEdgesDistanceFeatureGenerator.h"
 #include "itkImage.h"
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
@@ -57,10 +57,10 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  typedef itk::CannyEdgesFeatureGenerator< Dimension >   CannyEdgesFeatureGeneratorType;
-  typedef CannyEdgesFeatureGeneratorType::SpatialObjectType    SpatialObjectType;
+  typedef itk::CannyEdgesDistanceFeatureGenerator< Dimension >   CannyEdgesDistanceFeatureGeneratorType;
+  typedef CannyEdgesDistanceFeatureGeneratorType::SpatialObjectType    SpatialObjectType;
 
-  CannyEdgesFeatureGeneratorType::Pointer  featureGenerator = CannyEdgesFeatureGeneratorType::New();
+  CannyEdgesDistanceFeatureGeneratorType::Pointer  featureGenerator = CannyEdgesDistanceFeatureGeneratorType::New();
   
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();

@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    itkCannyEdgesFeatureGenerator.h
+  Module:    itkCannyEdgesDistanceFeatureGenerator.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkCannyEdgesFeatureGenerator_h
-#define __itkCannyEdgesFeatureGenerator_h
+#ifndef __itkCannyEdgesDistanceFeatureGenerator_h
+#define __itkCannyEdgesDistanceFeatureGenerator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"
@@ -27,7 +27,7 @@
 namespace itk
 {
 
-/** \class CannyEdgesFeatureGenerator
+/** \class CannyEdgesDistanceFeatureGenerator
  * \brief Generates a feature image by computing the distance map to the canny 
  * edges in the image.
  *
@@ -56,11 +56,11 @@ namespace itk
  * \ingroup SpatialObjectFilters
  */
 template <unsigned int NDimension>
-class ITK_EXPORT CannyEdgesFeatureGenerator : public FeatureGenerator<NDimension>
+class ITK_EXPORT CannyEdgesDistanceFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef CannyEdgesFeatureGenerator                        Self;
+  typedef CannyEdgesDistanceFeatureGenerator                        Self;
   typedef FeatureGenerator<NDimension>                      Superclass;
   typedef SmartPointer<Self>                                Pointer;
   typedef SmartPointer<const Self>                          ConstPointer;
@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CannyEdgesFeatureGenerator, FeatureGenerator);
+  itkTypeMacro(CannyEdgesDistanceFeatureGenerator, FeatureGenerator);
 
   /** Dimension of the space */
   itkStaticConstMacro(Dimension, unsigned int, NDimension);
@@ -98,8 +98,8 @@ public:
   itkGetMacro( LowerThreshold, double );
 
 protected:
-  CannyEdgesFeatureGenerator();
-  virtual ~CannyEdgesFeatureGenerator();
+  CannyEdgesDistanceFeatureGenerator();
+  virtual ~CannyEdgesDistanceFeatureGenerator();
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   /** Method invoked by the pipeline in order to trigger the computation of
@@ -107,7 +107,7 @@ protected:
   void  GenerateData ();
 
 private:
-  CannyEdgesFeatureGenerator(const Self&); //purposely not implemented
+  CannyEdgesDistanceFeatureGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   typedef float                                       InternalPixelType;
@@ -141,7 +141,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkCannyEdgesFeatureGenerator.txx"
+# include "itkCannyEdgesDistanceFeatureGenerator.txx"
 #endif
 
 #endif

@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    itkCannyEdgesFeatureGenerator.txx
+  Module:    itkCannyEdgesDistanceFeatureGenerator.txx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -14,10 +14,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkCannyEdgesFeatureGenerator_txx
-#define __itkCannyEdgesFeatureGenerator_txx
+#ifndef __itkCannyEdgesDistanceFeatureGenerator_txx
+#define __itkCannyEdgesDistanceFeatureGenerator_txx
 
-#include "itkCannyEdgesFeatureGenerator.h"
+#include "itkCannyEdgesDistanceFeatureGenerator.h"
 
 
 namespace itk
@@ -27,8 +27,8 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-CannyEdgesFeatureGenerator<NDimension>
-::CannyEdgesFeatureGenerator()
+CannyEdgesDistanceFeatureGenerator<NDimension>
+::CannyEdgesDistanceFeatureGenerator()
 {
   this->SetNumberOfRequiredInputs( 1 );
 
@@ -51,14 +51,14 @@ CannyEdgesFeatureGenerator<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-CannyEdgesFeatureGenerator<NDimension>
-::~CannyEdgesFeatureGenerator()
+CannyEdgesDistanceFeatureGenerator<NDimension>
+::~CannyEdgesDistanceFeatureGenerator()
 {
 }
 
 template <unsigned int NDimension>
 void
-CannyEdgesFeatureGenerator<NDimension>
+CannyEdgesDistanceFeatureGenerator<NDimension>
 ::SetInput( const SpatialObjectType * spatialObject )
 {
   // Process object is not const-correct so the const casting is required.
@@ -66,8 +66,8 @@ CannyEdgesFeatureGenerator<NDimension>
 }
 
 template <unsigned int NDimension>
-const typename CannyEdgesFeatureGenerator<NDimension>::SpatialObjectType *
-CannyEdgesFeatureGenerator<NDimension>
+const typename CannyEdgesDistanceFeatureGenerator<NDimension>::SpatialObjectType *
+CannyEdgesDistanceFeatureGenerator<NDimension>
 ::GetFeature() const
 {
   if (this->GetNumberOfOutputs() < 1)
@@ -85,7 +85,7 @@ CannyEdgesFeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-CannyEdgesFeatureGenerator<NDimension>
+CannyEdgesDistanceFeatureGenerator<NDimension>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
@@ -97,7 +97,7 @@ CannyEdgesFeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-CannyEdgesFeatureGenerator<NDimension>
+CannyEdgesDistanceFeatureGenerator<NDimension>
 ::GenerateData()
 {
   typename InputImageSpatialObjectType::ConstPointer inputObject =
