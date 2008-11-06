@@ -239,7 +239,7 @@ VectorLevelSetFunction<TImageType>
   // return the maximum of all the phases.
 
   TimeStepType dt = 0.0;
-  for (unsigned int i = 0 ; i < this->m_NumberOfPhases; i++)
+  for( unsigned int i = 0; i < this->m_NumberOfPhases; i++ )
     {
     double t = this->ComputeGlobalTimeStep( GlobalData, i );
     dt = (dt > t) ? dt : t;

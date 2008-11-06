@@ -142,4 +142,3 @@ CannyEdgesFeatureGenerator<NDimension>
 } // end namespace itk
 
 #endif
-

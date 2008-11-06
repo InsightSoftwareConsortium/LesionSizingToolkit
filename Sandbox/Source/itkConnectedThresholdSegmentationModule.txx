@@ -26,17 +26,17 @@ namespace itk
 template < class TPixel, unsigned int NDimension, class TOutputImage >
 class ConnectedThresholdIntantiator
 {
-  public:
-    typedef itk::Image< TPixel, NDimension >        InputImageType;
-    typedef itk::ConnectedThresholdImageFilter<
-      InputImageType, TOutputImage >                FilterType;
+public:
+  typedef itk::Image< TPixel, NDimension >        InputImageType;
+  typedef itk::ConnectedThresholdImageFilter<
+    InputImageType, TOutputImage >                FilterType;
 
-    typedef itk::SpatialObject< NDimension >        SpatialObjectType;
+  typedef itk::SpatialObject< NDimension >        SpatialObjectType;
 
-    typedef TOutputImage                            OutputImageType;
+  typedef TOutputImage                            OutputImageType;
 
-    static void Execute(const SpatialObjectType * input, 
-    const SpatialObjectType * feature, SpatialObjectType * output )
+  static void Execute(const SpatialObjectType * input, 
+  const SpatialObjectType * feature, SpatialObjectType * output )
     {
     typename FilterType::Pointer filter = FilterType::New();
     filter->Update();
@@ -93,9 +93,7 @@ void
 ConnectedThresholdSegmentationModule<NDimension>
 ::GenerateData()
 {
-  {
   InstantiatorMacro( unsigned char );
-  }
 }
 
 } // end namespace itk
