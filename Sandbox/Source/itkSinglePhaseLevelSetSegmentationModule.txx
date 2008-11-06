@@ -109,7 +109,6 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
 }
 
 
-
 /**
  * This method is intended to be used only by the subclasses to insert the
  * output image as cargo of the output spatial object.
