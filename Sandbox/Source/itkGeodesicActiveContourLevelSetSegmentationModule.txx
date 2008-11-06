@@ -67,11 +67,11 @@ void
 GeodesicActiveContourLevelSetSegmentationModule<NDimension>
 ::GenerateData()
 {
-  const InputSpatialObjectType * inputObject = NULL;
-//    dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
+  const InputSpatialObjectType * inputObject =
+    dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
 
-  const FeatureSpatialObjectType * featureObject = NULL;
-//    dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
+  const FeatureSpatialObjectType * featureObject =
+    dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
 
 
   const InputImageType * inputImage = inputObject->GetImage();
