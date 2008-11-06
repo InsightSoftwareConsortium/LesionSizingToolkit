@@ -60,7 +60,7 @@ class ITK_EXPORT CannyEdgesDistanceFeatureGenerator : public FeatureGenerator<ND
 {
 public:
   /** Standard class typedefs. */
-  typedef CannyEdgesDistanceFeatureGenerator                        Self;
+  typedef CannyEdgesDistanceFeatureGenerator                Self;
   typedef FeatureGenerator<NDimension>                      Superclass;
   typedef SmartPointer<Self>                                Pointer;
   typedef SmartPointer<const Self>                          ConstPointer;
