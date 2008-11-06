@@ -92,6 +92,11 @@ GeodesicActiveContourLevelSetSegmentationModule<NDimension>
   typename OutputImageType::Pointer outputImage = filter->GetOutput();
 
   outputImage->DisconnectPipeline();
+
+  OutputSpatialObjectType * outputObject =
+    dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+
+  outputObject->SetImage( outputImage );
 }
 
 } // end namespace itk
