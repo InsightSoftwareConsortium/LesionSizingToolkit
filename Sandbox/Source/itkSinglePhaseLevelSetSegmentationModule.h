@@ -67,6 +67,27 @@ public:
   typedef itk::ImageSpatialObject< NDimension, FeaturePixelType >   FeatureSpatialObjectType;
   typedef itk::ImageSpatialObject< NDimension, OutputPixelType >    OutputSpatialObjectType;
 
+  /** Weight that controls the propagating behavior of the level set. */
+  itkSetMacro( PropagationScaling, double );
+  itkGetMacro( PropagationScaling, double );
+
+  /** Weight that controls the behavior of curvature restriction in the
+   * level set. */
+  itkSetMacro( CurvatureScaling, double );
+  itkGetMacro( CurvatureScaling, double );
+
+  /** Weight that controls the behavior of the level set. */
+  itkSetMacro( AdvectionScaling, double );
+  itkGetMacro( AdvectionScaling, double );
+
+  /** Value of RMS change under which the level set propagation will
+   * stop. */
+  itkSetMacro( MaximumRMSError, double );
+  itkGetMacro( MaximumRMSError, double );
+
+  /** Maximum number of iterations that the level set solve will run. */
+  itkSetMacro( MaximumNumberOfIterations, unsigned int );
+  itkGetMacro( MaximumNumberOfIterations, unsigned int );
 
 protected:
   SinglePhaseLevelSetSegmentationModule();
@@ -81,6 +102,12 @@ private:
   SinglePhaseLevelSetSegmentationModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  double        m_PropagationScaling;
+  double        m_CurvatureScaling;
+  double        m_AdvectionScaling;
+
+  unsigned int  m_MaximumNumberOfIterations;
+  double        m_MaximumRMSError;
 };
 
 } // end namespace itk

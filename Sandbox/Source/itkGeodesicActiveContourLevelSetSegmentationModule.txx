@@ -85,11 +85,11 @@ GeodesicActiveContourLevelSetSegmentationModule<NDimension>
   filter->SetInput( inputImage );
   filter->SetFeatureImage( featureImage );
 
-  filter->SetMaximumRMSError( 0.01 );
-  filter->SetNumberOfIterations( 90 );
-  filter->SetPropagationScaling( 100.0 );
-  filter->SetCurvatureScaling( 75.0 );
-  filter->SetAdvectionScaling( 1.0 );
+  filter->SetMaximumRMSError( this->GetMaximumRMSError() );
+  filter->SetNumberOfIterations( this->GetMaximumNumberOfIterations() );
+  filter->SetPropagationScaling( this->GetPropagationScaling() );
+  filter->SetCurvatureScaling( this->GetCurvatureScaling() );
+  filter->SetAdvectionScaling( this->GetAdvectionScaling() );
 
   filter->Update();
 

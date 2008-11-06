@@ -36,6 +36,13 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
   typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+
+  this->m_MaximumNumberOfIterations = 100;
+  this->m_MaximumRMSError = 0.01;
+
+  this->m_AdvectionScaling = 1.0;
+  this->m_CurvatureScaling = 75.0;
+  this->m_PropagationScaling = 100.0;
 }
 
 
