@@ -1,6 +1,6 @@
 
 SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
-SET(TEST_DATA_ROOT ${LesionSizingKitSandbox_SOURCE_DIR}/../Data/)
+SET(TEST_DATA_ROOT ${LesionSizingKitSandbox_SOURCE_DIR}/../Data)
 SET(TEMP ${LesionSizingKitSandbox_BINARY_DIR}/Testing/Temporary)
 
 FIND_PATH(TEST_CORNELL_DATA_ROOT README.txt DOC "Directory with data from the Cornell ELCAP database")
@@ -135,7 +135,7 @@ ADD_TEST(itkConnectedThresholdSegmentationModuleTest1 ${CXX_TEST_PATH}/itkConnec
 
 ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
-  ${TEST_DATA_ROOT}/Input/DataCropped.mha
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
   1.0
   -1.0
@@ -153,7 +153,7 @@ ADD_TEST(itkCannyEdgesDistanceFeatureGeneratorTest1
 
 ADD_TEST(itkSatoVesselnessFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
-  ${TEST_DATA_ROOT}/Input/DataCropped.mha
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/SatoVesselnessFeatureGeneratorTest1_1.mhd
   1.0
   0.5
@@ -162,7 +162,7 @@ ADD_TEST(itkSatoVesselnessFeatureGeneratorTest1
 
 ADD_TEST(itkSatoLocalStructureFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
-  ${TEST_DATA_ROOT}/Input/DataCropped.mha
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/SatoLocalStructureFeatureGeneratorTest1_1.mhd
   1.0
   0.5
@@ -171,7 +171,7 @@ ADD_TEST(itkSatoLocalStructureFeatureGeneratorTest1
 
 ADD_TEST(itkDescoteauxSheetnessFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
-  ${TEST_DATA_ROOT}/Input/DataCropped.mha
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/DescoteauxSheetnessFeatureGeneratorTest1_1.mhd
   1.0
   0.5
@@ -180,7 +180,7 @@ ADD_TEST(itkDescoteauxSheetnessFeatureGeneratorTest1
 
 ADD_TEST(itkFrangiTubularnessFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkFrangiTubularnessFeatureGeneratorTest1
-  ${TEST_DATA_ROOT}/Input/DataCropped.mha
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/FrangiTubularnessFeatureGeneratorTest1_1.mhd
   1.0
   0.5
@@ -189,6 +189,8 @@ ADD_TEST(itkFrangiTubularnessFeatureGeneratorTest1
 
 ADD_TEST(itkGeodesicActiveContourLevelSetSegmentationModuleTest1 
   ${CXX_TEST_PATH}/itkGeodesicActiveContourLevelSetSegmentationModuleTest1 
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedManualInitialization1.mha
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
   )
 
