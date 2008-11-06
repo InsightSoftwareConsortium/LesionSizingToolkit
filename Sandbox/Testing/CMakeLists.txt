@@ -137,9 +137,9 @@ ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
-  1.0
-  -1.0
-  5.0
+  1.2
+  -10.0
+  90.0
   )
 
 ADD_TEST(itkCannyEdgesDistanceFeatureGeneratorTest1 
@@ -189,9 +189,9 @@ ADD_TEST(itkFrangiTubularnessFeatureGeneratorTest1
 
 ADD_TEST(itkGeodesicActiveContourLevelSetSegmentationModuleTest1 
   ${CXX_TEST_PATH}/itkGeodesicActiveContourLevelSetSegmentationModuleTest1 
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedManualInitialization1.mha
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
+  ${TEMP}/GeodesicActiveContourLevelSetSegmentationModuleTest1_1.mhd
   )
 
 IF(TEST_CORNELL_DATA_ROOT)
