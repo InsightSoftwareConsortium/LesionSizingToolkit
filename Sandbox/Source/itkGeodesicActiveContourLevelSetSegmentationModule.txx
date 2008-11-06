@@ -87,7 +87,21 @@ GeodesicActiveContourLevelSetSegmentationModule<NDimension>
   filter->SetInput( inputImage );
   filter->SetFeatureImage( featureImage );
 
+  filter->SetMaximumRMSError( 0.01 );
+  filter->SetNumberOfIterations( 90 );
+  filter->SetPropagationScaling( 100.0 );
+  filter->SetCurvatureScaling( 75.0 );
+  filter->SetAdvectionScaling( 1.0 );
+
   filter->Update();
+
+  std::cout << std::endl;
+  std::cout << "Max. no. iterations: " << filter->GetNumberOfIterations() << std::endl;
+  std::cout << "Max. RMS error: " << filter->GetMaximumRMSError() << std::endl;
+  std::cout << std::endl;
+  std::cout << "No. elpased iterations: " << filter->GetElapsedIterations() << std::endl;
+  std::cout << "RMS change: " << filter->GetRMSChange() << std::endl;
+
 
   typename OutputImageType::Pointer outputImage = filter->GetOutput();
 

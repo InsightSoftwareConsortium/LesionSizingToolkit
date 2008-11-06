@@ -26,7 +26,7 @@ int main( int argc, char * argv [] )
   if( argc < 3 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage " << std::endl;
+    std::cerr << argv[0] << " inputImage featureImage outputImage " << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -34,24 +34,70 @@ int main( int argc, char * argv [] )
   const unsigned int Dimension = 3;
 
   typedef itk::GeodesicActiveContourLevelSetSegmentationModule< Dimension >   SegmentationModuleType;
-  typedef SegmentationModuleType::SpatialObjectType    SpatialObjectType;
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
   
-  typedef itk::ImageSpatialObject< Dimension > ImageSpatialObjectType;
+  typedef SegmentationModuleType::InputImageType       InputImageType;
+  typedef SegmentationModuleType::FeatureImageType     FeatureImageType;
 
-  ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
+  typedef itk::ImageFileReader< InputImageType >       InputReaderType;
+  typedef itk::ImageFileReader< FeatureImageType >     FeatureReaderType;
+
+  InputReaderType::Pointer inputReader = InputReaderType::New();
+  FeatureReaderType::Pointer featureReader = FeatureReaderType::New();
+
+  inputReader->SetFileName( argv[1] );
+  featureReader->SetFileName( argv[2] );
+
+  try 
+    {
+    inputReader->Update();
+    featureReader->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
+
+
+  typedef SegmentationModuleType::InputSpatialObjectType          InputSpatialObjectType;
+  typedef SegmentationModuleType::FeatureSpatialObjectType        FeatureSpatialObjectType;
+  typedef SegmentationModuleType::OutputSpatialObjectType         OutputSpatialObjectType;
+  typedef SegmentationModuleType::OutputImageType                 OutputImageType;
+
+  InputSpatialObjectType::Pointer inputObject = InputSpatialObjectType::New();
+  FeatureSpatialObjectType::Pointer featureObject = FeatureSpatialObjectType::New();
+
+  inputObject->SetImage( inputReader->GetOutput() );
+  featureObject->SetImage( featureReader->GetOutput() );
 
   segmentationModule->SetInput( inputObject );
-
-  ImageSpatialObjectType::Pointer featureObject = ImageSpatialObjectType::New();
-
   segmentationModule->SetFeature( featureObject );
-
 
   segmentationModule->Update();
 
-  SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
+  OutputSpatialObjectType::ConstPointer outputObject = 
+    dynamic_cast< const OutputSpatialObjectType * >( segmentationModule->GetOutput() );
+
+  OutputImageType::ConstPointer outputImage = outputObject->GetImage();
+
+  typedef itk::ImageFileWriter< OutputImageType >  WriterType;
+  WriterType::Pointer writer = WriterType::New();
+
+  writer->SetFileName( argv[3] );
+  writer->SetInput( outputImage );
+
+  try 
+    {
+    writer->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
+
 
   segmentationModule->Print( std::cout );
 
