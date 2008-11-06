@@ -32,8 +32,6 @@ template <unsigned int NDimension>
 GeodesicActiveContourLevelSetSegmentationModule<NDimension>
 ::GeodesicActiveContourLevelSetSegmentationModule()
 {
-  this->SetNumberOfRequiredInputs( 2 );
-  this->SetNumberOfRequiredOutputs( 1 );
 }
 
 

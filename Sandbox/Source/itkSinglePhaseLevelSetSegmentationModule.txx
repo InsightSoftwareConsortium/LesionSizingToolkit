@@ -30,7 +30,12 @@ template <unsigned int NDimension>
 SinglePhaseLevelSetSegmentationModule<NDimension>
 ::SinglePhaseLevelSetSegmentationModule()
 {
+  this->SetNumberOfRequiredInputs( 2 );
   this->SetNumberOfRequiredOutputs( 1 );
+
+  typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
+
+  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
 }
 
 

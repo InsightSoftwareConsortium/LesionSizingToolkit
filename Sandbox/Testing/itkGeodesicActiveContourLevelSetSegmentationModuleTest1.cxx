@@ -39,9 +39,11 @@ int main( int argc, char * argv [] )
   
   typedef SegmentationModuleType::InputImageType       InputImageType;
   typedef SegmentationModuleType::FeatureImageType     FeatureImageType;
+  typedef SegmentationModuleType::OutputImageType      OutputImageType;
 
   typedef itk::ImageFileReader< InputImageType >       InputReaderType;
   typedef itk::ImageFileReader< FeatureImageType >     FeatureReaderType;
+  typedef itk::ImageFileWriter< OutputImageType >      WriterType;
 
   InputReaderType::Pointer inputReader = InputReaderType::New();
   FeatureReaderType::Pointer featureReader = FeatureReaderType::New();
@@ -64,7 +66,6 @@ int main( int argc, char * argv [] )
   typedef SegmentationModuleType::InputSpatialObjectType          InputSpatialObjectType;
   typedef SegmentationModuleType::FeatureSpatialObjectType        FeatureSpatialObjectType;
   typedef SegmentationModuleType::OutputSpatialObjectType         OutputSpatialObjectType;
-  typedef SegmentationModuleType::OutputImageType                 OutputImageType;
 
   InputSpatialObjectType::Pointer inputObject = InputSpatialObjectType::New();
   FeatureSpatialObjectType::Pointer featureObject = FeatureSpatialObjectType::New();
@@ -77,12 +78,14 @@ int main( int argc, char * argv [] )
 
   segmentationModule->Update();
 
+  typedef SegmentationModuleType::SpatialObjectType    SpatialObjectType;
+  SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
+
   OutputSpatialObjectType::ConstPointer outputObject = 
-    dynamic_cast< const OutputSpatialObjectType * >( segmentationModule->GetOutput() );
+    dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
-  typedef itk::ImageFileWriter< OutputImageType >  WriterType;
   WriterType::Pointer writer = WriterType::New();
 
   writer->SetFileName( argv[3] );

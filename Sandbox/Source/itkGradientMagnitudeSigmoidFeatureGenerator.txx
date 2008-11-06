@@ -31,6 +31,7 @@ GradientMagnitudeSigmoidFeatureGenerator<NDimension>
 ::GradientMagnitudeSigmoidFeatureGenerator()
 {
   this->SetNumberOfRequiredInputs( 1 );
+  this->SetNumberOfRequiredOutputs( 1 );
 
   this->m_GradientFilter = GradientFilterType::New();
   this->m_SigmoidFilter = SigmoidFilterType::New();
