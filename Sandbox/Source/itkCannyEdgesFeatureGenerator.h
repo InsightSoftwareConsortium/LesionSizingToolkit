@@ -22,7 +22,7 @@
 #include "itkImageSpatialObject.h"
 #include "itkCastImageFilter.h"
 #include "itkCannyEdgeDetectionImageFilter.h"
-#include "itkDanielssonDistanceMapImageFilter.h"
+#include "itkSignedMaurerDistanceMapImageFilter.h"
 
 namespace itk
 {
@@ -60,7 +60,7 @@ class ITK_EXPORT CannyEdgesFeatureGenerator : public FeatureGenerator<NDimension
 {
 public:
   /** Standard class typedefs. */
-  typedef CannyEdgesFeatureGenerator          Self;
+  typedef CannyEdgesFeatureGenerator                        Self;
   typedef FeatureGenerator<NDimension>                      Superclass;
   typedef SmartPointer<Self>                                Pointer;
   typedef SmartPointer<const Self>                          ConstPointer;
@@ -125,7 +125,7 @@ private:
     InternalImageType, InternalImageType >            CannyEdgeFilterType;
   typedef typename CannyEdgeFilterType::Pointer       CannyEdgeFilterPointer;
 
-  typedef DanielssonDistanceMapImageFilter<
+  typedef SignedMaurerDistanceMapImageFilter<
     InternalImageType, InternalImageType >            DistanceMapFilterType;
   typedef typename DistanceMapFilterType::Pointer     DistanceMapFilterPointer;
 
