@@ -17,9 +17,20 @@
 #include "itkImage.h"
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
+#include "itkImageFileReader.h"
+#include "itkImageFileWriter.h"
 
 int main( int argc, char * argv [] )
 {
+
+  if( argc < 3 )
+    {
+    std::cerr << "Missing Arguments" << std::endl;
+    std::cerr << argv[0] << " inputImage outputImage " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+
   const unsigned int Dimension = 3;
 
   typedef itk::GeodesicActiveContourLevelSetSegmentationModule< Dimension >   SegmentationModuleType;

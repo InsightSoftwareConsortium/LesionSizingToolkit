@@ -37,10 +37,10 @@ class ITK_EXPORT GeodesicActiveContourLevelSetSegmentationModule :
 {
 public:
   /** Standard class typedefs. */
-  typedef GeodesicActiveContourLevelSetSegmentationModule              Self;
+  typedef GeodesicActiveContourLevelSetSegmentationModule         Self;
   typedef SinglePhaseLevelSetSegmentationModule<NDimension>       Superclass;
-  typedef SmartPointer<Self>                                Pointer;
-  typedef SmartPointer<const Self>                          ConstPointer;
+  typedef SmartPointer<Self>                                      Pointer;
+  typedef SmartPointer<const Self>                                ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -56,6 +56,16 @@ public:
   typedef typename Superclass::SpatialObjectType         SpatialObjectType;
   typedef typename Superclass::SpatialObjectPointer      SpatialObjectPointer;
 
+  /** Types of images and spatial objects inherited from the superclass. */
+  typedef typename Superclass::OutputPixelType           OutputPixelType;
+  typedef typename Superclass::InputImageType            InputImageType;
+  typedef typename Superclass::FeatureImageType          FeatureImageType;
+  typedef typename Superclass::OutputImageType           OutputImageType;
+  typedef typename Superclass::InputSpatialObjectType    InputSpatialObjectType;
+  typedef typename Superclass::FeatureSpatialObjectType  FeatureSpatialObjectType;
+  typedef typename Superclass::OutputSpatialObjectType   OutputSpatialObjectType;
+
+
 protected:
   GeodesicActiveContourLevelSetSegmentationModule();
   virtual ~GeodesicActiveContourLevelSetSegmentationModule();
@@ -64,9 +74,6 @@ protected:
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
   void  GenerateData ();
-
-  /** Type of the output image */
-  typedef typename Superclass::OutputImageType        OutputImageType;
 
 private:
   GeodesicActiveContourLevelSetSegmentationModule(const Self&); //purposely not implemented

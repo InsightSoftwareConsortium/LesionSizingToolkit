@@ -18,6 +18,7 @@
 #define __itkSinglePhaseLevelSetSegmentationModule_h
 
 #include "itkSegmentationModule.h"
+#include "itkImageSpatialObject.h"
 
 namespace itk
 {
@@ -53,6 +54,20 @@ public:
   typedef typename Superclass::SpatialObjectType         SpatialObjectType;
   typedef typename Superclass::SpatialObjectPointer      SpatialObjectPointer;
 
+  /** Types of the input, feature and output images. */
+  typedef float                                         InputPixelType;
+  typedef float                                         FeaturePixelType;
+  typedef float                                         OutputPixelType;
+  typedef itk::Image< InputPixelType, NDimension >      InputImageType;
+  typedef itk::Image< FeaturePixelType, NDimension >    FeatureImageType;
+  typedef itk::Image< OutputPixelType, NDimension >     OutputImageType;
+
+  /** Types of the Spatial objects used for input, feature and output images. */
+  typedef itk::ImageSpatialObject< NDimension, InputPixelType >     InputSpatialObjectType;
+  typedef itk::ImageSpatialObject< NDimension, FeaturePixelType >   FeatureSpatialObjectType;
+  typedef itk::ImageSpatialObject< NDimension, OutputPixelType >    OutputSpatialObjectType;
+
+
 protected:
   SinglePhaseLevelSetSegmentationModule();
   virtual ~SinglePhaseLevelSetSegmentationModule();
@@ -61,10 +76,6 @@ protected:
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
   void  GenerateData ();
-
-  /** Type of the output image */
-  typedef unsigned char                                 OutputPixelType;
-  typedef itk::Image< OutputPixelType, NDimension >     OutputImageType;
 
 private:
   SinglePhaseLevelSetSegmentationModule(const Self&); //purposely not implemented

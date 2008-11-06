@@ -67,18 +67,15 @@ void
 GeodesicActiveContourLevelSetSegmentationModule<NDimension>
 ::GenerateData()
 {
-  const SpatialObjectType * input = this->GetInput();
-  const SpatialObjectType * featue = this->GetFeature();
+  const InputSpatialObjectType * inputObject = NULL;
+//    dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
 
-  //  this->GetInternalOutput();
+  const FeatureSpatialObjectType * featureObject = NULL;
+//    dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
 
-  typedef float                                         InputPixelType;
-  typedef float                                         FeaturePixelType;
-  typedef float                                         OutputPixelType;
 
-  typedef itk::Image< InputPixelType, NDimension >      InputImageType;
-  typedef itk::Image< FeaturePixelType, NDimension >    FeatureImageType;
-  typedef itk::Image< OutputPixelType, NDimension >     OutputImageType;
+  const InputImageType * inputImage = inputObject->GetImage();
+  const FeatureImageType * featureImage = featureObject->GetImage();
 
   typedef itk::GeodesicActiveContourLevelSetImageFilter<
     InputImageType, FeatureImageType, OutputPixelType > FilterType;
@@ -87,6 +84,8 @@ GeodesicActiveContourLevelSetSegmentationModule<NDimension>
 
   typename FilterType::Pointer filter = FilterType::New();
 
+  filter->SetInput( inputImage );
+  filter->SetFeatureImage( featureImage );
 
   filter->Update();
 

@@ -132,7 +132,6 @@ ADD_TEST(itkSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSegmentationModuleTest1 
 ADD_TEST(itkRegionGrowingSegmentationModuleTest1 ${CXX_TEST_PATH}/itkRegionGrowingSegmentationModuleTest1 )
 ADD_TEST(itkSinglePhaseLevelSetSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSinglePhaseLevelSetSegmentationModuleTest1 )
 ADD_TEST(itkConnectedThresholdSegmentationModuleTest1 ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1 )
-ADD_TEST(itkGeodesicActiveContourLevelSetSegmentationModuleTest1 ${CXX_TEST_PATH}/itkGeodesicActiveContourLevelSetSegmentationModuleTest1 )
 
 ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
@@ -186,6 +185,11 @@ ADD_TEST(itkFrangiTubularnessFeatureGeneratorTest1
   1.0
   0.5
   2.0
+  )
+
+ADD_TEST(itkGeodesicActiveContourLevelSetSegmentationModuleTest1 
+  ${CXX_TEST_PATH}/itkGeodesicActiveContourLevelSetSegmentationModuleTest1 
+  ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
   )
 
 IF(TEST_CORNELL_DATA_ROOT)
