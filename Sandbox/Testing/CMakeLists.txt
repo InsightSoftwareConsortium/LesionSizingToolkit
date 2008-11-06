@@ -125,6 +125,9 @@ TARGET_LINK_LIBRARIES(itkConnectedThresholdSegmentationModuleTest1 LesionSizingS
 ADD_EXECUTABLE(itkGeodesicActiveContourLevelSetSegmentationModuleTest1 itkGeodesicActiveContourLevelSetSegmentationModuleTest1.cxx )
 TARGET_LINK_LIBRARIES(itkGeodesicActiveContourLevelSetSegmentationModuleTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkShapeDetectionLevelSetSegmentationModuleTest1 itkShapeDetectionLevelSetSegmentationModuleTest1.cxx )
+TARGET_LINK_LIBRARIES(itkShapeDetectionLevelSetSegmentationModuleTest1 LesionSizingSandbox)
+
 ADD_TEST(itkLesionSegmentationMethodTest1 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest1 )
 ADD_TEST(itkLesionSegmentationMethodTest2 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest2 )
 ADD_TEST(itkFeatureGeneratorTest1 ${CXX_TEST_PATH}/itkFeatureGeneratorTest1 )
@@ -193,6 +196,14 @@ ADD_TEST(itkGeodesicActiveContourLevelSetSegmentationModuleTest1
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
   ${TEMP}/GeodesicActiveContourLevelSetSegmentationModuleTest1_1.mhd
   )
+
+ADD_TEST(itkShapeDetectionLevelSetSegmentationModuleTest1 
+  ${CXX_TEST_PATH}/itkShapeDetectionLevelSetSegmentationModuleTest1 
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedManualInitialization1.mha
+  ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
+  ${TEMP}/ShapeDetectionLevelSetSegmentationModuleTest1_1.mhd
+  )
+
 
 IF(TEST_CORNELL_DATA_ROOT)
 
