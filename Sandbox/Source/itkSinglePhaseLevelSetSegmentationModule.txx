@@ -65,6 +65,11 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
+  os << indent << "PropagationScaling = " << this->m_PropagationScaling << std::endl;
+  os << indent << "CurvatureScaling = " << this->m_CurvatureScaling << std::endl;
+  os << indent << "AdvectionScaling = " << this->m_AdvectionScaling << std::endl;
+  os << indent << "MaximumRMSError = " << this->m_MaximumRMSError << std::endl;
+  os << indent << "MaximumNumberOfIterations = " << this->m_MaximumNumberOfIterations << std::endl;
 }
 
 
