@@ -98,6 +98,15 @@ protected:
    * the segmentation. */
   void  GenerateData ();
 
+  /** Set the output image as cargo of the output SpatialObject. */
+  void PackOutputImageInOutputSpatialObject( OutputImageType * outputImage );
+
+  /** Extract the input image from the input spatial object. */
+  const InputImageType * GetInternalInputImage() const;
+
+  /** Extract the input feature image from the input feature spatial object. */
+  const FeatureImageType * GetInternalFeatureImage() const;
+
 private:
   SinglePhaseLevelSetSegmentationModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

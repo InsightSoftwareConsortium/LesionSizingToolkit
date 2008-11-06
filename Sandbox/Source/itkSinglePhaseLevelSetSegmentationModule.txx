@@ -74,6 +74,63 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
 
 
 /**
+ * This method is intended to be used only by the subclasses to extract the
+ * input image from the input SpatialObject.
+ */
+template <unsigned int NDimension>
+const typename SinglePhaseLevelSetSegmentationModule<NDimension>::InputImageType *
+SinglePhaseLevelSetSegmentationModule<NDimension>
+::GetInternalInputImage() const
+{
+  const InputSpatialObjectType * inputObject =
+    dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
+
+  const InputImageType * inputImage = inputObject->GetImage();
+
+  return inputImage;
+}
+
+
+/**
+ * This method is intended to be used only by the subclasses to extract the
+ * input feature image from the input feature SpatialObject.
+ */
+template <unsigned int NDimension>
+const typename SinglePhaseLevelSetSegmentationModule<NDimension>::FeatureImageType *
+SinglePhaseLevelSetSegmentationModule<NDimension>
+::GetInternalFeatureImage() const
+{
+  const FeatureSpatialObjectType * featureObject =
+    dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
+
+  const FeatureImageType * featureImage = featureObject->GetImage();
+
+  return featureImage;
+}
+
+
+
+/**
+ * This method is intended to be used only by the subclasses to insert the
+ * output image as cargo of the output spatial object.
+ */
+template <unsigned int NDimension>
+void
+SinglePhaseLevelSetSegmentationModule<NDimension>
+::PackOutputImageInOutputSpatialObject( OutputImageType * image )
+{
+  typename OutputImageType::Pointer outputImage = image;
+
+  outputImage->DisconnectPipeline();
+
+  OutputSpatialObjectType * outputObject =
+    dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+
+  outputObject->SetImage( outputImage );
+}
+
+
+/**
  * Generate Data
  */
 template <unsigned int NDimension>

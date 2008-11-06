@@ -65,25 +65,13 @@ void
 ShapeDetectionLevelSetSegmentationModule<NDimension>
 ::GenerateData()
 {
-  const InputSpatialObjectType * inputObject =
-    dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
-
-  const FeatureSpatialObjectType * featureObject =
-    dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
-
-
-  const InputImageType * inputImage = inputObject->GetImage();
-  const FeatureImageType * featureImage = featureObject->GetImage();
-
   typedef itk::ShapeDetectionLevelSetImageFilter<
     InputImageType, FeatureImageType, OutputPixelType > FilterType;
 
-  typedef itk::SpatialObject< NDimension >        SpatialObjectType;
-
   typename FilterType::Pointer filter = FilterType::New();
 
-  filter->SetInput( inputImage );
-  filter->SetFeatureImage( featureImage );
+  filter->SetInput( this->GetInternalInputImage() );
+  filter->SetFeatureImage( this->GetInternalFeatureImage() );
 
   filter->SetMaximumRMSError( this->GetMaximumRMSError() );
   filter->SetNumberOfIterations( this->GetMaximumNumberOfIterations() );
@@ -101,14 +89,7 @@ ShapeDetectionLevelSetSegmentationModule<NDimension>
   std::cout << "RMS change: " << filter->GetRMSChange() << std::endl;
 
 
-  typename OutputImageType::Pointer outputImage = filter->GetOutput();
-
-  outputImage->DisconnectPipeline();
-
-  OutputSpatialObjectType * outputObject =
-    dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
-
-  outputObject->SetImage( outputImage );
+  this->PackOutputImageInOutputSpatialObject( filter->GetOutput() );
 }
 
 } // end namespace itk
