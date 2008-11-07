@@ -95,6 +95,9 @@ TARGET_LINK_LIBRARIES(itkFeatureGeneratorTest1 LesionSizingSandbox)
 ADD_EXECUTABLE(itkCannyEdgesDistanceFeatureGeneratorTest1 itkCannyEdgesDistanceFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkCannyEdgesDistanceFeatureGeneratorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1 itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 itkGradientMagnitudeSigmoidFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 LesionSizingSandbox)
 
@@ -149,6 +152,15 @@ ADD_TEST(itkCannyEdgesDistanceFeatureGeneratorTest1
   ${CXX_TEST_PATH}/itkCannyEdgesDistanceFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/CannyEdgesDistanceFeatureGeneratorTest1_1.mhd
+  0.7 # Variance
+  150 # Upper hysteresis threshold
+  75  # Lower hysteresis threshold
+  )
+
+ADD_TEST(itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1 
+  ${CXX_TEST_PATH}/itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/CannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1_1.mhd
   0.7 # Variance
   150 # Upper hysteresis threshold
   75  # Lower hysteresis threshold
