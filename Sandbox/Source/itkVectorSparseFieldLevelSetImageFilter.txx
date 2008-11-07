@@ -771,8 +771,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
   itr.GoToBegin();
 
-  const unsigned int numberOfPhases =
-    itk::MeasurementVectorTraits::GetLength( itr.Get() );
+  const unsigned int numberOfPhases = MeasurementVectorTraits::GetLength( itr.Get() );
 
   for( unsigned int phase = 0; phase < numberOfPhases; phase++ )
     {

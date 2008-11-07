@@ -104,7 +104,7 @@ private:
                                   void *globalData,
                                   const FloatOffsetType& = FloatOffsetType(0.0) )
     {
-    return itk::NumericTraits< PixelType >::ZeroValue();
+    return NumericTraits< PixelType >::ZeroValue();
     }
 };
 

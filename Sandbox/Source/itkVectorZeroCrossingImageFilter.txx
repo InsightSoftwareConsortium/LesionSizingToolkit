@@ -152,7 +152,7 @@ VectorZeroCrossingImageFilter< TInputImage, TOutputImage >
         {
         that = bit.GetPixel(center + offset[i]);
 
-        const unsigned int numberOfComponents = itk::MeasurementVectorTraits::GetLength( that );
+        const unsigned int numberOfComponents = MeasurementVectorTraits::GetLength( that );
 
         for( unsigned int k=0; k < numberOfComponents; k++ )
           {

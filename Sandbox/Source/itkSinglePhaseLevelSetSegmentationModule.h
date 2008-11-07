@@ -58,14 +58,14 @@ public:
   typedef float                                         InputPixelType;
   typedef float                                         FeaturePixelType;
   typedef float                                         OutputPixelType;
-  typedef itk::Image< InputPixelType, NDimension >      InputImageType;
-  typedef itk::Image< FeaturePixelType, NDimension >    FeatureImageType;
-  typedef itk::Image< OutputPixelType, NDimension >     OutputImageType;
+  typedef Image< InputPixelType, NDimension >           InputImageType;
+  typedef Image< FeaturePixelType, NDimension >         FeatureImageType;
+  typedef Image< OutputPixelType, NDimension >          OutputImageType;
 
   /** Types of the Spatial objects used for input, feature and output images. */
-  typedef itk::ImageSpatialObject< NDimension, InputPixelType >     InputSpatialObjectType;
-  typedef itk::ImageSpatialObject< NDimension, FeaturePixelType >   FeatureSpatialObjectType;
-  typedef itk::ImageSpatialObject< NDimension, OutputPixelType >    OutputSpatialObjectType;
+  typedef ImageSpatialObject< NDimension, InputPixelType >     InputSpatialObjectType;
+  typedef ImageSpatialObject< NDimension, FeaturePixelType >   FeatureSpatialObjectType;
+  typedef ImageSpatialObject< NDimension, OutputPixelType >    OutputSpatialObjectType;
 
   /** Weight that controls the propagating behavior of the level set. */
   itkSetMacro( PropagationScaling, double );

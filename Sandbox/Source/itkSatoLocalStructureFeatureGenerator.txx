@@ -127,7 +127,7 @@ SatoLocalStructureFeatureGenerator<NDimension>
 
   outputImage->DisconnectPipeline();
 
-  typedef itk::ImageSpatialObject< Dimension, OutputPixelType > OutputImageSpatialObjectType;
+  typedef ImageSpatialObject< Dimension, OutputPixelType > OutputImageSpatialObjectType;
 
   OutputImageSpatialObjectType * outputObject =
     dynamic_cast< OutputImageSpatialObjectType * >(this->ProcessObject::GetOutput(0));
