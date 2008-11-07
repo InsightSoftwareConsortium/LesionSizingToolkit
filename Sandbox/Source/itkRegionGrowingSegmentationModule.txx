@@ -30,7 +30,12 @@ template <unsigned int NDimension>
 RegionGrowingSegmentationModule<NDimension>
 ::RegionGrowingSegmentationModule()
 {
+  this->SetNumberOfRequiredInputs( 2 );
   this->SetNumberOfRequiredOutputs( 1 );
+
+  typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
+
+  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
 }
 
 
@@ -66,6 +71,61 @@ RegionGrowingSegmentationModule<NDimension>
 {
 
 }
+
+
+/**
+ * This method is intended to be used only by the subclasses to extract the
+ * input image from the input SpatialObject.
+ */
+template <unsigned int NDimension>
+const typename RegionGrowingSegmentationModule<NDimension>::InputSpatialObjectType *
+RegionGrowingSegmentationModule<NDimension>
+::GetInternalInputLandmarks() const
+{
+  const InputSpatialObjectType * inputObject =
+    dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
+
+  return inputObject;
+}
+
+
+/**
+ * This method is intended to be used only by the subclasses to extract the
+ * input feature image from the input feature SpatialObject.
+ */
+template <unsigned int NDimension>
+const typename RegionGrowingSegmentationModule<NDimension>::FeatureImageType *
+RegionGrowingSegmentationModule<NDimension>
+::GetInternalFeatureImage() const
+{
+  const FeatureSpatialObjectType * featureObject =
+    dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
+
+  const FeatureImageType * featureImage = featureObject->GetImage();
+
+  return featureImage;
+}
+
+
+/**
+ * This method is intended to be used only by the subclasses to insert the
+ * output image as cargo of the output spatial object.
+ */
+template <unsigned int NDimension>
+void
+RegionGrowingSegmentationModule<NDimension>
+::PackOutputImageInOutputSpatialObject( OutputImageType * image )
+{
+  typename OutputImageType::Pointer outputImage = image;
+
+  outputImage->DisconnectPipeline();
+
+  OutputSpatialObjectType * outputObject =
+    dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+
+  outputObject->SetImage( outputImage );
+}
+
 
 } // end namespace itk
 

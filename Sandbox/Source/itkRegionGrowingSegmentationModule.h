@@ -18,6 +18,8 @@
 #define __itkRegionGrowingSegmentationModule_h
 
 #include "itkSegmentationModule.h"
+#include "itkImageSpatialObject.h"
+#include "itkLandmarkSpatialObject.h"
 
 namespace itk
 {
@@ -53,6 +55,19 @@ public:
   typedef typename Superclass::SpatialObjectType         SpatialObjectType;
   typedef typename Superclass::SpatialObjectPointer      SpatialObjectPointer;
 
+  /** Types of the input feature image and the output image */
+  typedef unsigned char                                 OutputPixelType;
+  typedef float                                         FeaturePixelType;
+  typedef Image< FeaturePixelType, NDimension >         FeatureImageType;
+  typedef Image< OutputPixelType, NDimension >          OutputImageType;
+
+  /** Types of the Spatial objects used for the input feature image and the output image. */
+  typedef ImageSpatialObject< NDimension, FeaturePixelType >   FeatureSpatialObjectType;
+  typedef ImageSpatialObject< NDimension, OutputPixelType >    OutputSpatialObjectType;
+
+  /** Type of the input set of seed points. They are stored in a Landmark Spatial Object. */
+  typedef LandmarkSpatialObject< NDimension >                  InputSpatialObjectType;
+
 protected:
   RegionGrowingSegmentationModule();
   virtual ~RegionGrowingSegmentationModule();
@@ -62,9 +77,14 @@ protected:
    * the segmentation. */
   void  GenerateData ();
 
-  /** Type of the output image */
-  typedef unsigned char                                 OutputPixelType;
-  typedef itk::Image< OutputPixelType, NDimension >     OutputImageType;
+  /** Set the output image as cargo of the output SpatialObject. */
+  void PackOutputImageInOutputSpatialObject( OutputImageType * outputImage );
+
+  /** Extract the input set of landmark points to be used as seeds. */
+  const InputSpatialObjectType * GetInternalInputLandmarks() const;
+
+  /** Extract the input feature image from the input feature spatial object. */
+  const FeatureImageType * GetInternalFeatureImage() const;
 
 private:
   RegionGrowingSegmentationModule(const Self&); //purposely not implemented
