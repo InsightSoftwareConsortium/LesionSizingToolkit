@@ -23,33 +23,6 @@
 namespace itk
 {
 
-template < class TPixel, unsigned int NDimension, class TOutputImage >
-class ConnectedThresholdIntantiator
-{
-public:
-  typedef Image< TPixel, NDimension >        InputImageType;
-  typedef ConnectedThresholdImageFilter<
-    InputImageType, TOutputImage >           FilterType;
-
-  typedef SpatialObject< NDimension >        SpatialObjectType;
-
-  typedef TOutputImage                       OutputImageType;
-
-  static void Execute(const SpatialObjectType * input, 
-  const SpatialObjectType * feature, SpatialObjectType * output )
-    {
-    typename FilterType::Pointer filter = FilterType::New();
-    filter->Update();
-    typename OutputImageType::Pointer outputImage = filter->GetOutput();
-    outputImage->DisconnectPipeline();
-    }
-
-};
-
-#define InstantiatorMacro( pixeltype ) \
-  ConnectedThresholdIntantiator< pixeltype, NDimension, OutputImageType >::Execute( \
-  this->GetInput(), this->GetFeature(), this->GetInternalOutput() );
-
 
 /**
  * Constructor
@@ -58,8 +31,6 @@ template <unsigned int NDimension>
 ConnectedThresholdSegmentationModule<NDimension>
 ::ConnectedThresholdSegmentationModule()
 {
-  this->SetNumberOfRequiredInputs( 2 );
-  this->SetNumberOfRequiredOutputs( 1 );
 }
 
 
@@ -93,7 +64,16 @@ void
 ConnectedThresholdSegmentationModule<NDimension>
 ::GenerateData()
 {
-  InstantiatorMacro( unsigned char );
+  typedef ConnectedThresholdImageFilter<
+    FeatureImageType, OutputImageType >           FilterType;
+
+  typename FilterType::Pointer filter = FilterType::New();
+
+  filter->SetInput( this->GetInternalFeatureImage() );
+  
+  filter->Update();
+
+  this->PackOutputImageInOutputSpatialObject( filter->GetOutput() );
 }
 
 } // end namespace itk

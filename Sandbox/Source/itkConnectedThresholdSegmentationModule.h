@@ -53,8 +53,8 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef typename Superclass::SpatialObjectType         SpatialObjectType;
-  typedef typename Superclass::SpatialObjectPointer      SpatialObjectPointer;
+  typedef typename Superclass::FeatureImageType         FeatureImageType;
+  typedef typename Superclass::OutputImageType          OutputImageType;
 
 protected:
   ConnectedThresholdSegmentationModule();
@@ -64,9 +64,6 @@ protected:
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
   void  GenerateData ();
-
-  /** Type of the output image */
-  typedef typename Superclass::OutputImageType        OutputImageType;
 
 private:
   ConnectedThresholdSegmentationModule(const Self&); //purposely not implemented
