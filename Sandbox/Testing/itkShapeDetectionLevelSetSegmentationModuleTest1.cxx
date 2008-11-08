@@ -23,10 +23,10 @@
 int main( int argc, char * argv [] )
 {
 
-  if( argc < 3 )
+  if( argc < 4 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage featureImage outputImage " << std::endl;
+    std::cerr << argv[0] << " inputImage featureImage outputImage [propagationScaling curvatureScaling]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -75,6 +75,22 @@ int main( int argc, char * argv [] )
 
   segmentationModule->SetInput( inputObject );
   segmentationModule->SetFeature( featureObject );
+
+  double propagationScaling = 1.0;
+  double curvatureScaling = 1.0;
+
+  if( argc > 4 )
+    {
+    propagationScaling = atof( argv[4] ); 
+    }
+
+  if( argc > 5 )
+    {
+    curvatureScaling = atof( argv[5] ); 
+    }
+
+  segmentationModule->SetPropagationScaling( propagationScaling );
+  segmentationModule->SetCurvatureScaling( curvatureScaling );
 
   segmentationModule->Update();
 
