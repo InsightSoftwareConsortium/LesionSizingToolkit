@@ -19,6 +19,7 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkSpatialObjectReader.h"
 
 int main( int argc, char * argv [] )
 {
@@ -41,6 +42,44 @@ int main( int argc, char * argv [] )
   typedef itk::ImageFileReader< FeatureImageType >     FeatureReaderType;
   typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
 
+  typedef itk::SpatialObjectReader< 3, unsigned short > SpatialObjectReaderType;
+
+  SpatialObjectReaderType::Pointer landmarkPointsReader = SpatialObjectReaderType::New();
+
+  landmarkPointsReader->SetFileName( argv[1] );
+  landmarkPointsReader->Update();
+
+  SpatialObjectReaderType::ScenePointer scene = landmarkPointsReader->GetScene();
+
+  if( !scene )
+    {
+    std::cerr << "No Scene : [FAILED]" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  std::cout << "Number of object in the scene:" << scene->GetNumberOfObjects(1) << std::endl;
+
+  typedef SpatialObjectReaderType::SceneType::ObjectListType     ObjectListType;
+
+  ObjectListType * sceneChildren = scene->GetObjects(999999);
+
+  ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
+
+  typedef SegmentationModuleType::InputSpatialObjectType  InputSpatialObjectType; 
+
+  const InputSpatialObjectType * landmarkSpatialObject = NULL;
+
+  while( spatialObjectItr != sceneChildren->end() ) 
+    {
+    std::string objectName = (*spatialObjectItr)->GetTypeName();
+    if( objectName == "LandmarkSpatialObject" )
+      {
+      landmarkSpatialObject = 
+        dynamic_cast< const InputSpatialObjectType * >( spatialObjectItr->GetPointer() );
+      }
+    spatialObjectItr++;
+    }
+ 
   FeatureReaderType::Pointer featureReader = FeatureReaderType::New();
 
   featureReader->SetFileName( argv[2] );
@@ -68,6 +107,7 @@ int main( int argc, char * argv [] )
   featureObject->SetImage( featureReader->GetOutput() );
 
   segmentationModule->SetFeature( featureObject );
+  segmentationModule->SetInput( landmarkSpatialObject );
 
   segmentationModule->Update();
 
