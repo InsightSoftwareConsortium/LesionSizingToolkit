@@ -78,7 +78,7 @@ int main( int argc, char * argv [] )
 
   if( argc > 3 )
     {
-    featureGenerator->SetVariance( atof( argv[3] ) );
+    featureGenerator->SetSigma( atof( argv[3] ) );
     }
 
   if( argc > 4 )

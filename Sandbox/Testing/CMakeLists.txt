@@ -154,11 +154,27 @@ ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   90.0
   )
 
+ADD_TEST(GradientMagnitudeImageFilterTest1
+  ${CXX_TEST_PATH}/GradientMagnitudeImageFilter
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/GradientMagnitudeImageFilterTest1_1.mhd
+  0.7 # Sigma
+  )
+
+ADD_TEST(CannyEdgeDetectionImageFilterTest1
+  ${CXX_TEST_PATH}/CannyEdgeDetectionImageFilter
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/CannyEdgeDetectionImageFilterTest1_1.mhd
+  0.7 # Sigma
+  150 # Upper hysteresis threshold
+  75  # Lower hysteresis threshold
+  )
+
 ADD_TEST(itkCannyEdgesDistanceFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkCannyEdgesDistanceFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/CannyEdgesDistanceFeatureGeneratorTest1_1.mhd
-  0.7 # Variance
+  0.7 # Sigma
   150 # Upper hysteresis threshold
   75  # Lower hysteresis threshold
   )
@@ -167,7 +183,7 @@ ADD_TEST(itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1
   ${CXX_TEST_PATH}/itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/CannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1_1.mhd
-  0.7 # Variance
+  0.7 # Sigma
   150 # Upper hysteresis threshold
   75  # Lower hysteresis threshold
   )
