@@ -43,7 +43,7 @@ CannyEdgesDistanceAdvectionFieldFeatureGenerator<NDimension>
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
 
-  this->m_Variance =  1.0;
+  this->m_Sigma =  1.0;
   this->m_UpperThreshold = NumericTraits< InternalPixelType >::max();
   this->m_LowerThreshold = NumericTraits< InternalPixelType >::min();
 }
@@ -121,7 +121,7 @@ CannyEdgesDistanceAdvectionFieldFeatureGenerator<NDimension>
   this->m_CannyFilter->SetInput( this->m_CastFilter->GetOutput() );
   this->m_DistanceMapFilter->SetInput( this->m_CannyFilter->GetOutput() );
 
-  this->m_CannyFilter->SetVariance( this->m_Variance );
+  this->m_CannyFilter->SetVariance( this->m_Sigma * this->m_Sigma );
   this->m_CannyFilter->SetUpperThreshold( this->m_UpperThreshold );
   this->m_CannyFilter->SetLowerThreshold( this->m_LowerThreshold );
   this->m_CannyFilter->SetMaximumError(0.01);

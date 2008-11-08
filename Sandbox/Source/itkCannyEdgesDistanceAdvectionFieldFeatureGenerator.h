@@ -97,8 +97,8 @@ public:
    * SpatialObject. */
   const SpatialObjectType * GetFeature() const;
 
-  itkSetMacro( Variance, double );
-  itkGetMacro( Variance, double );
+  itkSetMacro( Sigma, double );
+  itkGetMacro( Sigma, double );
   itkSetMacro( UpperThreshold, double );
   itkGetMacro( UpperThreshold, double );
   itkSetMacro( LowerThreshold, double );
@@ -153,7 +153,7 @@ private:
 
   double                                              m_UpperThreshold;
   double                                              m_LowerThreshold;
-  double                                              m_Variance;
+  double                                              m_Sigma;
 
 };
 

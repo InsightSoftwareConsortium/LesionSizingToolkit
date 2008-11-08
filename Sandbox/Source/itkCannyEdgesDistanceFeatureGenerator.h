@@ -90,8 +90,8 @@ public:
    * SpatialObject. */
   const SpatialObjectType * GetFeature() const;
 
-  itkSetMacro( Variance, double );
-  itkGetMacro( Variance, double );
+  itkSetMacro( Sigma, double );
+  itkGetMacro( Sigma, double );
   itkSetMacro( UpperThreshold, double );
   itkGetMacro( UpperThreshold, double );
   itkSetMacro( LowerThreshold, double );
@@ -129,13 +129,13 @@ private:
     InternalImageType, InternalImageType >            DistanceMapFilterType;
   typedef typename DistanceMapFilterType::Pointer     DistanceMapFilterPointer;
 
-  CastFilterPointer                  m_CastFilter;
-  DistanceMapFilterPointer           m_DistanceMapFilter;
-  CannyEdgeFilterPointer             m_CannyFilter;
+  CastFilterPointer                   m_CastFilter;
+  DistanceMapFilterPointer            m_DistanceMapFilter;
+  CannyEdgeFilterPointer              m_CannyFilter;
 
-  double                          m_UpperThreshold;
-  double                          m_LowerThreshold;
-  double                          m_Variance;
+  double                              m_UpperThreshold;
+  double                              m_LowerThreshold;
+  double                              m_Sigma;
 };
 
 } // end namespace itk
