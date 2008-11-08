@@ -79,6 +79,8 @@ GeodesicActiveContourLevelSetSegmentationModule<NDimension>
   filter->SetCurvatureScaling( this->GetCurvatureScaling() );
   filter->SetAdvectionScaling( this->GetAdvectionScaling() );
 
+  filter->UseImageSpacingOn();
+
   filter->Update();
 
   std::cout << std::endl;

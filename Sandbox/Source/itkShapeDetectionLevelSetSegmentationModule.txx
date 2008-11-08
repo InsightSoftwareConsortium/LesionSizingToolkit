@@ -79,6 +79,11 @@ ShapeDetectionLevelSetSegmentationModule<NDimension>
   filter->SetCurvatureScaling( this->GetCurvatureScaling() );
   filter->SetAdvectionScaling( 0.0 );
 
+  filter->UseImageSpacingOn();
+
+std::cout << "Propagation Scaling = " << this->GetPropagationScaling() << std::endl;
+std::cout << "Curvature Scaling = " << this->GetCurvatureScaling() << std::endl;
+
   filter->Update();
 
   std::cout << std::endl;
