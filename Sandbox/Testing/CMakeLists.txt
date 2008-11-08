@@ -20,6 +20,9 @@ TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter ITKIO)
 ADD_EXECUTABLE(GradientMagnitudeImageFilter GradientMagnitudeImageFilter.cxx )
 TARGET_LINK_LIBRARIES(GradientMagnitudeImageFilter ITKIO)
 
+ADD_EXECUTABLE(LandmarkSpatialObjectWriterTest LandmarkSpatialObjectWriterTest.cxx )
+TARGET_LINK_LIBRARIES(LandmarkSpatialObjectWriterTest ITKIO)
+
 IF( ITK_USE_MULTI_PHASE_FRAMEWORK )
 
 ADD_EXECUTABLE(itkVectorFiniteDifferenceImageFilterTest1 itkVectorFiniteDifferenceImageFilterTest1.cxx )
