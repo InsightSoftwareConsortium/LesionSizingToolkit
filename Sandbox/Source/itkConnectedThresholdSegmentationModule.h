@@ -55,6 +55,7 @@ public:
    * segmentation method. */
   typedef typename Superclass::FeatureImageType         FeatureImageType;
   typedef typename Superclass::OutputImageType          OutputImageType;
+  typedef typename Superclass::InputSpatialObjectType   InputSpatialObjectType;
 
 protected:
   ConnectedThresholdSegmentationModule();

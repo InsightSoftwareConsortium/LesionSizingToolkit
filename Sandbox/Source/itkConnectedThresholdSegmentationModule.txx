@@ -69,8 +69,30 @@ ConnectedThresholdSegmentationModule<NDimension>
 
   typename FilterType::Pointer filter = FilterType::New();
 
-  filter->SetInput( this->GetInternalFeatureImage() );
+  const FeatureImageType * featureImage = this->GetInternalFeatureImage();
+
+  filter->SetInput( featureImage );
   
+  const InputSpatialObjectType * inputSeeds = this->GetInternalInputLandmarks();
+ 
+  const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
+
+  typedef typename InputSpatialObjectType::SpatialObjectPointType   SpatialObjectPointType;
+  typedef typename SpatialObjectPointType::PointType                PointType;
+  typedef typename InputSpatialObjectType::PointListType            PointListType;
+  typedef typename FeatureImageType::IndexType                      IndexType;
+  typedef typename FeatureImageType::IndexType                      IndexType;
+
+  const PointListType & points = inputSeeds->GetPoints();
+
+  IndexType index;
+
+  for( unsigned int i=0; i < numberOfPoints; i++ )
+    {
+    featureImage->TransformPhysicalPointToIndex( points[i].GetPosition(), index );
+    filter->AddSeed( index );
+    }
+
   filter->Update();
 
   this->PackOutputImageInOutputSpatialObject( filter->GetOutput() );
