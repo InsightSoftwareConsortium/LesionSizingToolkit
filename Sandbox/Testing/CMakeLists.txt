@@ -14,6 +14,12 @@ TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite ITKIO)
 ADD_EXECUTABLE(ImageReadRegionOfInterestWrite ImageReadRegionOfInterestWrite.cxx )
 TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite ITKIO)
 
+ADD_EXECUTABLE(CannyEdgeDetectionImageFilter CannyEdgeDetectionImageFilter.cxx )
+TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter ITKIO)
+
+ADD_EXECUTABLE(GradientMagnitudeImageFilter GradientMagnitudeImageFilter.cxx )
+TARGET_LINK_LIBRARIES(GradientMagnitudeImageFilter ITKIO)
+
 IF( ITK_USE_MULTI_PHASE_FRAMEWORK )
 
 ADD_EXECUTABLE(itkVectorFiniteDifferenceImageFilterTest1 itkVectorFiniteDifferenceImageFilterTest1.cxx )
