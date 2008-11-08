@@ -71,6 +71,7 @@ ShapeDetectionLevelSetSegmentationModule<NDimension>
   typename FilterType::Pointer filter = FilterType::New();
 
   filter->SetInput( this->GetInternalInputImage() );
+  filter->SetIsoSurfaceValue( 0.0 ); // Zero Set value
   filter->SetFeatureImage( this->GetInternalFeatureImage() );
 
   filter->SetMaximumRMSError( this->GetMaximumRMSError() );
