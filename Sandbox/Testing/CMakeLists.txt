@@ -236,6 +236,17 @@ ADD_TEST(itkShapeDetectionLevelSetSegmentationModuleTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedManualInitialization1.mha
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
   ${TEMP}/ShapeDetectionLevelSetSegmentationModuleTest1_1.mhd
+  10.0   # Propagation Scaling
+  10.0   # Curvature Scaling
+  )
+
+ADD_TEST(itkShapeDetectionLevelSetSegmentationModuleTest2 
+  ${CXX_TEST_PATH}/itkShapeDetectionLevelSetSegmentationModuleTest1 
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedManualInitialization1.mha
+  ${TEMP}/CannyEdgesDistanceFeatureGeneratorTest1_1.mhd
+  ${TEMP}/ShapeDetectionLevelSetSegmentationModuleTest2_1.mhd
+  10.0   # Propagation Scaling
+  10.0   # Curvature Scaling
   )
 
 
