@@ -132,13 +132,13 @@ private:
   typedef typename DistanceMapFilterType::Pointer     DistanceMapFilterPointer;  
 
   typedef GradientImageFilter< InternalImageType, 
-          InternalPixelType, InternalPixelType >      GradientFilterType;
-  typedef typename GradientFilterType::Pointer        GradientFilterPointer;
-  typedef typename GradientFilterType::OutputImageType CovariantVectorImageType;
+          InternalPixelType, InternalPixelType >              GradientFilterType;
+  typedef typename GradientFilterType::Pointer                GradientFilterPointer;
+  typedef typename GradientFilterType::OutputImageType        CovariantVectorImageType;
 
-  typedef typename CovariantVectorImageType::PixelType       OutputPixelType;
-  typedef ImageSpatialObject< NDimension, OutputPixelType >  OutputImageSpatialObjectType;
-  typedef Image< OutputPixelType, Dimension >                OutputImageType;
+  typedef typename CovariantVectorImageType::PixelType        OutputPixelType;
+  typedef ImageSpatialObject< NDimension, OutputPixelType >   OutputImageSpatialObjectType;
+  typedef Image< OutputPixelType, Dimension >                 OutputImageType;
 
   typedef MultiplyImageFilter< 
     CovariantVectorImageType, InternalImageType,
