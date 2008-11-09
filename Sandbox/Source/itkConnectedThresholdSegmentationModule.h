@@ -57,6 +57,12 @@ public:
   typedef typename Superclass::OutputImageType          OutputImageType;
   typedef typename Superclass::InputSpatialObjectType   InputSpatialObjectType;
 
+  /** Upper and Lower thresholds used to control the region growth. */
+  itkSetMacro( LowerThreshold, double );
+  itkGetMacro( LowerThreshold, double );
+  itkSetMacro( UpperThreshold, double );
+  itkGetMacro( UpperThreshold, double );
+
 protected:
   ConnectedThresholdSegmentationModule();
   virtual ~ConnectedThresholdSegmentationModule();
@@ -70,6 +76,9 @@ private:
   ConnectedThresholdSegmentationModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  double        m_LowerThreshold;
+  double        m_UpperThreshold;
+  
 };
 
 } // end namespace itk

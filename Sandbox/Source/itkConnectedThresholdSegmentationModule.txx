@@ -93,6 +93,9 @@ ConnectedThresholdSegmentationModule<NDimension>
     filter->AddSeed( index );
     }
 
+  filter->SetLower( this->m_LowerThreshold );
+  filter->SetUpper( this->m_UpperThreshold );
+
   filter->Update();
 
   this->PackOutputImageInOutputSpatialObject( filter->GetOutput() );

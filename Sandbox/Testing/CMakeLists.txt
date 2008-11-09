@@ -146,7 +146,15 @@ ADD_TEST(itkFeatureGeneratorTest1 ${CXX_TEST_PATH}/itkFeatureGeneratorTest1 )
 ADD_TEST(itkSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSegmentationModuleTest1 )
 ADD_TEST(itkRegionGrowingSegmentationModuleTest1 ${CXX_TEST_PATH}/itkRegionGrowingSegmentationModuleTest1 )
 ADD_TEST(itkSinglePhaseLevelSetSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSinglePhaseLevelSetSegmentationModuleTest1 )
-ADD_TEST(itkConnectedThresholdSegmentationModuleTest1 ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1 )
+
+ADD_TEST(itkConnectedThresholdSegmentationModuleTest1 
+  ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1 
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/ConnectedThresholdSegmentationModuleTest1_1.mhd
+  -700
+  500
+  )
 
 ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
@@ -163,6 +171,12 @@ ADD_TEST(GradientMagnitudeImageFilterTest1
   ${TEMP}/GradientMagnitudeImageFilterTest1_1.mhd
   0.7 # Sigma
   )
+
+ADD_TEST(LandmarkSpatialObjectWriterTest1
+  ${CXX_TEST_PATH}/LandmarkSpatialObjectWriterTest
+  ${TEMP}/LandmarkSpatialObjectWriterTest1_1.txt
+  )
+
 
 ADD_TEST(CannyEdgeDetectionImageFilterTest1
   ${CXX_TEST_PATH}/CannyEdgeDetectionImageFilter
@@ -380,10 +394,12 @@ ADD_TEST(FTFGTest002
 #
 ADD_TEST(CTRGTest001
   ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  ${TEMP}/ConnectedThresholdSegmentationModuleTest1_1.mhd
   ${TEMP}/CornellPartSolid3_1_ROI.mhd
   ${TEMP}/CTRGTest001_01.mhd
-  100
-  200
+  -700
+  500
   )
 
 ENDIF(TEST_CORNELL_DATA_ROOT)

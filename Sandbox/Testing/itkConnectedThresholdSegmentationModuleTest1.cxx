@@ -27,7 +27,8 @@ int main( int argc, char * argv [] )
   if( argc < 3 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " landmarksFile featureImage outputImage " << std::endl;
+    std::cerr << argv[0] << " landmarksFile featureImage outputImage ";
+    std::cerr << " [lowerThreshold upperThreshold] " << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -109,6 +110,22 @@ int main( int argc, char * argv [] )
   segmentationModule->SetFeature( featureObject );
   segmentationModule->SetInput( landmarkSpatialObject );
 
+  double lowerThreshold = 90;
+  double upperThreshold = 200;
+
+  if( argc > 4 )
+    {
+    lowerThreshold = atof( argv[4] );
+    }
+
+  if( argc > 5 )
+    {
+    upperThreshold = atof( argv[5] );
+    }
+
+  segmentationModule->SetLowerThreshold( lowerThreshold );
+  segmentationModule->SetUpperThreshold( upperThreshold );
+
   segmentationModule->Update();
 
   typedef SegmentationModuleType::SpatialObjectType    SpatialObjectType;
@@ -123,6 +140,7 @@ int main( int argc, char * argv [] )
 
   writer->SetFileName( argv[3] );
   writer->SetInput( outputImage );
+
 
   try 
     {
