@@ -87,6 +87,9 @@ SatoVesselnessFeatureGenerator<NDimension>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
+  os << indent << "Vesselness Sigma " << this->m_Sigma << std::endl;
+  os << indent << "Vesselness Alpha1 " << this->m_Alpha1 << std::endl;
+  os << indent << "Vesselness Alpha2 " << this->m_Alpha2 << std::endl;
 }
 
 
