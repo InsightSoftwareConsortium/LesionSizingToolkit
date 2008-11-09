@@ -130,9 +130,12 @@ LungWallFeatureGenerator<NDimension>
   this->m_VotingHoleFillingFilter->SetBackgroundValue( 0.0 );
   this->m_VotingHoleFillingFilter->SetForegroundValue( 1.0 );
   this->m_VotingHoleFillingFilter->SetMajorityThreshold( 1 );
-  this->m_VotingHoleFillingFilter->SetMaximumNumberOfIterations( 100 );
+  this->m_VotingHoleFillingFilter->SetMaximumNumberOfIterations( 1000 );
 
   this->m_VotingHoleFillingFilter->Update();
+
+  std::cout << "Used " << this->m_VotingHoleFillingFilter->GetCurrentIterationNumber() << " iterations " << std::endl;
+  std::cout << "Changed " << this->m_VotingHoleFillingFilter->GetTotalNumberOfPixelsChanged() << " pixels " << std::endl;
 
   typename OutputImageType::Pointer outputImage = this->m_VotingHoleFillingFilter->GetOutput();
 
