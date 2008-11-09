@@ -47,7 +47,7 @@ SatoVesselnessSigmoidFeatureGenerator<NDimension>
 }
 
 
-/*
+/**
  * PrintSelf
  */
 template <unsigned int NDimension>
