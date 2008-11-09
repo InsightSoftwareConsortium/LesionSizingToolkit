@@ -134,6 +134,9 @@ TARGET_LINK_LIBRARIES(itkSinglePhaseLevelSetSegmentationModuleTest1 LesionSizing
 ADD_EXECUTABLE(itkConnectedThresholdSegmentationModuleTest1 itkConnectedThresholdSegmentationModuleTest1.cxx )
 TARGET_LINK_LIBRARIES(itkConnectedThresholdSegmentationModuleTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkConfidenceConnectedSegmentationModuleTest1 itkConfidenceConnectedSegmentationModuleTest1.cxx )
+TARGET_LINK_LIBRARIES(itkConfidenceConnectedSegmentationModuleTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkGeodesicActiveContourLevelSetSegmentationModuleTest1 itkGeodesicActiveContourLevelSetSegmentationModuleTest1.cxx )
 TARGET_LINK_LIBRARIES(itkGeodesicActiveContourLevelSetSegmentationModuleTest1 LesionSizingSandbox)
 
@@ -154,6 +157,14 @@ ADD_TEST(itkConnectedThresholdSegmentationModuleTest1
   ${TEMP}/ConnectedThresholdSegmentationModuleTest1_1.mhd
   -700
   500
+  )
+
+ADD_TEST(itkConfidenceConnectedSegmentationModuleTest1 
+  ${CXX_TEST_PATH}/itkConfidenceConnectedSegmentationModuleTest1 
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mhd
+  1.7
   )
 
 ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 
