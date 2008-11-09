@@ -105,13 +105,19 @@ int main( int argc, char * argv [] )
   InputSpatialObjectType::Pointer inputObject = InputSpatialObjectType::New();
   FeatureSpatialObjectType::Pointer featureObject = FeatureSpatialObjectType::New();
 
-  featureObject->SetImage( featureReader->GetOutput() );
+  FeatureImageType::Pointer featureImage = featureReader->GetOutput();
+
+  featureImage->DisconnectPipeline();
+
+  featureImage->Print( std::cout );
+
+  featureObject->SetImage( featureImage );
 
   segmentationModule->SetFeature( featureObject );
   segmentationModule->SetInput( landmarkSpatialObject );
 
-  double lowerThreshold = 90;
-  double upperThreshold = 200;
+  double lowerThreshold = -700;
+  double upperThreshold = 1000;
 
   if( argc > 4 )
     {
