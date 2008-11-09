@@ -113,6 +113,9 @@ TARGET_LINK_LIBRARIES(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 LesionSiz
 ADD_EXECUTABLE(itkSigmoidFeatureGeneratorTest1 itkSigmoidFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkSigmoidFeatureGeneratorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkLungWallFeatureGeneratorTest1 itkLungWallFeatureGeneratorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkLungWallFeatureGeneratorTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkSatoVesselnessFeatureGeneratorTest1 itkSatoVesselnessFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkSatoVesselnessFeatureGeneratorTest1 LesionSizingSandbox)
 
@@ -195,6 +198,13 @@ ADD_TEST(itkSigmoidFeatureGeneratorTest1
   ${TEMP}/SigmoidFeatureGeneratorTest1_1.mhd
   1.0
   -700.0 
+  )
+
+ADD_TEST(itkLungWallFeatureGeneratorTest1 
+  ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/LungWallFeatureGeneratorTest1_1.mhd
+  -400.0 
   )
 
 ADD_TEST(LandmarkSpatialObjectWriterTest1
@@ -363,6 +373,13 @@ ADD_TEST(SFGTest001
   -700.0 
   )
 
+ADD_TEST(LWFGTest001
+  ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/LWFGTest001_01.mhd
+  -400.0 
+  )
+
 ADD_TEST(SVFGTest001
   ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
   ${TEMP}/CornellPartSolid2_1_ROI.mhd
@@ -425,6 +442,13 @@ ADD_TEST(SFGTest002
   ${TEMP}/SFGTest002_01.mhd
   1.0
   -700.0
+  )
+
+ADD_TEST(LWFGTest002
+  ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  ${TEMP}/LWFGTest002_01.mhd
+  -400.0
   )
 
 ADD_TEST(SVFGTest002
