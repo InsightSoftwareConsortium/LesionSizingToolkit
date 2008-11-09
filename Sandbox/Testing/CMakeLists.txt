@@ -193,8 +193,8 @@ ADD_TEST(itkSigmoidFeatureGeneratorTest1
   ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/SigmoidFeatureGeneratorTest1_1.mhd
-  -10.0
-  90.0
+  1.0
+  -700.0 
   )
 
 ADD_TEST(LandmarkSpatialObjectWriterTest1
@@ -358,9 +358,9 @@ ADD_TEST(GMSFGTest001
 ADD_TEST(SFGTest001
   ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
   ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/GMSFGTest001_01.mhd
-  -10.0
-  90.0
+  ${TEMP}/SFGTest001_01.mhd
+  1.0
+  -700.0 
   )
 
 ADD_TEST(SVFGTest001
@@ -423,8 +423,8 @@ ADD_TEST(SFGTest002
   ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
   ${TEMP}/CornellPartSolid3_1_ROI.mhd
   ${TEMP}/SFGTest002_01.mhd
-  -10.0
-  90.0
+  1.0
+  -700.0
   )
 
 ADD_TEST(SVFGTest002
