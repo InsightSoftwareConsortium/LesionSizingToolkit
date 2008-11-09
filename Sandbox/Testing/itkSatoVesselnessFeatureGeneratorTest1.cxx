@@ -84,9 +84,9 @@ int main( int argc, char * argv [] )
     featureGenerator->SetAlpha1( atof( argv[4] ) );
     }
 
-  if( argc > 4 )
+  if( argc > 5 )
     {
-    featureGenerator->SetAlpha2( atof( argv[4] ) );
+    featureGenerator->SetAlpha2( atof( argv[5] ) );
     }
 
 
