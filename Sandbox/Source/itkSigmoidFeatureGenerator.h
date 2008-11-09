@@ -94,16 +94,13 @@ private:
   SigmoidFeatureGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typedef float                                       InternalPixelType;
-  typedef Image< InternalPixelType, Dimension >       InternalImageType;
-
-  typedef InternalPixelType                           OutputPixelType;
-  typedef InternalImageType                           OutputImageType;
+  typedef float                                       OutputPixelType;
+  typedef Image< OutputPixelType, Dimension >         OutputImageType;
 
   typedef ImageSpatialObject< NDimension, OutputPixelType >  OutputImageSpatialObjectType;
 
   typedef SigmoidImageFilter<
-    InternalImageType, OutputImageType >              SigmoidFilterType;
+    InputImageType, OutputImageType >                 SigmoidFilterType;
   typedef typename SigmoidFilterType::Pointer         SigmoidFilterPointer;
 
   SigmoidFilterPointer            m_SigmoidFilter;
