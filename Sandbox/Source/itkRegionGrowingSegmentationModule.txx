@@ -18,6 +18,7 @@
 #define __itkRegionGrowingSegmentationModule_txx
 
 #include "itkRegionGrowingSegmentationModule.h"
+#include "itkImageRegionIterator.h"
 
 
 namespace itk
@@ -120,10 +121,44 @@ RegionGrowingSegmentationModule<NDimension>
 
   outputImage->DisconnectPipeline();
 
+  this->ConvertIntensitiesToCenteredRange( outputImage );
+
   OutputSpatialObjectType * outputObject =
     dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
 
   outputObject->SetImage( outputImage );
+}
+
+/**
+ * This method is intended to be used only by this class. It should be called
+ * from the PackOutputImageInOutputSpatialObject() method.
+ */
+template <unsigned int NDimension>
+void
+RegionGrowingSegmentationModule<NDimension>
+::ConvertIntensitiesToCenteredRange( OutputImageType * image )
+{
+  typedef ImageRegionIterator< OutputImageType > IteratorType;
+
+  IteratorType itr( image, image->GetBufferedRegion() );
+  
+  itr.GoToBegin();
+
+  //
+  // Convert intensities to centered range
+  //
+  while( !itr.IsAtEnd() )
+    {
+    if( itr.Get() )
+      {
+      itr.Set( 4.0 );
+      }
+    else
+      {
+      itr.Set( -4.0 );
+      }
+    ++itr;
+    }
 }
 
 

@@ -56,7 +56,7 @@ public:
   typedef typename Superclass::SpatialObjectPointer      SpatialObjectPointer;
 
   /** Types of the input feature image and the output image */
-  typedef unsigned char                                 OutputPixelType;
+  typedef float                                         OutputPixelType;
   typedef float                                         FeaturePixelType;
   typedef Image< FeaturePixelType, NDimension >         FeatureImageType;
   typedef Image< OutputPixelType, NDimension >          OutputImageType;
@@ -90,6 +90,7 @@ private:
   RegionGrowingSegmentationModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  void ConvertIntensitiesToCenteredRange( OutputImageType * outputImage );
 };
 
 } // end namespace itk

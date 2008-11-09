@@ -95,6 +95,7 @@ ConnectedThresholdSegmentationModule<NDimension>
 
   filter->SetLower( this->m_LowerThreshold );
   filter->SetUpper( this->m_UpperThreshold );
+  filter->SetReplaceValue( 1.0 );
 
   filter->Update();
 
