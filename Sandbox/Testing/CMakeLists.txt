@@ -453,13 +453,22 @@ ADD_TEST(FTFGTest002
 #
 ADD_TEST(CTRGTest001
   ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
-  ${TEMP}/ConnectedThresholdSegmentationModuleTest1_1.mhd
-  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  ${TEST_DATA_ROOT}/Input/CornellPartSolid2Seeds1.txt
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
   ${TEMP}/CTRGTest001_01.mhd
   -700
   500
   )
+
+ADD_TEST(CTRGTest002
+  ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1
+  ${TEST_DATA_ROOT}/Input/CornellPartSolid3Seeds1.txt
+  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  ${TEMP}/CTRGTest002_01.mhd
+  -700
+  500
+  )
+
 
 ENDIF(TEST_CORNELL_DATA_ROOT)
 
