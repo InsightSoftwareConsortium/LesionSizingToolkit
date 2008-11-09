@@ -353,6 +353,17 @@ ADD_TEST(SVFGTest001
   2.0
   )
 
+ADD_TEST(SVSFGTest001
+  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/SVSFGTest001_01.mhd
+  1.0
+  0.5
+  2.0
+  -10
+  80
+  )
+
 ADD_TEST(SLSFGTest001
   ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
   ${TEMP}/CornellPartSolid2_1_ROI.mhd
@@ -397,6 +408,17 @@ ADD_TEST(SVFGTest002
   1.0
   0.5
   2.0
+  )
+
+ADD_TEST(SVSFGTest002
+  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  ${TEMP}/SVSFGTest002_01.mhd
+  1.0
+  0.5
+  2.0
+  -10
+  80
   )
 
 ADD_TEST(SLSFGTest002
