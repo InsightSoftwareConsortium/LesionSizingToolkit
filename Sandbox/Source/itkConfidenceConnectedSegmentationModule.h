@@ -37,7 +37,7 @@ class ITK_EXPORT ConfidenceConnectedSegmentationModule :
 {
 public:
   /** Standard class typedefs. */
-  typedef ConfidenceConnectedSegmentationModule              Self;
+  typedef ConfidenceConnectedSegmentationModule             Self;
   typedef RegionGrowingSegmentationModule<NDimension>       Superclass;
   typedef SmartPointer<Self>                                Pointer;
   typedef SmartPointer<const Self>                          ConstPointer;
