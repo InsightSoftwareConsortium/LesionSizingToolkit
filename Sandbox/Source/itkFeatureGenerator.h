@@ -77,6 +77,9 @@ protected:
    * the segmentation. */
   void  GenerateData ();
 
+  /** non-const version of the method intended to be used in derived classes. */
+  SpatialObjectType * GetInternalFeature();
+
 private:
   FeatureGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

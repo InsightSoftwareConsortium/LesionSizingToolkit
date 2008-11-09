@@ -66,6 +66,19 @@ FeatureGenerator<NDimension>
 
 }
 
+template <unsigned int NDimension>
+typename FeatureGenerator<NDimension>::SpatialObjectType *
+FeatureGenerator<NDimension>
+::GetInternalFeature()
+{
+  if (this->GetNumberOfOutputs() < 1)
+    {
+    return 0;
+    }
+
+  return static_cast<SpatialObjectType*>(this->ProcessObject::GetOutput(0));
+}
+
 
 /*
  * PrintSelf

@@ -113,6 +113,9 @@ TARGET_LINK_LIBRARIES(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 LesionSiz
 ADD_EXECUTABLE(itkSatoVesselnessFeatureGeneratorTest1 itkSatoVesselnessFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkSatoVesselnessFeatureGeneratorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkSatoVesselnessSigmoidFeatureGeneratorTest1 itkSatoVesselnessSigmoidFeatureGeneratorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkSatoVesselnessSigmoidFeatureGeneratorTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkSatoLocalStructureFeatureGeneratorTest1 itkSatoLocalStructureFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkSatoLocalStructureFeatureGeneratorTest1 LesionSizingSandbox)
 
@@ -224,6 +227,18 @@ ADD_TEST(itkSatoVesselnessFeatureGeneratorTest1
   0.5
   2.0
   )
+
+ADD_TEST(itkSatoVesselnessSigmoidFeatureGeneratorTest1 
+  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/SatoVesselnessSigmoidFeatureGeneratorTest1_1.mhd
+  1.0
+  0.5
+  2.0
+  -10
+  80
+  )
+
 
 ADD_TEST(itkSatoLocalStructureFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
