@@ -110,6 +110,9 @@ TARGET_LINK_LIBRARIES(itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1 L
 ADD_EXECUTABLE(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 itkGradientMagnitudeSigmoidFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkSigmoidFeatureGeneratorTest1 itkSigmoidFeatureGeneratorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkSigmoidFeatureGeneratorTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkSatoVesselnessFeatureGeneratorTest1 itkSatoVesselnessFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkSatoVesselnessFeatureGeneratorTest1 LesionSizingSandbox)
 
@@ -184,6 +187,14 @@ ADD_TEST(GradientMagnitudeImageFilterTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/GradientMagnitudeImageFilterTest1_1.mhd
   0.7 # Sigma
+  )
+
+ADD_TEST(itkSigmoidFeatureGeneratorTest1 
+  ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/SigmoidFeatureGeneratorTest1_1.mhd
+  -10.0
+  90.0
   )
 
 ADD_TEST(LandmarkSpatialObjectWriterTest1
@@ -344,6 +355,14 @@ ADD_TEST(GMSFGTest001
   90.0
   )
 
+ADD_TEST(SFGTest001
+  ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/GMSFGTest001_01.mhd
+  -10.0
+  90.0
+  )
+
 ADD_TEST(SVFGTest001
   ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
   ${TEMP}/CornellPartSolid2_1_ROI.mhd
@@ -391,12 +410,19 @@ ADD_TEST(FTFGTest001
   2.0
   )
 
-
 ADD_TEST(GMSFGTest002
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   ${TEMP}/CornellPartSolid3_1_ROI.mhd
   ${TEMP}/GMSFGTest002_01.mhd
   0.7
+  -10.0
+  90.0
+  )
+
+ADD_TEST(SFGTest002
+  ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  ${TEMP}/SFGTest002_01.mhd
   -10.0
   90.0
   )
