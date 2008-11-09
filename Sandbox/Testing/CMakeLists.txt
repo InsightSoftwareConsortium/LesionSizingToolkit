@@ -339,9 +339,9 @@ ADD_TEST(GMSFGTest001
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   ${TEMP}/CornellPartSolid2_1_ROI.mhd
   ${TEMP}/GMSFGTest001_01.mhd
-  1.0
-  -1.0
-  5.0
+  0.7
+  -10.0
+  90.0
   )
 
 ADD_TEST(SVFGTest001
@@ -396,9 +396,9 @@ ADD_TEST(GMSFGTest002
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   ${TEMP}/CornellPartSolid3_1_ROI.mhd
   ${TEMP}/GMSFGTest002_01.mhd
-  1.0
-  -1.0
-  5.0
+  0.7
+  -10.0
+  90.0
   )
 
 ADD_TEST(SVFGTest002
