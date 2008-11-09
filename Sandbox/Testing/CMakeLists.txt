@@ -254,28 +254,39 @@ ADD_TEST(itkFrangiTubularnessFeatureGeneratorTest1
 
 ADD_TEST(itkGeodesicActiveContourLevelSetSegmentationModuleTest1 
   ${CXX_TEST_PATH}/itkGeodesicActiveContourLevelSetSegmentationModuleTest1 
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedManualInitialization1.mha
+  ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mhd
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
   ${TEMP}/GeodesicActiveContourLevelSetSegmentationModuleTest1_1.mhd
   )
 
+
+SET_TESTS_PROPERTIES( itkGeodesicActiveContourLevelSetSegmentationModuleTest1 
+  PROPERTIES DEPENDS itkConfidenceConnectedSegmentationModuleTest1)
+
 ADD_TEST(itkShapeDetectionLevelSetSegmentationModuleTest1 
   ${CXX_TEST_PATH}/itkShapeDetectionLevelSetSegmentationModuleTest1 
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedManualInitialization1.mha
+  ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mhd
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
   ${TEMP}/ShapeDetectionLevelSetSegmentationModuleTest1_1.mhd
   100.0   # Propagation Scaling
     1.0   # Curvature Scaling
   )
 
+
+SET_TESTS_PROPERTIES( itkShapeDetectionLevelSetSegmentationModuleTest1 
+  PROPERTIES DEPENDS itkConfidenceConnectedSegmentationModuleTest1)
+
 ADD_TEST(itkShapeDetectionLevelSetSegmentationModuleTest2 
   ${CXX_TEST_PATH}/itkShapeDetectionLevelSetSegmentationModuleTest1 
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedManualInitialization1.mha
+  ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mhd
   ${TEMP}/CannyEdgesDistanceFeatureGeneratorTest1_1.mhd
   ${TEMP}/ShapeDetectionLevelSetSegmentationModuleTest2_1.mhd
   100.0   # Propagation Scaling
     1.0   # Curvature Scaling
   )
+
+SET_TESTS_PROPERTIES( itkShapeDetectionLevelSetSegmentationModuleTest2 
+  PROPERTIES DEPENDS itkConfidenceConnectedSegmentationModuleTest1)
 
 
 IF(TEST_CORNELL_DATA_ROOT)
