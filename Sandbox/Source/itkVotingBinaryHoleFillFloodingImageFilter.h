@@ -22,9 +22,10 @@
 
 #include <vector>
 
-namespace itk{
+namespace itk
+{
 
-/** /class VotingBinaryHoleFillFloodingImageFilter 
+/** \class VotingBinaryHoleFillFloodingImageFilter 
  *
  * \brief Perform front-propagation under a quorum sensing (voting) algorithm
  * for filling holes in a binary mask.
