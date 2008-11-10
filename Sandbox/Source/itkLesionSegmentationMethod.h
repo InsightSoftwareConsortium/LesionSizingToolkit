@@ -58,8 +58,9 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef SpatialObject< NDimension >           SpatialObjectType;
-  typedef typename SpatialObjectType::Pointer   SpatialObjectPointer;
+  typedef SpatialObject< NDimension >                 SpatialObjectType;
+  typedef typename SpatialObjectType::Pointer         SpatialObjectPointer;
+  typedef typename SpatialObjectType::ConstPointer    SpatialObjectConstPointer;
 
   /** SpatialObject that defines the Region of Interest in the input data */
   itkSetObjectMacro( RegionOfInterest, SpatialObjectType );
@@ -68,7 +69,7 @@ public:
   /** SpatialObject that defines the initial segmentation. This will be
    * used to initialize the segmentation process driven by the
    * LesionSegmentationMethod. */
-  itkSetObjectMacro( InitialSegmentation, SpatialObjectType );
+  itkSetConstObjectMacro( InitialSegmentation, SpatialObjectType );
   itkGetConstObjectMacro( InitialSegmentation, SpatialObjectType );
 
   /** Type of the class that will generate input features in the form of
@@ -107,8 +108,8 @@ private:
   LesionSegmentationMethod(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  SpatialObjectPointer                      m_RegionOfInterest;
-  SpatialObjectPointer                      m_InitialSegmentation;
+  SpatialObjectConstPointer                 m_RegionOfInterest;
+  SpatialObjectConstPointer                 m_InitialSegmentation;
   
   typedef typename FeatureGeneratorType::Pointer                FeatureGeneratorPointer;
   typedef std::vector< FeatureGeneratorPointer >                FeatureGeneratorArrayType;
