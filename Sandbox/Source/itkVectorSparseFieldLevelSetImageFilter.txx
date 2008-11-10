@@ -159,10 +159,10 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     unsigned int k;
     unsigned int t;
 
-    StatusType up_to;
-    StatusType up_search;
-    StatusType down_to;
-    StatusType down_search;
+    StatusValueType up_to;
+    StatusValueType up_search;
+    StatusValueType down_to;
+    StatusValueType down_search;
 
     LayerPointerType UpList[2];
     LayerPointerType DownList[2];
@@ -197,7 +197,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
     LayerListType & layers = this->m_LayersPhases[phase];
 
-    while( down_search < static_cast<StatusType>( layers.size() ) )
+    while( down_search < static_cast<StatusValueType>( layers.size() ) )
       {
       this->ProcessStatusList(UpList[j], UpList[k], up_to, up_search, phase);
       this->ProcessStatusList(DownList[j], DownList[k], down_to, down_search, phase);
@@ -216,8 +216,8 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       }
 
     // Process the outermost inside/outside layers in the sparse field.
-    this->ProcessStatusList(UpList[j], UpList[k], up_to, m_StatusNull, phase);
-    this->ProcessStatusList(DownList[j], DownList[k], down_to, m_StatusNull, phase);
+    this->ProcessStatusList(UpList[j], UpList[k], up_to, m_StatusNullValue, phase);
+    this->ProcessStatusList(DownList[j], DownList[k], down_to, m_StatusNullValue, phase);
 
     // Now we are left with the lists of indicies which must be
     // brought into the outermost layers.  Bring UpList into last inside layer
@@ -234,7 +234,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus, unsigned int phase)
+::ProcessOutsideList(LayerType *OutsideList, StatusValueType ChangeToStatus, unsigned int phase)
 {
   LayerNodeType *node;
 
@@ -247,7 +247,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     m_StatusImage->SetPixel( OutsideList->Front()->m_Value, ChangeToStatus );
     node = OutsideList->Front();
     OutsideList->PopFront();
-    layers[ChangeToStatus[phase]]->PushFront(node);
+    layers[ChangeToStatus]->PushFront(node);
     }
 }
 
@@ -255,13 +255,13 @@ template <class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::ProcessStatusList(LayerType *InputList, LayerType *OutputList,
-                    StatusType ChangeToStatus, StatusType SearchForStatus,
+                    StatusValueType ChangeToStatus, StatusValueType SearchForStatus,
                     unsigned int phase)
 {
   unsigned int i;
   bool bounds_status;
   LayerNodeType *node;
-  StatusType neighbor_status;
+  StatusValueType neighbor_status;
   NeighborhoodIterator<StatusImageType>
     statusIt(m_NeighborList.GetRadius(), m_StatusImage,
              this->GetOutput()->GetRequestedRegion());
@@ -1218,7 +1218,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
   LayerListType & layers = this->m_LayersPhases[phase];
 
-  StatusType past_end = static_cast<StatusType>( layers.size() ) - 1;
+  StatusValueType past_end = static_cast<StatusValueType>( layers.size() ) - 1;
 
   // Are we propagating values inward (more negative) or outward (more
   // positive)?
@@ -1245,7 +1245,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     }
 
   toIt  = layers[to[phase]]->Begin();
-  while ( toIt != layers[to]->End() )
+  while ( toIt != layers[to[phase]]->End() )
     {
     statusIt.SetLocation( toIt->m_Value );
 
@@ -1316,7 +1316,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       ++toIt;
       layers[to[phase]]->Unlink( node );
       StatusType s = statusIt.GetCenterPixel();
-      if ( promote > past_end )
+      if ( promote[phase] > past_end )
         {
         m_LayerNodeStore->Return( node );
         s[phase] = m_StatusNullValue;
@@ -1324,8 +1324,8 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
         }
       else
         {
-        layers[promote]->PushFront( node );
-        s[phase] = promote;
+        layers[promote[phase]]->PushFront( node );
+        s[phase] = promote[phase];
         statusIt.SetCenterPixel(s);
         }
       }

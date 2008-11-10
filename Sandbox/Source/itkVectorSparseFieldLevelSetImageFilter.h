@@ -425,11 +425,11 @@ protected:
                                LayerType *StatusDownList, unsigned int component);
   /** */
   void ProcessStatusList(LayerType *InputList, LayerType *OutputList,
-                         StatusType ChangeToStatus, StatusType SearchForStatus,
+                         StatusValueType ChangeToStatus, StatusValueType SearchForStatus,
                          unsigned int component);
 
   /** */
-  void ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus,
+  void ProcessOutsideList(LayerType *OutsideList, StatusValueType ChangeToStatus,
                           unsigned int component);
 
   itkGetConstMacro(ValueZero, ValueType);
