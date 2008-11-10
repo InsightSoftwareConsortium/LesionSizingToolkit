@@ -71,6 +71,10 @@ public:
   /** Output segmentation represented as a SpatialObject. */
   const SpatialObjectType * GetOutput() const;
 
+  /** Returns the number of features that are expected by this Segmentation
+   * Module. This method will be overloaded in derived classes. */
+  unsigned int GetExpectedNumberOfFeatures() const;
+
 protected:
   SegmentationModule();
   virtual ~SegmentationModule();

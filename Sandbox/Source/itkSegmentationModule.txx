@@ -87,6 +87,15 @@ SegmentationModule<NDimension>
 
 
 template <unsigned int NDimension>
+unsigned int
+SegmentationModule<NDimension>
+::GetExpectedNumberOfFeatures() const
+{
+  return 1;
+}
+
+
+template <unsigned int NDimension>
 const typename SegmentationModule<NDimension>::SpatialObjectType *
 SegmentationModule<NDimension>
 ::GetOutput() const

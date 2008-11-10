@@ -93,6 +93,12 @@ LesionSegmentationMethod<NDimension>
 ::GenerateData()
 {
   this->UpdateAllFeatureGenerators();
+
+  if( this->FeaturesNeedToBeConsolidated() )
+    {
+    this->ConsolidateFeatures();
+    }
+  this->ExecuteSegmentationModule();
 }
 
 
@@ -112,6 +118,39 @@ LesionSegmentationMethod<NDimension>
     (*gitr)->Update();
     ++gitr;
     }
+}
+
+template <unsigned int NDimension>
+bool
+LesionSegmentationMethod<NDimension>
+::FeaturesNeedToBeConsolidated() const
+{
+  const unsigned int expectedNumberOfFeatures = this->m_SegmentationModule->GetExpectedNumberOfFeatures();
+
+  if( expectedNumberOfFeatures < this->m_FeatureGenerators.size() )
+    {
+    return true;
+    }
+
+  return false;
+}
+
+ 
+template <unsigned int NDimension>
+void
+LesionSegmentationMethod<NDimension>
+::ConsolidateFeatures()
+{
+  
+}
+
+ 
+template <unsigned int NDimension>
+void
+LesionSegmentationMethod<NDimension>
+::ExecuteSegmentationModule()
+{
+  
 }
 
 

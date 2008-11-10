@@ -98,6 +98,9 @@ TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest1 LesionSizingSandbox)
 ADD_EXECUTABLE(itkLesionSegmentationMethodTest2 itkLesionSegmentationMethodTest2.cxx )
 TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest2 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkLesionSegmentationMethodTest3 itkLesionSegmentationMethodTest3.cxx )
+TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest3 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkFeatureGeneratorTest1 itkFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkFeatureGeneratorTest1 LesionSizingSandbox)
 
@@ -154,6 +157,8 @@ TARGET_LINK_LIBRARIES(itkShapeDetectionLevelSetSegmentationModuleTest1 LesionSiz
 
 ADD_TEST(itkLesionSegmentationMethodTest1 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest1 )
 ADD_TEST(itkLesionSegmentationMethodTest2 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest2 )
+ADD_TEST(itkLesionSegmentationMethodTest3 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3 )
+
 ADD_TEST(itkFeatureGeneratorTest1 ${CXX_TEST_PATH}/itkFeatureGeneratorTest1 )
 ADD_TEST(itkSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSegmentationModuleTest1 )
 ADD_TEST(itkRegionGrowingSegmentationModuleTest1 ${CXX_TEST_PATH}/itkRegionGrowingSegmentationModuleTest1 )

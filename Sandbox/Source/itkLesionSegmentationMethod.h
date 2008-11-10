@@ -122,6 +122,12 @@ private:
 
   void UpdateAllFeatureGenerators();
 
+  bool FeaturesNeedToBeConsolidated() const;
+
+  void ConsolidateFeatures();
+
+  void ExecuteSegmentationModule();
+
 };
 
 } // end namespace itk
