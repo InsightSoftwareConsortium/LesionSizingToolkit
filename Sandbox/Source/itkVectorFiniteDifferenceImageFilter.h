@@ -98,6 +98,7 @@ protected:
   /** The number of components per pixel in the input vector image. This is an
    * auxiliary variable used to cache the number of components. */
   unsigned int m_NumberOfComponents;
+  unsigned int m_NumberOfPhases;
 
   /** List of finite difference functions that will compute the updates at
    * every pixel. There should be one function per component of the input

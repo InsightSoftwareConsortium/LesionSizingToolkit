@@ -91,18 +91,6 @@ SparseFieldCityBlockNeighborList<TNeighborhoodType>
 //::m_ConstantGradientValue = 1.0;
 
 template<class TInputImage, class TOutputImage>
-ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ValueType
-VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::m_ValueOne = NumericTraits<ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage,
-                                                            TOutputImage>::ValueType >::OneValue();
-
-template<class TInputImage, class TOutputImage>
-ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ValueType
-VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::m_ValueZero = NumericTraits<ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage,
-                                                             TOutputImage>::ValueType >::ZeroValue();
-
-template<class TInputImage, class TOutputImage>
 ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ScalarValueType
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::m_ScalarValueOne = NumericTraits<ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage,
@@ -117,28 +105,28 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 template<class TInputImage, class TOutputImage>
 ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusValueType
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::m_StatusNull = NumericTraits<ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage,
-                                                              TOutputImage>::StatusValueType >::NonpositiveMin();
+::m_StatusNullValue = NumericTraits<ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage,
+                                                 TOutputImage>::StatusValueType >::NonpositiveMin();
 
 template<class TInputImage, class TOutputImage>
 ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusValueType
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::m_StatusChanging = -1;
+::m_StatusChangingValue = -1;
 
 template<class TInputImage, class TOutputImage>
 ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusValueType
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::m_StatusActiveChangingUp = -2;
+::m_StatusActiveChangingUpValue = -2;
 
 template<class TInputImage, class TOutputImage>
 ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusValueType
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::m_StatusActiveChangingDown = -3;
+::m_StatusActiveChangingDownValue = -3;
 
 template<class TInputImage, class TOutputImage>
 ITK_TYPENAME VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusValueType
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::m_StatusBoundaryPixel = -4;
+::m_StatusBoundaryPixelValue = -4;
 
 template<class TInputImage, class TOutputImage>
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
@@ -165,7 +153,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::ApplyUpdate(TimeStepType dt)
 {
 
-  for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
+  for( unsigned int phase = 0; phase < this->m_NumberOfPhases; phase++ )
     {
     unsigned int j;
     unsigned int k;
@@ -191,15 +179,15 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     // demotions in the m_StatusLayer for current active layer indicies
     // (i.e. those indicies which will move inside or outside the active
     // layers).
-    this->UpdateActiveLayerValues(dt, UpList[0], DownList[0], component);
+    this->UpdateActiveLayerValues(dt, UpList[0], DownList[0], phase);
 
     // Process the status up/down lists.  This is an iterative process which
     // proceeds outwards from the active layer.  Each iteration generates the
     // list for the next iteration.
 
     // First process the status lists generated on the active layer.
-    this->ProcessStatusList(UpList[0], UpList[1], 2, 1, component);
-    this->ProcessStatusList(DownList[0], DownList[1], 1, 2, component);
+    this->ProcessStatusList(UpList[0], UpList[1], 2, 1, phase);
+    this->ProcessStatusList(DownList[0], DownList[1], 1, 2, phase);
 
     down_to = up_to = 0;
     up_search       = 3;
@@ -207,12 +195,12 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     j = 1;
     k = 0;
 
-    LayerListType & layers = this->m_LayersComponents[component];
+    LayerListType & layers = this->m_LayersPhases[phase];
 
     while( down_search < static_cast<StatusType>( layers.size() ) )
       {
-      this->ProcessStatusList(UpList[j], UpList[k], up_to, up_search, component);
-      this->ProcessStatusList(DownList[j], DownList[k], down_to, down_search, component);
+      this->ProcessStatusList(UpList[j], UpList[k], up_to, up_search, phase);
+      this->ProcessStatusList(DownList[j], DownList[k], down_to, down_search, phase);
 
       if (up_to == 0) up_to += 1;
       else            up_to += 2;
@@ -228,14 +216,14 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       }
 
     // Process the outermost inside/outside layers in the sparse field.
-    this->ProcessStatusList(UpList[j], UpList[k], up_to, m_StatusNull, component);
-    this->ProcessStatusList(DownList[j], DownList[k], down_to, m_StatusNull, component);
+    this->ProcessStatusList(UpList[j], UpList[k], up_to, m_StatusNull, phase);
+    this->ProcessStatusList(DownList[j], DownList[k], down_to, m_StatusNull, phase);
 
     // Now we are left with the lists of indicies which must be
     // brought into the outermost layers.  Bring UpList into last inside layer
     // and DownList into last outside layer.
-    this->ProcessOutsideList(UpList[k], static_cast<int>( layers.size()) -2, component);
-    this->ProcessOutsideList(DownList[k], static_cast<int>( layers.size()) -1, component);
+    this->ProcessOutsideList(UpList[k], static_cast<int>( layers.size()) -2, phase);
+    this->ProcessOutsideList(DownList[k], static_cast<int>( layers.size()) -1, phase);
     }
 
   // Finally, we update all of the layer values (excluding the active layer,
@@ -246,11 +234,11 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus, unsigned int component)
+::ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus, unsigned int phase)
 {
   LayerNodeType *node;
 
-  LayerListType & layers = this->m_LayersComponents[component];
+  LayerListType & layers = this->m_LayersPhases[phase];
 
   // Push each index in the input list into its appropriate status layer
   // (ChangeToStatus) and update the status image value at that index.
@@ -259,7 +247,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     m_StatusImage->SetPixel( OutsideList->Front()->m_Value, ChangeToStatus );
     node = OutsideList->Front();
     OutsideList->PopFront();
-    layers[ChangeToStatus]->PushFront(node);
+    layers[ChangeToStatus[phase]]->PushFront(node);
     }
 }
 
@@ -268,7 +256,7 @@ void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::ProcessStatusList(LayerType *InputList, LayerType *OutputList,
                     StatusType ChangeToStatus, StatusType SearchForStatus,
-                    unsigned int component)
+                    unsigned int phase)
 {
   unsigned int i;
   bool bounds_status;
@@ -283,7 +271,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     statusIt.NeedToUseBoundaryConditionOff();
     }
 
-  LayerListType & layers = this->m_LayersComponents[component];
+  LayerListType & layers = this->m_LayersPhases[phase];
 
   // Push each index in the input list into its appropriate status layer
   // (ChangeToStatus) and update the status image value at that index.
@@ -329,7 +317,7 @@ template <class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::UpdateActiveLayerValues(TimeStepType dt,
-                          LayerType *UpList, LayerType *DownList, unsigned int component)
+                          LayerType *UpList, LayerType *DownList, unsigned int phase)
 {
   // This method scales the update buffer values by the time step and adds
   // them to the active layer pixels.  New values at an index which fall
@@ -348,13 +336,13 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   LayerNodeType *node;
   LayerNodeType *release_node;
 
-  StatusType neighbor_status;
+  StatusValueType neighbor_status;
 
   unsigned int i;
   unsigned int idx;
   unsigned int counter;
 
-  // FIXME   bool bounds_status;
+  bool bounds_status;
   bool flag;
 
   typename LayerType::Iterator         layerIt;
@@ -374,7 +362,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     statusIt.NeedToUseBoundaryConditionOff();
     }
 
-  LayerListType & layers = this->m_LayersComponents[component];
+  LayerListType & layers = this->m_LayersPhases[phase];
 
   counter =0;
   rms_change_accumulator = m_ScalarValueZero;
@@ -387,7 +375,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
     new_value = this->CalculateUpdateValue(layerIt->m_Value,
                                            dt,
-                                           outputIt.GetCenterPixel()[component],
+                                           outputIt.GetCenterPixel()[phase],
                                            *updateIt);
 
     // If this index needs to be moved to another layer, then search its
@@ -423,7 +411,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
         continue;
         }
 
-      rms_change_accumulator += vnl_math_sqr( new_value - outputIt.GetCenterPixel()[component] );
+      rms_change_accumulator += vnl_math_sqr( new_value - outputIt.GetCenterPixel()[phase] );
 
       // Search the neighborhood for inside indicies.
       temp_value = new_value - m_ConstantGradientValue;
@@ -435,11 +423,13 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
           {
           // Keep the smallest possible value for the new active node.  This
           // places the new active layer node closest to the zero level-set.
-// FIXME         if ( outputIt.GetPixel(idx) < LOWER_ACTIVE_THRESHOLD ||
-// FIXME              ::vnl_math_abs(temp_value) < ::vnl_math_abs(outputIt.GetPixel(idx)) )
-// FIXME           {
-// FIXME           outputIt.SetPixel(idx, temp_value, bounds_status);
-// FIXME           }
+          if ( outputIt.GetPixel(idx) < LOWER_ACTIVE_THRESHOLD ||
+               ::vnl_math_abs(temp_value) < ::vnl_math_abs(outputIt.GetPixel(idx)) )
+            {
+            typename OutputImageType::PixelType o = outputIt.GetPixel(idx);
+            o[phase] = temp_value;
+            outputIt.SetPixel(idx, o, bounds_status);
+            }
           }
         }
       node = m_LayerNodeStore->Borrow();
@@ -476,7 +466,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
         continue;
         }
 
-      rms_change_accumulator += vnl_math_sqr( new_value - outputIt.GetCenterPixel()[component] );
+      rms_change_accumulator += vnl_math_sqr( new_value - outputIt.GetCenterPixel()[phase] );
 
 
       // Search the neighborhood for outside indicies.
@@ -489,11 +479,13 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
           {
           // Keep the smallest magnitude value for this active set node.  This
           // places the node closest to the active layer.
-// FIXME         if ( outputIt.GetPixel(idx) >= UPPER_ACTIVE_THRESHOLD ||
-// FIXME              ::vnl_math_abs(temp_value) < ::vnl_math_abs(outputIt.GetPixel(idx)) )
-// FIXME           {
-// FIXME           outputIt.SetPixel(idx, temp_value, bounds_status);
-// FIXME           }
+          if ( outputIt.GetPixel(idx) >= UPPER_ACTIVE_THRESHOLD ||
+               ::vnl_math_abs(temp_value) < ::vnl_math_abs(outputIt.GetPixel(idx)) )
+            {
+            typename OutputImageType::PixelType o = outputIt.GetPixel(idx);
+            o[phase] = temp_value;
+            outputIt.SetPixel(idx, temp_value, bounds_status);
+            }
           }
         }
       node = m_LayerNodeStore->Borrow();
@@ -509,7 +501,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       }
     else
       {
-      rms_change_accumulator += vnl_math_sqr( new_value - outputIt.GetCenterPixel()[component] );
+      rms_change_accumulator += vnl_math_sqr( new_value - outputIt.GetCenterPixel()[phase] );
 
       outputIt.SetCenterPixel( new_value );
       ++layerIt;
@@ -547,7 +539,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   // First need to subtract the iso-surface value from the input image.
 
   //
-  //  Use the index cast filter to extract a component, process it and push it back.
+  //  Use the index cast filter to extract a phase, process it and push it back.
   //
   typedef VectorShiftScaleImageFilter<InputImageType, OutputImageType> ShiftScaleFilterType;
   typename ShiftScaleFilterType::Pointer shiftScaleFilter = ShiftScaleFilterType::New();
@@ -574,20 +566,23 @@ void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::InitializeStatusImage()
 {
-  this->m_StatusNull.SetSize( this->m_NumberOfComponents );
+  MeasurementVectorTraits::SetLength( m_ValueZero, this->m_NumberOfPhases );
+  MeasurementVectorTraits::SetLength( m_ValueOne, this->m_NumberOfPhases );
+  MeasurementVectorTraits::SetLength( m_StatusNull, this->m_NumberOfPhases );
+  MeasurementVectorTraits::SetLength( m_StatusChanging, this->m_NumberOfPhases );
+  MeasurementVectorTraits::SetLength( m_StatusActiveChangingUp, this->m_NumberOfPhases );
+  MeasurementVectorTraits::SetLength( m_StatusActiveChangingDown, this->m_NumberOfPhases );
+  this->m_ValueZero.Fill( NumericTraits< ScalarValueType >::Zero );
+  this->m_ValueOne.Fill( NumericTraits< ScalarValueType >::OneValue() );
   this->m_StatusNull.Fill( this->m_StatusNullValue );
-  this->m_StatusChanging.SetSize( this->m_NumberOfComponents );
   this->m_StatusChanging.Fill( this->m_StatusChangingValue );
-  this->m_StatusActiveChangingUp.SetSize( this->m_NumberOfComponents );
   this->m_StatusActiveChangingUp.Fill( this->m_StatusActiveChangingUpValue );
-  this->m_StatusActiveChangingDown.SetSize( this->m_NumberOfComponents );
   this->m_StatusActiveChangingDown.Fill( this->m_StatusActiveChangingDownValue );
-  this->m_StatusBoundaryPixel.SetSize( this->m_NumberOfComponents );
   this->m_StatusBoundaryPixel.Fill( this->m_StatusBoundaryPixelValue );
 
   // Allocate the status image.
   m_StatusImage = StatusImageType::New();
-  m_StatusImage->SetVectorLength( this->m_NumberOfComponents );
+  m_StatusImage->SetVectorLength( this->m_NumberOfPhases );
   m_StatusImage->SetRegions(this->GetOutput()->GetRequestedRegion());
   m_StatusImage->Allocate();
 
@@ -646,14 +641,14 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     }
 
 
-  this->m_LayersComponents.resize( this->m_NumberOfComponents );
+  this->m_LayersPhases.resize( this->m_NumberOfPhases );
 
   // Allocate and initialize the status image and the status vectors
   this->InitializeStatusImage();
 
-  for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
+  for( unsigned int phase = 0; phase < this->m_NumberOfPhases; phase++ )
     {
-    LayerListType & layers = this->m_LayersComponents[component];
+    LayerListType & layers = this->m_LayersPhases[phase];
 
     // Erase all existing layer lists.
     for( unsigned int k = 0; k < layers.size(); ++k )
@@ -682,13 +677,13 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
     // Construct the active layer and initialize the first layers inside and
     // outside of the active layer.
-    this->ConstructActiveLayer(component);
+    this->ConstructActiveLayer(phase);
 
     // Construct the rest of the non-active set layers using the first two
     // layers. Inside layers are odd numbers, outside layers are even numbers.
     for(unsigned int k = 1; k < layers.size() - 2; ++k)
       {
-      this->ConstructLayer(k, k+2, component);
+      this->ConstructLayer(k, k+2, phase);
       }
 
     }
@@ -736,18 +731,18 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
          shiftedIt = shiftedIt.Begin();
        ! outputIt.IsAtEnd(); ++outputIt, ++statusIt, ++shiftedIt)
     {
-    if (statusIt.Get() == m_StatusNull || statusIt.Get() == m_StatusBoundaryPixel)
+    for( unsigned int phase = 0; phase < this->m_NumberOfPhases; phase++ )
       {
       pixelValue = shiftedIt.Get();
-      for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
+      if (statusIt.Get()[phase] == m_StatusNullValue || statusIt.Get()[phase] == m_StatusBoundaryPixelValue)
         {
-        if( pixelValue[component] > this->m_ScalarValueZero )
+        if( pixelValue[phase] > this->m_ScalarValueZero )
           {
-          outputValue[component] = outside_value;
+          outputValue[phase] = outside_value;
           }
         else
           {
-          outputValue[component] = inside_value;
+          outputValue[phase] = inside_value;
           }
         }
       outputIt.Set( outputValue );
@@ -782,7 +777,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::ConstructActiveLayer(unsigned int component)
+::ConstructActiveLayer(unsigned int phase)
 {
   //
   // We find the active layer by searching for 0's in the zero crossing image
@@ -796,7 +791,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   // this is the case, then we need to do active bounds checking in the solver.
   //
 
-  LayerListType & layers = this->m_LayersComponents[component];
+  LayerListType & layers = this->m_LayersPhases[phase];
 
   NeighborhoodIterator<OutputImageType>
     shiftedIt(m_NeighborList.GetRadius(), m_ShiftedImage,
@@ -807,6 +802,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   NeighborhoodIterator<StatusImageType>
     statusIt(m_NeighborList.GetRadius(), m_StatusImage,
              this->GetOutput()->GetRequestedRegion());
+
   IndexType center_index, offset_index;
   LayerNodeType *node;
   bool bounds_status;
@@ -820,7 +816,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
   for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
     {
-    if ( outputIt.GetCenterPixel() == m_ValueZero )
+    if ( outputIt.GetCenterPixel()[phase] == m_ScalarValueZero )
       {
       // Grab the neighborhood in the status image.
       center_index = outputIt.GetIndex();
@@ -856,11 +852,11 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
         offset_index = center_index
           + m_NeighborList.GetNeighborhoodOffset(i);
 
-        if( outputIt.GetPixel(m_NeighborList.GetArrayIndex(i)) != m_ValueZero )
+        if( outputIt.GetPixel(m_NeighborList.GetArrayIndex(i))[phase] != m_ScalarValueZero )
           {
           value = shiftedIt.GetPixel(m_NeighborList.GetArrayIndex(i));
 
-          if( value[component] < m_ScalarValueZero ) // Assign to first inside layer.
+          if( value[phase] < m_ScalarValueZero ) // Assign to first inside layer.
             {
             layer_number = 1;
             }
@@ -869,8 +865,10 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
             layer_number = 2;
             }
 
+          StatusType s = statusIt.GetPixel(m_NeighborList.GetArrayIndex(i));
+          s[phase] = layer_number; 
           statusIt.SetPixel( m_NeighborList.GetArrayIndex(i),
-                             layer_number, bounds_status );
+                             s, bounds_status );
           if ( bounds_status == true ) // In bounds.
             {
             node = m_LayerNodeStore->Borrow();
@@ -886,7 +884,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 template<class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
-::ConstructLayer( StatusType from, StatusType to, unsigned int component)
+::ConstructLayer( StatusType from, StatusType to, unsigned int phase)
 {
   unsigned int i;
   LayerNodeType *node;
@@ -898,11 +896,11 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     statusIt(m_NeighborList.GetRadius(), m_StatusImage,
              this->GetOutput()->GetRequestedRegion() );
 
-  LayerListType & layers = this->m_LayersComponents[component];
+  LayerListType & layers = this->m_LayersPhases[phase];
 
   // For all indicies in the "from" layer...
-  for (fromIt = layers[from]->Begin();
-       fromIt != layers[from]->End();  ++fromIt)
+  for (fromIt = layers[from[phase]]->Begin();
+       fromIt != layers[from[phase]]->End();  ++fromIt)
     {
     // Search the neighborhood of this index in the status image for
     // unassigned indicies. Push those indicies onto the "to" layer and
@@ -911,17 +909,18 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     statusIt.SetLocation( fromIt->m_Value );
     for (i = 0; i < m_NeighborList.GetSize(); ++i)
       {
-      if ( statusIt.GetPixel( m_NeighborList.GetArrayIndex(i) )
-           == m_StatusNull )
+      StatusType s = statusIt.GetPixel( m_NeighborList.GetArrayIndex(i) );
+      if ( s[phase] == m_StatusNullValue )
         {
-        statusIt.SetPixel(m_NeighborList.GetArrayIndex(i), to,
+        s[phase] = to[phase];
+        statusIt.SetPixel(m_NeighborList.GetArrayIndex(i), s,
                           boundary_status);
         if (boundary_status == true) // in bounds
           {
           node = m_LayerNodeStore->Borrow();
           node->m_Value = statusIt.GetIndex()
             + m_NeighborList.GetNeighborhoodOffset(i);
-          layers[to]->PushFront( node );
+          layers[to[phase]]->PushFront( node );
           }
         }
       }
@@ -963,9 +962,9 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   ScalarValueType length;
   ScalarValueType distance;
 
-  for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
+  for( unsigned int phase = 0; phase < this->m_NumberOfPhases; phase++ )
     {
-    LayerListType & layers = this->m_LayersComponents[component];
+    LayerListType & layers = this->m_LayersPhases[phase];
 
     // For all indicies in the active layer...
     for (activeIt = layers[0]->Begin();
@@ -976,7 +975,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       shiftedIt.SetLocation( activeIt->m_Value );
 
       const ValueType centerPixelValue   = shiftedIt.GetCenterPixel();
-      const ScalarValueType centerPixelValueComponent   = centerPixelValue[component];
+      const ScalarValueType centerPixelValuePhase   = centerPixelValue[phase];
 
       length = m_ScalarValueZero;
       for (i = 0; i < ImageDimension; ++i)
@@ -984,11 +983,11 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
         const ValueType forwardPixelValue  = shiftedIt.GetPixel(center + m_NeighborList.GetStride(i));
         const ValueType backwardPixelValue = shiftedIt.GetPixel(center - m_NeighborList.GetStride(i));
 
-        const ScalarValueType forwardPixelValueComponent  = forwardPixelValue[component];
-        const ScalarValueType backwardPixelValueComponent = backwardPixelValue[component];
+        const ScalarValueType forwardPixelValuePhase  = forwardPixelValue[phase];
+        const ScalarValueType backwardPixelValuePhase = backwardPixelValue[phase];
 
-        dx_forward  = ( forwardPixelValueComponent - centerPixelValueComponent   ) * neighborhoodScales[i];
-        dx_backward = ( centerPixelValueComponent  - backwardPixelValueComponent ) * neighborhoodScales[i];
+        dx_forward  = ( forwardPixelValuePhase - centerPixelValuePhase   ) * neighborhoodScales[i];
+        dx_backward = ( centerPixelValuePhase  - backwardPixelValuePhase ) * neighborhoodScales[i];
 
         if ( vnl_math_abs(dx_forward) > vnl_math_abs(dx_backward) )
           {
@@ -1000,11 +999,11 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
           }
         }
       length = vcl_sqrt((double)length) + MIN_NORM;
-      distance = centerPixelValueComponent / length;
+      distance = centerPixelValuePhase / length;
 
       ValueType outpuPixel = output->GetPixel( activeIt->m_Value );
 
-      outpuPixel[component] = vnl_math_min(vnl_math_max(-CHANGE_FACTOR, distance), CHANGE_FACTOR);
+      outpuPixel[phase] = vnl_math_min(vnl_math_max(-CHANGE_FACTOR, distance), CHANGE_FACTOR);
 
       output->SetPixel( activeIt->m_Value , outpuPixel );
       }
@@ -1024,8 +1023,8 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   // strategy for downsizing.
   m_UpdateBuffer.clear();
 
-  // Use the maximum of the sizes from all component layers.
-  LayerListType & layers = this->m_LayersComponents[0];
+  // Use the maximum of the sizes from all phase layers.
+  LayerListType & layers = this->m_LayersPhases[0];
   m_UpdateBuffer.reserve( layers[0]->Size() );
 }
 
@@ -1037,12 +1036,12 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::CalculateChange()
 {
   // the time step will be computed as the smallest of all the time steps
-  // computed across all image components.
+  // computed across all image phases.
   TimeStepType timeStep = NumericTraits<TimeStepType>::max();
 
-  for(unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
+  for(unsigned int phase = 0; phase < this->m_NumberOfPhases; phase++ )
     {
-    VectorDifferenceFunctionPointer df = this->m_DifferenceFunctions[component];
+    VectorDifferenceFunctionPointer df = this->m_DifferenceFunctions[phase];
 
     if( df.IsNull() )
       {
@@ -1085,9 +1084,9 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       }
 
 
-    for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
+    for( unsigned int phase = 0; phase < this->m_NumberOfPhases; phase++ )
       {
-      LayerListType & layers = this->m_LayersComponents[component];
+      LayerListType & layers = this->m_LayersPhases[phase];
 
       m_UpdateBuffer.clear();
       m_UpdateBuffer.reserve(layers[0]->Size());
@@ -1122,25 +1121,25 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
               dx_backward = centerValue - backwardValue;
 
               // Pick the larger magnitude derivative.
-    // FIXME         if (::vnl_math_abs(dx_forward) > ::vnl_math_abs(dx_backward) )
-    // FIXME           {
-    // FIXME           offset[i] = dx_forward;
-    // FIXME           }
-    // FIXME         else
-    // FIXME           {
-    // FIXME           offset[i] = dx_backward;
-    // FIXME           }
+              if (::vnl_math_abs(dx_forward[phase]) > ::vnl_math_abs(dx_backward[phase]) )
+                {
+                offset[i] = dx_forward[phase];
+                }
+              else
+                {
+                offset[i] = dx_backward[phase];
+                }
               }
             else //Neighbors are opposite sign, pick the direction of the 0 surface.
               {
-    // FIXME         if (forwardValue * centerValue < 0)
-    // FIXME           {
-    // FIXME           offset[i] = forwardValue - centerValue;
-    // FIXME           }
-    // FIXME         else
-    // FIXME           {
-    // FIXME           offset[i] = centerValue - backwardValue;
-    // FIXME           }
+              if (forwardValue[phase] * centerValue[phase] < 0)
+                {
+                offset[i] = forwardValue[phase] - centerValue[phase];
+                }
+              else
+                {
+                offset[i] = centerValue[phase] - backwardValue[phase];
+                }
               }
 
             norm_grad_phi_squared += offset[i] * offset[i];
@@ -1148,16 +1147,18 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
           for (i = 0; i < ImageDimension; ++i)
             {
-    // FIXME        offset[i] = (offset[i] * centerValue) / (norm_grad_phi_squared + MIN_NORM);
+            offset[i] = (offset[i] * centerValue[phase]) / (norm_grad_phi_squared + MIN_NORM);
             }
 
-              //  FIXME: Change GetDifferenceFunction() to GetComponentDifferenceFunction() ??
-              //  FIXME: OR... have multiple DifferenceFunctions() one per component...?
-          m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData, component, offset ) );
+          //  FIXME: Change GetDifferenceFunction() to GetComponentDifferenceFunction() ??
+          //  FIXME: OR... have multiple DifferenceFunctions() one per phase...?
+          //  FIXME: KK Check with Luis.. Looks like an old comment that we can ignore.
+          //
+          m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData, phase, offset ) );
           }
         else // Don't do interpolation
           {
-          m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData, component, 0.0 ) );
+          m_UpdateBuffer.push_back( df->ComputeUpdate(outputIt, globalData, phase, 0.0 ) );
           }
         }
       }
@@ -1184,20 +1185,20 @@ void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::PropagateAllLayerValues()
 {
-  for( unsigned int component = 0; component < this->m_NumberOfComponents; component++ )
+  for( unsigned int phase = 0; phase < this->m_NumberOfPhases; phase++ )
     {
     // Update values in the first inside and first outside layers using the
     // active layer as a seed. Inside layers are odd numbers, outside layers are
     // even numbers.
-    this->PropagateLayerValues(0, 1, 3, 1, component); // first inside
-    this->PropagateLayerValues(0, 2, 4, 2, component); // first outside
+    this->PropagateLayerValues(0, 1, 3, 1, phase); // first inside
+    this->PropagateLayerValues(0, 2, 4, 2, phase); // first outside
 
-    LayerListType & layers = this->m_LayersComponents[component];
+    LayerListType & layers = this->m_LayersPhases[phase];
 
     // Update the rest of the layers.
     for( unsigned int i = 1; i < layers.size() - 2; ++i )
       {
-      this->PropagateLayerValues(i, i+2, i+4, (i+2)%2, component);
+      this->PropagateLayerValues(i, i+2, i+4, (i+2)%2, phase);
       }
     }
 }
@@ -1206,16 +1207,16 @@ template <class TInputImage, class TOutputImage>
 void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::PropagateLayerValues(StatusType from, StatusType to,
-                       StatusType promote, int InOrOut,unsigned int component)
+                       StatusType promote, int InOrOut,unsigned int phase)
 {
   unsigned int i;
-  ValueType value, value_temp, delta;
-  value = NumericTraits<ValueType>::Zero; // warnings
+  ScalarValueType value, value_temp, delta;
+  value = NumericTraits<ScalarValueType>::Zero;
   bool found_neighbor_flag;
   typename LayerType::Iterator toIt;
   LayerNodeType *node;
 
-  LayerListType & layers = this->m_LayersComponents[component];
+  LayerListType & layers = this->m_LayersPhases[phase];
 
   StatusType past_end = static_cast<StatusType>( layers.size() ) - 1;
 
@@ -1243,7 +1244,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     statusIt.NeedToUseBoundaryConditionOff();
     }
 
-  toIt  = layers[to]->Begin();
+  toIt  = layers[to[phase]]->Begin();
   while ( toIt != layers[to]->End() )
     {
     statusIt.SetLocation( toIt->m_Value );
@@ -1251,11 +1252,11 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     // Is this index marked for deletion? If the status image has
     // been marked with another layer's value, we need to delete this node
     // from the current list then skip to the next iteration.
-    if (statusIt.GetCenterPixel() != to)
+    if (statusIt.GetCenterPixel()[phase] != to[phase])
       {
       node = toIt.GetPointer();
       ++toIt;
-      layers[to]->Unlink( node );
+      layers[to[phase]]->Unlink( node );
       m_LayerNodeStore->Return( node );
       continue;
       }
@@ -1268,9 +1269,9 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       // If this neighbor is in the "from" list, compare its absolute value
       // to to any previous values found in the "from" list.  Keep the value
       // that will cause the next layer to be closest to the zero level set.
-      if ( statusIt.GetPixel( m_NeighborList.GetArrayIndex(i) ) == from )
+      if ( statusIt.GetPixel( m_NeighborList.GetArrayIndex(i) )[phase] == from[phase] )
         {
-        value_temp = outputIt.GetPixel( m_NeighborList.GetArrayIndex(i) );
+        value_temp = outputIt.GetPixel( m_NeighborList.GetArrayIndex(i) )[phase];
 
         if (found_neighbor_flag == false)
           {
@@ -1281,18 +1282,18 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
           if (InOrOut == 1)
             {
             // Find the largest (least negative) neighbor
-// FIXME           if ( value_temp > value )
-// FIXME             {
-// FIXME             value = value_temp;
-// FIXME             }
+            if ( value_temp > value )
+             {
+             value = value_temp;
+             }
             }
           else
             {
             // Find the smallest (least positive) neighbor
-// FIXME           if (value_temp < value)
-// FIXME             {
-// FIXME             value = value_temp;
-// FIXME             }
+            if (value_temp < value)
+              {
+              value = value_temp;
+              }
             }
           }
         found_neighbor_flag = true;
@@ -1313,16 +1314,19 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       // status image accordingly.
       node  = toIt.GetPointer();
       ++toIt;
-      layers[to]->Unlink( node );
+      layers[to[phase]]->Unlink( node );
+      StatusType s = statusIt.GetCenterPixel();
       if ( promote > past_end )
         {
         m_LayerNodeStore->Return( node );
-        statusIt.SetCenterPixel(m_StatusNull);
+        s[phase] = m_StatusNullValue;
+        statusIt.SetCenterPixel(s);
         }
       else
         {
         layers[promote]->PushFront( node );
-        statusIt.SetCenterPixel(promote);
+        s[phase] = promote;
+        statusIt.SetCenterPixel(s);
         }
       }
     }
@@ -1352,17 +1356,23 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   for (outputIt = outputIt.Begin(), statusIt = statusIt.Begin();
        ! outputIt.IsAtEnd(); ++outputIt, ++statusIt)
     {
-    if (statusIt.Get() == m_StatusNull)
+    StatusType s = statusIt.Get();
+    typename OutputImageType::PixelType outputPixel = outputIt.Get();
+    for (int phase = 0; phase < this->m_NumberOfPhases; phase++)
       {
-// FIXME     if (outputIt.Get() > m_ValueZero)
-// FIXME       {
-// FIXME       outputIt.Set(inside_value);
-// FIXME       }
-// FIXME     else
-// FIXME       {
-// FIXME       outputIt.Set(outside_value);
-// FIXME       }
+      if (s[phase] == m_StatusNullValue)
+        {
+        if (outputPixel.Get() > NumericTraits< ScalarValueType >::Zero )
+          {
+          outputPixel[phase] = inside_value;
+          }
+        else
+          {
+          outputPixel[phase] = outside_value;
+          }
+        }
       }
+    outputIt.Set( outputPixel );
     }
 }
 
@@ -1380,7 +1390,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
   for( unsigned int c = 0; c < this->m_NumberOfComponents; c++ )
     {
-    const LayerListType & layers = this->m_LayersComponents[c];
+    const LayerListType & layers = this->m_LayersPhases[c];
 
     for( unsigned int i=0; i < layers.size(); i++)
       {

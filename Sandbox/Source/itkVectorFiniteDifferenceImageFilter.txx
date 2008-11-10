@@ -18,7 +18,7 @@
 #define __itkVectorFiniteDifferenceImageFilter_txx
 
 #include "itkVectorFiniteDifferenceImageFilter.h"
-#include "itkVectorFiniteDifferenceFunction.h"
+#include "itkVectorLevelSetFunction.h"
 #include "itkMeasurementVectorTraits.h"
 
 namespace itk {
@@ -28,7 +28,7 @@ template<class TInputImage, class TOutputImage>
 VectorFiniteDifferenceImageFilter<TInputImage, TOutputImage>
 ::VectorFiniteDifferenceImageFilter()
 {
-  this->SetDifferenceFunction( VectorFiniteDifferenceFunction<TInputImage>::New() );
+  this->SetDifferenceFunction( VectorLevelSetFunction<TInputImage>::New() );
 }
 
 template<class TInputImage, class TOutputImage>

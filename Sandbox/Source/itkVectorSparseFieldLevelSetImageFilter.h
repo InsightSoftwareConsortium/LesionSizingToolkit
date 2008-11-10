@@ -37,8 +37,8 @@ class SparseFieldLevelSetNode
 {
 public:
   TValueType                  m_Value;
-  SparseFieldLevelSetNode   * m_Next;
-  SparseFieldLevelSetNode   * m_Previous;
+  SparseFieldLevelSetNode   * Next;
+  SparseFieldLevelSetNode   * Previous;
 };
 
 /**
@@ -278,8 +278,8 @@ public:
   typedef std::vector<LayerPointerType>         LayerListType;
 
   /** A type for a list of LayerListTypes. Each one of them will correspond to
-   * a component (or phase) of the multi-component level set image. */
-  typedef std::vector<LayerListType>  LayerListComponentsType;
+   * a phase of the multi-phase level set image. */
+  typedef std::vector<LayerListType>  LayerListPhasesType;
 
   /** Type used for storing status information */
   typedef signed char StatusValueType;
@@ -290,7 +290,7 @@ public:
   StatusImageType;
 
   /** Type of the status pixel */
-  typedef StatusImageType::PixelType StatusType;
+  typedef typename StatusImageType::PixelType StatusType;
 
   /** Memory pre-allocator used to manage layer nodes in a multi-threaded
    *  environment. */
@@ -490,8 +490,8 @@ protected:
    * field. Layers are organized as follows: m_Layer[0] = active layer,
    * m_Layer[i:odd] = inside layer (i+1)/2, m_Layer[i:even] = outside layer i/2
   */
-  //  LayerListType m_Layers;  // FIXME: DEPRECATED: Replaced with m_LayersComponents
-  LayerListComponentsType   m_LayersComponents;
+  //  LayerListType m_Layers;  // FIXME: DEPRECATED: Replaced with m_LayersPhases
+  LayerListPhasesType   m_LayersPhases;
 
   /** The number of layers to use in the sparse field.  Sparse field will
    * consist of m_NumberOfLayers layers on both sides of a single active layer.
