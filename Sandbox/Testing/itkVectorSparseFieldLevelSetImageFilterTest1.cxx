@@ -44,6 +44,7 @@ public:
   typedef typename Superclass::TimeStepType         TimeStepType;
   typedef typename Superclass::LayerType            LayerType;
   typedef typename Superclass::StatusType           StatusType;
+  typedef typename Superclass::StatusValueType      StatusValueType;
 
   ValueType GetValueZero() const 
     {
@@ -69,7 +70,7 @@ public:
   return this->Superclass::CalculateUpdateValue(idx,dt,value,change);
   }
 
-  void ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus, unsigned int component)
+  void ProcessOutsideList(LayerType *OutsideList, StatusValueType ChangeToStatus, unsigned int component)
     {
     this->Superclass::ProcessOutsideList( OutsideList, ChangeToStatus, component );
     };
@@ -317,7 +318,7 @@ int main( int argc, char * argv [] )
   outsideList->PushFront( &node4 );
   outsideList->PushFront( &node5 );
 
-  HelperFilterType::StatusType changeToStatus = 0;;
+  HelperFilterType::StatusValueType changeToStatus = 0;
 
   helperFilter->SetInput( inputLevelSet );
 

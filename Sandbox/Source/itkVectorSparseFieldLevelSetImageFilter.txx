@@ -1050,12 +1050,12 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
     typename VectorDifferenceFunctionType::FloatOffsetType offset;
 
-    ValueType norm_grad_phi_squared;
-    ValueType dx_forward;
-    ValueType dx_backward;
-    ValueType forwardValue;
-    ValueType backwardValue;
-    ValueType centerValue;
+    ScalarValueType norm_grad_phi_squared;
+    ScalarValueType dx_forward;
+    ScalarValueType dx_backward;
+    ScalarValueType forwardValue;
+    ScalarValueType backwardValue;
+    ScalarValueType centerValue;
 
     unsigned i;
     ScalarValueType MIN_NORM      = 1.0e-6;
@@ -1103,7 +1103,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
         // neighborhood.  This is used by some level set functions in sampling a
         // speed, advection, or curvature term.
         if (this->GetInterpolateSurfaceLocation()
-                       && (centerValue = outputIt.GetCenterPixel()) != 0.0 )
+                       && (centerValue = outputIt.GetCenterPixel()[phase]) != 0.0 )
           {
           // Surface is at the zero crossing, so distance to surface is:
           // phi(x) / norm(grad(phi)), where phi(x) is the center of the
@@ -1112,8 +1112,8 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
           norm_grad_phi_squared = 0.0;
           for (i = 0; i < ImageDimension; ++i)
             {
-            forwardValue  = outputIt.GetNext(i);
-            backwardValue = outputIt.GetPrevious(i);
+            forwardValue  = outputIt.GetNext(i)[phase];
+            backwardValue = outputIt.GetPrevious(i)[phase];
 
             if (forwardValue * backwardValue >= 0)
               { //  Neighbors are same sign OR at least one neighbor is zero.
@@ -1121,24 +1121,24 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
               dx_backward = centerValue - backwardValue;
 
               // Pick the larger magnitude derivative.
-              if (::vnl_math_abs(dx_forward[phase]) > ::vnl_math_abs(dx_backward[phase]) )
+              if (::vnl_math_abs(dx_forward) > ::vnl_math_abs(dx_backward) )
                 {
-                offset[i] = dx_forward[phase];
+                offset[i] = dx_forward;
                 }
               else
                 {
-                offset[i] = dx_backward[phase];
+                offset[i] = dx_backward;
                 }
               }
             else //Neighbors are opposite sign, pick the direction of the 0 surface.
               {
-              if (forwardValue[phase] * centerValue[phase] < 0)
+              if (forwardValue * centerValue < 0)
                 {
-                offset[i] = forwardValue[phase] - centerValue[phase];
+                offset[i] = forwardValue - centerValue;
                 }
               else
                 {
-                offset[i] = centerValue[phase] - backwardValue[phase];
+                offset[i] = centerValue - backwardValue;
                 }
               }
 
@@ -1147,7 +1147,7 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
           for (i = 0; i < ImageDimension; ++i)
             {
-            offset[i] = (offset[i] * centerValue[phase]) / (norm_grad_phi_squared + MIN_NORM);
+            offset[i] = (offset[i] * centerValue) / (norm_grad_phi_squared + MIN_NORM);
             }
 
           //  FIXME: Change GetDifferenceFunction() to GetComponentDifferenceFunction() ??
@@ -1342,10 +1342,10 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   // with value less than the innermost layer.  Assign background pixels
   // OUTSIDE the sparse field layers to a new level set with value greater than
   // the outermost layer.
-  const ValueType max_layer = static_cast<ValueType>(m_NumberOfLayers);
+  const ScalarValueType max_layer = static_cast<ScalarValueType>(m_NumberOfLayers);
 
-  const ValueType inside_value  = (max_layer+1) * m_ConstantGradientValue;
-  const ValueType outside_value = -(max_layer+1) * m_ConstantGradientValue;
+  const ScalarValueType inside_value  = (max_layer+1) * m_ConstantGradientValue;
+  const ScalarValueType outside_value = -(max_layer+1) * m_ConstantGradientValue;
 
   ImageRegionConstIterator<StatusImageType> statusIt(m_StatusImage,
                                                      this->GetOutput()->GetRequestedRegion());
@@ -1358,11 +1358,11 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     {
     StatusType s = statusIt.Get();
     typename OutputImageType::PixelType outputPixel = outputIt.Get();
-    for (int phase = 0; phase < this->m_NumberOfPhases; phase++)
+    for (unsigned int phase = 0; phase < this->m_NumberOfPhases; phase++)
       {
       if (s[phase] == m_StatusNullValue)
         {
-        if (outputPixel.Get() > NumericTraits< ScalarValueType >::Zero )
+        if (outputPixel[phase] > NumericTraits< ScalarValueType >::Zero )
           {
           outputPixel[phase] = inside_value;
           }
