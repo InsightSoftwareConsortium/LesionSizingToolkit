@@ -103,6 +103,18 @@ LesionSegmentationMethod<NDimension>
 
 
 /**
+ * Define the segmentation module to be used.
+ */
+template <unsigned int NDimension>
+void
+LesionSegmentationMethod<NDimension>
+::SetSegmentationModule( SegmentationModuleType * segmentor )
+{
+  this->m_SegmentationModule = segmentor;
+}
+
+
+/**
  * Update feature generators
  */
 template <unsigned int NDimension>
