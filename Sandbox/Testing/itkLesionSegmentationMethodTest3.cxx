@@ -22,6 +22,7 @@
 #include "itkImageMaskSpatialObject.h"
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
+#include "itkSigmoidFeatureGenerator.h"
 #include "itkConnectedThresholdSegmentationModule.h"
 
 int main( int argc, char * argv [] )
@@ -73,8 +74,12 @@ int main( int argc, char * argv [] )
   typedef itk::LungWallFeatureGenerator< Dimension > LungWallGeneratorType;
   LungWallGeneratorType::Pointer lungWallGenerator = LungWallGeneratorType::New();
 
+  typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
+  SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
+ 
   lesionSegmentationMethod->AddFeatureGenerator( lungWallGenerator );
   lesionSegmentationMethod->AddFeatureGenerator( vesselnessGenerator );
+  lesionSegmentationMethod->AddFeatureGenerator( sigmoidGenerator );
 
 
   typedef MethodType::SpatialObjectType    SpatialObjectType;
@@ -90,7 +95,17 @@ int main( int argc, char * argv [] )
 
   lungWallGenerator->SetInput( inputObject );
   vesselnessGenerator->SetInput( inputObject );
+  sigmoidGenerator->SetInput( inputObject );
 
+  lungWallGenerator->SetLungThreshold( -400.0 );
+
+  vesselnessGenerator->SetSigma( 1.0 );
+  vesselnessGenerator->SetAlpha1( 0.5 );
+  vesselnessGenerator->SetAlpha2( 2.0 );
+ 
+  sigmoidGenerator->SetAlpha(  1.0  );
+  sigmoidGenerator->SetBeta( -700.0 );
+ 
   typedef itk::ConnectedThresholdSegmentationModule< Dimension >   SegmentationModuleType;
   
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
