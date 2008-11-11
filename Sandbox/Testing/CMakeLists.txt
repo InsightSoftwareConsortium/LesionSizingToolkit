@@ -163,8 +163,8 @@ ADD_TEST(itkLesionSegmentationMethodTest3
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/LesionSegmentationMethodTest3_1.mhd
-  -700
-  500
+  0.5
+  1.0
   )
 
 ADD_TEST(itkFeatureGeneratorTest1 ${CXX_TEST_PATH}/itkFeatureGeneratorTest1 )
