@@ -178,6 +178,8 @@ public:
   /** The type used for the advection field */
   typedef typename SegmentationFunctionType::VectorImageType VectorImageType;
   typedef typename SegmentationFunctionType::ImageType       SpeedImageType;
+  typedef typename SegmentationFunctionType::MatrixValueType MatrixValueType;
+  typedef typename SegmentationFunctionType::VectorValueType VectorValueType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorSegmentationLevelSetImageFilter, VectorSparseFieldLevelSetImageFilter);
@@ -269,13 +271,13 @@ public:
       terms. You should use either this -or- Get/SetPropagationScaling and
       Get/SetAdvectionScaling (if appropriate).  See subclasses for details
       on when and whether to set these parameters.*/
-  void SetFeatureScaling(ValueType v)
+  void SetFeatureScaling(MatrixValueType v)
     {
-    if (v != m_SegmentationFunction->GetPropagationWeight())
+    if (v != m_SegmentationFunction->GetPropagationWeights())
       {
       this->SetPropagationScaling(v);
       }
-    if (v != m_SegmentationFunction->GetAdvectionWeight())
+    if (v != m_SegmentationFunction->GetAdvectionWeights())
       {
       this->SetAdvectionScaling(v);
       }
@@ -283,48 +285,48 @@ public:
 
   /** Set/Get the scaling of the propagation speed.  Setting the FeatureScaling
       parameter overrides any previous values set for PropagationScaling. */
-  void SetPropagationScaling(ValueType v)
+  void SetPropagationScaling(MatrixValueType v)
     {
-    if (v != m_SegmentationFunction->GetPropagationWeight())
+    if (v != m_SegmentationFunction->GetPropagationWeights())
       {
-      m_SegmentationFunction->SetPropagationWeight(v);
+      m_SegmentationFunction->SetPropagationWeights(v);
       this->Modified();
       }
     }
-  ValueType GetPropagationScaling() const
+  MatrixValueType GetPropagationScaling() const
     {
-    return m_SegmentationFunction->GetPropagationWeight();
+    return m_SegmentationFunction->GetPropagationWeights();
     }
 
   /** Set/Get the scaling of the advection field.  Setting the FeatureScaling
       parameter will override any existing value for AdvectionScaling. */
-  void SetAdvectionScaling(ValueType v)
+  void SetAdvectionScaling(MatrixValueType v)
     {
-    if (v != m_SegmentationFunction->GetAdvectionWeight())
+    if (v != m_SegmentationFunction->GetAdvectionWeights())
       {
-      m_SegmentationFunction->SetAdvectionWeight(v);
+      m_SegmentationFunction->SetAdvectionWeights(v);
       this->Modified();
       }
     }
-  ValueType GetAdvectionScaling() const
+  MatrixValueType GetAdvectionScaling() const
     {
-    return m_SegmentationFunction->GetAdvectionWeight();
+    return m_SegmentationFunction->GetAdvectionWeights();
     }
 
   /** Set/Get the scaling of the curvature. Use this parameter to increase the
       influence of curvature on the movement of the surface.  Higher values
       relative to Advection and Propagation values will give smoother surfaces. */
-  void SetCurvatureScaling(ValueType v)
+  void SetCurvatureScaling(MatrixValueType v)
     {
-    if (v != m_SegmentationFunction->GetCurvatureWeight())
+    if (v != m_SegmentationFunction->GetCurvatureWeights())
       {
-      m_SegmentationFunction->SetCurvatureWeight(v);
+      m_SegmentationFunction->SetCurvatureWeights(v);
       this->Modified();
       }
     }
-  ValueType GetCurvatureScaling() const
+  MatrixValueType GetCurvatureScaling() const
     {
-    return m_SegmentationFunction->GetCurvatureWeight();
+    return m_SegmentationFunction->GetCurvatureWeights();
     }
 
 

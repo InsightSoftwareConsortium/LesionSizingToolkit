@@ -18,6 +18,7 @@
 #define __itkVectorSegmentationLevelSetImageFilter_txx
 
 #include "itkVectorSegmentationLevelSetImageFilter.h"
+#include "vnl/vnl_matrix.h"
 
 namespace itk {
 
@@ -83,12 +84,14 @@ VectorSegmentationLevelSetImageFilter<TInputImage, TFeatureImage, TOutputImage>
   // Allocate the images from which speeds will be sampled.
   if (this->GetState() == Superclass::UNINITIALIZED && m_AutoGenerateSpeedAdvection == true)
     {
-    if (this->GetSegmentationFunction()->GetPropagationWeight() != 0) // FIXME
+    // Generate the speed image of any of the propagation weights are non-zero
+    if (!this->GetSegmentationFunction()->GetPropagationWeights().GetVnlMatrix().is_zero())
       {
       this->GenerateSpeedImage();
       }
     
-    if (this->GetSegmentationFunction()->GetAdvectionWeight() != 0)
+    // Generate the speed image of any of the advection weights are non-zero
+    if (!this->GetSegmentationFunction()->GetAdvectionWeights().GetVnlMatrix().is_zero())
       {
       this->GenerateAdvectionImage();
       }

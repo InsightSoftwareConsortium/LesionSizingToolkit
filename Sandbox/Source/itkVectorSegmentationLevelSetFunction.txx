@@ -42,8 +42,8 @@ template <class TImageType, class TFeatureImageType>
 void VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
 ::ReverseExpansionDirection()
 {
-  this->SetPropagationWeight( -1.0 * this->GetPropagationWeight() );
-  this->SetAdvectionWeight( -1.0 * this->GetAdvectionWeight() );
+  this->SetPropagationWeights( this->GetPropagationWeights() * (-1.0) );
+  this->SetAdvectionWeights( this->GetAdvectionWeights() * (-1.0) );
 }
 
 template <class TImageType, class TFeatureImageType>

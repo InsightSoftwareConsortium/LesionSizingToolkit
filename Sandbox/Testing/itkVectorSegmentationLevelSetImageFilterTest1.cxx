@@ -88,9 +88,10 @@ int main( int argc, char * argv [] )
 
   const unsigned int Dimension = 2;
   const unsigned int NumberOfPhases = 2;
+  const unsigned int NumberOfComponents = 1;
 
   typedef itk::Vector< float, NumberOfPhases >           LevelSetPixelType;
-  typedef itk::Vector< float, NumberOfPhases >           FeaturePixelType;
+  typedef itk::Vector< float, NumberOfComponents >           FeaturePixelType;
 
   typedef itk::Image< LevelSetPixelType, Dimension >     LevelSetImageType;
   typedef itk::Image< FeaturePixelType, Dimension >      FeatureImageType;
@@ -104,6 +105,19 @@ int main( int argc, char * argv [] )
   FilterType::Pointer filter = FilterType::New();
 
   FunctionType::Pointer differenceFunction = FunctionType::New();
+
+  FunctionType::MatrixValueType curvatureWeights( NumberOfPhases, NumberOfPhases );
+  FunctionType::MatrixValueType propagationWeights( NumberOfPhases, NumberOfComponents );
+  FunctionType::MatrixValueType advectionWeights( NumberOfPhases, NumberOfComponents );
+  FunctionType::MatrixValueType laplacianSmoothingWeights( NumberOfPhases, NumberOfComponents );
+  curvatureWeights.SetIdentity();
+  propagationWeights.Fill(10.0);
+  advectionWeights.Fill(10.0);
+  laplacianSmoothingWeights.Fill(10.0);
+  differenceFunction->SetCurvatureWeights( curvatureWeights );
+  differenceFunction->SetPropagationWeights( propagationWeights );
+  differenceFunction->SetAdvectionWeights( advectionWeights );
+  differenceFunction->SetLaplacianSmoothingWeights( laplacianSmoothingWeights );
 
   std::cout << filter->GetNameOfClass() << std::endl;
 
@@ -123,9 +137,7 @@ int main( int argc, char * argv [] )
   inputLevelSet->Allocate();
 
   filter->SetInput( inputLevelSet );
-
   filter->SetNumberOfIterations( 5 );
-
   filter->SetSegmentationFunction( differenceFunction.GetPointer() );
 
   // Exercise the Print method 
@@ -315,12 +327,6 @@ int main( int argc, char * argv [] )
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
     }
-
-  //
-  // Set the weights and run the filter again.
-  //
-  differenceFunction->SetPropagationWeight( 10.0 );
-  differenceFunction->SetAdvectionWeight( 10.0 );
 
   // Force the filter to run again
   inputLevelSet->Modified();
