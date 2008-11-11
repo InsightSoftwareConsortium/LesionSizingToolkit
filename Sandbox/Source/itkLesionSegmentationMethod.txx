@@ -153,7 +153,9 @@ void
 LesionSegmentationMethod<NDimension>
 ::ConsolidateFeatures()
 {
-  
+  // Temporary implementation: use only feature #1.
+  // Future implementation: compute pixel-wise MIN of all the features. 
+  this->m_SegmentationModule->SetFeature( this->m_FeatureGenerators[0]->GetFeature() );
 }
 
  
@@ -162,7 +164,8 @@ void
 LesionSegmentationMethod<NDimension>
 ::ExecuteSegmentationModule()
 {
-  
+  this->m_SegmentationModule->SetInput( this->m_InitialSegmentation ); 
+  this->m_SegmentationModule->Update();
 }
 
 
