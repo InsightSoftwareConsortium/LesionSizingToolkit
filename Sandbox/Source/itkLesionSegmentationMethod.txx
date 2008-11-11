@@ -19,6 +19,7 @@
 
 #include "itkLesionSegmentationMethod.h"
 #include "itkImageSpatialObject.h"
+#include "itkImageRegionIterator.h"
 
 
 namespace itk
@@ -153,7 +154,64 @@ LesionSegmentationMethod<NDimension>
 {
   // Temporary implementation: use only feature #1.
   // Future implementation: compute pixel-wise MIN of all the features. 
-  this->m_SegmentationModule->SetFeature( this->m_FeatureGenerators[0]->GetFeature() );
+  // this->m_SegmentationModule->SetFeature( this->m_FeatureGenerators[0]->GetFeature() );
+  //
+
+
+  // Temporary implementation: compute the pixel-wise min of all the 
+  // input feature images.
+  //
+  typedef float                                                   FeaturePixelType;
+  typedef Image< FeaturePixelType, NDimension >                   FeatureImageType;
+  typedef ImageSpatialObject< NDimension, FeaturePixelType >      FeatureSpatialObjectType;
+
+  const FeatureSpatialObjectType * firstFeatureObject =
+    dynamic_cast< const FeatureSpatialObjectType * >( this->m_FeatureGenerators[0]->GetFeature() );
+
+  const FeatureImageType * firstFeatureImage = firstFeatureObject->GetImage();
+
+  typename FeatureImageType::Pointer consolidatedFeatureImage = FeatureImageType::New();
+
+  consolidatedFeatureImage->CopyInformation( firstFeatureImage );
+  consolidatedFeatureImage->SetRegions( firstFeatureImage->GetBufferedRegion() );
+  consolidatedFeatureImage->Allocate();
+  consolidatedFeatureImage->FillBuffer( NumericTraits< FeaturePixelType >::max() );
+
+  const unsigned int numberOfFeatures = this->m_FeatureGenerators.size();
+
+  for( unsigned int i = 0; i < numberOfFeatures; i++ )
+    {
+    const FeatureSpatialObjectType * featureObject =
+      dynamic_cast< const FeatureSpatialObjectType * >( this->m_FeatureGenerators[i]->GetFeature() );
+
+    const FeatureImageType * featureImage = featureObject->GetImage();
+
+    typedef ImageRegionIterator< FeatureImageType >          FeatureIterator;
+    typedef ImageRegionConstIterator< FeatureImageType >     FeatureConstIterator;
+
+    FeatureIterator       dstitr( consolidatedFeatureImage, consolidatedFeatureImage->GetBufferedRegion() );
+    FeatureConstIterator  srcitr( featureImage, featureImage->GetBufferedRegion() );
+
+    dstitr.GoToBegin();
+    srcitr.GoToBegin();
+   
+    while( !srcitr.IsAtEnd() )
+      {
+      if( dstitr.Get() > srcitr.Get() )
+        {
+        dstitr.Set( srcitr.Get() );
+        }
+      ++srcitr;
+      ++dstitr;
+      }
+    }
+   
+  typename FeatureSpatialObjectType::Pointer outputFeatureObject = 
+    FeatureSpatialObjectType::New();
+
+  outputFeatureObject->SetImage( consolidatedFeatureImage );
+
+  this->m_SegmentationModule->SetFeature( outputFeatureObject );
 }
 
  
