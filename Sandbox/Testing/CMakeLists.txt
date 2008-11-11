@@ -157,7 +157,15 @@ TARGET_LINK_LIBRARIES(itkShapeDetectionLevelSetSegmentationModuleTest1 LesionSiz
 
 ADD_TEST(itkLesionSegmentationMethodTest1 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest1 )
 ADD_TEST(itkLesionSegmentationMethodTest2 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest2 )
-ADD_TEST(itkLesionSegmentationMethodTest3 ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3 )
+
+ADD_TEST(itkLesionSegmentationMethodTest3 
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/LesionSegmentationMethodTest3_1.mhd
+  -700
+  500
+  )
 
 ADD_TEST(itkFeatureGeneratorTest1 ${CXX_TEST_PATH}/itkFeatureGeneratorTest1 )
 ADD_TEST(itkSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSegmentationModuleTest1 )
