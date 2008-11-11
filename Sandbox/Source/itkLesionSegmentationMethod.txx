@@ -21,6 +21,9 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageRegionIterator.h"
 
+// DEBUGGING code:
+#include "itkImageFileWriter.h"
+
 
 namespace itk
 {
@@ -210,6 +213,16 @@ LesionSegmentationMethod<NDimension>
     FeatureSpatialObjectType::New();
 
   outputFeatureObject->SetImage( consolidatedFeatureImage );
+
+  // DEBUGGING code
+  typedef ImageFileWriter< FeatureImageType > WriterType;
+  typename WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName("consolidatedFeature.mha");
+  writer->UseCompressionOn();
+  writer->SetInput( consolidatedFeatureImage );
+  writer->Update();
+  // DEBUGGING code to be removed
+
 
   this->m_SegmentationModule->SetFeature( outputFeatureObject );
 }
