@@ -92,7 +92,7 @@ public:
    * Method for setting the class that encapsulates the actual segmentation
    * algorithm.
    */
-  void SetSegmentationModule( SegmentationModuleType * segmentor ); 
+  itkSetObjectMacro( SegmentationModule, SegmentationModuleType );
 
 
 protected:
@@ -102,7 +102,7 @@ protected:
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData();
 
 private:
   LesionSegmentationMethod(const Self&); //purposely not implemented

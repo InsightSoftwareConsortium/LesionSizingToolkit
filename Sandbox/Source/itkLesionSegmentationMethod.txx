@@ -18,6 +18,7 @@
 #define __itkLesionSegmentationMethod_txx
 
 #include "itkLesionSegmentationMethod.h"
+#include "itkImageSpatialObject.h"
 
 
 namespace itk
@@ -31,6 +32,14 @@ LesionSegmentationMethod<NDimension>
 ::LesionSegmentationMethod()
 {
   this->SetNumberOfRequiredOutputs( 1 );  // for the Transform
+
+  typedef float                                                 OutputPixelType;
+  typedef Image< OutputPixelType, NDimension >                  OutputImageType;
+  typedef ImageSpatialObject< NDimension, OutputPixelType >     OutputSpatialObjectType;
+
+  typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
+
+  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
 }
 
 
@@ -103,18 +112,6 @@ LesionSegmentationMethod<NDimension>
 
 
 /**
- * Define the segmentation module to be used.
- */
-template <unsigned int NDimension>
-void
-LesionSegmentationMethod<NDimension>
-::SetSegmentationModule( SegmentationModuleType * segmentor )
-{
-  this->m_SegmentationModule = segmentor;
-}
-
-
-/**
  * Update feature generators
  */
 template <unsigned int NDimension>
@@ -125,12 +122,15 @@ LesionSegmentationMethod<NDimension>
   FeatureGeneratorIterator gitr = this->m_FeatureGenerators.begin();
   FeatureGeneratorIterator gend = this->m_FeatureGenerators.end();
 
+  unsigned int counter = 0;
+
   while( gitr != gend )
     {
     (*gitr)->Update();
     ++gitr;
     }
 }
+
 
 template <unsigned int NDimension>
 bool
