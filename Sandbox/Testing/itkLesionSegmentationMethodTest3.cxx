@@ -104,7 +104,7 @@ int main( int argc, char * argv [] )
   vesselnessGenerator->SetAlpha2( 2.0 );
  
   sigmoidGenerator->SetAlpha(  1.0  );
-  sigmoidGenerator->SetBeta( -700.0 );
+  sigmoidGenerator->SetBeta( -200.0 );
  
   typedef itk::ConnectedThresholdSegmentationModule< Dimension >   SegmentationModuleType;
   
@@ -113,8 +113,8 @@ int main( int argc, char * argv [] )
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
 
-  double lowerThreshold = -700;
-  double upperThreshold = 1000;
+  double lowerThreshold = 0.5;
+  double upperThreshold = 1.0;
 
   if( argc > 4 )
     {
