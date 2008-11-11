@@ -101,6 +101,7 @@ int main( int argc, char * argv [] )
   WriterType::Pointer writer = WriterType::New();
 
   writer->SetFileName( argv[2] );
+  writer->UseCompressionOn();
   writer->SetInput( outputImage );
 
 
