@@ -445,10 +445,10 @@ protected:
   double m_ConstantGradientValue;
 
   /** Multiplicative identity of the ValueType. */
-  static ValueType m_ValueOne;
+  ValueType m_ValueOne;
 
   /** Additive identity of the ValueType. */
-  static ValueType m_ValueZero;
+  ValueType m_ValueZero;
 
   /** Additive identity of the ScalarValueType. */
   static ScalarValueType m_ScalarValueZero;

@@ -288,11 +288,11 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
     for (i = 0; i < m_NeighborList.GetSize(); ++i)
       {
-      neighbor_status = statusIt.GetPixel(m_NeighborList.GetArrayIndex(i));
+      neighbor_status = statusIt.GetPixel(m_NeighborList.GetArrayIndex(i))[phase];
 
       // Have we bumped up against the boundary?  If so, turn on bounds
       // checking.
-      if ( neighbor_status == m_StatusBoundaryPixel )
+      if ( neighbor_status == m_StatusBoundaryPixel[phase] )
         {
         m_BoundsCheckingActive = true;
         }
@@ -418,13 +418,13 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       for (i = 0; i < m_NeighborList.GetSize(); ++i)
         {
         idx = m_NeighborList.GetArrayIndex(i);
-        neighbor_status = statusIt.GetPixel( idx );
+        neighbor_status = statusIt.GetPixel( idx )[phase];
         if (neighbor_status == 1)
           {
           // Keep the smallest possible value for the new active node.  This
           // places the new active layer node closest to the zero level-set.
-          if ( outputIt.GetPixel(idx) < LOWER_ACTIVE_THRESHOLD ||
-               ::vnl_math_abs(temp_value) < ::vnl_math_abs(outputIt.GetPixel(idx)) )
+          if ( outputIt.GetPixel(idx)[phase] < LOWER_ACTIVE_THRESHOLD ||
+               ::vnl_math_abs(temp_value) < ::vnl_math_abs(outputIt.GetPixel(idx)[phase]) )
             {
             typename OutputImageType::PixelType o = outputIt.GetPixel(idx);
             o[phase] = temp_value;
@@ -474,13 +474,13 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
       for (i = 0; i < m_NeighborList.GetSize(); ++i)
         {
         idx = m_NeighborList.GetArrayIndex(i);
-        neighbor_status = statusIt.GetPixel( idx );
+        neighbor_status = statusIt.GetPixel( idx )[phase];
         if (neighbor_status == 2)
           {
           // Keep the smallest magnitude value for this active set node.  This
           // places the node closest to the active layer.
-          if ( outputIt.GetPixel(idx) >= UPPER_ACTIVE_THRESHOLD ||
-               ::vnl_math_abs(temp_value) < ::vnl_math_abs(outputIt.GetPixel(idx)) )
+          if ( outputIt.GetPixel(idx)[phase] >= UPPER_ACTIVE_THRESHOLD ||
+               ::vnl_math_abs(temp_value) < ::vnl_math_abs(outputIt.GetPixel(idx)[phase]) )
             {
             typename OutputImageType::PixelType o = outputIt.GetPixel(idx);
             o[phase] = temp_value;
