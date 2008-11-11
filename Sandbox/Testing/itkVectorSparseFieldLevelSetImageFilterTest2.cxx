@@ -45,6 +45,7 @@ public:
   typedef typename Superclass::TimeStepType         TimeStepType;
   typedef typename Superclass::LayerType            LayerType;
   typedef typename Superclass::StatusType           StatusType;
+  typedef typename Superclass::StatusValueType      StatusValueType;
 
   ValueType GetValueZero() const 
     {
@@ -70,9 +71,9 @@ public:
   return this->Superclass::CalculateUpdateValue(idx,dt,value,change);
   }
 
-  void ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus, unsigned int component)
+  void ProcessOutsideList(LayerType *OutsideList, StatusValueType ChangeToStatus, unsigned int phase)
     {
-    this->Superclass::ProcessOutsideList( OutsideList, ChangeToStatus, component );
+    this->Superclass::ProcessOutsideList( OutsideList, ChangeToStatus, phase );
     };
 
   void Initialize()
@@ -94,9 +95,10 @@ int main( int argc, char * argv [] )
 
   const unsigned int Dimension = 2;
   const unsigned int NumberOfPhases = 3;
+  const unsigned int NumberOfComponents = 3;
 
   typedef itk::Vector< float, NumberOfPhases >           LevelSetPixelType;
-  typedef itk::Vector< float, NumberOfPhases >           FeaturePixelType;
+  typedef itk::Vector< float, NumberOfComponents >           FeaturePixelType;
 
   typedef itk::Image< LevelSetPixelType, Dimension >     LevelSetImageType;
   typedef itk::Image< FeaturePixelType, Dimension >      FeatureImageType;
@@ -104,7 +106,7 @@ int main( int argc, char * argv [] )
   typedef itk::VectorSparseFieldLevelSetImageFilter< 
     LevelSetImageType, LevelSetImageType >               FilterType;
 
-  typedef itk::VectorFiniteDifferenceFunction<LevelSetImageType>  FunctionType;
+  typedef itk::VectorLevelSetFunction<LevelSetImageType>  FunctionType;
 
   FilterType::Pointer filter = FilterType::New();
 
@@ -424,7 +426,7 @@ int main( int argc, char * argv [] )
   outsideList->PushFront( &node4 );
   outsideList->PushFront( &node5 );
 
-  HelperFilterType::StatusType changeToStatus = 0;;
+  HelperFilterType::StatusValueType changeToStatus = 0;;
 
   helperFilter->SetInput( inputLevelSet );
 
@@ -435,9 +437,9 @@ int main( int argc, char * argv [] )
   helperFilter->CopyInputToOutput();
   helperFilter->Initialize();
 
-  for(unsigned int component = 0; component < NumberOfPhases; component++ )
+  for(unsigned int phase = 0; phase < NumberOfPhases; phase++ )
     {
-    helperFilter->ProcessOutsideList( outsideList, changeToStatus, component );
+    helperFilter->ProcessOutsideList( outsideList, changeToStatus, phase );
     }
 
   try

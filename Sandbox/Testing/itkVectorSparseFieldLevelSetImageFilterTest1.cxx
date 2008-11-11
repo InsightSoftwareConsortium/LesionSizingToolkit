@@ -70,9 +70,9 @@ public:
   return this->Superclass::CalculateUpdateValue(idx,dt,value,change);
   }
 
-  void ProcessOutsideList(LayerType *OutsideList, StatusValueType ChangeToStatus, unsigned int component)
+  void ProcessOutsideList(LayerType *OutsideList, StatusValueType ChangeToStatus, unsigned int phase)
     {
-    this->Superclass::ProcessOutsideList( OutsideList, ChangeToStatus, component );
+    this->Superclass::ProcessOutsideList( OutsideList, ChangeToStatus, phase );
     };
 
   void Initialize()
@@ -94,9 +94,10 @@ int main( int argc, char * argv [] )
 
   const unsigned int Dimension = 2;
   const unsigned int NumberOfPhases = 3;
+  const unsigned int NumberOfComponents = 3;
 
   typedef itk::Vector< float, NumberOfPhases >           LevelSetPixelType;
-  typedef itk::Vector< float, NumberOfPhases >           FeaturePixelType;
+  typedef itk::Vector< float, NumberOfComponents >           FeaturePixelType;
 
   typedef itk::Image< LevelSetPixelType, Dimension >     LevelSetImageType;
   typedef itk::Image< FeaturePixelType, Dimension >      FeatureImageType;
@@ -329,9 +330,9 @@ int main( int argc, char * argv [] )
   helperFilter->CopyInputToOutput();
   helperFilter->Initialize();
 
-  for(unsigned int component = 0; component < NumberOfPhases; component++ )
+  for(unsigned int phase = 0; phase < NumberOfPhases; phase++ )
     {
-    helperFilter->ProcessOutsideList( outsideList, changeToStatus, component );
+    helperFilter->ProcessOutsideList( outsideList, changeToStatus, phase );
     }
 
   return EXIT_SUCCESS;
