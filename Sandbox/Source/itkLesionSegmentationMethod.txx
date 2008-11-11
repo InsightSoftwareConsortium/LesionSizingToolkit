@@ -122,8 +122,6 @@ LesionSegmentationMethod<NDimension>
   FeatureGeneratorIterator gitr = this->m_FeatureGenerators.begin();
   FeatureGeneratorIterator gend = this->m_FeatureGenerators.end();
 
-  unsigned int counter = 0;
-
   while( gitr != gend )
     {
     (*gitr)->Update();
