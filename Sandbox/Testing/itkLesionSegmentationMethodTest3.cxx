@@ -15,6 +15,8 @@
 
 #include "itkLesionSegmentationMethod.h"
 #include "itkImage.h"
+#include "itkImageFileReader.h"
+#include "itkImageFileWriter.h"
 #include "itkSpatialObject.h"
 #include "itkSpatialObjectReader.h"
 #include "itkImageMaskSpatialObject.h"
@@ -24,7 +26,36 @@
 
 int main( int argc, char * argv [] )
 {
+
+  if( argc < 3 )
+    {
+    std::cerr << "Missing Arguments" << std::endl;
+    std::cerr << argv[0] << " landmarksFile inputImage outputImage ";
+    std::cerr << " [lowerThreshold upperThreshold] " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+
   const unsigned int Dimension = 3;
+  typedef signed short   InputPixelType;
+
+  typedef itk::Image< InputPixelType, Dimension > InputImageType;
+
+  typedef itk::ImageFileReader< InputImageType > InputImageReaderType;
+  InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
+
+  inputImageReader->SetFileName( argv[2] );
+
+  try 
+    {
+    inputImageReader->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
+
 
   typedef itk::LesionSegmentationMethod< Dimension >   MethodType;
 
@@ -44,6 +75,21 @@ int main( int argc, char * argv [] )
 
   lesionSegmentationMethod->AddFeatureGenerator( lungWallGenerator );
   lesionSegmentationMethod->AddFeatureGenerator( vesselnessGenerator );
+
+
+  typedef MethodType::SpatialObjectType    SpatialObjectType;
+
+  typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
+  InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
+
+  InputImageType::Pointer inputImage = inputImageReader->GetOutput();
+
+  inputImage->DisconnectPipeline();
+
+  inputObject->SetImage( inputImage );
+
+  lungWallGenerator->SetInput( inputObject );
+  vesselnessGenerator->SetInput( inputObject );
 
   typedef itk::ConnectedThresholdSegmentationModule< Dimension >   SegmentationModuleType;
   
@@ -110,8 +156,34 @@ int main( int argc, char * argv [] )
 
   lesionSegmentationMethod->Update();
 
-  lesionSegmentationMethod->Print( std::cout );
-
   
+  typedef SegmentationModuleType::SpatialObjectType           SpatialObjectType;
+  typedef SegmentationModuleType::OutputSpatialObjectType     OutputSpatialObjectType;
+  typedef SegmentationModuleType::OutputImageType             OutputImageType;
+
+  SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
+
+  OutputSpatialObjectType::ConstPointer outputObject = 
+    dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
+
+  OutputImageType::ConstPointer outputImage = outputObject->GetImage();
+
+  typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
+  OutputWriterType::Pointer writer = OutputWriterType::New();
+
+  writer->SetFileName( argv[3] );
+  writer->SetInput( outputImage );
+
+
+  try 
+    {
+    writer->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
+
   return EXIT_SUCCESS;
 }
