@@ -548,6 +548,14 @@ ADD_TEST(CTRGTest002
   500
   )
 
+ADD_TEST(itkLesionSegmentationMethodTest3_SM0052-20000101 
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
+  ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
+  ${TEMP}/SM0052-20000101_1_ROI.mha
+  ${TEMP}/LesionSegmentationMethodTest3_SM0052-20000101.mha
+  0.5
+  1.0
+  )
 
 ENDIF(TEST_CORNELL_DATA_ROOT)
 
