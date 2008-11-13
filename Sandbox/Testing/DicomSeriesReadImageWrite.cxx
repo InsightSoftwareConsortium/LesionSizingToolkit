@@ -116,7 +116,7 @@ int main( int argc, char* argv[] )
     WriterType::Pointer writer = WriterType::New();
     
     writer->SetFileName( argv[2] );
-
+    writer->UseCompressionOn();
     writer->SetInput( reader->GetOutput() );
 
     std::cout  << "Writing the image as " << std::endl << std::endl;

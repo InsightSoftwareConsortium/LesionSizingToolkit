@@ -353,6 +353,13 @@ ADD_TEST(Read002
   ${TEMP}/CornellPartSolid3_1.mhd
   )
 
+# Test a solid lesion on the left lobe of the lung
+ADD_TEST(Read003-SM0052-20000101 
+  ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
+  ${TEST_CORNELL_DATA_ROOT}/SM0052-20000101/SM0052/20000101-154701-2-1
+  ${TEMP}/SM0052-20000101_1.mha
+  )
+
 ADD_TEST(ROI001 
   ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
   ${TEMP}/CornellPartSolid2_1.mhd
@@ -369,6 +376,14 @@ ADD_TEST(ROI002
   100 120  64
   )
 
+# Extract ROI of a solid lesion from the left lobe of the lung
+ADD_TEST(ROI003-SM0052-20000101 
+  ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
+  ${TEMP}/SM0052-20000101_1.mha
+  ${TEMP}/SM0052-20000101_1_ROI.mha
+  317   193   154
+  111   116   85
+  )
 
 ADD_TEST(GMSFGTest001
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1

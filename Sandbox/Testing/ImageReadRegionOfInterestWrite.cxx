@@ -85,6 +85,7 @@ int main( int argc, char ** argv )
 
   filter->SetInput( reader->GetOutput() );
   writer->SetInput( filter->GetOutput() );
+  writer->UseCompressionOn();
 
   try 
     { 
