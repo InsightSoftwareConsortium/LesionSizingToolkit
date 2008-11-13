@@ -107,6 +107,23 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
     } 
 
+  if( argc > 6 )
+    {
+    writer->SetInput( cannyFilter->GetNonMaximumSuppressionImage() );
+    writer->SetFileName( argv[6] );
+
+    try 
+      {
+      writer->Update();
+      }
+    catch( itk::ExceptionObject & err ) 
+      { 
+      std::cout << "ExceptionObject caught !" << std::endl; 
+      std::cout << err << std::endl; 
+      return EXIT_FAILURE;
+      } 
+    }
+  
 
   return EXIT_SUCCESS;
 }

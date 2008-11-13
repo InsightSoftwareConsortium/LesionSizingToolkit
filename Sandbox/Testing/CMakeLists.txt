@@ -233,6 +233,7 @@ ADD_TEST(CannyEdgeDetectionImageFilterTest1
   0.7 # Sigma
   150 # Upper hysteresis threshold
   75  # Lower hysteresis threshold
+  ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest1_1.mhd
   )
 
 ADD_TEST(itkCannyEdgesDistanceFeatureGeneratorTest1 
