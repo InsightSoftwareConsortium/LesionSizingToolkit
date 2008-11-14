@@ -548,6 +548,17 @@ ADD_TEST(CTRGTest002
   500
   )
 
+# Part solid lesion with some attachemnt to the right lung wall.
+# CornellPartSolid2/SM0055-20000101
+ADD_TEST(itkLesionSegmentationMethodTest3_CornellPartSolid2
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
+  ${TEST_DATA_ROOT}/Input/CornellPartSolid2Seeds1.txt
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/LesionSegmentationMethodTest3_CornellPartSolid2.mha
+  0.5
+  1.0
+  )
+
 ADD_TEST(itkLesionSegmentationMethodTest3_SM0052-20000101 
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
   ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
