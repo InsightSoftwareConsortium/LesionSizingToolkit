@@ -111,6 +111,11 @@ LesionSegmentationMethod<NDimension>
     {
     this->ConsolidateFeatures();
     }
+  else
+    {
+    this->m_SegmentationModule->SetFeature( 
+        this->m_FeatureGenerators[0]->GetFeature() );
+    }
   this->ExecuteSegmentationModule();
 }
 
