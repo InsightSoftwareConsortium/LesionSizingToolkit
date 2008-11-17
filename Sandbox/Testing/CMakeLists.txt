@@ -360,6 +360,12 @@ ADD_TEST(Read003-SM0052-20000101
   ${TEMP}/SM0052-20000101_1.mha
   )
 
+ADD_TEST(Read004-SM0054-20000101
+  ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
+  ${TEST_CORNELL_DATA_ROOT}/SM0054-20000101/SM0054/20000101-141301-2-1
+  ${TEMP}/SM0054-20000101_1.mha
+  )
+
 ADD_TEST(ROI001 
   ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
   ${TEMP}/CornellPartSolid2_1.mhd
@@ -385,6 +391,16 @@ ADD_TEST(ROI003-SM0052-20000101
   111   116   85
   )
 
+# Extract ROI of a solid lesion from the left lobe of the lung attached
+# heavily to the upper left lung wall.
+ADD_TEST(ROI004-SM0054-20000101
+  ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
+  ${TEMP}/SM0054-20000101_1.mha
+  ${TEMP}/SM0054-20000101_1_ROI.mha
+  324 235 129
+  124 103 54
+  )
+
 ADD_TEST(GMSFGTest001
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   ${TEMP}/CornellPartSolid2_1_ROI.mhd
@@ -406,6 +422,13 @@ ADD_TEST(LWFGTest001
   ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
   ${TEMP}/CornellPartSolid2_1_ROI.mhd
   ${TEMP}/LWFGTest001_01.mhd
+  -400.0 
+  )
+
+ADD_TEST(LWFGTest004-SM0054-20000101
+  ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
+  ${TEMP}/SM0054-20000101_1_ROI.mha
+  ${TEMP}/LWFGTest004_SM0054-20000101_1.mha
   -400.0 
   )
 
@@ -564,6 +587,15 @@ ADD_TEST(itkLesionSegmentationMethodTest3_SM0052-20000101
   ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
   ${TEMP}/SM0052-20000101_1_ROI.mha
   ${TEMP}/LesionSegmentationMethodTest3_SM0052-20000101.mha
+  0.5
+  1.0
+  )
+
+ADD_TEST(itkLesionSegmentationMethodTest3_SM0054-20000101 
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
+  ${TEST_DATA_ROOT}/Input/SM0054-20000101-CroppedSeeds1.txt
+  ${TEMP}/SM0054-20000101_1_ROI.mha
+  ${TEMP}/LesionSegmentationMethodTest3_SM0054-20000101.mha
   0.5
   1.0
   )
