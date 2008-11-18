@@ -74,8 +74,8 @@ public:
   const SpatialObjectType * GetFeature() const;
 
   /** Set the Hounsfield Unit value to threshold the Lung. */
-  itkSetMacro( LungThreshold, double );
-  itkGetMacro( LungThreshold, double );
+  itkSetMacro( LungThreshold, InputPixelType );
+  itkGetMacro( LungThreshold, InputPixelType );
 
 protected:
   LungWallFeatureGenerator();
@@ -109,7 +109,7 @@ private:
   ThresholdFilterPointer                m_ThresholdFilter;
   VotingHoleFillingFilterPointer        m_VotingHoleFillingFilter;
 
-  double                                m_LungThreshold;
+  InputPixelType                        m_LungThreshold;
 };
 
 } // end namespace itk

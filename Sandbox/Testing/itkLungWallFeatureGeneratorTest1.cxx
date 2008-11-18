@@ -76,7 +76,7 @@ int main( int argc, char * argv [] )
 
   if( argc > 3 )
     {
-    featureGenerator->SetLungThreshold( atof( argv[3] ) );
+    featureGenerator->SetLungThreshold( atoi( argv[3] ) );
     }
 
 

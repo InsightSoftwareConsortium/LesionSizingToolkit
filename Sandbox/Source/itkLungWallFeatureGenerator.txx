@@ -40,7 +40,7 @@ LungWallFeatureGenerator<NDimension>
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
 
-  this->m_LungThreshold = -400.0;
+  this->m_LungThreshold = -400;
 }
 
 
@@ -117,7 +117,7 @@ LungWallFeatureGenerator<NDimension>
   this->m_VotingHoleFillingFilter->SetInput( this->m_ThresholdFilter->GetOutput() );
 
   this->m_ThresholdFilter->SetLowerThreshold( this->m_LungThreshold );
-  this->m_ThresholdFilter->SetUpperThreshold( 3000.0 );
+  this->m_ThresholdFilter->SetUpperThreshold( 3000 );
 
   this->m_ThresholdFilter->SetInsideValue( 0.0 );
   this->m_ThresholdFilter->SetOutsideValue( 1.0 );

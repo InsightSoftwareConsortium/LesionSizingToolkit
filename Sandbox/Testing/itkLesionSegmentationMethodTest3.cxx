@@ -97,7 +97,7 @@ int main( int argc, char * argv [] )
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
 
-  lungWallGenerator->SetLungThreshold( -400.0 );
+  lungWallGenerator->SetLungThreshold( -400 );
 
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
