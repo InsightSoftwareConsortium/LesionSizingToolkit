@@ -24,10 +24,12 @@ namespace itk
 
 /** \class WeightedSumFeatureAggregator
  * \brief Class for combining multiple features into a single one by computing
- * the pixel-wise minimum. 
+ * a pixel-wise weighted sum that is normalized to produce a number between 0
+ * and 1.
  *
  * This class generates a new feature object containing an image that is
- * computed as the pixel-wise minimum of all the input feature images.
+ * computed as the pixel-wise weighted sum of all the input feature images.
+ * The user must provide the weight to be used.
  *
  * \warning This class assumes that all the images have the same: origin,
  * spacing, orientation, and that they are represented in the same image grid.
@@ -42,7 +44,7 @@ class ITK_EXPORT WeightedSumFeatureAggregator : public FeatureAggregator<NDimens
 {
 public:
   /** Standard class typedefs. */
-  typedef WeightedSumFeatureAggregator            Self;
+  typedef WeightedSumFeatureAggregator        Self;
   typedef FeatureAggregator<NDimension>       Superclass;
   typedef SmartPointer<Self>                  Pointer;
   typedef SmartPointer<const Self>            ConstPointer;
