@@ -110,6 +110,9 @@ TARGET_LINK_LIBRARIES(itkFeatureAggregatorTest1 LesionSizingSandbox)
 ADD_EXECUTABLE(itkMinimumFeatureAggregatorTest1 itkMinimumFeatureAggregatorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkMinimumFeatureAggregatorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkWeightedSumFeatureAggregatorTest1 itkWeightedSumFeatureAggregatorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkWeightedSumFeatureAggregatorTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkCannyEdgesDistanceFeatureGeneratorTest1 itkCannyEdgesDistanceFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkCannyEdgesDistanceFeatureGeneratorTest1 LesionSizingSandbox)
 
@@ -624,6 +627,14 @@ ADD_TEST(itkMinimumFeatureAggregatorTest1
   1.0
   )
 
+ADD_TEST(itkWeightedSumFeatureAggregatorTest1 
+  ${CXX_TEST_PATH}/itkWeightedSumFeatureAggregatorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/WeightedSumFeatureAggregatorTest1_1.mhd
+  0.5
+  1.0
+  )
 
 ENDIF(TEST_CORNELL_DATA_ROOT)
 

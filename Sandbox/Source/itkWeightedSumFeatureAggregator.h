@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    itkMinimumFeatureAggregator.h
+  Module:    itkWeightedSumFeatureAggregator.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -14,15 +14,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkMinimumFeatureAggregator_h
-#define __itkMinimumFeatureAggregator_h
+#ifndef __itkWeightedSumFeatureAggregator_h
+#define __itkWeightedSumFeatureAggregator_h
 
 #include "itkFeatureAggregator.h"
 
 namespace itk
 {
 
-/** \class MinimumFeatureAggregator
+/** \class WeightedSumFeatureAggregator
  * \brief Class for combining multiple features into a single one by computing
  * the pixel-wise minimum. 
  *
@@ -38,11 +38,11 @@ namespace itk
  * \ingroup SpatialObjectFilters
  */
 template <unsigned int NDimension>
-class ITK_EXPORT MinimumFeatureAggregator : public FeatureAggregator<NDimension>
+class ITK_EXPORT WeightedSumFeatureAggregator : public FeatureAggregator<NDimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef MinimumFeatureAggregator            Self;
+  typedef WeightedSumFeatureAggregator            Self;
   typedef FeatureAggregator<NDimension>       Superclass;
   typedef SmartPointer<Self>                  Pointer;
   typedef SmartPointer<const Self>            ConstPointer;
@@ -51,20 +51,20 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MinimumFeatureAggregator, FeatureAggregator);
+  itkTypeMacro(WeightedSumFeatureAggregator, FeatureAggregator);
 
   /** Dimension of the space */
   itkStaticConstMacro(Dimension, unsigned int, NDimension);
 
 
 protected:
-  MinimumFeatureAggregator();
-  virtual ~MinimumFeatureAggregator();
+  WeightedSumFeatureAggregator();
+  virtual ~WeightedSumFeatureAggregator();
   void PrintSelf(std::ostream& os, Indent indent) const;
 
 
 private:
-  MinimumFeatureAggregator(const Self&); //purposely not implemented
+  WeightedSumFeatureAggregator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   void ConsolidateFeatures();
@@ -74,7 +74,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkMinimumFeatureAggregator.txx"
+# include "itkWeightedSumFeatureAggregator.txx"
 #endif
 
 #endif
