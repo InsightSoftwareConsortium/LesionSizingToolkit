@@ -20,6 +20,7 @@
 #include "itkVotingBinaryHoleFillFloodingImageFilter.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
+#include "itkImageRegionExclusionIteratorWithIndex.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkOffset.h"
 
@@ -157,10 +158,21 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
   typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator fit;
 
+
   // Process only the internal face
   fit = faceList.begin();
   
   this->m_InternalRegion = *fit;
+
+  // Mark all the pixels in the boundary of the seed image as visited
+  typedef itk::ImageRegionExclusionIteratorWithIndex< 
+    SeedMaskImageType > ExclusionIteratorType;
+  ExclusionIteratorType exIt( this->m_SeedsMask, region );
+  exIt.SetExclusionRegion( this->m_InternalRegion );
+  for (exIt.GoToBegin(); !exIt.IsAtEnd(); ++exIt)
+    {
+    exIt.Set( 255 );
+    }
 
   bit = ConstNeighborhoodIterator<InputImageType>( radius, inputImage, this->m_InternalRegion );
   itr  = ImageRegionIterator<OutputImageType>(    this->m_OutputImage, this->m_InternalRegion );
@@ -383,7 +395,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
       NeighborOffsetType offset = this->m_Neighborhood.GetOffset(i);
       IndexType neighborIndex = this->GetCurrentPixelIndex() + offset;
 
-      if( this->m_InternalRegion.IsInside( neighborIndex ) )
+      //if( this->m_InternalRegion.IsInside( neighborIndex ) )
         {
         if( this->m_SeedsMask->GetPixel( neighborIndex ) == 0 )
           {
