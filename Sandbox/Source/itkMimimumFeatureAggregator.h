@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    itkFeatureAggregator.h
+  Module:    itkMimimumFeatureAggregator.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFeatureAggregator_h
-#define __itkFeatureAggregator_h
+#ifndef __itkMinimumFeatureAggregator_h
+#define __itkMinimumFeatureAggregator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"
@@ -24,10 +24,15 @@
 namespace itk
 {
 
-/** \class FeatureAggregator
- * \brief Class for combining multiple features into a single one. 
+/** \class MinimumFeatureAggregator
+ * \brief Class for combining multiple features into a single one by computing
+ * the pixel-wise minimum. 
  *
- * This class is the base class for specific implementation of feature
+ * This class generates a new feature object containing an image that is
+ * computed as the pixel-wise minimum of all the input feature images.
+ *
+ * \warning This class assumes that all the images have the same: origin,
+ * spacing, orientation, and that they are represented in the same image grid.
  * mixing strategies.
  *
  * SpatialObjects are used as inputs and outputs of this class.
@@ -35,75 +40,53 @@ namespace itk
  * \ingroup SpatialObjectFilters
  */
 template <unsigned int NDimension>
-class ITK_EXPORT FeatureAggregator : public FeatureGenerator<NDimension>
+class ITK_EXPORT MinimumFeatureAggregator : public FeatureAggregator<NDimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef FeatureAggregator             Self;
-  typedef FeatureGenerator<NDimension>  Superclass;
+  typedef MinimumFeatureAggregator      Self;
+  typedef FeatureAggregator             Superclass;
   typedef SmartPointer<Self>            Pointer;
   typedef SmartPointer<const Self>      ConstPointer;
 
-  /** This is an abstract class, therefore it doesn't need the itkNewMacro() */
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FeatureAggregator, FeatureGenerator);
+  itkTypeMacro(MinimumFeatureAggregator, FeatureAggregator);
 
   /** Dimension of the space */
   itkStaticConstMacro(Dimension, unsigned int, NDimension);
 
-  /** Type of spatialObject that will be passed as input and output of this
-   * segmentation method. */
-  typedef SpatialObject< NDimension >                 SpatialObjectType;
-  typedef typename SpatialObjectType::Pointer         SpatialObjectPointer;
-  typedef typename SpatialObjectType::ConstPointer    SpatialObjectConstPointer;
-
-  /** Type of the class that will generate input features in the form of
-   * spatial objects. */
-  typedef FeatureGenerator< Dimension >         FeatureGeneratorType;
-
-  /**
-   * Method for adding a feature generator that will compute the Nth feature to
-   * be passed to the segmentation module.
-   */
-  void AddFeatureGenerator( FeatureGeneratorType * generator ); 
 
 protected:
-  FeatureAggregator();
-  virtual ~FeatureAggregator();
+  MinimumFeatureAggregator();
+  virtual ~MinimumFeatureAggregator();
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
   void  GenerateData();
 
-  unsigned int GetNumberOfInputFeatures() const;
-
-  typedef typename FeatureGeneratorType::SpatialObjectType      InputFeatureType;
-
-  const InputFeatureType * GetInputFeature( unsigned int featureId ) const;
 
 private:
-  FeatureAggregator(const Self&); //purposely not implemented
+  MinimumFeatureAggregator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  typedef typename Superclass::FeatureGeneratorType             FeatureGeneratorType;
   typedef typename FeatureGeneratorType::Pointer                FeatureGeneratorPointer;
   typedef std::vector< FeatureGeneratorPointer >                FeatureGeneratorArrayType;
   typedef typename FeatureGeneratorArrayType::iterator          FeatureGeneratorIterator;
   typedef typename FeatureGeneratorArrayType::const_iterator    FeatureGeneratorConstIterator;
 
-  FeatureGeneratorArrayType                 m_FeatureGenerators;
-
-  void UpdateAllFeatureGenerators();
-
-  void virtual ConsolidateFeatures() = 0;
+  void ConsolidateFeatures();
 
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkFeatureAggregator.txx"
+# include "itkMinimumFeatureAggregator.txx"
 #endif
 
 #endif

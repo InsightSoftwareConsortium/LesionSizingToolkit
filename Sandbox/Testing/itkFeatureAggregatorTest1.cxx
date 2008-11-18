@@ -25,6 +25,106 @@
 #include "itkSigmoidFeatureGenerator.h"
 #include "itkConnectedThresholdSegmentationModule.h"
 
+namespace itk 
+{
+template< unsigned int NDimension>
+class FeatureAggregatorSurrogate : public FeatureAggregator< NDimension >
+{
+public:
+  /** Standard class typedefs. */
+  typedef FeatureAggregatorSurrogate        Self;
+  typedef FeatureAggregator<NDimension>     Superclass;
+  typedef SmartPointer<Self>                Pointer;
+  typedef SmartPointer<const Self>          ConstPointer;
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(FeatureAggregatorSurrogate, FeatureAggregator);
+
+  /** Dimension of the space */
+  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+
+
+protected:
+  FeatureAggregatorSurrogate() {};
+  virtual ~FeatureAggregatorSurrogate() {};
+  void PrintSelf(std::ostream& os, Indent indent) const;
+
+  /** Method invoked by the pipeline in order to trigger the computation of
+   * the segmentation. */
+  void  GenerateData();
+
+
+private:
+  FeatureAggregatorSurrogate(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+  typedef typename Superclass::FeatureGeneratorType             FeatureGeneratorType;
+  typedef typename FeatureGeneratorType::Pointer                FeatureGeneratorPointer;
+  typedef std::vector< FeatureGeneratorPointer >                FeatureGeneratorArrayType;
+  typedef typename FeatureGeneratorArrayType::iterator          FeatureGeneratorIterator;
+  typedef typename FeatureGeneratorArrayType::const_iterator    FeatureGeneratorConstIterator;
+
+  virtual void ConsolidateFeatures()
+    {
+    typedef float                                                   FeaturePixelType;
+    typedef Image< FeaturePixelType, NDimension >                   FeatureImageType;
+    typedef ImageSpatialObject< NDimension, FeaturePixelType >      FeatureSpatialObjectType;
+
+    const FeatureSpatialObjectType * firstFeatureObject =
+      dynamic_cast< const FeatureSpatialObjectType * >( this->GetInputFeature(0) );
+
+    const FeatureImageType * firstFeatureImage = firstFeatureObject->GetImage();
+
+    typename FeatureImageType::Pointer consolidatedFeatureImage = FeatureImageType::New();
+
+    consolidatedFeatureImage->CopyInformation( firstFeatureImage );
+    consolidatedFeatureImage->SetRegions( firstFeatureImage->GetBufferedRegion() );
+    consolidatedFeatureImage->Allocate();
+    consolidatedFeatureImage->FillBuffer( NumericTraits< FeaturePixelType >::max() );
+
+    const unsigned int numberOfFeatures = this->GetNumberOfInputFeatures();
+
+    for( unsigned int i = 0; i < numberOfFeatures; i++ )
+      {
+      const FeatureSpatialObjectType * featureObject =
+        dynamic_cast< const FeatureSpatialObjectType * >( this->GetInputFeature(i) );
+
+      const FeatureImageType * featureImage = featureObject->GetImage();
+
+      typedef ImageRegionIterator< FeatureImageType >          FeatureIterator;
+      typedef ImageRegionConstIterator< FeatureImageType >     FeatureConstIterator;
+
+      FeatureIterator       dstitr( consolidatedFeatureImage, consolidatedFeatureImage->GetBufferedRegion() );
+      FeatureConstIterator  srcitr( featureImage, featureImage->GetBufferedRegion() );
+
+      dstitr.GoToBegin();
+      srcitr.GoToBegin();
+     
+      while( !srcitr.IsAtEnd() )
+        {
+        if( dstitr.Get() > srcitr.Get() )
+          {
+          dstitr.Set( srcitr.Get() );
+          }
+        ++srcitr;
+        ++dstitr;
+        }
+      }
+
+    FeatureSpatialObjectType * outputObject =
+      dynamic_cast< FeatureSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+
+    outputObject->SetImage( consolidatedFeatureImage );
+    }
+
+};
+
+} // end of itk namespace
+
+
 int main( int argc, char * argv [] )
 {
 
@@ -58,7 +158,7 @@ int main( int argc, char * argv [] )
     }
 
 
-  typedef itk::FeatureAggregator< Dimension >   AggregatorType;
+  typedef itk::FeatureAggregatorSurrogate< Dimension >   AggregatorType;
 
   AggregatorType::Pointer  featureAggregator = AggregatorType::New();
   

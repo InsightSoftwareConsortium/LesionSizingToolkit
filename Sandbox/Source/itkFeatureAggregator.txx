@@ -68,6 +68,28 @@ FeatureAggregator<NDimension>
 }
 
 
+template <unsigned int NDimension>
+unsigned int
+FeatureAggregator<NDimension>
+::GetNumberOfInputFeatures() const
+{
+  return this->m_FeatureGenerators.size();
+}
+
+
+template <unsigned int NDimension>
+const typename FeatureAggregator<NDimension>::InputFeatureType * 
+FeatureAggregator<NDimension>
+::GetInputFeature( unsigned int featureId ) const
+{
+  if( featureId >= this->GetNumberOfInputFeatures() )
+    {
+    itkExceptionMacro("Feature Id" << featureId << " doesn't exist"); 
+    }
+  return this->m_FeatureGenerators[featureId]->GetFeature();
+}
+
+
 /**
  * PrintSelf
  */
@@ -121,68 +143,6 @@ FeatureAggregator<NDimension>
     (*gitr)->Update();
     ++gitr;
     }
-}
-
- 
-template <unsigned int NDimension>
-void
-FeatureAggregator<NDimension>
-::ConsolidateFeatures()
-{
-  //
-  // Temporary implementation: compute the pixel-wise min of all the 
-  // input feature images. MOVE THIS TO A DERIVED CLASS
-  //
-  typedef float                                                   FeaturePixelType;
-  typedef Image< FeaturePixelType, NDimension >                   FeatureImageType;
-  typedef ImageSpatialObject< NDimension, FeaturePixelType >      FeatureSpatialObjectType;
-
-  const FeatureSpatialObjectType * firstFeatureObject =
-    dynamic_cast< const FeatureSpatialObjectType * >( this->m_FeatureGenerators[0]->GetFeature() );
-
-  const FeatureImageType * firstFeatureImage = firstFeatureObject->GetImage();
-
-  typename FeatureImageType::Pointer consolidatedFeatureImage = FeatureImageType::New();
-
-  consolidatedFeatureImage->CopyInformation( firstFeatureImage );
-  consolidatedFeatureImage->SetRegions( firstFeatureImage->GetBufferedRegion() );
-  consolidatedFeatureImage->Allocate();
-  consolidatedFeatureImage->FillBuffer( NumericTraits< FeaturePixelType >::max() );
-
-  const unsigned int numberOfFeatures = this->m_FeatureGenerators.size();
-
-  for( unsigned int i = 0; i < numberOfFeatures; i++ )
-    {
-    const FeatureSpatialObjectType * featureObject =
-      dynamic_cast< const FeatureSpatialObjectType * >( this->m_FeatureGenerators[i]->GetFeature() );
-
-    const FeatureImageType * featureImage = featureObject->GetImage();
-
-    typedef ImageRegionIterator< FeatureImageType >          FeatureIterator;
-    typedef ImageRegionConstIterator< FeatureImageType >     FeatureConstIterator;
-
-    FeatureIterator       dstitr( consolidatedFeatureImage, consolidatedFeatureImage->GetBufferedRegion() );
-    FeatureConstIterator  srcitr( featureImage, featureImage->GetBufferedRegion() );
-
-    dstitr.GoToBegin();
-    srcitr.GoToBegin();
-   
-    while( !srcitr.IsAtEnd() )
-      {
-      if( dstitr.Get() > srcitr.Get() )
-        {
-        dstitr.Set( srcitr.Get() );
-        }
-      ++srcitr;
-      ++dstitr;
-      }
-    }
-
-  FeatureSpatialObjectType * outputObject =
-    dynamic_cast< FeatureSpatialObjectType * >(this->ProcessObject::GetOutput(0));
-
-  outputObject->SetImage( consolidatedFeatureImage );
-   
 }
 
 } // end namespace itk

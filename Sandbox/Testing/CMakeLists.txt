@@ -107,6 +107,9 @@ TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest3 LesionSizingSandbox)
 ADD_EXECUTABLE(itkFeatureAggregatorTest1 itkFeatureAggregatorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkFeatureAggregatorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkMinimumFeatureAggregatorTest1 itkMinimumFeatureAggregatorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkMinimumFeatureAggregatorTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkCannyEdgesDistanceFeatureGeneratorTest1 itkCannyEdgesDistanceFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkCannyEdgesDistanceFeatureGeneratorTest1 LesionSizingSandbox)
 
@@ -607,7 +610,16 @@ ADD_TEST(itkFeatureAggregatorTest1
   ${CXX_TEST_PATH}/itkFeatureAggregatorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/LesionSegmentationMethodTest3_1.mhd
+  ${TEMP}/FeatureAggregatorTest1_1.mhd
+  0.5
+  1.0
+  )
+
+ADD_TEST(itkMinimumFeatureAggregatorTest1 
+  ${CXX_TEST_PATH}/itkMinimumFeatureAggregatorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/MinimumFeatureAggregatorTest1_1.mhd
   0.5
   1.0
   )

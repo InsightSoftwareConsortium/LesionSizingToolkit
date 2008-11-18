@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Lesion Sizing Toolkit
-  Module:    itkLesionSegmentationMethodTest3.cxx
+  Module:    itkMinimumFeatureAggregatorTest1.cxx
 
   Copyright (c) Kitware Inc. 
   All rights reserved.
@@ -13,7 +13,7 @@
 
 =========================================================================*/
 
-#include "itkLesionSegmentationMethod.h"
+#include "itkFeatureAggregator.h"
 #include "itkImage.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
@@ -24,7 +24,106 @@
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
 #include "itkConnectedThresholdSegmentationModule.h"
-#include "itkMinimumFeatureAggregator.h"
+
+namespace itk 
+{
+template< unsigned int NDimension>
+class FeatureAggregatorSurrogate : public FeatureAggregator< NDimension >
+{
+public:
+  /** Standard class typedefs. */
+  typedef FeatureAggregatorSurrogate        Self;
+  typedef FeatureAggregator<NDimension>     Superclass;
+  typedef SmartPointer<Self>                Pointer;
+  typedef SmartPointer<const Self>          ConstPointer;
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(FeatureAggregatorSurrogate, FeatureAggregator);
+
+  /** Dimension of the space */
+  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+
+
+protected:
+  FeatureAggregatorSurrogate();
+  virtual ~FeatureAggregatorSurrogate();
+  void PrintSelf(std::ostream& os, Indent indent) const;
+
+  /** Method invoked by the pipeline in order to trigger the computation of
+   * the segmentation. */
+  void  GenerateData();
+
+
+private:
+  FeatureAggregatorSurrogate(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+  typedef typename Superclass::FeatureGeneratorType             FeatureGeneratorType;
+  typedef typename FeatureGeneratorType::Pointer                FeatureGeneratorPointer;
+  typedef std::vector< FeatureGeneratorPointer >                FeatureGeneratorArrayType;
+  typedef typename FeatureGeneratorArrayType::iterator          FeatureGeneratorIterator;
+  typedef typename FeatureGeneratorArrayType::const_iterator    FeatureGeneratorConstIterator;
+
+  void ConsolidateFeatures()
+    {
+    typedef float                                                   FeaturePixelType;
+    typedef Image< FeaturePixelType, NDimension >                   FeatureImageType;
+    typedef ImageSpatialObject< NDimension, FeaturePixelType >      FeatureSpatialObjectType;
+
+    const FeatureSpatialObjectType * firstFeatureObject =
+      dynamic_cast< const FeatureSpatialObjectType * >( this->m_FeatureGenerators[0]->GetFeature() );
+
+    const FeatureImageType * firstFeatureImage = firstFeatureObject->GetImage();
+
+    typename FeatureImageType::Pointer consolidatedFeatureImage = FeatureImageType::New();
+
+    consolidatedFeatureImage->CopyInformation( firstFeatureImage );
+    consolidatedFeatureImage->SetRegions( firstFeatureImage->GetBufferedRegion() );
+    consolidatedFeatureImage->Allocate();
+    consolidatedFeatureImage->FillBuffer( NumericTraits< FeaturePixelType >::max() );
+
+    const unsigned int numberOfFeatures = this->m_FeatureGenerators.size();
+
+    for( unsigned int i = 0; i < numberOfFeatures; i++ )
+      {
+      const FeatureSpatialObjectType * featureObject =
+        dynamic_cast< const FeatureSpatialObjectType * >( this->m_FeatureGenerators[i]->GetFeature() );
+
+      const FeatureImageType * featureImage = featureObject->GetImage();
+
+      typedef ImageRegionIterator< FeatureImageType >          FeatureIterator;
+      typedef ImageRegionConstIterator< FeatureImageType >     FeatureConstIterator;
+
+      FeatureIterator       dstitr( consolidatedFeatureImage, consolidatedFeatureImage->GetBufferedRegion() );
+      FeatureConstIterator  srcitr( featureImage, featureImage->GetBufferedRegion() );
+
+      dstitr.GoToBegin();
+      srcitr.GoToBegin();
+     
+      while( !srcitr.IsAtEnd() )
+        {
+        if( dstitr.Get() > srcitr.Get() )
+          {
+          dstitr.Set( srcitr.Get() );
+          }
+        ++srcitr;
+        ++dstitr;
+        }
+      }
+
+    FeatureSpatialObjectType * outputObject =
+      dynamic_cast< FeatureSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+
+    outputObject->SetImage( consolidatedFeatureImage );
+    }
+
+};
+
+} // end of itk namespace
+
 
 int main( int argc, char * argv [] )
 {
@@ -59,16 +158,10 @@ int main( int argc, char * argv [] )
     }
 
 
-  typedef itk::LesionSegmentationMethod< Dimension >   MethodType;
+  typedef itk::FeatureAggregatorSurrogate< Dimension >   AggregatorType;
 
-  MethodType::Pointer  lesionSegmentationMethod = MethodType::New();
+  AggregatorType::Pointer  featureAggregator = AggregatorType::New();
   
-  typedef itk::ImageMaskSpatialObject< Dimension > ImageMaskSpatialObjectType;
-
-  ImageMaskSpatialObjectType::Pointer regionOfInterest = ImageMaskSpatialObjectType::New();
-
-  lesionSegmentationMethod->SetRegionOfInterest( regionOfInterest );
-
   typedef itk::SatoVesselnessSigmoidFeatureGenerator< Dimension > VesselnessGeneratorType;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
 
@@ -78,16 +171,12 @@ int main( int argc, char * argv [] )
   typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
  
-  typedef itk::MinimumFeatureAggregator< Dimension >   FeatureAggregatorType;
-  FeatureAggregatorType::Pointer featureAggregator = FeatureAggregatorType::New();
-
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
 
-  lesionSegmentationMethod->AddFeatureGenerator( featureAggregator );
 
-  typedef MethodType::SpatialObjectType    SpatialObjectType;
+  typedef AggregatorType::SpatialObjectType    SpatialObjectType;
 
   typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -114,8 +203,6 @@ int main( int argc, char * argv [] )
   typedef itk::ConnectedThresholdSegmentationModule< Dimension >   SegmentationModuleType;
   
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-
-  lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
 
   double lowerThreshold = 0.5;
@@ -172,16 +259,15 @@ int main( int argc, char * argv [] )
     spatialObjectItr++;
     }
  
-  lesionSegmentationMethod->SetInitialSegmentation( landmarkSpatialObject );
 
-  lesionSegmentationMethod->Update();
+  featureAggregator->Update();
 
   
   typedef SegmentationModuleType::SpatialObjectType           SpatialObjectType;
   typedef SegmentationModuleType::OutputSpatialObjectType     OutputSpatialObjectType;
   typedef SegmentationModuleType::OutputImageType             OutputImageType;
 
-  SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
+  SpatialObjectType::ConstPointer segmentation = featureAggregator->GetFeature();
 
   OutputSpatialObjectType::ConstPointer outputObject = 
     dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
