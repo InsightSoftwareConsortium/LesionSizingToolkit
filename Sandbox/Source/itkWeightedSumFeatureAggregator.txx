@@ -57,7 +57,16 @@ WeightedSumFeatureAggregator<NDimension>
   Superclass::PrintSelf( os, indent );
 }
 
- 
+  
+template <unsigned int NDimension>
+void
+WeightedSumFeatureAggregator<NDimension>
+::AddWeight( double weight )
+{
+  this->m_Weights.push_back( weight );
+}
+
+
 template <unsigned int NDimension>
 void
 WeightedSumFeatureAggregator<NDimension>
@@ -77,9 +86,24 @@ WeightedSumFeatureAggregator<NDimension>
   consolidatedFeatureImage->CopyInformation( firstFeatureImage );
   consolidatedFeatureImage->SetRegions( firstFeatureImage->GetBufferedRegion() );
   consolidatedFeatureImage->Allocate();
-  consolidatedFeatureImage->FillBuffer( NumericTraits< FeaturePixelType >::max() );
+  consolidatedFeatureImage->FillBuffer( NumericTraits< FeaturePixelType >::ZeroValue() );
 
   const unsigned int numberOfFeatures = this->GetNumberOfInputFeatures();
+
+  const unsigned int numberOfWeights = this->m_Weights.size();
+
+  if( numberOfFeatures != numberOfWeights )
+    {
+    itkExceptionMacro("Number of Weights " << numberOfWeights 
+      << " different from " << " number of Features " << numberOfFeatures );
+    }
+
+  double sumOfWeights = 0.0;
+
+  for( unsigned int k = 0; k < numberOfWeights; k++ )
+    {
+    sumOfWeights += this->m_Weights[k]; 
+    }
 
   for( unsigned int i = 0; i < numberOfFeatures; i++ )
     {
@@ -97,12 +121,11 @@ WeightedSumFeatureAggregator<NDimension>
     dstitr.GoToBegin();
     srcitr.GoToBegin();
    
+    const double weight = this->m_Weights[i] / sumOfWeights;
+
     while( !srcitr.IsAtEnd() )
       {
-      if( dstitr.Get() > srcitr.Get() )
-        {
-        dstitr.Set( srcitr.Get() );
-        }
+      dstitr.Set( dstitr.Get() + srcitr.Get() * weight );
       ++srcitr;
       ++dstitr;
       }

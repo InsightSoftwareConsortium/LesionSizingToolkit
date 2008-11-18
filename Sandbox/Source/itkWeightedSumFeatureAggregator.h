@@ -58,6 +58,9 @@ public:
   /** Dimension of the space */
   itkStaticConstMacro(Dimension, unsigned int, NDimension);
 
+  /** Add the weight that will be used to multiply the corresponding feature
+   * when computing the weighted sum. */
+  void virtual AddWeight( double weight );
 
 protected:
   WeightedSumFeatureAggregator();
@@ -70,6 +73,10 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   void ConsolidateFeatures();
+
+  typedef std::vector< double >     WeightsArrayType;
+
+  WeightsArrayType                  m_Weights;
 
 };
 

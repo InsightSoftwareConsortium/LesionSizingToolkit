@@ -76,6 +76,12 @@ int main( int argc, char * argv [] )
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
 
+  //
+  // Weights will be normalized internally.
+  //
+  featureAggregator->AddWeight( 20.0 );
+  featureAggregator->AddWeight( 50.0 );
+  featureAggregator->AddWeight( 30.0 );
 
   typedef AggregatorType::SpatialObjectType    SpatialObjectType;
 
