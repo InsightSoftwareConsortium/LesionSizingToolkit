@@ -124,7 +124,7 @@ LungWallFeatureGenerator<NDimension>
 
   typename InternalImageType::SizeType  ballManhattanRadius;
 
-  ballManhattanRadius.Fill( 2 );
+  ballManhattanRadius.Fill( 3 );
 
   this->m_VotingHoleFillingFilter->SetRadius( ballManhattanRadius );
   this->m_VotingHoleFillingFilter->SetBackgroundValue( 0.0 );
