@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    itkMimimumFeatureAggregator.h
+  Module:    itkMinimumFeatureAggregator.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -17,9 +17,7 @@
 #ifndef __itkMinimumFeatureAggregator_h
 #define __itkMinimumFeatureAggregator_h
 
-#include "itkFeatureGenerator.h"
-#include "itkImage.h"
-#include "itkImageSpatialObject.h"
+#include "itkFeatureAggregator.h"
 
 namespace itk
 {
@@ -44,10 +42,10 @@ class ITK_EXPORT MinimumFeatureAggregator : public FeatureAggregator<NDimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef MinimumFeatureAggregator      Self;
-  typedef FeatureAggregator             Superclass;
-  typedef SmartPointer<Self>            Pointer;
-  typedef SmartPointer<const Self>      ConstPointer;
+  typedef MinimumFeatureAggregator            Self;
+  typedef FeatureAggregator<NDimension>       Superclass;
+  typedef SmartPointer<Self>                  Pointer;
+  typedef SmartPointer<const Self>            ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -63,10 +61,6 @@ protected:
   MinimumFeatureAggregator();
   virtual ~MinimumFeatureAggregator();
   void PrintSelf(std::ostream& os, Indent indent) const;
-
-  /** Method invoked by the pipeline in order to trigger the computation of
-   * the segmentation. */
-  void  GenerateData();
 
 
 private:

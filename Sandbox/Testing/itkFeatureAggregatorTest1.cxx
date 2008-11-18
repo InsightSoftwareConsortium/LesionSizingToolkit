@@ -50,12 +50,10 @@ public:
 protected:
   FeatureAggregatorSurrogate() {};
   virtual ~FeatureAggregatorSurrogate() {};
-  void PrintSelf(std::ostream& os, Indent indent) const;
-
-  /** Method invoked by the pipeline in order to trigger the computation of
-   * the segmentation. */
-  void  GenerateData();
-
+  void PrintSelf(std::ostream& os, Indent indent) const 
+    {
+    this->Superclass::PrintSelf( os, indent );
+    }
 
 private:
   FeatureAggregatorSurrogate(const Self&); //purposely not implemented

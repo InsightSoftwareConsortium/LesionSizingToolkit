@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    itkMimimumFeatureAggregator.txx
+  Module:    itkMinimumFeatureAggregator.txx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -68,7 +68,7 @@ MinimumFeatureAggregator<NDimension>
   typedef ImageSpatialObject< NDimension, FeaturePixelType >      FeatureSpatialObjectType;
 
   const FeatureSpatialObjectType * firstFeatureObject =
-    dynamic_cast< const FeatureSpatialObjectType * >( this->m_FeatureGenerators[0]->GetFeature() );
+    dynamic_cast< const FeatureSpatialObjectType * >( this->GetInputFeature(0) );
 
   const FeatureImageType * firstFeatureImage = firstFeatureObject->GetImage();
 
@@ -79,12 +79,12 @@ MinimumFeatureAggregator<NDimension>
   consolidatedFeatureImage->Allocate();
   consolidatedFeatureImage->FillBuffer( NumericTraits< FeaturePixelType >::max() );
 
-  const unsigned int numberOfFeatures = this->m_FeatureGenerators.size();
+  const unsigned int numberOfFeatures = this->GetNumberOfInputFeatures();
 
   for( unsigned int i = 0; i < numberOfFeatures; i++ )
     {
     const FeatureSpatialObjectType * featureObject =
-      dynamic_cast< const FeatureSpatialObjectType * >( this->m_FeatureGenerators[i]->GetFeature() );
+      dynamic_cast< const FeatureSpatialObjectType * >( this->GetInputFeature(i) );
 
     const FeatureImageType * featureImage = featureObject->GetImage();
 
