@@ -70,6 +70,9 @@ TARGET_LINK_LIBRARIES(itkVectorShiftScaleImageFilterText1 LesionSizingSandbox)
 ADD_EXECUTABLE(itkVectorZeroCrossingImageFilterTest1 itkVectorZeroCrossingImageFilterTest1.cxx )
 TARGET_LINK_LIBRARIES(itkVectorZeroCrossingImageFilterTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkFeatureGeneratorTest1 itkFeatureGeneratorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkFeatureGeneratorTest1 LesionSizingSandbox)
+
 
 ADD_TEST(itkVectorFiniteDifferenceImageFilterTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceImageFilterTest1 )
 ADD_TEST(itkVectorFiniteDifferenceFunctionTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceFunctionTest1 )
@@ -101,8 +104,8 @@ TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest2 LesionSizingSandbox)
 ADD_EXECUTABLE(itkLesionSegmentationMethodTest3 itkLesionSegmentationMethodTest3.cxx )
 TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest3 LesionSizingSandbox)
 
-ADD_EXECUTABLE(itkFeatureGeneratorTest1 itkFeatureGeneratorTest1.cxx )
-TARGET_LINK_LIBRARIES(itkFeatureGeneratorTest1 LesionSizingSandbox)
+ADD_EXECUTABLE(itkFeatureAggregatorTest1 itkFeatureAggregatorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkFeatureAggregatorTest1 LesionSizingSandbox)
 
 ADD_EXECUTABLE(itkCannyEdgesDistanceFeatureGeneratorTest1 itkCannyEdgesDistanceFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkCannyEdgesDistanceFeatureGeneratorTest1 LesionSizingSandbox)
@@ -599,6 +602,16 @@ ADD_TEST(itkLesionSegmentationMethodTest3_SM0054-20000101
   0.5
   1.0
   )
+
+ADD_TEST(itkFeatureAggregatorTest1 
+  ${CXX_TEST_PATH}/itkFeatureAggregatorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/LesionSegmentationMethodTest3_1.mhd
+  0.5
+  1.0
+  )
+
 
 ENDIF(TEST_CORNELL_DATA_ROOT)
 
