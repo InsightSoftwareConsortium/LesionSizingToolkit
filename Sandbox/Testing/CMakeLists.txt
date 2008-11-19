@@ -104,6 +104,9 @@ TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest2 LesionSizingSandbox)
 ADD_EXECUTABLE(itkLesionSegmentationMethodTest3 itkLesionSegmentationMethodTest3.cxx )
 TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest3 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkLesionSegmentationMethodTest4 itkLesionSegmentationMethodTest4.cxx )
+TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest4 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkFeatureAggregatorTest1 itkFeatureAggregatorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkFeatureAggregatorTest1 LesionSizingSandbox)
 
@@ -158,6 +161,9 @@ TARGET_LINK_LIBRARIES(itkConnectedThresholdSegmentationModuleTest1 LesionSizingS
 ADD_EXECUTABLE(itkConfidenceConnectedSegmentationModuleTest1 itkConfidenceConnectedSegmentationModuleTest1.cxx )
 TARGET_LINK_LIBRARIES(itkConfidenceConnectedSegmentationModuleTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkFastMarchingSegmentationModuleTest1 itkFastMarchingSegmentationModuleTest1.cxx )
+TARGET_LINK_LIBRARIES(itkFastMarchingSegmentationModuleTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkGeodesicActiveContourLevelSetSegmentationModuleTest1 itkGeodesicActiveContourLevelSetSegmentationModuleTest1.cxx )
 TARGET_LINK_LIBRARIES(itkGeodesicActiveContourLevelSetSegmentationModuleTest1 LesionSizingSandbox)
 
@@ -196,6 +202,14 @@ ADD_TEST(itkConfidenceConnectedSegmentationModuleTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mhd
   1.7
+  )
+
+ADD_TEST(itkFastMarchingSegmentationModuleTest1-PartSolidLesion1
+  ${CXX_TEST_PATH}/itkFastMarchingSegmentationModuleTest1 
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/FastMarchingSegmentationModuleTest1-PartSolidLesion1_1.mha
+  10.0 5.0 
   )
 
 ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 
@@ -607,6 +621,14 @@ ADD_TEST(itkLesionSegmentationMethodTest3_SM0054-20000101
   ${TEMP}/LesionSegmentationMethodTest3_SM0054-20000101.mha
   0.5
   1.0
+  )
+
+ADD_TEST(itkLesionSegmentationMethodTest4_SM0052-20000101 
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest4
+  ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
+  ${TEMP}/SM0052-20000101_1_ROI.mha
+  ${TEMP}/LesionSegmentationMethodTest4_SM0052-20000101.mha
+  10 5
   )
 
 ADD_TEST(itkFeatureAggregatorTest1 
