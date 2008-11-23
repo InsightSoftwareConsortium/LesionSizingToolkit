@@ -23,6 +23,13 @@ TARGET_LINK_LIBRARIES(GradientMagnitudeImageFilter ITKIO)
 ADD_EXECUTABLE(LandmarkSpatialObjectWriterTest LandmarkSpatialObjectWriterTest.cxx )
 TARGET_LINK_LIBRARIES(LandmarkSpatialObjectWriterTest ITKIO)
 
+ADD_EXECUTABLE(itkFeatureGeneratorTest1 itkFeatureGeneratorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkFeatureGeneratorTest1 LesionSizingSandbox)
+
+ADD_EXECUTABLE(itkRegionCompetitionImageFilterTest1 itkRegionCompetitionImageFilterTest1.cxx)
+TARGET_LINK_LIBRARIES(itkRegionCompetitionImageFilterTest1 LesionSizingSandbox)
+
+
 IF( ITK_USE_MULTI_PHASE_FRAMEWORK )
 
 ADD_EXECUTABLE(itkVectorFiniteDifferenceImageFilterTest1 itkVectorFiniteDifferenceImageFilterTest1.cxx )
@@ -69,10 +76,6 @@ TARGET_LINK_LIBRARIES(itkVectorShiftScaleImageFilterText1 LesionSizingSandbox)
 
 ADD_EXECUTABLE(itkVectorZeroCrossingImageFilterTest1 itkVectorZeroCrossingImageFilterTest1.cxx )
 TARGET_LINK_LIBRARIES(itkVectorZeroCrossingImageFilterTest1 LesionSizingSandbox)
-
-ADD_EXECUTABLE(itkFeatureGeneratorTest1 itkFeatureGeneratorTest1.cxx )
-TARGET_LINK_LIBRARIES(itkFeatureGeneratorTest1 LesionSizingSandbox)
-
 
 ADD_TEST(itkVectorFiniteDifferenceImageFilterTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceImageFilterTest1 )
 ADD_TEST(itkVectorFiniteDifferenceFunctionTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceFunctionTest1 )
@@ -189,6 +192,8 @@ ADD_TEST(itkFeatureGeneratorTest1 ${CXX_TEST_PATH}/itkFeatureGeneratorTest1 )
 ADD_TEST(itkSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSegmentationModuleTest1 )
 ADD_TEST(itkRegionGrowingSegmentationModuleTest1 ${CXX_TEST_PATH}/itkRegionGrowingSegmentationModuleTest1 )
 ADD_TEST(itkSinglePhaseLevelSetSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSinglePhaseLevelSetSegmentationModuleTest1 )
+
+ADD_TEST(itkRegionCompetitionImageFilterTest1 ${CXX_TEST_PATH}/itkRegionCompetitionImageFilterTest1 )
 
 ADD_TEST(itkConnectedThresholdSegmentationModuleTest1 
   ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1 
