@@ -107,6 +107,9 @@ TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest3 LesionSizingSandbox)
 ADD_EXECUTABLE(itkLesionSegmentationMethodTest4 itkLesionSegmentationMethodTest4.cxx )
 TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest4 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkLesionSegmentationMethodTest5 itkLesionSegmentationMethodTest5.cxx )
+TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest5 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkFeatureAggregatorTest1 itkFeatureAggregatorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkFeatureAggregatorTest1 LesionSizingSandbox)
 
@@ -629,6 +632,13 @@ ADD_TEST(itkLesionSegmentationMethodTest4_SM0052-20000101
   ${TEMP}/SM0052-20000101_1_ROI.mha
   ${TEMP}/LesionSegmentationMethodTest4_SM0052-20000101.mha
   10 5
+  )
+
+ADD_TEST(itkLesionSegmentationMethodTest5_SM0052-20000101 
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest5
+  ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
+  ${TEMP}/SM0052-20000101_1_ROI.mha
+  ${TEMP}/LesionSegmentationMethodTest5_SM0052-20000101.mha
   )
 
 ADD_TEST(itkFeatureAggregatorTest1 

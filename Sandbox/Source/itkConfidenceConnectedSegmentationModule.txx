@@ -81,7 +81,6 @@ ConfidenceConnectedSegmentationModule<NDimension>
   typedef typename SpatialObjectPointType::PointType                PointType;
   typedef typename InputSpatialObjectType::PointListType            PointListType;
   typedef typename FeatureImageType::IndexType                      IndexType;
-  typedef typename FeatureImageType::IndexType                      IndexType;
 
   const PointListType & points = inputSeeds->GetPoints();
 

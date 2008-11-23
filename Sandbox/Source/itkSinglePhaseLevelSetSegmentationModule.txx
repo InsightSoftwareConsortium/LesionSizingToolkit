@@ -18,7 +18,7 @@
 #define __itkSinglePhaseLevelSetSegmentationModule_txx
 
 #include "itkSinglePhaseLevelSetSegmentationModule.h"
-
+#include "itkLandmarkSpatialObject.h"
 
 namespace itk
 {
@@ -43,6 +43,7 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
   this->m_AdvectionScaling = 1.0;
   this->m_CurvatureScaling = 75.0;
   this->m_PropagationScaling = 100.0;
+  this->m_ZeroSetInputImage = NULL;
 }
 
 
@@ -84,10 +85,51 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
 {
   const InputSpatialObjectType * inputObject =
     dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
+  if (inputObject)
+    {
+    const InputImageType * inputImage = inputObject->GetImage();
+    this->m_ZeroSetInputImage = const_cast< InputImageType * >(inputImage);
+    return inputImage;
+    }
 
-  const InputImageType * inputImage = inputObject->GetImage();
+  if (this->m_ZeroSetInputImage)
+    {
+    return this->m_ZeroSetInputImage;
+    }
+  
+  // If seeds are specified, construct the zero set image from the landmarks.
+  typedef LandmarkSpatialObject< Self::Dimension >        LandmarkObjectType;
+  typedef typename FeatureImageType::IndexType       IndexType;
+  typedef typename LandmarkObjectType::PointListType PointListType;
+  IndexType index;
 
-  return inputImage;
+  const LandmarkObjectType * landmarkObject =
+    dynamic_cast< const LandmarkObjectType * >( this->GetInput() );
+  if (landmarkObject)
+    {
+    const unsigned int numberOfPoints     = landmarkObject->GetNumberOfPoints();
+    const PointListType & points          = landmarkObject->GetPoints();
+    const FeatureImageType * featureImage = this->GetInternalFeatureImage();
+
+    // Allocate an input image and initialize it with the seed points.
+    typename InputImageType::Pointer inputImage = InputImageType::New();
+    inputImage->CopyInformation( featureImage );
+    inputImage->SetBufferedRegion( featureImage->GetBufferedRegion() );
+    inputImage->SetRequestedRegion( featureImage->GetRequestedRegion() );
+    inputImage->Allocate();
+    inputImage->FillBuffer( 4 );
+    
+    for( unsigned int i=0; i < numberOfPoints; i++ )
+      {
+      inputImage->TransformPhysicalPointToIndex( points[i].GetPosition(), index );
+      inputImage->SetPixel( index, -4 );
+      }
+    
+    this->m_ZeroSetInputImage = inputImage;
+    return inputImage;
+    }
+
+  return NULL;
 }
 
 
