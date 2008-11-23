@@ -34,6 +34,8 @@ template <class TInputImage, class TOutputImage>
 RegionCompetitionImageFilter<TInputImage, TOutputImage>
 ::RegionCompetitionImageFilter()
 {
+  this->SetNumberOfRequiredInputs( 2 );
+
   this->m_MaximumNumberOfIterations = 10;
   this->m_CurrentIterationNumber = 0;
 
@@ -44,8 +46,6 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
   this->m_SeedArray2 = new SeedArrayType;
 
   this->m_OutputImage = NULL;
-
-  this->m_MajorityThreshold = 1;
 }
 
 /**
@@ -72,6 +72,20 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
 }
 
 
+/**
+ * Set the input image containing initial labeled regions
+ */
+template <class TInputImage, class TOutputImage>
+void
+RegionCompetitionImageFilter<TInputImage, TOutputImage>
+::SetInputLabels( const TOutputImage * inputLabeledImage )
+{
+  // Process object is not const-correct so the const casting is required.
+  this->SetNthInput(1, const_cast<TOutputImage *>( inputLabeledImage ));
+}
+
+
+
 template <class TInputImage, class TOutputImage>
 void 
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
@@ -79,7 +93,6 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 {
   this->AllocateOutputImageWorkingMemory();
   this->InitializeNeighborhood();
-  this->ComputeBirthThreshold();
   this->ComputeArrayOfNeighborhoodBufferOffsets();
   this->FindAllPixelsInTheBoundaryAndAddThemAsSeeds();
   this->IterateFrontPropagations();
@@ -132,7 +145,9 @@ void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::InitializeNeighborhood()
 {
-  this->m_Neighborhood.SetRadius( this->GetRadius() );
+  InputSizeType radius;
+  radius.Fill( 1 );
+  this->m_Neighborhood.SetRadius( radius );
 }
 
 
@@ -149,7 +164,8 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
   ImageRegionIterator< OutputImageType >        itr;
   ImageRegionIterator< SeedMaskImageType >      mtr;
   
-  const InputSizeType & radius = this->GetRadius();
+  InputSizeType radius;
+  radius.Fill( 1 );
 
   // Find the data-set boundary "faces"
   typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType faceList;
@@ -184,8 +200,8 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
   
   unsigned int neighborhoodSize = bit.Size();
 
-  const InputImagePixelType foregroundValue = this->GetForegroundValue();
-  const InputImagePixelType backgroundValue = this->GetBackgroundValue();
+  const InputImagePixelType foregroundValue = 255; // FIXME : Use labels here
+  const InputImagePixelType backgroundValue = 0;   // FIXME : Use no-labels here
   
   this->m_SeedArray1->clear();
   this->m_SeedsNewValues.clear();
@@ -239,15 +255,15 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
     {
     this->SetCurrentPixelIndex( *seedItr );
 
-    if( this->TestForQuorumAtCurrentPixel() )
+    if( this->TestForAvailabilityAtCurrentPixel() )
       {
-      this->m_SeedsNewValues.push_back( this->GetForegroundValue() );
+      this->m_SeedsNewValues.push_back( 255 ); // FIXME: Use label value here
       this->PutCurrentPixelNeighborsIntoSeedArray();
       this->m_NumberOfPixelsChangedInLastIteration++;
       }
     else
       {
-      this->m_SeedsNewValues.push_back( this->GetBackgroundValue() );
+      this->m_SeedsNewValues.push_back( 0 ); // FIXME: Use No-label value here 
       // Keep the seed to try again in the next iteration.
       this->m_SeedArray2->push_back( this->GetCurrentPixelIndex() );
       }
@@ -316,44 +332,9 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 bool 
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::TestForQuorumAtCurrentPixel() const
+::TestForAvailabilityAtCurrentPixel() const
 {
-  //
-  // Find the location of the current pixel in the image memory buffer
-  //
-  const OffsetValueType offset = this->m_OutputImage->ComputeOffset( this->GetCurrentPixelIndex() );
-
-  const InputImagePixelType * buffer = this->m_OutputImage->GetBufferPointer();
-
-  const InputImagePixelType * currentPixelPointer = buffer + offset;
-
-  unsigned int numberOfNeighborsAtForegroundValue = 0;
-
-  //
-  // From that buffer position, visit all other neighbor pixels 
-  // and check if they are set to the foreground value.
-  //
-  typedef typename NeighborOffsetArrayType::const_iterator   NeigborOffsetIterator;
-
-  NeigborOffsetIterator neighborItr = this->m_NeighborBufferOffset.begin();
-
-  const InputImagePixelType foregroundValue = this->GetForegroundValue();
-
-  while( neighborItr != this->m_NeighborBufferOffset.end() )
-    {
-    const InputImagePixelType * neighborPixelPointer = currentPixelPointer + *neighborItr;
-
-    if( *neighborPixelPointer == foregroundValue )
-      {
-      numberOfNeighborsAtForegroundValue++;
-      }
-
-    ++neighborItr;
-    }
-
-  bool quorum = (numberOfNeighborsAtForegroundValue > this->GetBirthThreshold() );
-
-  return quorum;
+  return true; // FIXME
 }
 
 
@@ -367,9 +348,9 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
   //
   const OffsetValueType offset = this->m_OutputImage->ComputeOffset( this->GetCurrentPixelIndex() );
 
-  const InputImagePixelType * buffer = this->m_OutputImage->GetBufferPointer();
+  const OutputImagePixelType * buffer = this->m_OutputImage->GetBufferPointer();
 
-  const InputImagePixelType * currentPixelPointer = buffer + offset;
+  const OutputImagePixelType * currentPixelPointer = buffer + offset;
 
 
   const unsigned int neighborhoodSize = this->m_Neighborhood.Size();
@@ -384,11 +365,11 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 
   NeigborOffsetIterator neighborItr = this->m_NeighborBufferOffset.begin();
 
-  const InputImagePixelType backgroundValue = this->GetBackgroundValue();
+  const OutputImagePixelType backgroundValue = 0;  // FIXME: replace with NO-Label.
 
   for( unsigned int i = 0; i < neighborhoodSize; ++i, ++neighborItr )
     {
-    const InputImagePixelType * neighborPixelPointer = currentPixelPointer + *neighborItr;
+    const OutputImagePixelType * neighborPixelPointer = currentPixelPointer + *neighborItr;
 
     if( *neighborPixelPointer == backgroundValue )
       {
@@ -451,22 +432,6 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
     }
 }
 
-template <class TInputImage, class TOutputImage>
-void 
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::ComputeBirthThreshold()
-{
-  const unsigned int neighborhoodSize = this->m_Neighborhood.Size();
-
-  // Take the number of neighbors, discount the central pixel, and take half of them.
-  unsigned int threshold = static_cast<unsigned int>( (neighborhoodSize - 1 ) / 2.0 ); 
-
-  // add the majority threshold.
-  threshold += this->GetMajorityThreshold();
-
-  // Set that number as the Birth Threshold
-  this->SetBirthThreshold( threshold );
-}
 
 } // end namespace itk
 

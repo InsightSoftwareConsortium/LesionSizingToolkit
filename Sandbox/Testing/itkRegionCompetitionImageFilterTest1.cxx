@@ -13,19 +13,142 @@
 
 =========================================================================*/
 
+#include "itkBinaryThresholdImageFilter.h"
+#include "itkConnectedComponentImageFilter.h"
+#include "itkRelabelComponentImageFilter.h"
 #include "itkRegionCompetitionImageFilter.h"
 #include "itkImage.h"
+
 
 int main( int argc, char * argv [] )
 {
   const unsigned int Dimension = 3;
-  typedef unsigned char  PixelType;
+  typedef signed short    InputPixelType;
+  typedef unsigned char   BinaryPixelType;
+  typedef unsigned long   LabelPixelType;
 
-  typedef itk::Image< PixelType, Dimension >      ImageType;
+  typedef itk::Image< InputPixelType,  Dimension >      InputImageType;
+  typedef itk::Image< BinaryPixelType, Dimension >      BinaryImageType;
+  typedef itk::Image< LabelPixelType,  Dimension >      LabelImageType;
 
-  typedef itk::RegionCompetitionImageFilter< ImageType, ImageType >    FilterType;
+  typedef itk::BinaryThresholdImageFilter< 
+    InputImageType, BinaryImageType >  ThresholdFilterType;
 
-  FilterType::Pointer filter = FilterType::New();
+  typedef itk::ConnectedComponentImageFilter<
+    BinaryImageType, LabelImageType > ComponentsFilterType;
+
+  typedef itk::RelabelComponentImageFilter<
+    LabelImageType, LabelImageType > RelabelFilterType;
+
+  typedef itk::RegionCompetitionImageFilter< 
+    InputImageType, LabelImageType >    CompetitionFilterType;
+
+
+  ThresholdFilterType::Pointer thresholderFilter = ThresholdFilterType::New();
+
+  ComponentsFilterType::Pointer componentsFilter = ComponentsFilterType::New();
+
+  RelabelFilterType::Pointer relabelerFilter = RelabelFilterType::New();
+  
+  CompetitionFilterType::Pointer competitionFilter = CompetitionFilterType::New();
  
+
+  //
+  // Create an input image
+  //
+  InputImageType::Pointer  inputImage = InputImageType::New();
+
+  InputImageType::RegionType itkregion;
+  InputImageType::SizeType   itksize;
+  InputImageType::IndexType  itkindex;
+
+  itksize[0] = 21;
+  itksize[1] = 21;
+  itksize[2] = 30;
+
+  itkindex[0] = 0;
+  itkindex[1] = 0;
+  itkindex[2] = 0;
+
+  itkregion.SetIndex( itkindex );
+  itkregion.SetSize( itksize );
+
+  inputImage->SetRegions( itkregion );
+  inputImage->Allocate();
+
+  InputImageType::SpacingType itkspacing;
+
+  itkspacing[0] = 0.7;
+  itkspacing[1] = 0.9;
+  itkspacing[2] = 1.5;
+
+  inputImage->SetSpacing( itkspacing );
+
+  InputImageType::PointType  itkorigin;
+
+  itkorigin[0] = 129.5;
+  itkorigin[1] = 137.5;
+  itkorigin[2] = 159.5;
+
+  inputImage->SetOrigin( itkorigin );
+
+  //
+  // Populate the pixel values in an asymmetric way to ensure that one
+  // component is larger than the other.
+  //
+  InputImageType::IndexType index1;
+  InputImageType::IndexType index2;
+
+  index1[0] = 10;
+  index1[1] = 10;
+  index1[2] = 10;
+
+  index2[0] = 10;
+  index2[1] = 10;
+  index2[2] = 32;
+
+  InputImageType::PointType point1;
+  InputImageType::PointType point2;
+
+  inputImage->TransformIndexToPhysicalPoint( index1, point1 );
+  inputImage->TransformIndexToPhysicalPoint( index2, point2 );
+
+ 
+  typedef itk::ImageRegionIteratorWithIndex< InputImageType > IteratorType;
+
+  IteratorType itr( inputImage, itkregion );
+
+  itr.GoToBegin();
+
+  InputImageType::PointType point;
+
+  while ( !itr.IsAtEnd() )
+    {
+    const InputImageType::IndexType & index = itr.GetIndex();
+    inputImage->TransformIndexToPhysicalPoint( index, point );
+    const double distance1 = point1.EuclideanDistanceTo( point );
+    const double distance2 = point2.EuclideanDistanceTo( point );
+    const double value1 = 1000.0 - distance1 * 200;
+    const double value2 = 1000.0 - distance2 * 200;
+    if ( value1 > value2 )
+      {
+      itr.Set( static_cast< InputPixelType >( value1 ) );
+      }
+    else
+      {
+      itr.Set( static_cast< InputPixelType >( value2 ) );
+      }
+    ++itr;
+    }
+
+
+
+
+  componentsFilter->SetInput( thresholderFilter->GetOutput() );
+  relabelerFilter->SetInput( componentsFilter->GetOutput() );
+  competitionFilter->SetInput( inputImage );
+  competitionFilter->SetInputLabels( relabelerFilter->GetOutput() );
+
+
   return EXIT_SUCCESS;
 }
