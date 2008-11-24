@@ -169,5 +169,11 @@ int main( int argc, char * argv [] )
   labelWriter->Update();
 
 
+  // Write the output image
+  labelWriter->SetInput( competitionFilter->GetOutput() );
+  labelWriter->SetFileName("labeledSegmentedImage.mha");
+  labelWriter->Update();
+
+
   return EXIT_SUCCESS;
 }

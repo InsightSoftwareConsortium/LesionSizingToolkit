@@ -99,7 +99,7 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
 ::SetInputLabels( const TOutputImage * inputLabeledImage )
 {
   // Process object is not const-correct so the const casting is required.
-  this->SetNthInput(1, const_cast<TOutputImage *>( inputLabeledImage ));
+  this->SetNthInput(1, const_cast<OutputImageType *>( inputLabeledImage ));
 }
 
 
@@ -166,7 +166,12 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::ComputeNumberOfInputLabels()
 {
   const OutputImageType * inputLabelsImage = 
-    dynamic_cast< const OutputImageType * >( this->GetInput(1) );
+    dynamic_cast< const OutputImageType * >( this->ProcessObject::GetInput(1) );
+
+  std::cout << "GetInput(1) = " << this->GetInput(1) << std::endl;
+  std::cout << "inputLabelsImage " << inputLabelsImage << std::endl;
+  std::cout << "GetInput(1).Print() = " << std::endl;
+  this->GetInput(1)->Print( std::cout );
 
   typedef itk::ImageRegionConstIterator< OutputImageType >  IteratorType;
 
@@ -215,7 +220,12 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
   const InputImageType * inputImage = this->GetInput();
 
   const OutputImageType * inputLabelsImage = 
-    dynamic_cast< const OutputImageType * >( this->GetInput(1) );
+    dynamic_cast< const OutputImageType * >( this->ProcessObject::GetInput(1) );
+
+  std::cout << "GetInput(1) = " << this->GetInput(1) << std::endl;
+  std::cout << "inputLabelsImage " << inputLabelsImage << std::endl;
+  std::cout << "GetInput(1).Print() = " << std::endl;
+  this->GetInput(1)->Print( std::cout );
 
   OutputImageRegionType region =  inputLabelsImage->GetRequestedRegion();
 
@@ -266,7 +276,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 
   const OutputImagePixelType backgroundValue = 0;  // no-label value.
   
-  for( unsigned int lb = 0; lb < this->m_SeedArray1->size(); lb++ )
+  for( unsigned int lb = 0; lb < this->m_NumberOfLabels; lb++ )
     {
     this->m_SeedArray1[ lb ].clear();
     this->m_SeedsNewValues[ lb ].clear();
@@ -291,7 +301,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
         OutputImagePixelType value = bit.GetPixel(i);
         if( value != backgroundValue )
           {
-          this->m_SeedArray1[value].push_back( bit.GetIndex() );
+          this->m_SeedArray1[value-1].push_back( bit.GetIndex() );
           break;
           }
         }
@@ -302,7 +312,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
     }
 
 
-  for( unsigned int lb = 0; lb < this->m_SeedArray1->size(); lb++ )
+  for( unsigned int lb = 0; lb < this->m_NumberOfLabels; lb++ )
     {
     this->m_SeedsNewValues[lb].reserve( this->m_SeedArray1[lb].size() ); 
     }
