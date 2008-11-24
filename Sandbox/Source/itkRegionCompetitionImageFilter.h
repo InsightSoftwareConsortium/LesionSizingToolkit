@@ -112,6 +112,10 @@ private:
 
   void AllocateOutputImageWorkingMemory();
 
+  void AllocateFrontsWorkingMemory();
+
+  void ComputeNumberOfInputLabels();
+
   void InitializeNeighborhood();
 
   void FindAllPixelsInTheBoundaryAndAddThemAsSeeds();
@@ -144,9 +148,9 @@ private:
 
   InputImageRegionType              m_InternalRegion;
   
-  typedef std::vector<OutputImagePixelType>   SeedNewValuesArrayType;
+  typedef std::vector<OutputImagePixelType> SeedNewValuesArrayType;
 
-  SeedNewValuesArrayType            m_SeedsNewValues;
+  SeedNewValuesArrayType *          m_SeedsNewValues;
 
   unsigned int                      m_CurrentIterationNumber;
   unsigned int                      m_MaximumNumberOfIterations;
@@ -180,6 +184,8 @@ private:
   typedef itk::Neighborhood< InputImagePixelType, InputImageDimension >  NeighborhoodType;
 
   NeighborhoodType                  m_Neighborhood;
+
+  mutable unsigned int              m_NumberOfLabels;
 };
 
 } // end namespace itk
