@@ -79,7 +79,6 @@ ShapeDetectionLevelSetSegmentationModule<NDimension>
   filter->SetPropagationScaling( this->GetPropagationScaling() );
   filter->SetCurvatureScaling( this->GetCurvatureScaling() );
   filter->SetAdvectionScaling( 0.0 );
-
   filter->UseImageSpacingOn();
 
   std::cout << "Propagation Scaling = " << this->GetPropagationScaling() << std::endl;
@@ -87,13 +86,10 @@ ShapeDetectionLevelSetSegmentationModule<NDimension>
 
   filter->Update();
 
-  std::cout << std::endl;
   std::cout << "Max. no. iterations: " << filter->GetNumberOfIterations() << std::endl;
   std::cout << "Max. RMS error: " << filter->GetMaximumRMSError() << std::endl;
-  std::cout << std::endl;
   std::cout << "No. elpased iterations: " << filter->GetElapsedIterations() << std::endl;
   std::cout << "RMS change: " << filter->GetRMSChange() << std::endl;
-
 
   this->PackOutputImageInOutputSpatialObject( filter->GetOutput() );
 }

@@ -89,6 +89,19 @@ public:
   itkGetMacro( ThresholdOutput, bool );
   itkBooleanMacro( ThresholdOutput );
 
+  /** Apply a gradient magnitude sigmoid to the input prior to running fast
+   * marching ? Default ON. */
+  itkSetMacro( GradientMagnitudeSigmoid, bool );
+  itkGetMacro( GradientMagnitudeSigmoid, bool );
+  itkBooleanMacro( GradientMagnitudeSigmoid);
+
+  /** Alpha and Beta values for the sigmoid filter. Makes sense only if 
+   * GradientMagnitudeSigmoid flag is ON. */
+  itkSetMacro( SigmoidAlpha, double );
+  itkGetMacro( SigmoidAlpha, double );
+  itkSetMacro( SigmoidBeta, double );
+  itkGetMacro( SigmoidBeta, double );
+  
 protected:
   FastMarchingSegmentationModule();
   virtual ~FastMarchingSegmentationModule();
@@ -110,6 +123,9 @@ protected:
   double m_StoppingValue;
   double m_DistanceFromSeeds;
   bool   m_ThresholdOutput;
+  bool   m_GradientMagnitudeSigmoid;
+  double m_SigmoidAlpha;
+  double m_SigmoidBeta;
 
 private:
   FastMarchingSegmentationModule(const Self&); //purposely not implemented

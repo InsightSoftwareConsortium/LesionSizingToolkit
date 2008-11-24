@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Lesion Sizing Toolkit
-  Module:    itkLesionSegmentationMethodTest5.cxx
+  Module:    itkLesionSegmentationMethodTest6.cxx
 
   Copyright (c) Kitware Inc. 
   All rights reserved.
@@ -27,7 +27,7 @@
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
-#include "itkShapeDetectionLevelSetSegmentationModule.h"
+#include "itkFastMarchingAndShapeDetectionLevelSetSegmentationModule.h"
 #include "itkMinimumFeatureAggregator.h"
 
 int main( int argc, char * argv [] )
@@ -35,13 +35,14 @@ int main( int argc, char * argv [] )
 
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
+    std::cerr << "Applies fast marhching followed by shape detection. Missing Arguments" << std::endl;
     std::cerr << argv[0] << "\n\tlandmarksFile\n\tinputImage\n\toutputImage ";
     std::cerr << "\n\t[RMSErrorForShapeDetection]"
               << "\n\t[IterationsForShapeDetection]"
               << "\n\t[CurvatureScalingForShapeDetection]"
-              << "\n\t[PropagationScalingForShapeDetection]"
-              << std::endl;
+              << "\n\t[PropagationScalingForShapeDetection]";
+    std::cerr << "\n\tstopping time for fast marching";
+    std::cerr << "\n\tdistance from seeds for fast marching" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -106,44 +107,27 @@ int main( int argc, char * argv [] )
   lungWallGenerator->SetInput( inputObject );
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
-
-  lungWallGenerator->SetLungThreshold( -400.0 );
-
+  lungWallGenerator->SetLungThreshold( -400 );
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
   vesselnessGenerator->SetAlpha2( 2.0 );
- 
   sigmoidGenerator->SetAlpha(  1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
  
-  typedef itk::ShapeDetectionLevelSetSegmentationModule< Dimension >   SegmentationModuleType;
+  typedef itk::FastMarchingAndShapeDetectionLevelSetSegmentationModule< Dimension > SegmentationModuleType;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-
-  if (argc > 4)
-    {
-    segmentationModule->SetMaximumRMSError( atof( argv[4]) );
-    }
-  if (argc > 5)
-    {
-    segmentationModule->SetMaximumNumberOfIterations( atoi( argv[5]) );
-    }
-  if (argc > 6)
-    {
-    segmentationModule->SetCurvatureScaling( atof( argv[6]) );
-    }
-  if (argc > 7)
-    {
-    segmentationModule->SetPropagationScaling( atof( argv[7]) );
-    }
-
-
+  segmentationModule->SetMaximumRMSError( argc > 4 ? atof(argv[4]) : 0.0002 );
+  segmentationModule->SetMaximumNumberOfIterations( argc > 5 ? atoi(argv[5]) : 300 );
+  segmentationModule->SetCurvatureScaling( argc > 6 ? atof(argv[6]) : 1.0 );
+  segmentationModule->SetPropagationScaling( argc > 7 ? atof(argv[7]) : 10.0 );
+  segmentationModule->SetStoppingValue( argc > 8 ? atof(argv[8]) : 5.0 );
+  segmentationModule->SetDistanceFromSeeds( argc > 9 ? atof(argv[9]) : 2.0 );
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
   typedef itk::SpatialObjectReader< 3, unsigned short > SpatialObjectReaderType;
   SpatialObjectReaderType::Pointer landmarkPointsReader = SpatialObjectReaderType::New();
   landmarkPointsReader->SetFileName( argv[1] );
   landmarkPointsReader->Update();
-
   SpatialObjectReaderType::ScenePointer scene = landmarkPointsReader->GetScene();
   if( !scene )
     {
@@ -158,9 +142,7 @@ int main( int argc, char * argv [] )
 
   typedef SegmentationModuleType::InputSpatialObjectType  InputSpatialObjectType; 
   typedef itk::LandmarkSpatialObject< Dimension > LandmarkSpatialObjectType;
-
   const LandmarkSpatialObjectType * landmarkSpatialObject = NULL;
-
   while( spatialObjectItr != sceneChildren->end() ) 
     {
     std::string objectName = (*spatialObjectItr)->GetTypeName();
@@ -173,7 +155,6 @@ int main( int argc, char * argv [] )
     }
  
   lesionSegmentationMethod->SetInitialSegmentation( landmarkSpatialObject );
-
   lesionSegmentationMethod->Update();
 
   
@@ -185,12 +166,10 @@ int main( int argc, char * argv [] )
 
   OutputSpatialObjectType::ConstPointer outputObject = 
     dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
-
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
   typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
-
   writer->SetFileName( argv[3] );
   writer->SetInput( outputImage );
   writer->UseCompressionOn();

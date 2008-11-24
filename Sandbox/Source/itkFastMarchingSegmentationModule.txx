@@ -21,6 +21,8 @@
 #include "itkImageRegionIterator.h"
 #include "itkFastMarchingImageFilter.h"
 #include "itkBinaryThresholdImageFilter.h"
+#include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
+#include "itkSigmoidImageFilter.h"
 #include "itkImageFileWriter.h"
 
 namespace itk
@@ -36,6 +38,9 @@ FastMarchingSegmentationModule<NDimension>
   m_ThresholdOutput = false;
   m_StoppingValue = static_cast<double>( static_cast<OutputPixelType>( 
                       NumericTraits<OutputPixelType>::max() / 2.0 ) );
+  m_GradientMagnitudeSigmoid = true;
+  m_SigmoidAlpha = -1.0;
+  m_SigmoidBeta  = 5.0;
   this->SetNumberOfRequiredInputs( 2 );
   this->SetNumberOfRequiredOutputs( 1 );
 
@@ -79,13 +84,45 @@ FastMarchingSegmentationModule<NDimension>
     FeatureImageType, OutputImageType >      FilterType;
   typedef BinaryThresholdImageFilter< 
           OutputImageType, OutputImageType > ThresholdFilterType;
-
+  typedef GradientMagnitudeRecursiveGaussianImageFilter<
+          FeatureImageType >  DerivativeFilterType;
+  typedef SigmoidImageFilter< FeatureImageType,
+                              FeatureImageType > SigmoidFilterType;
+  typename DerivativeFilterType::Pointer derivativeFilter;
+  typename SigmoidFilterType::Pointer    sigmoidFilter;
   typename FilterType::Pointer filter = FilterType::New();
-  filter->SetStoppingValue( this->m_StoppingValue );
 
   const FeatureImageType * featureImage = this->GetInternalFeatureImage();
-  filter->SetInput( featureImage );
+  
+  if (m_GradientMagnitudeSigmoid)
+    {
 
+    // Default sigma is the minimum image spacing.
+    double minSpacing = NumericTraits<double>::max();
+    for (unsigned int i=0; i< Dimension; i++)
+      {
+      minSpacing = vnl_math_min(minSpacing, featureImage->GetSpacing()[i]);
+      }
+    const double sigmaDefault = minSpacing;
+      
+    derivativeFilter = DerivativeFilterType::New();
+    derivativeFilter->SetInput( featureImage );
+    derivativeFilter->SetSigma( sigmaDefault );
+    sigmoidFilter = SigmoidFilterType::New();
+    sigmoidFilter->SetOutputMaximum(1.0);
+    sigmoidFilter->SetOutputMinimum(0.0);
+    sigmoidFilter->SetInput( derivativeFilter->GetOutput() );
+    sigmoidFilter->SetAlpha(m_SigmoidAlpha);
+    sigmoidFilter->SetBeta(m_SigmoidBeta);
+    sigmoidFilter->Update();
+    filter->SetInput( sigmoidFilter->GetOutput() );
+    }
+  else
+    {
+    filter->SetInput( featureImage );
+    }
+
+  filter->SetStoppingValue( this->m_StoppingValue );
 
   const InputSpatialObjectType * inputSeeds = this->GetInternalInputLandmarks();
   const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
