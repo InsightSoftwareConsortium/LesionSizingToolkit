@@ -116,6 +116,9 @@ TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest5 LesionSizingSandbox)
 ADD_EXECUTABLE(itkLesionSegmentationMethodTest6 itkLesionSegmentationMethodTest6.cxx )
 TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest6 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkLesionSegmentationMethodTest7 itkLesionSegmentationMethodTest7.cxx )
+TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest7 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkFeatureAggregatorTest1 itkFeatureAggregatorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkFeatureAggregatorTest1 LesionSizingSandbox)
 
@@ -649,12 +652,19 @@ ADD_TEST(itkLesionSegmentationMethodTest5_SM0052-20000101
   ${TEMP}/LesionSegmentationMethodTest5_SM0052-20000101.mha
   )
 
-# Fast marching from a seed point followed by shape detection
+# Fast marching from a seed point followed by shape detection level set segmentation
 ADD_TEST(itkLesionSegmentationMethodTest6_SM0052-20000101 
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest6
   ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
   ${TEMP}/SM0052-20000101_1_ROI.mha
   ${TEMP}/LesionSegmentationMethodTest6_SM0052-20000101.mha )
+
+# Fast marching from a seed point followed by GAC level set segmentation
+ADD_TEST(itkLesionSegmentationMethodTest7_SM0052-20000101 
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest7
+  ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
+  ${TEMP}/SM0052-20000101_1_ROI.mha
+  ${TEMP}/LesionSegmentationMethodTest7_SM0052-20000101.mha )
 
 ADD_TEST(itkFeatureAggregatorTest1 
   ${CXX_TEST_PATH}/itkFeatureAggregatorTest1
