@@ -107,6 +107,7 @@ int main( int argc, char * argv [] )
 
   writer->SetFileName( argv[2] );
   writer->SetInput( outputImage );
+  writer->UseCompressionOn();
 
 
   try 

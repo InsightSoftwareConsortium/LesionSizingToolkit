@@ -455,19 +455,32 @@ ADD_TEST(SFGTest001
   -700.0 
   )
 
-ADD_TEST(LWFGTest001
+ADD_TEST(SFGTest-SM0052-20000101
+  ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
+  ${TEMP}/SM0052-20000101_1_ROI.mha
+  ${TEMP}/SFGTest-SM0052-20000101.mha
+  1.0  -700.0 )
+
+ADD_TEST(SFGTest-SM0054-20000101
+  ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
+  ${TEMP}/SM0054-20000101_1_ROI.mha
+  ${TEMP}/SFGTest-SM0054-20000101.mha
+  1.0  -700.0 )
+
+ADD_TEST(LWFGTest-CornellPartSolid2
   ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
   ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/LWFGTest001_01.mhd
-  -400.0 
-  )
+  ${TEMP}/LWFGTest-CornellPartSolid2_1.mha -400.0 )
 
-ADD_TEST(LWFGTest004-SM0054-20000101
+ADD_TEST(LWFGTest-SM0052-20000101
+  ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
+  ${TEMP}/SM0052-20000101_1_ROI.mha
+  ${TEMP}/LWFGTest_SM0052-20000101_1.mha -400.0 )
+
+ADD_TEST(LWFGTest-SM0054-20000101
   ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
   ${TEMP}/SM0054-20000101_1_ROI.mha
-  ${TEMP}/LWFGTest004_SM0054-20000101_1.mha
-  -400.0 
-  )
+  ${TEMP}/LWFGTest_SM0054-20000101_1.mha -400.0 )
 
 ADD_TEST(SVFGTest001
   ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
@@ -488,6 +501,18 @@ ADD_TEST(SVSFGTest001
   -10
   80
   )
+
+ADD_TEST(SVSFGTest-SM0054-20000101
+  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
+  ${TEMP}/SM0054-20000101_1_ROI.mha
+  ${TEMP}/SVSFGTest-SM0054-20000101_1.mha
+  1.0 0.5 2.0 )
+
+ADD_TEST(SVSFGTest-SM0052-20000101
+  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
+  ${TEMP}/SM0052-20000101_1_ROI.mha
+  ${TEMP}/SVSFGTest-SM0052-20000101_1.mha 
+  1.0 0.5 2.0 )
 
 ADD_TEST(SLSFGTest001
   ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
@@ -658,6 +683,11 @@ ADD_TEST(itkLesionSegmentationMethodTest6_SM0052-20000101
   ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
   ${TEMP}/SM0052-20000101_1_ROI.mha
   ${TEMP}/LesionSegmentationMethodTest6_SM0052-20000101.mha )
+ADD_TEST(itkLesionSegmentationMethodTest6_SM0054-20000101 
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest6
+  ${TEST_DATA_ROOT}/Input/SM0054-20000101-CroppedSeeds1.txt
+  ${TEMP}/SM0054-20000101_1_ROI.mha
+  ${TEMP}/LesionSegmentationMethodTest6_SM0054-20000101.mha )
 
 # Fast marching from a seed point followed by GAC level set segmentation
 ADD_TEST(itkLesionSegmentationMethodTest7_SM0052-20000101 
@@ -665,6 +695,11 @@ ADD_TEST(itkLesionSegmentationMethodTest7_SM0052-20000101
   ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
   ${TEMP}/SM0052-20000101_1_ROI.mha
   ${TEMP}/LesionSegmentationMethodTest7_SM0052-20000101.mha )
+ADD_TEST(itkLesionSegmentationMethodTest7_SM0054-20000101 
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest7
+  ${TEST_DATA_ROOT}/Input/SM0054-20000101-CroppedSeeds1.txt
+  ${TEMP}/SM0054-20000101_1_ROI.mha
+  ${TEMP}/LesionSegmentationMethodTest7_SM0054-20000101.mha )
 
 ADD_TEST(itkFeatureAggregatorTest1 
   ${CXX_TEST_PATH}/itkFeatureAggregatorTest1
