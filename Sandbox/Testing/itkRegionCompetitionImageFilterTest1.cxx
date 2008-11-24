@@ -17,6 +17,7 @@
 #include "itkConnectedComponentImageFilter.h"
 #include "itkRelabelComponentImageFilter.h"
 #include "itkRegionCompetitionImageFilter.h"
+#include "itkImageFileWriter.h"
 #include "itkImage.h"
 
 
@@ -128,8 +129,8 @@ int main( int argc, char * argv [] )
     inputImage->TransformIndexToPhysicalPoint( index, point );
     const double distance1 = point1.EuclideanDistanceTo( point );
     const double distance2 = point2.EuclideanDistanceTo( point );
-    const double value1 = 1000.0 - distance1 * 200;
-    const double value2 = 1000.0 - distance2 * 200;
+    const double value1 = 1000.0 - distance1 * 50;
+    const double value2 = 1000.0 - distance2 * 50;
     if ( value1 > value2 )
       {
       itr.Set( static_cast< InputPixelType >( value1 ) );
@@ -142,6 +143,12 @@ int main( int argc, char * argv [] )
     }
 
 
+  // Just for debugging, save input image
+  typedef itk::ImageFileWriter< InputImageType >   WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetInput( inputImage );
+  writer->SetFileName("inputCompetitionImage.mha");
+  writer->Update();
 
 
   componentsFilter->SetInput( thresholderFilter->GetOutput() );
