@@ -65,7 +65,7 @@ int main( int argc, char * argv [] )
 
   itksize[0] = 21;
   itksize[1] = 21;
-  itksize[2] = 30;
+  itksize[2] = 42;
 
   itkindex[0] = 0;
   itkindex[1] = 0;
@@ -106,7 +106,7 @@ int main( int argc, char * argv [] )
 
   index2[0] = 10;
   index2[1] = 10;
-  index2[2] = 32;
+  index2[2] = 31;
 
   InputImageType::PointType point1;
   InputImageType::PointType point2;
@@ -151,10 +151,22 @@ int main( int argc, char * argv [] )
   writer->Update();
 
 
+  thresholderFilter->SetInput( inputImage );
   componentsFilter->SetInput( thresholderFilter->GetOutput() );
   relabelerFilter->SetInput( componentsFilter->GetOutput() );
   competitionFilter->SetInput( inputImage );
   competitionFilter->SetInputLabels( relabelerFilter->GetOutput() );
+
+  thresholderFilter->SetUpperThreshold( 2000 );
+  thresholderFilter->SetLowerThreshold(  400 );
+
+
+  // Just for debugging, save input image of labels
+  typedef itk::ImageFileWriter< LabelImageType >   LabelWriterType;
+  LabelWriterType::Pointer labelWriter = LabelWriterType::New();
+  labelWriter->SetInput( relabelerFilter->GetOutput() );
+  labelWriter->SetFileName("labeledImage.mha");
+  labelWriter->Update();
 
 
   return EXIT_SUCCESS;
