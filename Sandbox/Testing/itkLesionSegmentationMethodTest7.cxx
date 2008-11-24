@@ -90,7 +90,7 @@ int main( int argc, char * argv [] )
  
   typedef itk::MinimumFeatureAggregator< Dimension >   FeatureAggregatorType;
   FeatureAggregatorType::Pointer featureAggregator = FeatureAggregatorType::New();
-  //featureAggregator->AddFeatureGenerator( lungWallGenerator );
+  featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
   lesionSegmentationMethod->AddFeatureGenerator( featureAggregator );
