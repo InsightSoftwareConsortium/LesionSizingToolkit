@@ -121,7 +121,7 @@ int main( int argc, char * argv [] )
   segmentationModule->SetMaximumNumberOfIterations( argc > 5 ? atoi(argv[5]) : 300 );
   segmentationModule->SetCurvatureScaling( argc > 6 ? atof(argv[6]) : 1.0 );
   segmentationModule->SetPropagationScaling( argc > 7 ? atof(argv[7]) : 10.0 );
-  segmentationModule->SetAdvectionScaling( argc > 8 ? atof(argv[8]) : 10.0 );
+  segmentationModule->SetAdvectionScaling( argc > 8 ? atof(argv[8]) : 50.0 );
   segmentationModule->SetStoppingValue( argc > 9 ? atof(argv[9]) : 5.0 );
   segmentationModule->SetDistanceFromSeeds( argc > 10 ? atof(argv[10]) : 2.0 );
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );

@@ -472,6 +472,11 @@ ADD_TEST(LWFGTest-CornellPartSolid2
   ${TEMP}/CornellPartSolid2_1_ROI.mhd
   ${TEMP}/LWFGTest-CornellPartSolid2_1.mha -400.0 )
 
+ADD_TEST(LWFGTest-CornellPartSolid1
+  ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/LWFGTest-CornellPartSolid1_1.mha -400.0 )
+
 ADD_TEST(LWFGTest-SM0052-20000101
   ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
   ${TEMP}/SM0052-20000101_1_ROI.mha
@@ -688,6 +693,16 @@ ADD_TEST(itkLesionSegmentationMethodTest6_SM0054-20000101
   ${TEST_DATA_ROOT}/Input/SM0054-20000101-CroppedSeeds1.txt
   ${TEMP}/SM0054-20000101_1_ROI.mha
   ${TEMP}/LesionSegmentationMethodTest6_SM0054-20000101.mha )
+ADD_TEST(itkLesionSegmentationMethodTest6_CornellPartSolid2
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest6
+  ${TEST_DATA_ROOT}/Input/CornellPartSolid2Seeds1.txt
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/LesionSegmentationMethodTest6_CornellPartSolid2.mha )
+ADD_TEST(itkLesionSegmentationMethodTest6_CornellPartSolid1
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest6
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/LesionSegmentationMethodTest6_CornellPartSolid1.mha  )
 
 # Fast marching from a seed point followed by GAC level set segmentation
 ADD_TEST(itkLesionSegmentationMethodTest7_SM0052-20000101 
@@ -700,6 +715,16 @@ ADD_TEST(itkLesionSegmentationMethodTest7_SM0054-20000101
   ${TEST_DATA_ROOT}/Input/SM0054-20000101-CroppedSeeds1.txt
   ${TEMP}/SM0054-20000101_1_ROI.mha
   ${TEMP}/LesionSegmentationMethodTest7_SM0054-20000101.mha )
+ADD_TEST(itkLesionSegmentationMethodTest7_CornellPartSolid2
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest7
+  ${TEST_DATA_ROOT}/Input/CornellPartSolid2Seeds1.txt
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/LesionSegmentationMethodTest7_CornellPartSolid2.mha )
+ADD_TEST(itkLesionSegmentationMethodTest7_CornellPartSolid1
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest7
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/LesionSegmentationMethodTest7_CornellPartSolid1.mha  )
 
 ADD_TEST(itkFeatureAggregatorTest1 
   ${CXX_TEST_PATH}/itkFeatureAggregatorTest1
