@@ -100,6 +100,16 @@ int main( int argc, char* argv[] )
 
     fileNames = nameGenerator->GetFileNames( seriesIdentifier );
  
+    FileNamesContainer::const_iterator  fitr = fileNames.begin();
+    FileNamesContainer::const_iterator  fend = fileNames.end();
+
+    while( fitr != fend )
+      {
+      std::cout << *fitr << std::endl;
+      ++fitr;
+      }
+
+
     reader->SetFileNames( fileNames );
 
     try
