@@ -216,8 +216,6 @@ void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::FindAllPixelsInTheBoundaryAndAddThemAsSeeds()
 {
-  const InputImageType * inputImage = this->GetInput();
-
   const OutputImageType * inputLabelsImage = 
     dynamic_cast< const OutputImageType * >( this->ProcessObject::GetInput(1) );
 
