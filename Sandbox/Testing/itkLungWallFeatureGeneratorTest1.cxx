@@ -121,5 +121,19 @@ int main( int argc, char * argv [] )
   featureGenerator->Print( std::cout );
 
  
+  featureGenerator->SetLungThreshold( 100 );
+  if( featureGenerator->GetLungThreshold() != 100 )
+    {
+    std::cerr << "Error in Set/GetLungThreshold()" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  featureGenerator->SetLungThreshold( 200 );
+  if( featureGenerator->GetLungThreshold() != 200 )
+    {
+    std::cerr << "Error in Set/GetLungThreshold()" << std::endl;
+    return EXIT_FAILURE;
+    }
+
   return EXIT_SUCCESS;
 }
