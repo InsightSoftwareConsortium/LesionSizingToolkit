@@ -121,11 +121,16 @@ private:
   SegmentationModulePointer                 m_SegmentationModule;
 
 
+  /** This method calls the Update() method of each one of the feature generators */
   void UpdateAllFeatureGenerators();
 
-  bool FeaturesNeedToBeConsolidated() const;
+  /** This method compares the number of available features against the number
+   * of expected features, and it will throw an exception if they do not match.
+   */
+  void VerifyNumberOfAvailableFeaturesMatchedExpectations() const;
 
-  void ConsolidateFeatures();
+  /** Connect the outputs of feature generators as input to the segmentation module */
+  void ConnectFeaturesToSegmentationModule();
 
   void ExecuteSegmentationModule();
 

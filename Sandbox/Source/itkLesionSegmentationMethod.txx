@@ -112,21 +112,10 @@ LesionSegmentationMethod<NDimension>
 
   this->UpdateAllFeatureGenerators();
 
-  if( this->FeaturesNeedToBeConsolidated() )
-    {
-    this->ConsolidateFeatures();
-    }
-  else
-    {
-    if( this->m_FeatureGenerators.size() > 0 )
-      {
-      if( this->m_FeatureGenerators[0]->GetFeature() )
-        {
-        this->m_SegmentationModule->SetFeature( 
-          this->m_FeatureGenerators[0]->GetFeature() );
-        }
-      }
-    }
+  this->VerifyNumberOfAvailableFeaturesMatchedExpectations();
+
+  this->ConnectFeaturesToSegmentationModule();
+
   this->ExecuteSegmentationModule();
 }
 
@@ -151,96 +140,33 @@ LesionSegmentationMethod<NDimension>
 
 
 template <unsigned int NDimension>
-bool
+void
 LesionSegmentationMethod<NDimension>
-::FeaturesNeedToBeConsolidated() const
+::VerifyNumberOfAvailableFeaturesMatchedExpectations() const
 {
   const unsigned int expectedNumberOfFeatures = this->m_SegmentationModule->GetExpectedNumberOfFeatures();
+  const unsigned int availableNumberOfFeatures = this->m_FeatureGenerators.size();
 
-  if( expectedNumberOfFeatures < this->m_FeatureGenerators.size() )
+  if( expectedNumberOfFeatures != availableNumberOfFeatures )
     {
-    return true;
+    itkExceptionMacro("Expecting " << expectedNumberOfFeatures << " but only got " << availableNumberOfFeatures );
     }
-
-  return false;
 }
 
- 
+
 template <unsigned int NDimension>
 void
 LesionSegmentationMethod<NDimension>
-::ConsolidateFeatures()
+::ConnectFeaturesToSegmentationModule()
 {
-  // Temporary implementation: use only feature #1.
-  // Future implementation: compute pixel-wise MIN of all the features. 
-  // this->m_SegmentationModule->SetFeature( this->m_FeatureGenerators[0]->GetFeature() );
-  //
-
-
-  // Temporary implementation: compute the pixel-wise min of all the 
-  // input feature images.
-  //
-  typedef float                                                   FeaturePixelType;
-  typedef Image< FeaturePixelType, NDimension >                   FeatureImageType;
-  typedef ImageSpatialObject< NDimension, FeaturePixelType >      FeatureSpatialObjectType;
-
-  const FeatureSpatialObjectType * firstFeatureObject =
-    dynamic_cast< const FeatureSpatialObjectType * >( this->m_FeatureGenerators[0]->GetFeature() );
-
-  const FeatureImageType * firstFeatureImage = firstFeatureObject->GetImage();
-
-  typename FeatureImageType::Pointer consolidatedFeatureImage = FeatureImageType::New();
-
-  consolidatedFeatureImage->CopyInformation( firstFeatureImage );
-  consolidatedFeatureImage->SetRegions( firstFeatureImage->GetBufferedRegion() );
-  consolidatedFeatureImage->Allocate();
-  consolidatedFeatureImage->FillBuffer( NumericTraits< FeaturePixelType >::max() );
-
-  const unsigned int numberOfFeatures = this->m_FeatureGenerators.size();
-
-  for( unsigned int i = 0; i < numberOfFeatures; i++ )
+  if( this->m_FeatureGenerators.size() > 0 )
     {
-    const FeatureSpatialObjectType * featureObject =
-      dynamic_cast< const FeatureSpatialObjectType * >( this->m_FeatureGenerators[i]->GetFeature() );
-
-    const FeatureImageType * featureImage = featureObject->GetImage();
-
-    typedef ImageRegionIterator< FeatureImageType >          FeatureIterator;
-    typedef ImageRegionConstIterator< FeatureImageType >     FeatureConstIterator;
-
-    FeatureIterator       dstitr( consolidatedFeatureImage, consolidatedFeatureImage->GetBufferedRegion() );
-    FeatureConstIterator  srcitr( featureImage, featureImage->GetBufferedRegion() );
-
-    dstitr.GoToBegin();
-    srcitr.GoToBegin();
-   
-    while( !srcitr.IsAtEnd() )
+    if( this->m_FeatureGenerators[0]->GetFeature() )
       {
-      if( dstitr.Get() > srcitr.Get() )
-        {
-        dstitr.Set( srcitr.Get() );
-        }
-      ++srcitr;
-      ++dstitr;
+      this->m_SegmentationModule->SetFeature( 
+        this->m_FeatureGenerators[0]->GetFeature() );
       }
     }
-   
-  typename FeatureSpatialObjectType::Pointer outputFeatureObject = 
-    FeatureSpatialObjectType::New();
-
-  outputFeatureObject->SetImage( consolidatedFeatureImage );
-
-  // DEBUGGING code
-  typedef ImageFileWriter< FeatureImageType > WriterType;
-  typename WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName("consolidatedFeature.mha");
-  writer->UseCompressionOn();
-  writer->SetInput( consolidatedFeatureImage );
-  writer->Update();
-  // DEBUGGING code to be removed
-
-
-  this->m_SegmentationModule->SetFeature( outputFeatureObject );
 }
 
  
