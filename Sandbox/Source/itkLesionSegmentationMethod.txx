@@ -105,6 +105,11 @@ void
 LesionSegmentationMethod<NDimension>
 ::GenerateData()
 {
+  if( !this->m_SegmentationModule )
+    {
+    itkExceptionMacro("Segmentation Module has not been connected");
+    }
+
   this->UpdateAllFeatureGenerators();
 
   if( this->FeaturesNeedToBeConsolidated() )
@@ -113,8 +118,14 @@ LesionSegmentationMethod<NDimension>
     }
   else
     {
-    this->m_SegmentationModule->SetFeature( 
-        this->m_FeatureGenerators[0]->GetFeature() );
+    if( this->m_FeatureGenerators.size() == 0 )
+      {
+      if( this->m_FeatureGenerators[0]->GetFeature() )
+        {
+        this->m_SegmentationModule->SetFeature( 
+          this->m_FeatureGenerators[0]->GetFeature() );
+        }
+      }
     }
   this->ExecuteSegmentationModule();
 }
