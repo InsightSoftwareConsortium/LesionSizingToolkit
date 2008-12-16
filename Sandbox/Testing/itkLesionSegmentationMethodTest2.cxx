@@ -63,10 +63,19 @@ int main( int argc, char * argv [] )
   segmentationMethod->AddFeatureGenerator( localStructureGenerator );
   segmentationMethod->AddFeatureGenerator( gradientMagnitudeSigmoidGenerator );
 
-  segmentationMethod->Update();
+  try
+    {
+    segmentationMethod->Update();
+    std::cerr << "Failed to catch expected exception" << std::endl;
+    return EXIT_FAILURE;
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cout << "Caught expected exception" << std::endl;
+    std::cout << excp << std::endl;
+    }
 
   segmentationMethod->Print( std::cout );
-
   
   return EXIT_SUCCESS;
 }
