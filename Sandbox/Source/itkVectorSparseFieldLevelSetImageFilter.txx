@@ -1283,9 +1283,9 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
             {
             // Find the largest (least negative) neighbor
             if ( value_temp > value )
-             {
-             value = value_temp;
-             }
+              {
+              value = value_temp;
+              }
             }
           else
             {

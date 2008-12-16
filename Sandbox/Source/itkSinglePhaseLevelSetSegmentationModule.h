@@ -117,7 +117,9 @@ private:
 
   unsigned int  m_MaximumNumberOfIterations;
   double        m_MaximumRMSError;
-  mutable typename InputImageType::ConstPointer m_ZeroSetInputImage;
+
+  typedef typename InputImageType::ConstPointer  ImageConstPointer;
+  mutable ImageConstPointer m_ZeroSetInputImage;
 };
 
 } // end namespace itk

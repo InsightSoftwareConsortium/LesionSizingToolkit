@@ -38,7 +38,7 @@ class ITK_EXPORT FastMarchingSegmentationModule : public SegmentationModule<NDim
 {
 public:
   /** Standard class typedefs. */
-  typedef FastMarchingSegmentationModule       Self;
+  typedef FastMarchingSegmentationModule        Self;
   typedef SegmentationModule<NDimension>        Superclass;
   typedef SmartPointer<Self>                    Pointer;
   typedef SmartPointer<const Self>              ConstPointer;
@@ -141,4 +141,3 @@ private:
 #endif
 
 #endif
-

@@ -264,4 +264,3 @@ FastMarchingSegmentationModule<NDimension>
 } // end namespace itk
 
 #endif
-

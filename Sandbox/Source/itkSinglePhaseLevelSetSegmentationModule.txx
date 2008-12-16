@@ -99,8 +99,8 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
   
   // If seeds are specified, construct the zero set image from the landmarks.
   typedef LandmarkSpatialObject< Self::Dimension >        LandmarkObjectType;
-  typedef typename FeatureImageType::IndexType       IndexType;
-  typedef typename LandmarkObjectType::PointListType PointListType;
+  typedef typename FeatureImageType::IndexType            IndexType;
+  typedef typename LandmarkObjectType::PointListType      PointListType;
   IndexType index;
 
   const LandmarkObjectType * landmarkObject =

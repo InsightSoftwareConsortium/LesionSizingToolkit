@@ -103,7 +103,6 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
 }
 
 
-
 template <class TInputImage, class TOutputImage>
 void 
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
