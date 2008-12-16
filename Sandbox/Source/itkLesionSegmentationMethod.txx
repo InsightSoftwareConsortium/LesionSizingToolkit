@@ -118,7 +118,7 @@ LesionSegmentationMethod<NDimension>
     }
   else
     {
-    if( this->m_FeatureGenerators.size() == 0 )
+    if( this->m_FeatureGenerators.size() > 0 )
       {
       if( this->m_FeatureGenerators[0]->GetFeature() )
         {
