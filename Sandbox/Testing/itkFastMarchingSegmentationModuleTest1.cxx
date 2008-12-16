@@ -132,5 +132,123 @@ int main( int argc, char * argv [] )
 
   segmentationModule->Print( std::cout );
   
+
+  //
+  // Exercise Set/Get methods
+  //
+  segmentationModule->SetStoppingValue( 0.0 );
+  segmentationModule->SetDistanceFromSeeds( 0.0 );
+
+  if( segmentationModule->GetStoppingValue() != 0.0 )
+    {
+    std::cerr << "Error in Set/GetStoppingValue() " << std::endl;
+    return EXIT_FAILURE;
+    }
+  
+  if( segmentationModule->GetDistanceFromSeeds() != 0.0 )
+    {
+    std::cerr << "Error in Set/GetDistanceFromSeeds() " << std::endl;
+    return EXIT_FAILURE;
+    }
+  
+  segmentationModule->SetStoppingValue( stoppingTime );
+  segmentationModule->SetDistanceFromSeeds( distanceFromSeeds );
+
+  if( segmentationModule->GetStoppingValue() != stoppingTime )
+    {
+    std::cerr << "Error in Set/GetStoppingValue() " << std::endl;
+    return EXIT_FAILURE;
+    }
+  
+  if( segmentationModule->GetDistanceFromSeeds() != distanceFromSeeds )
+    {
+    std::cerr << "Error in Set/GetDistanceFromSeeds() " << std::endl;
+    return EXIT_FAILURE;
+    }
+ 
+  segmentationModule->SetThresholdOutput( false );
+  if( segmentationModule->GetThresholdOutput() )
+    {
+    std::cerr << "Error in Set/GetThresholdOutput() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  segmentationModule->SetThresholdOutput( true );
+  if( !segmentationModule->GetThresholdOutput() )
+    {
+    std::cerr << "Error in Set/GetThresholdOutput() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  segmentationModule->ThresholdOutputOn();
+  if( !segmentationModule->GetThresholdOutput() )
+    {
+    std::cerr << "Error in Set/GetThresholdOutput() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  segmentationModule->ThresholdOutputOff();
+  if( segmentationModule->GetThresholdOutput() )
+    {
+    std::cerr << "Error in Set/GetThresholdOutput() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  segmentationModule->GradientMagnitudeSigmoidOn();
+  if( !segmentationModule->GetGradientMagnitudeSigmoid() )
+    {
+    std::cerr << "Error in Set/GetGradientMagnitudeSigmoid() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  segmentationModule->GradientMagnitudeSigmoidOff();
+  if( segmentationModule->GetGradientMagnitudeSigmoid() )
+    {
+    std::cerr << "Error in Set/GetGradientMagnitudeSigmoid() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  segmentationModule->SetGradientMagnitudeSigmoid( true );
+  if( !segmentationModule->GetGradientMagnitudeSigmoid() )
+    {
+    std::cerr << "Error in Set/GetGradientMagnitudeSigmoid() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  segmentationModule->SetGradientMagnitudeSigmoid( false );
+  if( segmentationModule->GetGradientMagnitudeSigmoid() )
+    {
+    std::cerr << "Error in Set/GetGradientMagnitudeSigmoid() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  segmentationModule->SetSigmoidAlpha( 0.0 );
+  if( segmentationModule->GetSigmoidAlpha() != 0.0 )
+    {
+    std::cerr << "Error in Set/GetSigmoidAlpha() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  segmentationModule->SetSigmoidAlpha( 3.0 );
+  if( segmentationModule->GetSigmoidAlpha() != 3.0 )
+    {
+    std::cerr << "Error in Set/GetSigmoidAlpha() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  segmentationModule->SetSigmoidBeta( 0.0 );
+  if( segmentationModule->GetSigmoidBeta() != 0.0 )
+    {
+    std::cerr << "Error in Set/GetSigmoidBeta() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  segmentationModule->SetSigmoidBeta( 3.0 );
+  if( segmentationModule->GetSigmoidBeta() != 3.0 )
+    {
+    std::cerr << "Error in Set/GetSigmoidBeta() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
   return EXIT_SUCCESS;
 }
