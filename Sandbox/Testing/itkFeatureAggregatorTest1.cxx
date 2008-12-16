@@ -290,5 +290,7 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
+  featureAggregator->Print( std::cout );
+
   return EXIT_SUCCESS;
 }
