@@ -184,5 +184,9 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
+  segmentationModule->Print( std::cout );
+
+  std::cout << "Name of class " << segmentationModule->GetNameOfClass() << std::endl;
+
   return EXIT_SUCCESS;
 }
