@@ -67,6 +67,7 @@ LesionSegmentationMethod<NDimension>
 ::AddFeatureGenerator( FeatureGeneratorType * generator ) 
 {
   this->m_FeatureGenerators.push_back( generator );
+  this->Modified();
 }
 
 
