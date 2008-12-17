@@ -29,6 +29,9 @@ TARGET_LINK_LIBRARIES(itkFeatureGeneratorTest1 LesionSizingSandbox)
 ADD_EXECUTABLE(itkRegionCompetitionImageFilterTest1 itkRegionCompetitionImageFilterTest1.cxx)
 TARGET_LINK_LIBRARIES(itkRegionCompetitionImageFilterTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkSegmentationVolumeEstimatorTest1 itkSegmentationVolumeEstimatorTest1.cxx)
+TARGET_LINK_LIBRARIES(itkSegmentationVolumeEstimatorTest1 LesionSizingSandbox)
+
 
 IF( ITK_USE_MULTI_PHASE_FRAMEWORK )
 
@@ -206,6 +209,8 @@ ADD_TEST(itkRegionGrowingSegmentationModuleTest1 ${CXX_TEST_PATH}/itkRegionGrowi
 ADD_TEST(itkSinglePhaseLevelSetSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSinglePhaseLevelSetSegmentationModuleTest1 )
 
 ADD_TEST(itkRegionCompetitionImageFilterTest1 ${CXX_TEST_PATH}/itkRegionCompetitionImageFilterTest1 )
+
+ADD_TEST(itkSegmentationVolumeEstimatorTest1 ${CXX_TEST_PATH}/itkSegmentationVolumeEstimatorTest1 )
 
 ADD_TEST(itkConnectedThresholdSegmentationModuleTest1 
   ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1 
@@ -405,6 +410,8 @@ ADD_TEST(Read002
   ${TEMP}/CornellPartSolid3_1.mhd
   )
 
+IF(TEST_CORNELL_COLLECTION)
+
 # Test a solid lesion on the left lobe of the lung
 ADD_TEST(Read003-SM0052-20000101 
   ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
@@ -416,22 +423,6 @@ ADD_TEST(Read004-SM0054-20000101
   ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
   ${TEST_CORNELL_DATA_ROOT}/SM0054-20000101/SM0054/20000101-141301-2-1
   ${TEMP}/SM0054-20000101_1.mha
-  )
-
-ADD_TEST(ROI001 
-  ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
-  ${TEMP}/CornellPartSolid2_1.mhd
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  270 180 120 
-  160 100  69 
-  )
-
-ADD_TEST(ROI002 
-  ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
-  ${TEMP}/CornellPartSolid3_1.mhd
-  ${TEMP}/CornellPartSolid3_1_ROI.mhd
-  100 170 180 
-  100 120  64
   )
 
 # Extract ROI of a solid lesion from the left lobe of the lung
@@ -451,23 +442,6 @@ ADD_TEST(ROI004-SM0054-20000101
   ${TEMP}/SM0054-20000101_1_ROI.mha
   324 235 129
   124 103 54
-  )
-
-ADD_TEST(GMSFGTest001
-  ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/GMSFGTest001_01.mhd
-  0.7
-  -10.0
-  90.0
-  )
-
-ADD_TEST(SFGTest001
-  ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/SFGTest001_01.mhd
-  1.0
-  -700.0 
   )
 
 ADD_TEST(SFGTest-SM0052-20000101
@@ -502,6 +476,55 @@ ADD_TEST(LWFGTest-SM0054-20000101
   ${TEMP}/SM0054-20000101_1_ROI.mha
   ${TEMP}/LWFGTest_SM0054-20000101_1.mha -400.0 )
 
+ADD_TEST(SVSFGTest-SM0054-20000101
+  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
+  ${TEMP}/SM0054-20000101_1_ROI.mha
+  ${TEMP}/SVSFGTest-SM0054-20000101_1.mha
+  1.0 0.5 2.0 )
+
+ADD_TEST(SVSFGTest-SM0052-20000101
+  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
+  ${TEMP}/SM0052-20000101_1_ROI.mha
+  ${TEMP}/SVSFGTest-SM0052-20000101_1.mha 
+  1.0 0.5 2.0 )
+
+
+ENDIF(TEST_CORNELL_COLLECTION)
+
+
+ADD_TEST(ROI001 
+  ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
+  ${TEMP}/CornellPartSolid2_1.mhd
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  270 180 120 
+  160 100  69 
+  )
+
+ADD_TEST(ROI002 
+  ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
+  ${TEMP}/CornellPartSolid3_1.mhd
+  ${TEMP}/CornellPartSolid3_1_ROI.mhd
+  100 170 180 
+  100 120  64
+  )
+
+ADD_TEST(GMSFGTest001
+  ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/GMSFGTest001_01.mhd
+  0.7
+  -10.0
+  90.0
+  )
+
+ADD_TEST(SFGTest001
+  ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
+  ${TEMP}/CornellPartSolid2_1_ROI.mhd
+  ${TEMP}/SFGTest001_01.mhd
+  1.0
+  -700.0 
+  )
+
 ADD_TEST(SVFGTest001
   ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
   ${TEMP}/CornellPartSolid2_1_ROI.mhd
@@ -521,18 +544,6 @@ ADD_TEST(SVSFGTest001
   -10
   80
   )
-
-ADD_TEST(SVSFGTest-SM0054-20000101
-  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
-  ${TEMP}/SM0054-20000101_1_ROI.mha
-  ${TEMP}/SVSFGTest-SM0054-20000101_1.mha
-  1.0 0.5 2.0 )
-
-ADD_TEST(SVSFGTest-SM0052-20000101
-  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
-  ${TEMP}/SM0052-20000101_1_ROI.mha
-  ${TEMP}/SVSFGTest-SM0052-20000101_1.mha 
-  1.0 0.5 2.0 )
 
 ADD_TEST(SLSFGTest001
   ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
@@ -653,7 +664,7 @@ ADD_TEST(CTRGTest002
   500
   )
 
-# Part solid lesion with some attachemnt to the right lung wall.
+# Part solid lesion with some attachment to the right lung wall.
 # CornellPartSolid2/SM0055-20000101
 ADD_TEST(itkLesionSegmentationMethodTest3_CornellPartSolid2
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
@@ -703,16 +714,19 @@ ADD_TEST(itkLesionSegmentationMethodTest6_SM0052-20000101
   ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
   ${TEMP}/SM0052-20000101_1_ROI.mha
   ${TEMP}/LesionSegmentationMethodTest6_SM0052-20000101.mha )
+
 ADD_TEST(itkLesionSegmentationMethodTest6_SM0054-20000101 
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest6
   ${TEST_DATA_ROOT}/Input/SM0054-20000101-CroppedSeeds1.txt
   ${TEMP}/SM0054-20000101_1_ROI.mha
   ${TEMP}/LesionSegmentationMethodTest6_SM0054-20000101.mha )
+
 ADD_TEST(itkLesionSegmentationMethodTest6_CornellPartSolid2
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest6
   ${TEST_DATA_ROOT}/Input/CornellPartSolid2Seeds1.txt
   ${TEMP}/CornellPartSolid2_1_ROI.mhd
   ${TEMP}/LesionSegmentationMethodTest6_CornellPartSolid2.mha )
+
 ADD_TEST(itkLesionSegmentationMethodTest6_CornellPartSolid1
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest6
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
@@ -725,16 +739,19 @@ ADD_TEST(itkLesionSegmentationMethodTest7_SM0052-20000101
   ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
   ${TEMP}/SM0052-20000101_1_ROI.mha
   ${TEMP}/LesionSegmentationMethodTest7_SM0052-20000101.mha )
+
 ADD_TEST(itkLesionSegmentationMethodTest7_SM0054-20000101 
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest7
   ${TEST_DATA_ROOT}/Input/SM0054-20000101-CroppedSeeds1.txt
   ${TEMP}/SM0054-20000101_1_ROI.mha
   ${TEMP}/LesionSegmentationMethodTest7_SM0054-20000101.mha )
+
 ADD_TEST(itkLesionSegmentationMethodTest7_CornellPartSolid2
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest7
   ${TEST_DATA_ROOT}/Input/CornellPartSolid2Seeds1.txt
   ${TEMP}/CornellPartSolid2_1_ROI.mhd
   ${TEMP}/LesionSegmentationMethodTest7_CornellPartSolid2.mha )
+
 ADD_TEST(itkLesionSegmentationMethodTest7_CornellPartSolid1
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest7
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
