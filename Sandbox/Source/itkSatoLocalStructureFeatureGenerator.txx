@@ -67,13 +67,7 @@ const typename SatoLocalStructureFeatureGenerator<NDimension>::SpatialObjectType
 SatoLocalStructureFeatureGenerator<NDimension>
 ::GetFeature() const
 {
-  if (this->GetNumberOfOutputs() < 1)
-    {
-    return 0;
-    }
-
   return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
-
 }
 
 
@@ -102,7 +96,7 @@ SatoLocalStructureFeatureGenerator<NDimension>
 
   if( !inputObject )
     {
-    itkExceptionMacro("Missing input spatial object");
+    itkExceptionMacro("Missing input spatial object or incorrect type");
     }
 
   const InputImageType * inputImage = inputObject->GetImage();
