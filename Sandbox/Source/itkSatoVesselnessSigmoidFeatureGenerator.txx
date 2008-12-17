@@ -77,17 +77,7 @@ SatoVesselnessSigmoidFeatureGenerator<NDimension>
   typename OutputImageSpatialObjectType::Pointer outputObject =
     dynamic_cast<OutputImageSpatialObjectType * >( this->GetInternalFeature() );
 
-  if( !outputObject )
-    {
-    itkExceptionMacro("Missing output feature object or incorrect type");
-    }
-
   const OutputImageType * inputImage = outputObject->GetImage();
-
-  if( !inputImage )
-    {
-    itkExceptionMacro("Missing output image object");
-    }
 
   this->m_SigmoidFilter->SetInput( inputImage );
 
