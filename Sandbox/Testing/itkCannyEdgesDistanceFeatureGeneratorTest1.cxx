@@ -73,6 +73,35 @@ int main( int argc, char * argv [] )
 
   featureGenerator->SetInput( inputObject );
 
+  double sigma = 1.0;
+  double lowerthreshold = 100;
+  double upperthreshold = 200;
+
+  featureGenerator->SetSigma( 1.0 );
+  featureGenerator->SetUpperThreshold( 1000 );
+  featureGenerator->SetLowerThreshold(   50 );
+
+  featureGenerator->SetSigma( sigma );
+  if( featureGenerator->GetSigma() != sigma );
+    {
+    std::cerr << "Error in Set/GetSigma()" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  featureGenerator->SetLowerThreshold( lowerthreshold );
+  if( featureGenerator->GetLowerThreshold() != lowerthreshold );
+    {
+    std::cerr << "Error in Set/GetLowerThreshold()" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  featureGenerator->SetUpperThreshold( upperthreshold );
+  if( featureGenerator->GetUpperThreshold() != upperthreshold );
+    {
+    std::cerr << "Error in Set/GetUpperThreshold()" << std::endl;
+    return EXIT_FAILURE;
+    }
+
   if( argc > 3 )
     {
     featureGenerator->SetSigma( atof( argv[3] ) );
@@ -85,7 +114,7 @@ int main( int argc, char * argv [] )
 
   if( argc > 5 )
     {
-    featureGenerator->SetLowerThreshold( atof( argv[4] ) );
+    featureGenerator->SetLowerThreshold( atof( argv[5] ) );
     }
 
   try 

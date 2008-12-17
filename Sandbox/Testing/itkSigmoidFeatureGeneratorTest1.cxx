@@ -74,16 +74,35 @@ int main( int argc, char * argv [] )
 
   featureGenerator->SetInput( inputObject );
 
+  double alpha =   1.0;
+  double beta  = 100.0;
+
   if( argc > 3 )
     {
-    featureGenerator->SetAlpha( atof( argv[3] ) );
+    alpha = atof( argv[3] );
     }
 
   if( argc > 4 )
     {
-    featureGenerator->SetBeta( atof( argv[4] ) );
+    beta = atof( argv[4] );
     }
 
+  featureGenerator->SetAlpha( 0.0 );
+  featureGenerator->SetBeta( 0.0 );
+
+  featureGenerator->SetAlpha( alpha );
+  if( featureGenerator->GetAlpha() != alpha )
+    {
+    std::cerr << "Error in Set/GetAlpha()" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  featureGenerator->SetBeta( beta );
+  if( featureGenerator->GetBeta() != beta )
+    {
+    std::cerr << "Error in Set/GetBeta()" << std::endl;
+    return EXIT_FAILURE;
+    }
 
   try 
     {
