@@ -37,6 +37,9 @@ TARGET_LINK_LIBRARIES(itkSegmentationVolumeEstimatorTest1 LesionSizingSandbox)
 ADD_EXECUTABLE(itkGrayscaleImageSegmentationVolumeEstimatorTest1 itkGrayscaleImageSegmentationVolumeEstimatorTest1.cxx)
 TARGET_LINK_LIBRARIES(itkGrayscaleImageSegmentationVolumeEstimatorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkVotingBinaryHoleFillFloodingImageFilterTest1 itkVotingBinaryHoleFillFloodingImageFilterTest1.cxx)
+TARGET_LINK_LIBRARIES(itkVotingBinaryHoleFillFloodingImageFilterTest1 LesionSizingSandbox)
+
 
 IF( ITK_USE_MULTI_PHASE_FRAMEWORK )
 
@@ -221,6 +224,16 @@ ADD_TEST(itkRegionCompetitionImageFilterTest1 ${CXX_TEST_PATH}/itkRegionCompetit
 ADD_TEST(itkSegmentationVolumeEstimatorTest1 ${CXX_TEST_PATH}/itkSegmentationVolumeEstimatorTest1 )
 
 ADD_TEST(itkGrayscaleImageSegmentationVolumeEstimatorTest1 ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest1 )
+
+ADD_TEST(itkVotingBinaryHoleFillFloodingImageFilterTest1
+  ${EXECUTABLE_OUTPUT_PATH}/itkVotingBinaryHoleFillFloodingImageFilterTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/VotingBinaryHoleFillFloodingImageFilterTest1_1.mha
+  200  # threshold value
+  2    # neighborhood radius
+  1    # majority
+  100  # iterations
+  )
 
 ADD_TEST(itkConnectedThresholdSegmentationModuleTest1 
   ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1 
