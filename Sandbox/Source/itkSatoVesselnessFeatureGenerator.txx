@@ -106,7 +106,7 @@ SatoVesselnessFeatureGenerator<NDimension>
 
   if( !inputObject )
     {
-    itkExceptionMacro("Missing input spatial object");
+    itkExceptionMacro("Missing input spatial object or incorrect type");
     }
 
   const InputImageType * inputImage = inputObject->GetImage();
