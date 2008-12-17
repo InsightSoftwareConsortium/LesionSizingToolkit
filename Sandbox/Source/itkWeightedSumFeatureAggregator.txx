@@ -64,6 +64,7 @@ WeightedSumFeatureAggregator<NDimension>
 ::AddWeight( double weight )
 {
   this->m_Weights.push_back( weight );
+  this->Modified();
 }
 
 
