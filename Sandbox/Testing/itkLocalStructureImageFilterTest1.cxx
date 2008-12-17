@@ -15,7 +15,6 @@
 
 #include "itkLocalStructureImageFilter.h"
 #include "itkHessianRecursiveGaussianImageFilter.h"
-#include "itkSymmetricSecondRankTensor.h"
 #include "itkSymmetricEigenAnalysisImageFilter.h"
 #include "itkImage.h"
 #include "itkImageFileReader.h"
@@ -58,16 +57,6 @@ int main( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try 
-    {
-    reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
-
   typedef itk::LocalStructureImageFilter< EigenValueImageType, OutputImageType >   LocalStructureFilterType;
 
   LocalStructureFilterType::Pointer localStructure = LocalStructureFilterType::New();
@@ -91,12 +80,12 @@ int main( int argc, char * argv [] )
     localStructure->SetGamma( atof( argv[5] ) );
     }
 
+  eigen->SetDimension( Dimension );
 
   WriterType::Pointer writer = WriterType::New();
 
   writer->SetFileName( argv[2] );
   writer->SetInput( localStructure->GetOutput() );
-
 
   try 
     {
@@ -108,11 +97,9 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-
   std::cout << "Name Of Class = " << localStructure->GetNameOfClass() << std::endl;
 
   localStructure->Print( std::cout );
 
- 
   return EXIT_SUCCESS;
 }
