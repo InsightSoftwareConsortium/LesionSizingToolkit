@@ -73,9 +73,7 @@ protected:
   virtual ~FeatureGenerator();
   void PrintSelf(std::ostream& os, Indent indent) const;
 
-  /** Method invoked by the pipeline in order to trigger the computation of
-   * the segmentation. */
-  void  GenerateData ();
+  /** Derived classes must implement the "void  GenerateData()" method  */
 
   /** non-const version of the method intended to be used in derived classes. */
   SpatialObjectType * GetInternalFeature();

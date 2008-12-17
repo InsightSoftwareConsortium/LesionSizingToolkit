@@ -92,17 +92,6 @@ FeatureGenerator<NDimension>
 }
 
 
-/*
- * Generate Data
- */
-template <unsigned int NDimension>
-void
-FeatureGenerator<NDimension>
-::GenerateData()
-{
-
-}
-
 } // end namespace itk
 
 #endif
