@@ -5,6 +5,8 @@ SET(TEMP ${LesionSizingKitSandbox_BINARY_DIR}/Testing/Temporary)
 
 FIND_PATH(TEST_CORNELL_DATA_ROOT README.txt DOC "Directory with data from the Cornell ELCAP database")
 
+OPTION(TEST_CORNELL_COLLECTION "Run tests in the collection of datasets from Cornell" OFF)
+
 ADD_EXECUTABLE(itkSystemInformationSandbox itkSystemInformation.cxx )
 TARGET_LINK_LIBRARIES(itkSystemInformationSandbox LesionSizingSandbox)
 
@@ -31,6 +33,9 @@ TARGET_LINK_LIBRARIES(itkRegionCompetitionImageFilterTest1 LesionSizingSandbox)
 
 ADD_EXECUTABLE(itkSegmentationVolumeEstimatorTest1 itkSegmentationVolumeEstimatorTest1.cxx)
 TARGET_LINK_LIBRARIES(itkSegmentationVolumeEstimatorTest1 LesionSizingSandbox)
+
+ADD_EXECUTABLE(itkGrayscaleImageSegmentationVolumeEstimatorTest1 itkGrayscaleImageSegmentationVolumeEstimatorTest1.cxx)
+TARGET_LINK_LIBRARIES(itkGrayscaleImageSegmentationVolumeEstimatorTest1 LesionSizingSandbox)
 
 
 IF( ITK_USE_MULTI_PHASE_FRAMEWORK )
@@ -211,6 +216,8 @@ ADD_TEST(itkSinglePhaseLevelSetSegmentationModuleTest1 ${CXX_TEST_PATH}/itkSingl
 ADD_TEST(itkRegionCompetitionImageFilterTest1 ${CXX_TEST_PATH}/itkRegionCompetitionImageFilterTest1 )
 
 ADD_TEST(itkSegmentationVolumeEstimatorTest1 ${CXX_TEST_PATH}/itkSegmentationVolumeEstimatorTest1 )
+
+ADD_TEST(itkGrayscaleImageSegmentationVolumeEstimatorTest1 ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest1 )
 
 ADD_TEST(itkConnectedThresholdSegmentationModuleTest1 
   ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1 
