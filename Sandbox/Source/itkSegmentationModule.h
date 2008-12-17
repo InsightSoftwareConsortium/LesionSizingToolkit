@@ -80,9 +80,7 @@ protected:
   virtual ~SegmentationModule();
   void PrintSelf(std::ostream& os, Indent indent) const;
 
-  /** Method invoked by the pipeline in order to trigger the computation of
-   * the segmentation. */
-  void  GenerateData ();
+  /* Derived classes MUST implement the "void  GenerateData ()" method */
 
   /** Output segmentation represented as a SpatialObject. Non-const version
    * only for internal use. */

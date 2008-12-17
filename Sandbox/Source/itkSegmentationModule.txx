@@ -137,17 +137,6 @@ SegmentationModule<NDimension>
 }
 
 
-/*
- * Generate Data
- */
-template <unsigned int NDimension>
-void
-SegmentationModule<NDimension>
-::GenerateData()
-{
-
-}
-
 } // end namespace itk
 
 #endif
