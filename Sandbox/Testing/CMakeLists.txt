@@ -166,6 +166,9 @@ TARGET_LINK_LIBRARIES(itkSatoLocalStructureFeatureGeneratorTest1 LesionSizingSan
 ADD_EXECUTABLE(itkLocalStructureImageFilterTest1 itkLocalStructureImageFilterTest1.cxx )
 TARGET_LINK_LIBRARIES(itkLocalStructureImageFilterTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkDescoteauxSheetnessImageFilterTest1 itkDescoteauxSheetnessImageFilterTest1.cxx )
+TARGET_LINK_LIBRARIES(itkDescoteauxSheetnessImageFilterTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkDescoteauxSheetnessFeatureGeneratorTest1 itkDescoteauxSheetnessFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkDescoteauxSheetnessFeatureGeneratorTest1 LesionSizingSandbox)
 
@@ -343,6 +346,15 @@ ADD_TEST(itkLocalStructureImageFilterTest1
   ${CXX_TEST_PATH}/itkLocalStructureImageFilterTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/LocalStructureImageFilterTest1_1.mhd
+  1.0
+  0.5
+  2.0
+  )
+
+ADD_TEST(itkDescoteauxSheetnessImageFilterTest1 
+  ${CXX_TEST_PATH}/itkDescoteauxSheetnessImageFilterTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/DescoteauxSheetnesImageFilterTest1_1.mhd
   1.0
   0.5
   2.0
