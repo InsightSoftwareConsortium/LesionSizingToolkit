@@ -20,7 +20,6 @@
 #include "itkFeatureAggregator.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageFileWriter.h"
 
 
 namespace itk
