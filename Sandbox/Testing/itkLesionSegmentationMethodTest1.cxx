@@ -33,9 +33,27 @@ int main( int argc, char * argv [] )
 
   segmentationMethod->SetRegionOfInterest( regionOfInterest );
 
+  const MethodType::SpatialObjectType * regionOfInterestReturned =
+    segmentationMethod->GetRegionOfInterest();
+
+  if( regionOfInterestReturned != regionOfInterest.GetPointer() )
+    {
+    std::cerr << "Error in Set/GetRegionOfInterest() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
   ImageMaskSpatialObjectType::Pointer initialSegmentation = ImageMaskSpatialObjectType::New();
 
   segmentationMethod->SetInitialSegmentation( initialSegmentation );
+  
+  const MethodType::SpatialObjectType * initialSegmentationReturned =
+    segmentationMethod->GetInitialSegmentation();
+
+  if( initialSegmentationReturned != initialSegmentation.GetPointer() )
+    {
+    std::cerr << "Error in Set/GetInitialSegmentation() " << std::endl;
+    return EXIT_FAILURE;
+    }
 
   typedef itk::FeatureGenerator< Dimension > FeatureGeneratorType;
 
