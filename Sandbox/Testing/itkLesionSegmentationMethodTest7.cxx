@@ -186,5 +186,24 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
+
+  // 
+  // Exercise the exception on the number of feature generators
+  //
+  lesionSegmentationMethod->AddFeatureGenerator( lungWallGenerator );
+
+  try 
+    {
+    lesionSegmentationMethod->Update();
+    std::cerr << "Failure to throw expected exception" << std::endl;
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cout << "Caught expected exception " << std::endl;
+    std::cout << excp << std::endl;
+    return EXIT_FAILURE;
+    }
+
+
   return EXIT_SUCCESS;
 }
