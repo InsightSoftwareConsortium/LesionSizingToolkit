@@ -64,6 +64,11 @@ protected:
    * the segmentation. */
   void  GenerateData();
 
+  /** Required type of the input */
+  typedef float                                               InputPixelType;
+  typedef ImageSpatialObject< NDimension, InputPixelType >    InputImageSpatialObjectType;
+  typedef Image< InputPixelType, NDimension >                 InputImageType;
+
 private:
   GrayscaleImageSegmentationVolumeEstimator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

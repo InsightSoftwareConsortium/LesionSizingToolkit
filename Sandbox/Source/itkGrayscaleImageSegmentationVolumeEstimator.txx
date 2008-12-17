@@ -65,6 +65,21 @@ void
 GrayscaleImageSegmentationVolumeEstimator<NDimension>
 ::GenerateData()
 {
+  typename InputImageSpatialObjectType::ConstPointer inputObject =
+    dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
+
+  if( !inputObject )
+    {
+    itkExceptionMacro("Missing input spatial object or incorrect type");
+    }
+
+  const InputImageType * inputImage = inputObject->GetImage();
+
+  if( !inputImage )
+    {
+    itkExceptionMacro("Missing input image");
+    }
+
 
 }
 
