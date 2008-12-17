@@ -201,5 +201,23 @@ int main( int argc, char * argv [] )
 
   featureAggregator->Print( std::cout );
 
+  //
+  // Exercise exception for incorrect number of weights
+  //
+  featureAggregator->AddWeight( 13.0 );
+
+  try 
+    {
+    featureAggregator->Update();
+    std::cerr << "Failure to produce expected exception" << std::endl;
+    return EXIT_FAILURE;
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cout << "Caught expected exception " << std::endl;
+    std::cout << excp << std::endl;
+    }
+
+
   return EXIT_SUCCESS;
 }
