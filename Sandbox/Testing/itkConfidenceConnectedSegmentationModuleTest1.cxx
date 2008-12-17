@@ -147,5 +147,22 @@ int main( int argc, char * argv [] )
   segmentationModule->Print( std::cout );
   std::cout << "Class name = " << segmentationModule->GetNameOfClass() << std::endl;
   
+  //
+  // Exerciser Get methods
+  //
+  segmentationModule->SetSigmaMultiplier( 0.0 );
+  if( segmentationModule->GetSigmaMultiplier() != 0.0 )
+    {
+    std::cerr << "Error in Set/GetSigmaMultiplier() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  segmentationModule->SetSigmaMultiplier( sigmaMultiplier );
+  if( segmentationModule->GetSigmaMultiplier() != sigmaMultiplier )
+    {
+    std::cerr << "Error in Set/GetSigmaMultiplier() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
   return EXIT_SUCCESS;
 }
