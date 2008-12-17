@@ -132,6 +132,20 @@ int main( int argc, char * argv [] )
   segmentationModule->SetLowerThreshold( lowerThreshold );
   segmentationModule->SetUpperThreshold( upperThreshold );
 
+
+  if( segmentationModule->GetLowerThreshold() != lowerThreshold )
+    {
+    std::cerr << "Error in Set/GetLowerThreshold() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  if( segmentationModule->GetUpperThreshold() != lowerThreshold )
+    {
+    std::cerr << "Error in Set/GetUpperThreshold() " << std::endl;
+    return EXIT_FAILURE;
+    }
+
+
   segmentationModule->Update();
 
   typedef SegmentationModuleType::SpatialObjectType    SpatialObjectType;
