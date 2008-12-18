@@ -139,7 +139,7 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  if( segmentationModule->GetUpperThreshold() != lowerThreshold )
+  if( segmentationModule->GetUpperThreshold() != upperThreshold )
     {
     std::cerr << "Error in Set/GetUpperThreshold() " << std::endl;
     return EXIT_FAILURE;
