@@ -75,11 +75,6 @@ GrayscaleImageSegmentationVolumeEstimator<NDimension>
 
   const InputImageType * inputImage = inputObject->GetImage();
 
-  if( !inputImage )
-    {
-    itkExceptionMacro("Missing input image");
-    }
-
   double sumOfIntensities = 0.0;
 
   double minimumIntensity = NumericTraits< double >::max();
@@ -113,17 +108,40 @@ GrayscaleImageSegmentationVolumeEstimator<NDimension>
     ++itr;
     }
 
-  sumOfIntensities -= region.GetNumberOfPixels() * minimumIntensity;
+  const unsigned int long numberOfPixels = region.GetNumberOfPixels();
 
-  const double volumeEstimation = 
-    sumOfIntensities / (maximumIntensity - minimumIntensity);
-  
+  sumOfIntensities -= numberOfPixels * minimumIntensity;
+
+  typedef typename InputImageType::SpacingType  SpacingType;
+
+  const SpacingType spacing = inputImage->GetSpacing();
+
+  double pixelVolume = spacing[0] * spacing[1] * spacing[2];
+
+  //
+  // Deal with eventual cases of negative spacing
+  //
+  if( pixelVolume < 0.0 )
+    {
+    pixelVolume = -pixelVolume;
+    }
+
+  const double intensityRange =  (maximumIntensity - minimumIntensity);
+
+  double volumeEstimation = 0.0;
+
+  if( intensityRange > 1e-6 )
+    {
+    volumeEstimation = pixelVolume * sumOfIntensities / intensityRange;
+    }
+
   typedef typename Superclass::RealObjectType   RealObjectType;
 
   RealObjectType * outputCarrier =
     static_cast<RealObjectType*>(this->ProcessObject::GetOutput(0));
  
   outputCarrier->Set( volumeEstimation );
+
 }
 
 } // end namespace itk

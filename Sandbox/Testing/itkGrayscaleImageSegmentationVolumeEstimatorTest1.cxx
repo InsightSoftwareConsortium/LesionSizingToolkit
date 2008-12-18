@@ -17,6 +17,7 @@
 #include "itkImage.h"
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
+#include "itkImageFileWriter.h"
 
 
 int main( int argc, char * argv [] )
@@ -55,9 +56,67 @@ int main( int argc, char * argv [] )
 
   InputImageSpatialObjectType::Pointer inputImageSpatialObject = InputImageSpatialObjectType::New();
 
-  inputImageSpatialObject->SetImage( image );
-
   volumeEstimator->SetInput( inputImageSpatialObject );
+
+  inputImageSpatialObject->SetImage( image );
+ 
+  InputImageType::SpacingType spacing;
+
+  spacing[0] = 0.5;
+  spacing[1] = 0.5;
+  spacing[2] = 0.8;
+  
+  image->SetSpacing( spacing );
+
+
+  InputImageType::SizeType  size;
+  size[0] = 101;
+  size[1] = 101;
+  size[2] = 101;
+
+  InputImageType::RegionType region;
+  region.SetSize( size );
+
+  image->SetRegions( region );
+  image->Allocate();
+
+  typedef itk::ImageRegionIterator< InputImageType > IteratorType;
+
+  IteratorType itr( image, region );
+
+  itr.GoToBegin();
+
+  InputImageType::IndexType index;
+  InputImageType::PointType point;
+
+  //
+  // Populate the image with a sphere 
+  //
+  InputImageType::PointType center;
+
+  center[0] = 50.0 * spacing[0];
+  center[1] = 50.0 * spacing[1];
+  center[2] = 50.0 * spacing[2];
+
+  const double radius = 15.0;
+
+  while( !itr.IsAtEnd() )
+    {
+    index = itr.GetIndex();
+    image->TransformIndexToPhysicalPoint( index, point );
+    const double distance = point.EuclideanDistanceTo( center ); 
+
+    if( distance > radius )
+      {
+      itr.Set( -4.0 );
+      }
+    else
+      {
+      itr.Set( 4.0 );
+      }
+
+    ++itr;
+    }
 
   volumeEstimator->Update();
 
@@ -73,7 +132,32 @@ int main( int argc, char * argv [] )
 
   volumeEstimator->Print( std::cout );
 
+  typedef itk::ImageFileWriter< InputImageType > WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetInput( image );
+  writer->SetFileName("sphereForVolumeTest.mhd");
+  writer->Update();
+
   std::cout << "Class name = " << volumeEstimator->GetNameOfClass() << std::endl;
-  
+ 
+  const double pi = atan(1.0) * 4.0;
+
+  const double expectedVolume = ( 4.0 / 3.0 ) * pi * ( radius * radius * radius );
+
+  const double difference = volume1 - expectedVolume;
+
+  const double percentage = 100.0 * vnl_math_abs( difference ) / expectedVolume;
+
+  std::cout << "Expected  Volume = " << expectedVolume << std::endl;
+  std::cout << "Estimated Volume = " << volume1 << std::endl;
+  std::cout << "Difference       = " << difference << std::endl;
+  std::cout << "Percentage       = " << percentage << "%" << std::endl;
+
+  if( percentage > 0.1 )  // This is: 0.1%
+    {
+    std::cout << "Error too large. Test FAILED!" << std::endl;
+    return EXIT_FAILURE;
+    }
+
   return EXIT_SUCCESS;
 }

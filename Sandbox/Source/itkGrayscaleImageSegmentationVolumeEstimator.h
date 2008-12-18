@@ -23,8 +23,18 @@ namespace itk
 {
 
 /** \class GrayscaleImageSegmentationVolumeEstimator
- * \brief Class for estimating the volume of a segmentation stored in a SpatialObject
- *  that carries a gray-scale image of pixel type float.
+ * \brief Class for estimating the volume of a segmentation stored in a
+ * SpatialObject that carries a gray-scale image of pixel type float. This
+ * implementation assumes that the input image is roughly composed of two
+ * regions with intensity plateaus, and with a narrow transition region between
+ * the two regions.  Note that this doesn't mean that the regions must be a
+ * single connected component.
+ *
+ * The estimation of the volume is done by the equivalent of rescaling the
+ * intensity range to [0:1] and then adding the contributions of all the
+ * pixels. 
+ *
+ * The pixels size is, of course, taken into account.
  *
  * \ingroup SpatialObjectFilters
  */
