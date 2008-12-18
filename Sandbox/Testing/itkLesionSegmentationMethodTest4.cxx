@@ -27,6 +27,7 @@
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
+#include "itkGradientMagnitudeSigmoidFeatureGenerator.h"
 #include "itkFastMarchingSegmentationModule.h"
 #include "itkMinimumFeatureAggregator.h"
 
@@ -83,12 +84,17 @@ int main( int argc, char * argv [] )
   typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
  
+  typedef itk::GradientMagnitudeSigmoidFeatureGenerator< Dimension > GradientMagnitudeSigmoidGeneratorType;
+  GradientMagnitudeSigmoidGeneratorType::Pointer gradientMagnitudeSigmoidGenerator = 
+    GradientMagnitudeSigmoidGeneratorType::New();
+
   typedef itk::MinimumFeatureAggregator< Dimension >   FeatureAggregatorType;
   FeatureAggregatorType::Pointer featureAggregator = FeatureAggregatorType::New();
 
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
+  featureAggregator->AddFeatureGenerator( gradientMagnitudeSigmoidGenerator );
 
   lesionSegmentationMethod->AddFeatureGenerator( featureAggregator );
 
@@ -106,6 +112,7 @@ int main( int argc, char * argv [] )
   lungWallGenerator->SetInput( inputObject );
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
+  gradientMagnitudeSigmoidGenerator->SetInput( inputObject );
 
   lungWallGenerator->SetLungThreshold( -400.0 );
 
@@ -116,6 +123,10 @@ int main( int argc, char * argv [] )
   sigmoidGenerator->SetAlpha(  1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
  
+  gradientMagnitudeSigmoidGenerator->SetSigma( 1.0 );
+  gradientMagnitudeSigmoidGenerator->SetAlpha( -0.1 );
+  gradientMagnitudeSigmoidGenerator->SetBeta( 150.0 );
+
   typedef itk::FastMarchingSegmentationModule< Dimension >   SegmentationModuleType;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
 
