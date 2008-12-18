@@ -108,7 +108,7 @@ int main( int argc, char * argv [] )
   vesselnessGenerator->SetAlpha1( 0.5 );
   vesselnessGenerator->SetAlpha2( 2.0 );
  
-  sigmoidGenerator->SetAlpha(  1.0  );
+  sigmoidGenerator->SetAlpha( 100.0  );
   sigmoidGenerator->SetBeta( -200.0 );
  
   typedef itk::ConnectedThresholdSegmentationModule< Dimension >   SegmentationModuleType;

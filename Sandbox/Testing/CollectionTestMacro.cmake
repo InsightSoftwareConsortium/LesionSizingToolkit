@@ -36,8 +36,8 @@ ADD_TEST(SFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
   ${DATASET_ROI}
   ${TEMP}/SFGTest${DATASET_ID}.mhd
-  1.0    # Alpha
-  -700.0 # Beta: Lung Threshold
+   100.0 # Alpha
+  -200.0 # Beta: Lung Threshold
   )
 
 # Lung Wall Feature Generator
