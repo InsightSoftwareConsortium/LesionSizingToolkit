@@ -27,8 +27,8 @@ ADD_TEST(GMSFG_${DATASET_ID}
   ${DATASET_ROI}
   ${TEMP}/GMSFGTest${DATASET_ID}.mhd
   0.7    # Sigma
-  -10.0  # Alpha
-  90.0   # Beta
+  -0.1   # Alpha
+  150.0  # Beta
   )
 
 # Sigmoid Feature Generator
@@ -122,8 +122,8 @@ ADD_TEST(LSMT4_${DATASET_ID}
   ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
   ${DATASET_ROI}
   ${TEMP}/LSMT4_${DATASET_ID}.mha
-  10   # Stopping time for Fast Marching termination
-  5    # Distance from seeds for Fast Marching initialization
+  500   # Stopping time for Fast Marching termination
+    5   # Distance from seeds for Fast Marching initialization
   )
 
 ADD_TEST(LSMT5_${DATASET_ID}
