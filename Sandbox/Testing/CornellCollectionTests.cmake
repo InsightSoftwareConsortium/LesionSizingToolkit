@@ -3,45 +3,154 @@
 #
 MACRO(TEST_DATASET DATASET_ID DATASET_DIRECTORY ROI_X ROI_Y ROI_Z ROI_DX ROI_DY ROI_DZ)
 
-ADD_TEST(READ${DATASET_ID}
+SET(DATASET_ROI ${TEMP}/${DATASET_ID}_ROI.mhd)
+
+# Dicom to Meta
+ADD_TEST(DTM_${DATASET_ID}
   ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
   ${TEST_CORNELL_DATA_ROOT}/${DATASET_DIRECTORY}
   ${TEMP}/${DATASET_ID}.mhd
   )
 
-ADD_TEST(ROI${DATASET_ID}
+# Extract Region of Interest
+ADD_TEST(ROI_${DATASET_ID}
   ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
   ${TEMP}/${DATASET_ID}.mhd
-  ${TEMP}/${DATASET_ID}_ROI.mhd
+  ${DATASET_ROI}
   ${ROI_X} ${ROI_Y} ${ROI_Z} 
   ${ROI_DX} ${ROI_DY} ${ROI_DZ} 
   )
 
-ADD_TEST(GMSFG${DATASET_ID}
+# Gradient Magnitude Sigmoid Feature Generator
+ADD_TEST(GMSFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
-  ${TEMP}/${DATASET_ID}_ROI.mhd
+  ${DATASET_ROI}
   ${TEMP}/GMSFGTest${DATASET_ID}.mhd
-  0.7
-  -10.0
-  90.0
+  0.7    # Sigma
+  -10.0  # Alpha
+  90.0   # Beta
   )
 
-ADD_TEST(SFG${DATASET_ID}
+# Sigmoid Feature Generator
+ADD_TEST(SFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
-  ${TEMP}/${DATASET_ID}_ROI.mhd
+  ${DATASET_ROI}
   ${TEMP}/SFGTest${DATASET_ID}.mhd
-  1.0
-  -700.0 
+  1.0    # Alpha
+  -700.0 # Beta: Lung Threshold
   )
 
-ADD_TEST(LWFG${DATASET_ID}
+# Lung Wall Feature Generator
+ADD_TEST(LWFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
-  ${TEMP}/${DATASET_ID}_ROI.mhd
+  ${DATASET_ROI}
   ${TEMP}/LWFGTest${DATASET_ID}.mha
-  -400.0
+  -400.0 # Lung Threshold
   )
+
+# Sato Vesselness Feature Generator
+ADD_TEST(SVFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
+  ${DATASET_ROI}
+  ${TEMP}/SVFGTest${DATASET_ID}.mhd
+  1.0   # Sigma
+  0.5   # Vesselness Alpha1
+  2.0   # Vesselness Alpha2
+  )
+
+# Sato Vesselness Sigmoid Feature Generator
+ADD_TEST(SVSFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
+  ${DATASET_ROI}
+  ${TEMP}/SVSFGTest${DATASET_ID}.mhd
+  1.0   # Sigma
+  0.5   # Vesselness Alpha1
+  2.0   # Vesselness Alpha2
+  -10.0 # Sigmoid Alpha
+  80.0  # Sigmoid Beta
+  )
+
+ADD_TEST(SLSFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
+  ${DATASET_ROI}
+  ${TEMP}/SLSFGTest${DATASET_ID}.mhd
+  1.0  # Sigma
+  0.5  # Alpha
+  2.0  # Gamma
+  )
+
+ADD_TEST(DSFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
+  ${DATASET_ROI}
+  ${TEMP}/SLSFGTest${DATASET_ID}.mhd
+  1.0  # Sigma
+  0.5  # Sheetness
+  2.0  # Bloobiness
+  1.0  # Noise
+  )
+
+ADD_TEST(FTFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkFrangiTubularnessFeatureGeneratorTest1
+  ${DATASET_ROI}
+  ${TEMP}/FTFGTest${DATASET_ID}.mhd
+  1.0  # Sigma
+  0.5  # Sheetness
+  2.0  # Bloobiness
+  1.0  # Noise
+  )
+
+ADD_TEST(CTRG_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  ${DATASET_ROI}
+  ${TEMP}/CTRGTest${DATASET_ID}.mhd
+  -700  # Lower Threshold
+  500   # Upper Threshold
+  )
+
+ADD_TEST(LSMT3_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  ${DATASET_ROI}
+  ${TEMP}/LSMT3_${DATASET_ID}.mha
+  0.5  # Lower Threshold
+  1.0  # Upper Threshold
+  )
+
+ADD_TEST(LSMT4_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest4
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  ${DATASET_ROI}
+  ${TEMP}/LSMT4_${DATASET_ID}.mha
+  10   # Stopping time for Fast Marching termination
+  5    # Distance from seeds for Fast Marching initialization
+  )
+
+ADD_TEST(LSMT5_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest5
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  ${DATASET_ROI}
+  ${TEMP}/LSMT5_${DATASET_ID}.mha
+  )
+
+ADD_TEST(LSMT6_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest6
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  ${DATASET_ROI}
+  ${TEMP}/LSMT6_${DATASET_ID}.mha
+  )
+
+ADD_TEST(LSMT7_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest7
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  ${DATASET_ROI}
+  ${TEMP}/LSMT7_${DATASET_ID}.mha
+  )
+
 
 ENDMACRO(TEST_DATASET)
+
+
 
 
 TEST_DATASET(SM0055 
@@ -67,227 +176,5 @@ TEST_DATASET(SM0054
   324 235 129
   124 103 54
   )
-
-ADD_TEST(SVFGTest001
-  ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/SVFGTest001_01.mhd
-  1.0
-  0.5
-  2.0
-  )
-
-ADD_TEST(SVSFGTest001
-  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/SVSFGTest001_01.mhd
-  1.0
-  0.5
-  2.0
-  -10
-  80
-  )
-
-ADD_TEST(SVSFGTest-SM0054-20000101
-  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
-  ${TEMP}/SM0054-20000101_1_ROI.mha
-  ${TEMP}/SVSFGTest-SM0054-20000101_1.mha
-  1.0 0.5 2.0 )
-
-ADD_TEST(SVSFGTest-SM0052-20000101
-  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
-  ${TEMP}/SM0052-20000101_1_ROI.mha
-  ${TEMP}/SVSFGTest-SM0052-20000101_1.mha 
-  1.0 0.5 2.0 )
-
-
-ADD_TEST(SLSFGTest001
-  ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/SLSFGTest001_01.mhd
-  1.0
-  0.5
-  2.0
-  )
-
-ADD_TEST(DSFGTest001
-  ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/SLSFGTest001_01.mhd
-  1.0
-  0.5
-  2.0
-  )
-
-ADD_TEST(FTFGTest001
-  ${CXX_TEST_PATH}/itkFrangiTubularnessFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/SLSFGTest001_01.mhd
-  1.0
-  0.5
-  2.0
-  )
-
-ADD_TEST(SVFGTest002
-  ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid3_1_ROI.mhd
-  ${TEMP}/SVFGTest002_01.mhd
-  1.0
-  0.5
-  2.0
-  )
-
-ADD_TEST(SVSFGTest002
-  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid3_1_ROI.mhd
-  ${TEMP}/SVSFGTest002_01.mhd
-  1.0
-  0.5
-  2.0
-  -10
-  80
-  )
-
-ADD_TEST(SLSFGTest002
-  ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid3_1_ROI.mhd
-  ${TEMP}/SLSFGTest002_01.mhd
-  1.0
-  0.5
-  2.0
-  )
-
-ADD_TEST(DSFGTest002
-  ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid3_1_ROI.mhd
-  ${TEMP}/SLSFGTest002_01.mhd
-  1.0
-  0.5
-  2.0
-  )
-
-ADD_TEST(FTFGTest002
-  ${CXX_TEST_PATH}/itkFrangiTubularnessFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid3_1_ROI.mhd
-  ${TEMP}/SLSFGTest002_01.mhd
-  1.0
-  0.5
-  2.0
-  )
-
-#
-#  Region Growing tests
-#
-ADD_TEST(CTRGTest001
-  ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1
-  ${TEST_DATA_ROOT}/Input/CornellPartSolid2Seeds1.txt
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/CTRGTest001_01.mhd
-  -700
-  500
-  )
-
-ADD_TEST(CTRGTest002
-  ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1
-  ${TEST_DATA_ROOT}/Input/CornellPartSolid3Seeds1.txt
-  ${TEMP}/CornellPartSolid3_1_ROI.mhd
-  ${TEMP}/CTRGTest002_01.mhd
-  -700
-  500
-  )
-
-# Part solid lesion with some attachment to the right lung wall.
-# CornellPartSolid2/SM0055-20000101
-ADD_TEST(LSMT3_CornellPartSolid2
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
-  ${TEST_DATA_ROOT}/Input/CornellPartSolid2Seeds1.txt
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/LesionSegmentationMethodTest3_CornellPartSolid2.mha
-  0.5
-  1.0
-  )
-
-ADD_TEST(LSMT3_SM0052-20000101 
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
-  ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
-  ${TEMP}/SM0052-20000101_1_ROI.mha
-  ${TEMP}/LesionSegmentationMethodTest3_SM0052-20000101.mha
-  0.5
-  1.0
-  )
-
-ADD_TEST(LSMT3_SM0054-20000101 
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
-  ${TEST_DATA_ROOT}/Input/SM0054-20000101-CroppedSeeds1.txt
-  ${TEMP}/SM0054-20000101_1_ROI.mha
-  ${TEMP}/LesionSegmentationMethodTest3_SM0054-20000101.mha
-  0.5
-  1.0
-  )
-
-ADD_TEST(LSMT4_SM0052-20000101 
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest4
-  ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
-  ${TEMP}/SM0052-20000101_1_ROI.mha
-  ${TEMP}/LesionSegmentationMethodTest4_SM0052-20000101.mha
-  10 5
-  )
-
-ADD_TEST(LSMT5_SM0052-20000101 
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest5
-  ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
-  ${TEMP}/SM0052-20000101_1_ROI.mha
-  ${TEMP}/LesionSegmentationMethodTest5_SM0052-20000101.mha
-  )
-
-# Fast marching from a seed point followed by shape detection level set segmentation
-ADD_TEST(LSMT6_SM0052-20000101 
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest6
-  ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
-  ${TEMP}/SM0052-20000101_1_ROI.mha
-  ${TEMP}/LesionSegmentationMethodTest6_SM0052-20000101.mha )
-
-ADD_TEST(LSMT6_SM0054-20000101 
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest6
-  ${TEST_DATA_ROOT}/Input/SM0054-20000101-CroppedSeeds1.txt
-  ${TEMP}/SM0054-20000101_1_ROI.mha
-  ${TEMP}/LesionSegmentationMethodTest6_SM0054-20000101.mha )
-
-ADD_TEST(LSMT6_CornellPartSolid2
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest6
-  ${TEST_DATA_ROOT}/Input/CornellPartSolid2Seeds1.txt
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/LesionSegmentationMethodTest6_CornellPartSolid2.mha )
-
-ADD_TEST(LSMT6_CornellPartSolid1
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest6
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/LesionSegmentationMethodTest6_CornellPartSolid1.mha  )
-
-# Fast marching from a seed point followed by GAC level set segmentation
-ADD_TEST(LSMT7_SM0052-20000101 
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest7
-  ${TEST_DATA_ROOT}/Input/SM0052-20000101-CroppedSeeds1.txt
-  ${TEMP}/SM0052-20000101_1_ROI.mha
-  ${TEMP}/LesionSegmentationMethodTest7_SM0052-20000101.mha )
-
-ADD_TEST(LSMT7_SM0054-20000101 
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest7
-  ${TEST_DATA_ROOT}/Input/SM0054-20000101-CroppedSeeds1.txt
-  ${TEMP}/SM0054-20000101_1_ROI.mha
-  ${TEMP}/LesionSegmentationMethodTest7_SM0054-20000101.mha )
-
-ADD_TEST(LSMT7_CornellPartSolid2
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest7
-  ${TEST_DATA_ROOT}/Input/CornellPartSolid2Seeds1.txt
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/LesionSegmentationMethodTest7_CornellPartSolid2.mha )
-
-ADD_TEST(LSMT7_CornellPartSolid1
-  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest7
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/LesionSegmentationMethodTest7_CornellPartSolid1.mha  )
 
 
