@@ -147,6 +147,47 @@ ADD_TEST(LSMT7_${DATASET_ID}
   ${TEMP}/LSMT7_${DATASET_ID}.mha
   )
 
+ADD_TEST(LSMTVE3_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest2
+  ${TEMP}/LSMT3_${DATASET_ID}.mha
+  LSMT3
+  ${DATASET_ID}
+  ${TEMP}/VolumeEstimation_${DATASET_ID}.txt
+  )
+
+ADD_TEST(LSMTVE4_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest2
+  ${TEMP}/LSMT4_${DATASET_ID}.mha
+  LSMT4
+  ${DATASET_ID}
+  ${TEMP}/VolumeEstimation_${DATASET_ID}.txt
+  )
+
+ADD_TEST(LSMTVE5_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest2
+  ${TEMP}/LSMT5_${DATASET_ID}.mha
+  LSMT5
+  ${DATASET_ID}
+  ${TEMP}/VolumeEstimation_${DATASET_ID}.txt
+  )
+
+ADD_TEST(LSMTVE6_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest2
+  ${TEMP}/LSMT6_${DATASET_ID}.mha
+  LSMT6
+  ${DATASET_ID}
+  ${TEMP}/VolumeEstimation_${DATASET_ID}.txt
+  )
+
+
+ADD_TEST(LSMTVE7_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest2
+  ${TEMP}/LSMT7_${DATASET_ID}.mha
+  LSMT7
+  ${DATASET_ID}
+  ${TEMP}/VolumeEstimation_${DATASET_ID}.txt
+  )
+
 
 ENDMACRO(TEST_DATASET)
 
