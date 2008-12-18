@@ -20,8 +20,6 @@
 #include "itkFastMarchingSegmentationModule.h"
 #include "itkImageRegionIterator.h"
 #include "itkFastMarchingImageFilter.h"
-#include "itkBinaryThresholdImageFilter.h"
-#include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
 #include "itkSigmoidImageFilter.h"
 #include "itkImageFileWriter.h"
 
@@ -35,12 +33,11 @@ template <unsigned int NDimension>
 FastMarchingSegmentationModule<NDimension>
 ::FastMarchingSegmentationModule()
 {
-  m_ThresholdOutput = false;
-  m_StoppingValue = static_cast<double>( static_cast<OutputPixelType>( 
+  this->m_StoppingValue = static_cast<double>( static_cast<OutputPixelType>( 
                       NumericTraits<OutputPixelType>::max() / 2.0 ) );
-  m_GradientMagnitudeSigmoid = true;
-  m_SigmoidAlpha = -1.0;
-  m_SigmoidBeta  = 5.0;
+
+  this->m_DistanceFromSeeds = 0.0;
+  
   this->SetNumberOfRequiredInputs( 2 );
   this->SetNumberOfRequiredOutputs( 1 );
 
@@ -69,6 +66,8 @@ FastMarchingSegmentationModule<NDimension>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
+  os << indent << "Stopping Value = " << this->m_StoppingValue << std::endl;
+  os << indent << "Distance from seeds = " << this->m_DistanceFromSeeds << std::endl;
 }
 
 
@@ -80,47 +79,13 @@ void
 FastMarchingSegmentationModule<NDimension>
 ::GenerateData()
 {
-  typedef FastMarchingImageFilter<
-    FeatureImageType, OutputImageType >      FilterType;
-  typedef BinaryThresholdImageFilter< 
-          OutputImageType, OutputImageType > ThresholdFilterType;
-  typedef GradientMagnitudeRecursiveGaussianImageFilter<
-          FeatureImageType >  DerivativeFilterType;
-  typedef SigmoidImageFilter< FeatureImageType,
-                              FeatureImageType > SigmoidFilterType;
-  typename DerivativeFilterType::Pointer derivativeFilter;
-  typename SigmoidFilterType::Pointer    sigmoidFilter;
+  typedef FastMarchingImageFilter< FeatureImageType, OutputImageType >      FilterType;
+  
   typename FilterType::Pointer filter = FilterType::New();
 
   const FeatureImageType * featureImage = this->GetInternalFeatureImage();
-  
-  if (m_GradientMagnitudeSigmoid)
-    {
 
-    // Default sigma is the minimum image spacing.
-    double minSpacing = NumericTraits<double>::max();
-    for (unsigned int i=0; i< Dimension; i++)
-      {
-      minSpacing = vnl_math_min(minSpacing, featureImage->GetSpacing()[i]);
-      }
-    const double sigmaDefault = minSpacing;
-      
-    derivativeFilter = DerivativeFilterType::New();
-    derivativeFilter->SetInput( featureImage );
-    derivativeFilter->SetSigma( sigmaDefault );
-    sigmoidFilter = SigmoidFilterType::New();
-    sigmoidFilter->SetOutputMaximum(1.0);
-    sigmoidFilter->SetOutputMinimum(0.0);
-    sigmoidFilter->SetInput( derivativeFilter->GetOutput() );
-    sigmoidFilter->SetAlpha(m_SigmoidAlpha);
-    sigmoidFilter->SetBeta(m_SigmoidBeta);
-    sigmoidFilter->Update();
-    filter->SetInput( sigmoidFilter->GetOutput() );
-    }
-  else
-    {
-    filter->SetInput( featureImage );
-    }
+  filter->SetInput( featureImage );
 
   filter->SetStoppingValue( this->m_StoppingValue );
 
@@ -134,6 +99,7 @@ FastMarchingSegmentationModule<NDimension>
   typedef typename FeatureImageType::IndexType                      IndexType;
   typedef typename FilterType::NodeContainer                        NodeContainer;
   typedef typename FilterType::NodeType                             NodeType;
+
   typename NodeContainer::Pointer trialPoints = NodeContainer::New();
   
   const PointListType & points = inputSeeds->GetPoints();
@@ -159,22 +125,18 @@ FastMarchingSegmentationModule<NDimension>
   filter->SetTrialPoints( trialPoints );
   filter->Update();
 
-  if (this->m_ThresholdOutput)
-    {
-    // Threshold the result with a time from the time map.
-    typename ThresholdFilterType::Pointer threshold = ThresholdFilterType::New();
-    threshold->SetInput( filter->GetOutput() );
-    threshold->SetUpperThreshold( itk::NumericTraits<OutputPixelType>::Zero ); 
-    threshold->SetLowerThreshold( itk::NumericTraits<OutputPixelType>::NonpositiveMin() ); 
-    threshold->SetInsideValue( 1 );
-    threshold->SetOutsideValue( 0 );
-    threshold->Update();
-    this->PackOutputImageInOutputSpatialObject( threshold->GetOutput() );
-    }
-  else 
-    {
-    this->PackOutputImageInOutputSpatialObject( filter->GetOutput() );
-    }
+  // Rescale the values to make the output intensity fit in the expected
+  // range of [-4:4]
+  typedef itk::SigmoidImageFilter< OutputImageType, OutputImageType > SigmoidFilterType; 
+  typename SigmoidFilterType::Pointer sigmoid = SigmoidFilterType::New();
+  sigmoid->SetInput( filter->GetOutput() );
+  sigmoid->SetBeta( itk::NumericTraits<OutputPixelType>::Zero ); 
+  sigmoid->SetAlpha( 1.0 );
+  sigmoid->SetOutputMinimum( -4.0 );
+  sigmoid->SetOutputMaximum(  4.0 );
+  sigmoid->Update();
+
+  this->PackOutputImageInOutputSpatialObject( sigmoid->GetOutput() );
 }
 
 

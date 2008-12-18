@@ -80,28 +80,6 @@ public:
   itkSetMacro( DistanceFromSeeds, double );
   itkGetMacro( DistanceFromSeeds, double );
 
-  /** Threshold the output ? The output of the filter is a level set. The zero
-   * set would represent the segmentation. However in most cases, the output
-   * of this module may be plugged in as the initial level set to a levelset 
-   * method such as shape detection, in which case you do not want to threshold
-   * the output. Default is OFF. */
-  itkSetMacro( ThresholdOutput, bool );
-  itkGetMacro( ThresholdOutput, bool );
-  itkBooleanMacro( ThresholdOutput );
-
-  /** Apply a gradient magnitude sigmoid to the input prior to running fast
-   * marching ? Default ON. */
-  itkSetMacro( GradientMagnitudeSigmoid, bool );
-  itkGetMacro( GradientMagnitudeSigmoid, bool );
-  itkBooleanMacro( GradientMagnitudeSigmoid);
-
-  /** Alpha and Beta values for the sigmoid filter. Makes sense only if 
-   * GradientMagnitudeSigmoid flag is ON. */
-  itkSetMacro( SigmoidAlpha, double );
-  itkGetMacro( SigmoidAlpha, double );
-  itkSetMacro( SigmoidBeta, double );
-  itkGetMacro( SigmoidBeta, double );
-  
 protected:
   FastMarchingSegmentationModule();
   virtual ~FastMarchingSegmentationModule();
@@ -122,10 +100,6 @@ protected:
 
   double m_StoppingValue;
   double m_DistanceFromSeeds;
-  bool   m_ThresholdOutput;
-  bool   m_GradientMagnitudeSigmoid;
-  double m_SigmoidAlpha;
-  double m_SigmoidBeta;
 
 private:
   FastMarchingSegmentationModule(const Self&); //purposely not implemented

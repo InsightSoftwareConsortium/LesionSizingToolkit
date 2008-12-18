@@ -34,8 +34,7 @@ FastMarchingAndShapeDetectionLevelSetSegmentationModule<NDimension>
 {
   this->m_FastMarchingModule = FastMarchingModuleType::New();
   this->m_FastMarchingModule->SetDistanceFromSeeds(1.0);
-  this->m_FastMarchingModule->SetThresholdOutput( false );
-  this->m_FastMarchingModule->GradientMagnitudeSigmoidOn();
+  this->m_FastMarchingModule->SetStoppingValue(100.0);
   this->m_ShapeDetectionLevelSetModule = ShapeDetectionLevelSetModuleType::New();
 }
 
