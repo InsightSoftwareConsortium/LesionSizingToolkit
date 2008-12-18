@@ -20,7 +20,7 @@
 #include "itkFastMarchingSegmentationModule.h"
 #include "itkImageRegionIterator.h"
 #include "itkFastMarchingImageFilter.h"
-#include "itkSigmoidImageFilter.h"
+#include "itkIntensityWindowingImageFilter.h"
 #include "itkImageFileWriter.h"
 
 namespace itk
@@ -127,16 +127,16 @@ FastMarchingSegmentationModule<NDimension>
 
   // Rescale the values to make the output intensity fit in the expected
   // range of [-4:4]
-  typedef itk::SigmoidImageFilter< OutputImageType, OutputImageType > SigmoidFilterType; 
-  typename SigmoidFilterType::Pointer sigmoid = SigmoidFilterType::New();
-  sigmoid->SetInput( filter->GetOutput() );
-  sigmoid->SetBeta( itk::NumericTraits<OutputPixelType>::Zero ); 
-  sigmoid->SetAlpha( 1.0 );
-  sigmoid->SetOutputMinimum( -4.0 );
-  sigmoid->SetOutputMaximum(  4.0 );
-  sigmoid->Update();
+  typedef itk::IntensityWindowingImageFilter<  OutputImageType, OutputImageType > WindowingFilterType;
+  typename WindowingFilterType::Pointer windowing = WindowingFilterType::New();
+  windowing->SetInput( filter->GetOutput() );
+  windowing->SetWindowMinimum( -this->m_DistanceFromSeeds );
+  windowing->SetWindowMaximum(  this->m_StoppingValue );
+  windowing->SetOutputMaximum( -4.0 );
+  windowing->SetOutputMinimum(  4.0 );
+  windowing->Update();
 
-  this->PackOutputImageInOutputSpatialObject( sigmoid->GetOutput() );
+  this->PackOutputImageInOutputSpatialObject( windowing->GetOutput() );
 }
 
 
@@ -189,39 +189,6 @@ FastMarchingSegmentationModule<NDimension>
     dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
   outputObject->SetImage( outputImage );
 }
-
-/**
- * This method is intended to be used only by this class. It should be called
- * from the PackOutputImageInOutputSpatialObject() method.
- */
-template <unsigned int NDimension>
-void
-FastMarchingSegmentationModule<NDimension>
-::ConvertIntensitiesToCenteredRange( OutputImageType * image )
-{
-  typedef ImageRegionIterator< OutputImageType > IteratorType;
-
-  IteratorType itr( image, image->GetBufferedRegion() );
-  
-  itr.GoToBegin();
-
-  //
-  // Convert intensities to centered range
-  //
-  while( !itr.IsAtEnd() )
-    {
-    if( itr.Get() )
-      {
-      itr.Set( 4.0 );
-      }
-    else
-      {
-      itr.Set( -4.0 );
-      }
-    ++itr;
-    }
-}
-
 
 } // end namespace itk
 

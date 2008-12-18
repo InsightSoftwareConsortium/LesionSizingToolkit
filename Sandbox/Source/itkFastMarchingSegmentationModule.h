@@ -105,7 +105,6 @@ private:
   FastMarchingSegmentationModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  void ConvertIntensitiesToCenteredRange( OutputImageType * outputImage );
 };
 
 } // end namespace itk
