@@ -14,6 +14,9 @@ SET(LIBRARY_OUTPUT_PATH ${LesionSizingKitSandbox_BINARY_DIR}/bin CACHE INTERNAL 
 
 OPTION(ITK_USE_MULTI_PHASE_FRAMEWORK "Enable multi-phase level sets" ON)
 
+OPTION(LSTK_SANDBOX_BUILD_REPORTS "Build Lesion Sizing Toolkit Sandbox with LaTeX reports." OFF)
+
+
 ENABLE_TESTING()
 INCLUDE(CTest)
 
@@ -26,3 +29,7 @@ ADD_SUBDIRECTORY(Testing)
 ADD_SUBDIRECTORY(Examples)
 
 INCLUDE(${LesionSizingKitSandbox_SOURCE_DIR}/Utilities/KWStyle/KWStyle.cmake)
+
+IF(LSTK_SANDBOX_BUILD_REPORTS)
+  ADD_SUBDIRECTORY(Documents)
+ENDIF(LSTK_SANDBOX_BUILD_REPORTS)
