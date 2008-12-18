@@ -467,7 +467,7 @@ ADD_TEST(itkWeightedSumFeatureAggregatorTest1
   )
 
 IF(TEST_CORNELL_COLLECTION)
-  INCLUDE(FemurDataTests.cmake)
+  INCLUDE(CornellCollectionTests.cmake)
 ENDIF(TEST_CORNELL_COLLECTION)
 
 ENDIF(TEST_CORNELL_DATA_ROOT)
