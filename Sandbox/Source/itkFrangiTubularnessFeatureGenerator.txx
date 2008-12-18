@@ -41,6 +41,9 @@ FrangiTubularnessFeatureGenerator<NDimension>
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
 
   this->m_Sigma =  1.0;
+  this->m_SheetnessNormalization = 0.5;
+  this->m_BloobinessNormalization = 2.0;
+  this->m_NoiseNormalization = 1.0;
 }
 
 
