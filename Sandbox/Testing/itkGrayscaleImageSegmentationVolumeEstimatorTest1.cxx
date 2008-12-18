@@ -35,6 +35,30 @@ int main( int argc, char * argv [] )
 
   volumeEstimator->SetInput( inputObject );
 
+  try
+    {
+    volumeEstimator->Update();
+    std::cerr << "Failed to catch expected exception" << std::endl;
+    return EXIT_FAILURE;
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cout << "Caught expected exception" << std::endl;
+    std::cout << excp << std::endl;
+    }
+
+  typedef VolumeEstimatorType::InputImageType   InputImageType;
+
+  InputImageType::Pointer image = InputImageType::New();
+
+  typedef VolumeEstimatorType::InputImageSpatialObjectType  InputImageSpatialObjectType;
+
+  InputImageSpatialObjectType::Pointer inputImageSpatialObject = InputImageSpatialObjectType::New();
+
+  inputImageSpatialObject->SetImage( image );
+
+  volumeEstimator->SetInput( inputImageSpatialObject );
+
   volumeEstimator->Update();
 
   VolumeEstimatorType::RealType volume1 = volumeEstimator->GetVolume();

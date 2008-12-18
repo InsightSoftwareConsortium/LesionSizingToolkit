@@ -54,6 +54,11 @@ public:
   typedef typename Superclass::SpatialObjectPointer       SpatialObjectPointer;
   typedef typename Superclass::SpatialObjectConstPointer  SpatialObjectConstPointer;
 
+  /** Required type of the input */
+  typedef float                                               InputPixelType;
+  typedef ImageSpatialObject< NDimension, InputPixelType >    InputImageSpatialObjectType;
+  typedef Image< InputPixelType, NDimension >                 InputImageType;
+
 protected:
   GrayscaleImageSegmentationVolumeEstimator();
   virtual ~GrayscaleImageSegmentationVolumeEstimator();
@@ -63,11 +68,6 @@ protected:
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
   void  GenerateData();
-
-  /** Required type of the input */
-  typedef float                                               InputPixelType;
-  typedef ImageSpatialObject< NDimension, InputPixelType >    InputImageSpatialObjectType;
-  typedef Image< InputPixelType, NDimension >                 InputImageType;
 
 private:
   GrayscaleImageSegmentationVolumeEstimator(const Self&); //purposely not implemented
