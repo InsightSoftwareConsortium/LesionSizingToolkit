@@ -12,7 +12,6 @@ CenterOfRotation = 0 0 0
 ElementSpacing = 1 1 1
 ElementType = MET_FLOAT
 PointDim = x y z red green blue alpha
-NPoints = 2
+NPoints = 1
 Points = 
-131.8  73.5  -83.0    1 0 0 1 
-131.4  65.8  -89.2    1 0 0 1 
+55.8  6.3  -83.0    1 0 0 1 
