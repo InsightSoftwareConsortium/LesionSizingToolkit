@@ -82,7 +82,7 @@ ADD_TEST(SLSFG_${DATASET_ID}
 ADD_TEST(DSFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
   ${DATASET_ROI}
-  ${TEMP}/SLSFGTest${DATASET_ID}.mhd
+  ${TEMP}/DSFGTest${DATASET_ID}.mhd
   1.0  # Sigma
   0.5  # Sheetness
   2.0  # Bloobiness
