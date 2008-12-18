@@ -1,7 +1,7 @@
 #
 #  Helper macro that will run the set of operations in a given dataset.
 #
-MACRO(TEST_DATASET DATASET_ID DATASET_DIRECTORY)
+MACRO(TEST_DATASET DATASET_ID DATASET_DIRECTORY ROI_X ROI_Y ROI_Z ROI_DX ROI_DY ROI_DZ)
 
 ADD_TEST(READ${DATASET_ID}
   ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
@@ -9,120 +9,64 @@ ADD_TEST(READ${DATASET_ID}
   ${TEMP}/${DATASET_ID}.mhd
   )
 
-ENDMACRO(TEST_DATASET)
-
-TEST_DATASET(SM0055 "CornellPartSolid2/SM0055-20000101/SM0055/20000101-122401-2-1" )
-TEST_DATASET(SL0074 "CornellPartSolid3/SL0074-20000101/SL0074/20000101-134856-2-1" )
-
-ADD_TEST(Read001 
-  ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
-  ${TEST_CORNELL_DATA_ROOT}/CornellPartSolid2/SM0055-20000101/SM0055/20000101-122401-2-1
-  ${TEMP}/CornellPartSolid2_1.mhd
-  )
-
-ADD_TEST(Read002 
-  ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
-  ${TEST_CORNELL_DATA_ROOT}/CornellPartSolid3/SL0074-20000101/SL0074/20000101-134856-2-1
-  ${TEMP}/CornellPartSolid3_1.mhd
-  )
-
-# Test a solid lesion on the left lobe of the lung
-ADD_TEST(Read003-SM0052-20000101 
-  ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
-  ${TEST_CORNELL_DATA_ROOT}/SM0052-20000101/SM0052/20000101-154701-2-1
-  ${TEMP}/SM0052-20000101_1.mha
-  )
-
-ADD_TEST(Read004-SM0054-20000101
-  ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
-  ${TEST_CORNELL_DATA_ROOT}/SM0054-20000101/SM0054/20000101-141301-2-1
-  ${TEMP}/SM0054-20000101_1.mha
-  )
-
-ADD_TEST(ROI001 
+ADD_TEST(ROI${DATASET_ID}
   ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
-  ${TEMP}/CornellPartSolid2_1.mhd
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  270 180 120 
-  160 100  69 
+  ${TEMP}/${DATASET_ID}.mhd
+  ${TEMP}/${DATASET_ID}_ROI.mhd
+  ${ROI_X} ${ROI_Y} ${ROI_Z} 
+  ${ROI_DX} ${ROI_DY} ${ROI_DZ} 
   )
 
-ADD_TEST(ROI002 
-  ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
-  ${TEMP}/CornellPartSolid3_1.mhd
-  ${TEMP}/CornellPartSolid3_1_ROI.mhd
-  100 170 180 
-  100 120  64
-  )
-
-# Extract ROI of a solid lesion from the left lobe of the lung
-ADD_TEST(ROI003-SM0052-20000101 
-  ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
-  ${TEMP}/SM0052-20000101_1.mha
-  ${TEMP}/SM0052-20000101_1_ROI.mha
-  317   193   154
-  111   116   85
-  )
-
-# Extract ROI of a solid lesion from the left lobe of the lung attached
-# heavily to the upper left lung wall.
-ADD_TEST(ROI004-SM0054-20000101
-  ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
-  ${TEMP}/SM0054-20000101_1.mha
-  ${TEMP}/SM0054-20000101_1_ROI.mha
-  324 235 129
-  124 103 54
-  )
-
-ADD_TEST(GMSFGTest001
+ADD_TEST(GMSFG${DATASET_ID}
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/GMSFGTest001_01.mhd
+  ${TEMP}/${DATASET_ID}_ROI.mhd
+  ${TEMP}/GMSFGTest${DATASET_ID}.mhd
   0.7
   -10.0
   90.0
   )
 
-ADD_TEST(SFGTest001
+ADD_TEST(SFG${DATASET_ID}
   ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/SFGTest001_01.mhd
+  ${TEMP}/${DATASET_ID}_ROI.mhd
+  ${TEMP}/SFGTest${DATASET_ID}.mhd
   1.0
   -700.0 
   )
 
-
-ADD_TEST(SFGTest-SM0052-20000101
-  ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
-  ${TEMP}/SM0052-20000101_1_ROI.mha
-  ${TEMP}/SFGTest-SM0052-20000101.mha
-  1.0  -700.0 )
-
-ADD_TEST(SFGTest-SM0054-20000101
-  ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
-  ${TEMP}/SM0054-20000101_1_ROI.mha
-  ${TEMP}/SFGTest-SM0054-20000101.mha
-  1.0  -700.0 )
-
-ADD_TEST(LWFGTest-CornellPartSolid2
+ADD_TEST(LWFG${DATASET_ID}
   ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid2_1_ROI.mhd
-  ${TEMP}/LWFGTest-CornellPartSolid2_1.mha -400.0 )
+  ${TEMP}/${DATASET_ID}_ROI.mhd
+  ${TEMP}/LWFGTest${DATASET_ID}.mha
+  -400.0
+  )
 
-ADD_TEST(LWFGTest-CornellPartSolid1
-  ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/LWFGTest-CornellPartSolid1_1.mha -400.0 )
+ENDMACRO(TEST_DATASET)
 
-ADD_TEST(LWFGTest-SM0052-20000101
-  ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
-  ${TEMP}/SM0052-20000101_1_ROI.mha
-  ${TEMP}/LWFGTest_SM0052-20000101_1.mha -400.0 )
 
-ADD_TEST(LWFGTest-SM0054-20000101
-  ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
-  ${TEMP}/SM0054-20000101_1_ROI.mha
-  ${TEMP}/LWFGTest_SM0054-20000101_1.mha -400.0 )
+TEST_DATASET(SM0055 
+  "CornellPartSolid2/SM0055-20000101/SM0055/20000101-122401-2-1"
+  270 180 120 
+  160 100  69 
+  )
+
+TEST_DATASET(SL0074 
+  "CornellPartSolid3/SL0074-20000101/SL0074/20000101-134856-2-1"
+  100 170 180 
+  100 120  64
+  )
+
+TEST_DATASET(SM0052 
+  "SM0052-20000101/SM0052/20000101-154701-2-1"
+  317   193   154
+  111   116   85
+  )
+
+TEST_DATASET(SM0054
+  "SM0054-20000101/SM0054/20000101-141301-2-1"
+  324 235 129
+  124 103 54
+  )
 
 ADD_TEST(SVFGTest001
   ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
@@ -182,30 +126,6 @@ ADD_TEST(FTFGTest001
   1.0
   0.5
   2.0
-  )
-
-ADD_TEST(GMSFGTest002
-  ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid3_1_ROI.mhd
-  ${TEMP}/GMSFGTest002_01.mhd
-  0.7
-  -10.0
-  90.0
-  )
-
-ADD_TEST(SFGTest002
-  ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid3_1_ROI.mhd
-  ${TEMP}/SFGTest002_01.mhd
-  1.0
-  -700.0
-  )
-
-ADD_TEST(LWFGTest002
-  ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
-  ${TEMP}/CornellPartSolid3_1_ROI.mhd
-  ${TEMP}/LWFGTest002_01.mhd
-  -400.0
   )
 
 ADD_TEST(SVFGTest002
