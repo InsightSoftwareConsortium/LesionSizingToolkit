@@ -196,12 +196,12 @@ int main( int argc, char * argv [] )
     {
     lesionSegmentationMethod->Update();
     std::cerr << "Failure to throw expected exception" << std::endl;
+    return EXIT_FAILURE;
     }
   catch( itk::ExceptionObject & excp )
     {
     std::cout << "Caught expected exception " << std::endl;
     std::cout << excp << std::endl;
-    return EXIT_FAILURE;
     }
 
 
