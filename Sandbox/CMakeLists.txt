@@ -16,6 +16,7 @@ OPTION(ITK_USE_MULTI_PHASE_FRAMEWORK "Enable multi-phase level sets" ON)
 
 OPTION(LSTK_SANDBOX_BUILD_REPORTS "Build Lesion Sizing Toolkit Sandbox with LaTeX reports." OFF)
 
+OPTION(LSTK_SANDBOX_USE_VTK "Build visualization helper tools." OFF)
 
 ENABLE_TESTING()
 INCLUDE(CTest)
