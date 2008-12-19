@@ -21,7 +21,6 @@
 #include "itkVTKImageImport.h"
 #include "itkConfidenceConnectedImageFilter.h"
 #include "itkCastImageFilter.h"
-#include "itkRGBPixel.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 
@@ -45,7 +44,6 @@
 
 #define VTK_CREATE(type, name) \
   vtkSmartPointer<type> name = vtkSmartPointer<type>::New()
-
 
 /**
  * This function will connect the given itk::VTKImageExport filter to
@@ -154,10 +152,10 @@ int main(int argc, char * argv [] )
 
     // Create the vtkImageImport and connect it to the
     // itk::VTKImageExport instance.
-    VTK_CREATE(vtkImageImport, vtkImporter1);
+    VTK_CREATE( vtkImageImport, vtkImporter1 );
     ConnectPipelines(itkExporter1, vtkImporter1.GetPointer() );
     
-    VTK_CREATE(vtkImageImport, vtkImporter2);
+    VTK_CREATE( vtkImageImport, vtkImporter2 );
     ConnectPipelines(itkExporter2, vtkImporter2.GetPointer() );
     
 
@@ -169,9 +167,9 @@ int main(int argc, char * argv [] )
 
     // Create a renderer, render window, and render window interactor to
     // display the results.
-    VTK_CREATE(vtkRenderer, renderer);
-    VTK_CREATE(vtkRenderWindow, renWin);
-    VTK_CREATE(vtkRenderWindowInteractor, iren);
+    VTK_CREATE( vtkRenderer, renderer );
+    VTK_CREATE( vtkRenderWindow, renWin );
+    VTK_CREATE( vtkRenderWindowInteractor, iren );
 
     renWin->SetSize(600, 600);
     renWin->AddRenderer(renderer);
@@ -296,7 +294,7 @@ int main(int argc, char * argv [] )
       writer->SetInput( contour->GetOutput() );
       writer->Write();
       }
- 
+
     // Bring up the render window and begin interaction.
     renderer->ResetCamera();
     renWin->Render();
@@ -309,6 +307,5 @@ int main(int argc, char * argv [] )
     }
 
 
-  
   return 0;
 }

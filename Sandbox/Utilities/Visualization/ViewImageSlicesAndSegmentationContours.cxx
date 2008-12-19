@@ -121,7 +121,7 @@ int main(int argc, char * argv [] )
   try
     {
     typedef signed short    PixelType;
-    typedef unsigned char   MaskPixelType;
+    typedef float           MaskPixelType;
 
     const unsigned int Dimension = 3;
 
@@ -169,8 +169,8 @@ int main(int argc, char * argv [] )
     // Create a renderer, render window, and render window interactor to
     // display the results.
     VTK_CREATE( vtkRenderer, renderer );
-    VTK_CREATE(vtkRenderWindow, renWin);
-    VTK_CREATE(vtkRenderWindowInteractor, iren);
+    VTK_CREATE( vtkRenderWindow, renWin );
+    VTK_CREATE( vtkRenderWindowInteractor, iren );
 
     VTK_CREATE(vtkInteractorStyleImage, interactorStyle);
 
@@ -248,7 +248,7 @@ int main(int argc, char * argv [] )
     VTK_CREATE(vtkContourFilter , contour);
     contour->SetInput( vtkImporter2->GetOutput() );
 
-    MaskPixelType contourValue = 128;
+    MaskPixelType contourValue = 0.0;
 
     if( argc > 3 )
       {
@@ -276,6 +276,7 @@ int main(int argc, char * argv [] )
   
     renderer->AddActor( polyActor );
     
+
     if( argc > 4 )
       {
       int representation = atoi( argv[4] );
@@ -309,6 +310,6 @@ int main(int argc, char * argv [] )
     std::cerr << "Exception catched !! " << e << std::endl;
     }
 
- 
+
   return 0;
 }
