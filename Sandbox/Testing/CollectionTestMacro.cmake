@@ -128,7 +128,7 @@ ADD_TEST(LSMT4_${DATASET_ID}
 
 ADD_TEST(LSMT5_${DATASET_ID}
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest5
-  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  ${TEMP}/LSMT4_${DATASET_ID}.mha
   ${DATASET_ROI}
   ${TEMP}/LSMT5_${DATASET_ID}.mha
   0.0002  # RMS maximum error

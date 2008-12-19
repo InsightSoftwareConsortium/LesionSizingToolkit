@@ -22,7 +22,6 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkSpatialObject.h"
-#include "itkSpatialObjectReader.h"
 #include "itkImageMaskSpatialObject.h"
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
@@ -152,46 +151,35 @@ int main( int argc, char * argv [] )
 
 
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
+ 
+  typedef SegmentationModuleType::InputSpatialObjectType    InputSpatialObjectType;
+  typedef SegmentationModuleType::InputImageType            InputSegmentationType;
 
-  typedef itk::SpatialObjectReader< 3, unsigned short > SpatialObjectReaderType;
+  typedef itk::ImageFileReader< InputSegmentationType > InputSegmentationReaderType;
 
-  SpatialObjectReaderType::Pointer landmarkPointsReader = SpatialObjectReaderType::New();
+  InputSegmentationReaderType::Pointer inputSegmentationReader = InputSegmentationReaderType::New();
 
-  landmarkPointsReader->SetFileName( argv[1] );
-  landmarkPointsReader->Update();
+  inputSegmentationReader->SetFileName( argv[1] );
 
-  SpatialObjectReaderType::ScenePointer scene = landmarkPointsReader->GetScene();
-
-  if( !scene )
+  try 
     {
-    std::cerr << "No Scene : [FAILED]" << std::endl;
+    inputSegmentationReader->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
     return EXIT_FAILURE;
     }
 
-  std::cout << "Number of object in the scene:" << scene->GetNumberOfObjects(1) << std::endl;
+  InputSegmentationType::Pointer inputSegmentation = inputSegmentationReader->GetOutput();
 
-  typedef SpatialObjectReaderType::SceneType::ObjectListType     ObjectListType;
+  inputSegmentation->DisconnectPipeline();
 
-  ObjectListType * sceneChildren = scene->GetObjects(999999);
+  InputSpatialObjectType::Pointer inputImageSpatialObject = InputSpatialObjectType::New();
 
-  ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
+  inputImageSpatialObject->SetImage( inputSegmentation );
 
-  typedef SegmentationModuleType::InputSpatialObjectType  InputSpatialObjectType; 
-
-  const InputSpatialObjectType * landmarkSpatialObject = NULL;
-
-  while( spatialObjectItr != sceneChildren->end() ) 
-    {
-    std::string objectName = (*spatialObjectItr)->GetTypeName();
-    if( objectName == "LandmarkSpatialObject" )
-      {
-      landmarkSpatialObject = 
-        dynamic_cast< const InputSpatialObjectType * >( spatialObjectItr->GetPointer() );
-      }
-    spatialObjectItr++;
-    }
- 
-  lesionSegmentationMethod->SetInitialSegmentation( landmarkSpatialObject );
+  lesionSegmentationMethod->SetInitialSegmentation( inputImageSpatialObject );
 
   lesionSegmentationMethod->Update();
 
