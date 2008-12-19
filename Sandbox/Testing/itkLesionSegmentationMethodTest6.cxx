@@ -27,6 +27,7 @@
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
+#include "itkGradientMagnitudeSigmoidFeatureGenerator.h"
 #include "itkFastMarchingAndShapeDetectionLevelSetSegmentationModule.h"
 #include "itkMinimumFeatureAggregator.h"
 
@@ -87,14 +88,22 @@ int main( int argc, char * argv [] )
   typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
  
+  typedef itk::GradientMagnitudeSigmoidFeatureGenerator< Dimension > GradientMagnitudeSigmoidGeneratorType;
+  GradientMagnitudeSigmoidGeneratorType::Pointer gradientMagnitudeSigmoidGenerator = 
+    GradientMagnitudeSigmoidGeneratorType::New();
+
   typedef itk::MinimumFeatureAggregator< Dimension >   FeatureAggregatorType;
   FeatureAggregatorType::Pointer featureAggregator = FeatureAggregatorType::New();
+
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
+  featureAggregator->AddFeatureGenerator( gradientMagnitudeSigmoidGenerator );
+
   lesionSegmentationMethod->AddFeatureGenerator( featureAggregator );
 
   typedef MethodType::SpatialObjectType    SpatialObjectType;
+
   typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -107,54 +116,73 @@ int main( int argc, char * argv [] )
   lungWallGenerator->SetInput( inputObject );
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
+  gradientMagnitudeSigmoidGenerator->SetInput( inputObject );
+
   lungWallGenerator->SetLungThreshold( -400 );
+
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
   vesselnessGenerator->SetAlpha2( 2.0 );
+ 
   sigmoidGenerator->SetAlpha(  1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
  
+  gradientMagnitudeSigmoidGenerator->SetSigma( 1.0 );
+  gradientMagnitudeSigmoidGenerator->SetAlpha( -0.1 );
+  gradientMagnitudeSigmoidGenerator->SetBeta( 150.0 );
+
   typedef itk::FastMarchingAndShapeDetectionLevelSetSegmentationModule< Dimension > SegmentationModuleType;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
+
   segmentationModule->SetMaximumRMSError( argc > 4 ? atof(argv[4]) : 0.0002 );
   segmentationModule->SetMaximumNumberOfIterations( argc > 5 ? atoi(argv[5]) : 300 );
   segmentationModule->SetCurvatureScaling( argc > 6 ? atof(argv[6]) : 1.0 );
   segmentationModule->SetPropagationScaling( argc > 7 ? atof(argv[7]) : 10.0 );
-  segmentationModule->SetStoppingValue( argc > 8 ? atof(argv[8]) : 5.0 );
-  segmentationModule->SetDistanceFromSeeds( argc > 9 ? atof(argv[9]) : 2.0 );
+  segmentationModule->SetStoppingValue( argc > 8 ? atof(argv[8]) : 500.0 );
+  segmentationModule->SetDistanceFromSeeds( argc > 9 ? atof(argv[9]) : 5.0 );
+
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
   typedef itk::SpatialObjectReader< 3, unsigned short > SpatialObjectReaderType;
+
   SpatialObjectReaderType::Pointer landmarkPointsReader = SpatialObjectReaderType::New();
+
   landmarkPointsReader->SetFileName( argv[1] );
   landmarkPointsReader->Update();
+
   SpatialObjectReaderType::ScenePointer scene = landmarkPointsReader->GetScene();
+
   if( !scene )
     {
     std::cerr << "No Scene : [FAILED]" << std::endl;
     return EXIT_FAILURE;
     }
+
   std::cout << "Number of object in the scene:" << scene->GetNumberOfObjects(1) << std::endl;
 
   typedef SpatialObjectReaderType::SceneType::ObjectListType     ObjectListType;
+
   ObjectListType * sceneChildren = scene->GetObjects(999999);
+
   ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
 
   typedef SegmentationModuleType::InputSpatialObjectType  InputSpatialObjectType; 
-  typedef itk::LandmarkSpatialObject< Dimension > LandmarkSpatialObjectType;
-  const LandmarkSpatialObjectType * landmarkSpatialObject = NULL;
+
+  const InputSpatialObjectType * landmarkSpatialObject = NULL;
+
   while( spatialObjectItr != sceneChildren->end() ) 
     {
     std::string objectName = (*spatialObjectItr)->GetTypeName();
     if( objectName == "LandmarkSpatialObject" )
       {
       landmarkSpatialObject = 
-        dynamic_cast< const LandmarkSpatialObjectType * >( spatialObjectItr->GetPointer() );
+        dynamic_cast< const InputSpatialObjectType * >( spatialObjectItr->GetPointer() );
       }
     spatialObjectItr++;
     }
  
   lesionSegmentationMethod->SetInitialSegmentation( landmarkSpatialObject );
+
   lesionSegmentationMethod->Update();
 
   
@@ -166,13 +194,16 @@ int main( int argc, char * argv [] )
 
   OutputSpatialObjectType::ConstPointer outputObject = 
     dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
+
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
   typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
+
   writer->SetFileName( argv[3] );
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
+
 
   try 
     {

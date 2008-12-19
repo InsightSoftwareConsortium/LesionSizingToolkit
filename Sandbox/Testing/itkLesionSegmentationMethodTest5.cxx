@@ -27,6 +27,7 @@
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
+#include "itkGradientMagnitudeSigmoidFeatureGenerator.h"
 #include "itkShapeDetectionLevelSetSegmentationModule.h"
 #include "itkMinimumFeatureAggregator.h"
 
@@ -86,14 +87,22 @@ int main( int argc, char * argv [] )
   typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
  
+  typedef itk::GradientMagnitudeSigmoidFeatureGenerator< Dimension > GradientMagnitudeSigmoidGeneratorType;
+  GradientMagnitudeSigmoidGeneratorType::Pointer gradientMagnitudeSigmoidGenerator = 
+    GradientMagnitudeSigmoidGeneratorType::New();
+
   typedef itk::MinimumFeatureAggregator< Dimension >   FeatureAggregatorType;
   FeatureAggregatorType::Pointer featureAggregator = FeatureAggregatorType::New();
+
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
+  featureAggregator->AddFeatureGenerator( gradientMagnitudeSigmoidGenerator );
+
   lesionSegmentationMethod->AddFeatureGenerator( featureAggregator );
 
   typedef MethodType::SpatialObjectType    SpatialObjectType;
+
   typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -106,8 +115,9 @@ int main( int argc, char * argv [] )
   lungWallGenerator->SetInput( inputObject );
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
+  gradientMagnitudeSigmoidGenerator->SetInput( inputObject );
 
-  lungWallGenerator->SetLungThreshold( -400.0 );
+  lungWallGenerator->SetLungThreshold( -400 );
 
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
@@ -116,6 +126,10 @@ int main( int argc, char * argv [] )
   sigmoidGenerator->SetAlpha(  1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
  
+  gradientMagnitudeSigmoidGenerator->SetSigma( 1.0 );
+  gradientMagnitudeSigmoidGenerator->SetAlpha( -0.1 );
+  gradientMagnitudeSigmoidGenerator->SetBeta( 150.0 );
+
   typedef itk::ShapeDetectionLevelSetSegmentationModule< Dimension >   SegmentationModuleType;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
 
@@ -140,26 +154,31 @@ int main( int argc, char * argv [] )
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
   typedef itk::SpatialObjectReader< 3, unsigned short > SpatialObjectReaderType;
+
   SpatialObjectReaderType::Pointer landmarkPointsReader = SpatialObjectReaderType::New();
+
   landmarkPointsReader->SetFileName( argv[1] );
   landmarkPointsReader->Update();
 
   SpatialObjectReaderType::ScenePointer scene = landmarkPointsReader->GetScene();
+
   if( !scene )
     {
     std::cerr << "No Scene : [FAILED]" << std::endl;
     return EXIT_FAILURE;
     }
+
   std::cout << "Number of object in the scene:" << scene->GetNumberOfObjects(1) << std::endl;
 
   typedef SpatialObjectReaderType::SceneType::ObjectListType     ObjectListType;
+
   ObjectListType * sceneChildren = scene->GetObjects(999999);
+
   ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
 
   typedef SegmentationModuleType::InputSpatialObjectType  InputSpatialObjectType; 
-  typedef itk::LandmarkSpatialObject< Dimension > LandmarkSpatialObjectType;
 
-  const LandmarkSpatialObjectType * landmarkSpatialObject = NULL;
+  const InputSpatialObjectType * landmarkSpatialObject = NULL;
 
   while( spatialObjectItr != sceneChildren->end() ) 
     {
@@ -167,7 +186,7 @@ int main( int argc, char * argv [] )
     if( objectName == "LandmarkSpatialObject" )
       {
       landmarkSpatialObject = 
-        dynamic_cast< const LandmarkSpatialObjectType * >( spatialObjectItr->GetPointer() );
+        dynamic_cast< const InputSpatialObjectType * >( spatialObjectItr->GetPointer() );
       }
     spatialObjectItr++;
     }
@@ -195,6 +214,7 @@ int main( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
+
   try 
     {
     writer->Update();
@@ -204,6 +224,10 @@ int main( int argc, char * argv [] )
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
     }
+
+  segmentationModule->Print( std::cout );
+
+  std::cout << "Name of class " << segmentationModule->GetNameOfClass() << std::endl;
 
   return EXIT_SUCCESS;
 }

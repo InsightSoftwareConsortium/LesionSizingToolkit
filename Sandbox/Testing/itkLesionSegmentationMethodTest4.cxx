@@ -114,7 +114,7 @@ int main( int argc, char * argv [] )
   sigmoidGenerator->SetInput( inputObject );
   gradientMagnitudeSigmoidGenerator->SetInput( inputObject );
 
-  lungWallGenerator->SetLungThreshold( -400.0 );
+  lungWallGenerator->SetLungThreshold( -400 );
 
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
@@ -209,6 +209,10 @@ int main( int argc, char * argv [] )
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
     }
+
+  segmentationModule->Print( std::cout );
+
+  std::cout << "Name of class " << segmentationModule->GetNameOfClass() << std::endl;
 
   return EXIT_SUCCESS;
 }

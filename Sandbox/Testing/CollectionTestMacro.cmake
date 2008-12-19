@@ -131,6 +131,10 @@ ADD_TEST(LSMT5_${DATASET_ID}
   ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
   ${DATASET_ROI}
   ${TEMP}/LSMT5_${DATASET_ID}.mha
+  0.0002  # RMS maximum error
+  300     # Maximum number of iterations
+   1.0    # Curvature scaling
+  10.0    # Propagation scaling
   )
 
 ADD_TEST(LSMT6_${DATASET_ID}
@@ -138,6 +142,12 @@ ADD_TEST(LSMT6_${DATASET_ID}
   ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
   ${DATASET_ROI}
   ${TEMP}/LSMT6_${DATASET_ID}.mha
+  0.0002  # RMS maximum error
+  300     # Maximum number of iterations
+   1.0    # Curvature scaling
+  10.0    # Propagation scaling
+  500     # Stopping time for Fast Marching termination
+    5     # Distance from seeds for Fast Marching initialization
   )
 
 ADD_TEST(LSMT7_${DATASET_ID}
