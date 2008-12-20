@@ -23,6 +23,7 @@
 #include "vtkImageViewer2.h"
 #include "vtkImageActor.h"
 #include "vtkRenderWindowInteractor.h"
+#include "vtkInteractorStyleImage.h"
 
 #define VTK_CREATE(type, name) \
   vtkSmartPointer<type> name = vtkSmartPointer<type>::New()
@@ -57,10 +58,12 @@ int main(int argc, char * argv [] )
   VTK_CREATE( vtkRenderWindow, renderWindow );
   VTK_CREATE( vtkRenderer,     renderer );
   VTK_CREATE( vtkRenderWindowInteractor, renderWindowInteractor );
+  VTK_CREATE( vtkInteractorStyleImage, interactorStyle );
 
   renderWindow->SetSize(600, 600);
   renderWindow->AddRenderer(renderer);
   renderWindowInteractor->SetRenderWindow(renderWindow);
+  renderWindowInteractor->SetInteractorStyle( interactorStyle );
 
   // Set the background to something grayish
   renderer->SetBackground(0.4392, 0.5020, 0.5647);
