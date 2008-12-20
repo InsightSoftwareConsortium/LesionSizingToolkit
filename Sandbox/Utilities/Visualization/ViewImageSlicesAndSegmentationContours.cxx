@@ -52,7 +52,7 @@ int main(int argc, char * argv [] )
 
   SpatialObjectReaderType::Pointer landmarkPointsReader = SpatialObjectReaderType::New();
 
-  landmarkPointsReader->SetFileName( argv[1] );
+  landmarkPointsReader->SetFileName( argv[2] );
   landmarkPointsReader->Update();
 
   SpatialObjectReaderType::ScenePointer scene = landmarkPointsReader->GetScene();
