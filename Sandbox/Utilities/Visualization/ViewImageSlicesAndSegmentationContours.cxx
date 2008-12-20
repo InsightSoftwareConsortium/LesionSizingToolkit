@@ -18,6 +18,11 @@
 #include "vtkContourVisualizationModule.h"
 #include "vtkSmartPointer.h"
 #include "vtkMetaImageReader.h"
+#include "vtkRenderer.h"
+#include "vtkRenderWindow.h"
+#include "vtkImageViewer2.h"
+#include "vtkImageActor.h"
+#include "vtkRenderWindowInteractor.h"
 
 #define VTK_CREATE(type, name) \
   vtkSmartPointer<type> name = vtkSmartPointer<type>::New()
@@ -47,6 +52,26 @@ int main(int argc, char * argv [] )
   imageReader->SetFileName( argv[1] );
   imageReader->Update();
 
+
+  VTK_CREATE( vtkImageViewer2, imageViewer );
+  VTK_CREATE( vtkRenderWindow, renderWindow );
+  VTK_CREATE( vtkRenderer,     renderer );
+  VTK_CREATE( vtkRenderWindowInteractor, renderWindowInteractor );
+
+  renderWindow->SetSize(600, 600);
+  renderWindow->AddRenderer(renderer);
+  renderWindowInteractor->SetRenderWindow(renderWindow);
+
+  // Set the background to something grayish
+  renderer->SetBackground(0.4392, 0.5020, 0.5647);
+
+  // set the interpolation type to nearest neighbour
+  imageViewer->GetImageActor()->SetInterpolate( 0 );
+
+  imageViewer->SetInput( imageReader->GetOutput() );
+
+  renderer->AddActor( imageViewer->GetImageActor() );
+
   const unsigned int numberOfSegmentations = argc - 2;
 
   for(unsigned int segmentationId=0; segmentationId < numberOfSegmentations; segmentationId++)
@@ -54,7 +79,19 @@ int main(int argc, char * argv [] )
     VTK_CREATE( vtkMetaImageReader, segmentationReader );
     segmentationReader->SetFileName( argv[segmentationId+2] );
     segmentationReader->Update();
+
+    VTK_CREATE( vtkContourVisualizationModule, newContourModule );
+    contourModules.push_back( newContourModule );
+
+    newContourModule->SetSegmentation( segmentationReader->GetOutput() );
+    renderer->AddActor( newContourModule->GetActor() );
     }
+
+
+  // Bring up the render window and begin interaction.
+  renderer->ResetCamera();
+  renderWindow->Render();
+  renderWindowInteractor->Start();
 
   return EXIT_SUCCESS;
 }
