@@ -101,6 +101,8 @@ int main(int argc, char * argv [] )
   // Grab the first point in the list of seed points
   PointType point = points[0].GetPosition();
 
+  std::cout << "Seed point = " << point << std::endl;
+
   double seedPoint[3];
 
   seedPoint[0] = point[0];
@@ -163,6 +165,7 @@ int main(int argc, char * argv [] )
     newContourModule->SetContourColor( 1, 0, 0 );
     newContourModule->SetContourVisibility( 1 );
     newContourModule->SetPlaneOrigin( seedPoint );
+    newContourModule->SetPlaneOrientation( vtkContourVisualizationModule::SLICE_ORIENTATION_XY );
     newContourModule->SetSegmentation( segmentationReader->GetOutput() );
  
     newContourModule->Update();

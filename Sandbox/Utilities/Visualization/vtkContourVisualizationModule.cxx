@@ -68,7 +68,7 @@ vtkContourVisualizationModule::vtkContourVisualizationModule()
   this->SlicePosition[1] = 0;
   this->SlicePosition[2] = 0;
 
-  this->SliceOrientation = 0;
+  this->SliceOrientation = SLICE_ORIENTATION_XY;
 }
 
 vtkContourVisualizationModule::~vtkContourVisualizationModule()
@@ -117,6 +117,7 @@ void vtkContourVisualizationModule::SetContourColor( double r, double g, double 
   this->Color[2] = b;
   
   this->Property->SetColor( r , g , b ); 
+  this->Modified();
 }
 
 void vtkContourVisualizationModule::GetContourColor( double &r, double &g , double &b)
@@ -134,7 +135,8 @@ int vtkContourVisualizationModule::GetVisibility()
 void vtkContourVisualizationModule::SetContourVisibility( int state  )
 {
   this->Visibility = state;
-  this->Actor->SetVisibility( state ); 
+  this->Actor->SetVisibility( this->Visibility ); 
+  this->Modified();
 }
 
 vtkActor * 
@@ -211,6 +213,8 @@ void vtkContourVisualizationModule::Update()
            sliceExtent[4], sliceExtent[5] );
 
   this->ContourFilter->Update();
+
+  this->ContourFilter->GetOutput()->Print( std::cout );
 }
 
 void vtkContourVisualizationModule::SetPlaneOrientation( int orientation )
