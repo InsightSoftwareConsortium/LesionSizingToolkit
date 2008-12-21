@@ -38,6 +38,26 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
    \DeclareGraphicsRule{.png}{eps}{.png.bb}{`convert #1 eps:-}
 \fi
 
+\newcommand{\composeFigureFromDatasetFeatures}[1]{
+\begin{figure}
+\center
+\includegraphics[width=0.7\textwidth]{SCRNFG_#1.png}
+\itkcaption[Dataset #1 Features]{Dataset #1 Results of Feature Generators.}
+\label{fig:Dataset#1Features}
+\end{figure}
+\clearpage
+}
+
+\newcommand{\composeFigureFromDatasetSegmentations}[1]{
+\begin{figure}
+\center
+\includegraphics[width=0.7\textwidth]{SCRNLSM_#1.png}
+\itkcaption[Dataset #1 Segmentations]{Dataset #1 Results of Segmentations.}
+\label{fig:Dataset#1Features}
+\end{figure}
+\clearpage
+}
+
 
 \maketitle
 
@@ -69,6 +89,10 @@ segmentations and by providing quantitative estimations of lesion volume.
 \section{Algorithm Description}
 
 \section{Segmentation Results Visualizations}
+
+\composeFigureFromDatasetFeatures{SL0074}
+
+\composeFigureFromDatasetSegmentations{SL0074}
 
 \small
 \listoffigures
