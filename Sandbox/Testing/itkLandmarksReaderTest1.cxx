@@ -30,6 +30,8 @@ int main( int argc, char * argv [] )
 
   const unsigned int Dimension = 3;
 
+  typedef itk::LandmarkSpatialObject< Dimension >    InputSpatialObjectType;
+
   //
   //  Reading the landmarks file with the itkLandmarksReader.
   //
@@ -52,6 +54,7 @@ int main( int argc, char * argv [] )
 
   landmarksReader->Update();
 
+  InputSpatialObjectType::ConstPointer landmarkSpatialObject1 = landmarksReader->GetOutput();
 
   //
   // Reading the landmarks file by using direct ITK classes
@@ -79,22 +82,44 @@ int main( int argc, char * argv [] )
 
   ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
 
-  typedef itk::LandmarkSpatialObject< Dimension >               InputSpatialObjectType;
 
-  const InputSpatialObjectType * landmarkSpatialObject = NULL;
+  const InputSpatialObjectType * landmarkSpatialObject2 = NULL;
 
   while( spatialObjectItr != sceneChildren->end() ) 
     {
     std::string objectName = (*spatialObjectItr)->GetTypeName();
     if( objectName == "LandmarkSpatialObject" )
       {
-      landmarkSpatialObject = 
+      landmarkSpatialObject2 = 
         dynamic_cast< const InputSpatialObjectType * >( spatialObjectItr->GetPointer() );
       }
     spatialObjectItr++;
     }
  
-  // landmarkSpatialObject 
+  typedef InputSpatialObjectType::PointListType    PointListType;
+
+  const unsigned int numberOfPoints1 = landmarkSpatialObject1->GetNumberOfPoints();
+  const unsigned int numberOfPoints2 = landmarkSpatialObject2->GetNumberOfPoints();
+
+  if( numberOfPoints1 != numberOfPoints2 )
+    {
+    std::cerr << "Number of points is not consistent between two read methods" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  const PointListType & points1 = landmarkSpatialObject1->GetPoints();
+  const PointListType & points2 = landmarkSpatialObject2->GetPoints();
+
+  for( unsigned int i=0; i < numberOfPoints1; i++ )
+    {
+    if( points1[i].GetPosition() != points2[i].GetPosition() )
+      {
+      std::cerr << "Error : point " << i << " has different positions" << std::endl;
+      std::cerr << "Expected position " << points2[i].GetPosition() << std::endl;
+      std::cerr << "Received position " << points1[i].GetPosition() << std::endl;
+      return EXIT_FAILURE;
+      }
+    }
 
   return EXIT_SUCCESS;
 }
