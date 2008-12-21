@@ -114,6 +114,8 @@ ADD_TEST(SCRNFG_${DATASET_ID}
   ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
   ${DATASET_ROI}
   ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  1
+  ${TEMP}/SCRNFG_${DATASET_ID}.png
   ${TEMP}/GMSFGTest${DATASET_ID}.mhd
   ${TEMP}/SFGTest${DATASET_ID}.mhd
   ${TEMP}/LWFGTest${DATASET_ID}.mha
@@ -220,6 +222,8 @@ ADD_TEST(SCRNLSM_${DATASET_ID}
   ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
   ${DATASET_ROI}
   ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  1
+  ${TEMP}/SCRNLSM_${DATASET_ID}.png
   ${TEMP}/LSMT3_${DATASET_ID}.mha
   ${TEMP}/LSMT4_${DATASET_ID}.mha
   ${TEMP}/LSMT5_${DATASET_ID}.mha

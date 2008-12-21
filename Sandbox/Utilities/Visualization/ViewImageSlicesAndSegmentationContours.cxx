@@ -24,6 +24,9 @@
 #include "vtkImageActor.h"
 #include "vtkRenderWindowInteractor.h"
 #include "vtkInteractorStyleImage.h"
+#include "vtkCamera.h"
+#include "vtkWindowToImageFilter.h"
+#include "vtkPNGWriter.h"
 
 #include "itkSpatialObject.h"
 #include "itkSpatialObjectReader.h"
@@ -41,8 +44,9 @@ int main(int argc, char * argv [] )
   if( argc < 4 )
     {
     std::cerr << "Missing parameters" << std::endl;
-    std::cerr << "Usage: " << argv[0] << " imageFileName landmarkFile segmentationFilename";
-    std::cerr << "[segmentationFilename2,...n]";
+    std::cerr << "Usage: " << argv[0] << " imageFileName landmarkFile ";
+    std::cerr << " [screenshot:1/0] screnshotFilename.png";
+    std::cerr << " segmentationFilename [segmentationFilename2,...n]";
     std::cerr << std::endl;
     return 1;
     }
@@ -113,6 +117,14 @@ int main(int argc, char * argv [] )
   imageReader->SetFileName( argv[1] );
   imageReader->Update();
 
+  bool produceScreenshot = atoi( argv[3] );
+
+  unsigned int numberOfArgumentsBeforeSegmentations = 4;
+
+  if( produceScreenshot )
+    {
+    numberOfArgumentsBeforeSegmentations += 1;
+    }
 
   VTK_CREATE( vtkImageViewer2, imageViewer );
   VTK_CREATE( vtkRenderWindow, renderWindow );
@@ -135,7 +147,7 @@ int main(int argc, char * argv [] )
 
   renderer->AddActor( imageViewer->GetImageActor() );
 
-  const unsigned int numberOfArgumentsBeforeSegmentations = 3;
+
   const unsigned int numberOfSegmentations = argc - numberOfArgumentsBeforeSegmentations;
 
   for(unsigned int segmentationId=0; segmentationId < numberOfSegmentations; segmentationId++)
@@ -161,8 +173,35 @@ int main(int argc, char * argv [] )
 
   // Bring up the render window and begin interaction.
   renderer->ResetCamera();
-  renderWindow->Render();
-  renderWindowInteractor->Start();
+
+  vtkCamera * camera = renderer->GetActiveCamera();
+
+  camera->SetParallelProjection( true );
+  renderer->ResetCamera();
+  camera->Zoom(1.2);
+
+  if ( produceScreenshot ) 
+    {
+    VTK_CREATE( vtkWindowToImageFilter, windowToImageFilter );
+    VTK_CREATE( vtkPNGWriter, screenShotWriter );
+
+    windowToImageFilter->SetInput( renderWindow );
+    windowToImageFilter->Update();
+
+    screenShotWriter->SetInput( windowToImageFilter->GetOutput() );
+    screenShotWriter->SetFileName( argv[4] );
+    
+    renderWindow->Render();
+    screenShotWriter->Write();
+
+    screenShotWriter->SetInput( NULL );
+    windowToImageFilter->SetInput( NULL );
+    }
+  else
+    {
+    renderWindow->Render();
+    renderWindowInteractor->Start();
+    }
 
   return EXIT_SUCCESS;
 }
