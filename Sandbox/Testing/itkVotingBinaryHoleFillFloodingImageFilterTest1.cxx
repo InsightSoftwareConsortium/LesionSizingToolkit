@@ -70,7 +70,7 @@ int main( int argc, char * argv[] )
   
   indexRadius[0] = radius; // radius along x
   indexRadius[1] = radius; // radius along y
-  indexRadius[1] = radius; // radius along y
+  indexRadius[2] = radius; // radius along z
 
   filter->SetRadius( indexRadius );
 
