@@ -43,6 +43,9 @@ TARGET_LINK_LIBRARIES(itkGrayscaleImageSegmentationVolumeEstimatorTest2 LesionSi
 ADD_EXECUTABLE(itkVotingBinaryHoleFillFloodingImageFilterTest1 itkVotingBinaryHoleFillFloodingImageFilterTest1.cxx)
 TARGET_LINK_LIBRARIES(itkVotingBinaryHoleFillFloodingImageFilterTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkLandmarksReaderTest1 itkLandmarksReaderTest1.cxx)
+TARGET_LINK_LIBRARIES(itkLandmarksReaderTest1 LesionSizingSandbox)
+
 
 IF( ITK_USE_MULTI_PHASE_FRAMEWORK )
 
@@ -228,6 +231,10 @@ ADD_TEST(itkSegmentationVolumeEstimatorTest1 ${CXX_TEST_PATH}/itkSegmentationVol
 
 ADD_TEST(itkGrayscaleImageSegmentationVolumeEstimatorTest1 ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest1 )
 
+ADD_TEST(itkLandmarksReaderTest1
+  ${EXECUTABLE_OUTPUT_PATH}/itkLandmarksReaderTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  )
 
 ADD_TEST(itkVotingBinaryHoleFillFloodingImageFilterTest1
   ${EXECUTABLE_OUTPUT_PATH}/itkVotingBinaryHoleFillFloodingImageFilterTest1
