@@ -45,6 +45,7 @@ int main(int argc, char * argv [] )
     {
     std::cerr << "Missing parameters" << std::endl;
     std::cerr << "Usage: " << argv[0] << " imageFileName landmarkFile ";
+    std::cerr << " isoValue ";
     std::cerr << " [screenshot:1/0] screnshotFilename.png";
     std::cerr << " segmentationFilename [segmentationFilename2,...n]";
     std::cerr << std::endl;
@@ -119,9 +120,11 @@ int main(int argc, char * argv [] )
   imageReader->SetFileName( argv[1] );
   imageReader->Update();
 
-  bool produceScreenshot = atoi( argv[3] );
+  float isoValue = atof( argv[3] );
 
-  unsigned int numberOfArgumentsBeforeSegmentations = 4;
+  bool produceScreenshot = atoi( argv[4] );
+
+  unsigned int numberOfArgumentsBeforeSegmentations = 5;
 
   if( produceScreenshot )
     {
@@ -161,7 +164,7 @@ int main(int argc, char * argv [] )
     VTK_CREATE( vtkContourVisualizationModule, newContourModule );
     contourModules.push_back( newContourModule );
 
-    newContourModule->SetIsoValue( 0.0 );
+    newContourModule->SetIsoValue( isoValue );
     newContourModule->SetContourColor( 1, 0, 0 );
     newContourModule->SetContourVisibility( 1 );
     newContourModule->SetPlaneOrigin( seedPoint );

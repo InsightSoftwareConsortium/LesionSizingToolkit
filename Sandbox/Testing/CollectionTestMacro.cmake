@@ -1,6 +1,22 @@
 #
 #  Helper macro that will run the set of operations in a given dataset.
 #
+MACRO(SCREEN_SHOT DATASET_ID ISO_VALUE CONTOUR_ID)
+
+ADD_TEST(SCRN_${CONTOUR_ID}_${DATASET_ID}
+  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
+  ${DATASET_ROI}
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  ${ISO_VALUE}
+  1
+  ${TEMP}/${CONTOUR_ID}Test${DATASET_ID}.png
+  ${TEMP}/${CONTOUR_ID}Test${DATASET_ID}.mhd
+  )
+
+ENDMACRO(SCREEN_SHOT)
+
+
+
 MACRO(TEST_DATASET DATASET_ID DATASET_DIRECTORY ROI_X ROI_Y ROI_Z ROI_DX ROI_DY ROI_DZ)
 
 SET(DATASET_ROI ${TEMP}/${DATASET_ID}_ROI.mhd)
@@ -111,85 +127,22 @@ ADD_TEST(CTRG_${DATASET_ID}
 IF( LSTK_SANDBOX_USE_VTK )
 
 # Screen shots of feature generators
-ADD_TEST(SCRN_GMSFG_${DATASET_ID}
+SCREEN_SHOT( ${DATASET_ID} 0.5 GMSFG )
+SCREEN_SHOT( ${DATASET_ID} 0.5 SFG )
+SCREEN_SHOT( ${DATASET_ID} 0.5 LWFG )
+SCREEN_SHOT( ${DATASET_ID} 0.5 SVFG )
+SCREEN_SHOT( ${DATASET_ID} 0.5 SVSFG )
+SCREEN_SHOT( ${DATASET_ID} 0.5 SLSFG )
+SCREEN_SHOT( ${DATASET_ID} 0.5 DSFG )
+SCREEN_SHOT( ${DATASET_ID} 0.5 FTFG )
+
+ADD_TEST(SCRN_AFG_${DATASET_ID}
   ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
   ${DATASET_ROI}
   ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  0.0
   1
-  ${TEMP}/GMSFGTest${DATASET_ID}.png
-  ${TEMP}/GMSFGTest${DATASET_ID}.mhd
-  )
-
-ADD_TEST(SCRN_SFG_${DATASET_ID}
-  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
-  ${DATASET_ROI}
-  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
-  1
-  ${TEMP}/SFGTest${DATASET_ID}.png
-  ${TEMP}/SFGTest${DATASET_ID}.mhd
-  )
-
-ADD_TEST(SCRN_LWFG_${DATASET_ID}
-  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
-  ${DATASET_ROI}
-  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
-  1
-  ${TEMP}/LWFGTest${DATASET_ID}.png
-  ${TEMP}/LWFGTest${DATASET_ID}.mhd
-  )
-
-ADD_TEST(SCRN_SVFG_${DATASET_ID}
-  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
-  ${DATASET_ROI}
-  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
-  1
-  ${TEMP}/SVFGTest${DATASET_ID}.png
-  ${TEMP}/SVFGTest${DATASET_ID}.mhd
-  )
-
-ADD_TEST(SCRN_SVSFG_${DATASET_ID}
-  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
-  ${DATASET_ROI}
-  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
-  1
-  ${TEMP}/SVSFGTest${DATASET_ID}.png
-  ${TEMP}/SVSFGTest${DATASET_ID}.mhd
-  )
-
-ADD_TEST(SCRN_SLSFG_${DATASET_ID}
-  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
-  ${DATASET_ROI}
-  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
-  1
-  ${TEMP}/SLSFGTest${DATASET_ID}.png
-  ${TEMP}/SLSFGTest${DATASET_ID}.mhd
-  )
-
-ADD_TEST(SCRN_DSFG_${DATASET_ID}
-  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
-  ${DATASET_ROI}
-  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
-  1
-  ${TEMP}/DSFGTest${DATASET_ID}.png
-  ${TEMP}/DSFGTest${DATASET_ID}.mhd
-  )
-
-ADD_TEST(SCRN_FTFG_${DATASET_ID}
-  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
-  ${DATASET_ROI}
-  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
-  1
-  ${TEMP}/FTFGTest${DATASET_ID}.png
-  ${TEMP}/FTFGTest${DATASET_ID}.mhd
-  )
-
-
-ADD_TEST(SCRNFG_${DATASET_ID}
-  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
-  ${DATASET_ROI}
-  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
-  1
-  ${TEMP}/SCRNFG_${DATASET_ID}.png
+  ${TEMP}/SCRN_AFG_${DATASET_ID}.png
   ${TEMP}/GMSFGTest${DATASET_ID}.mhd
   ${TEMP}/SFGTest${DATASET_ID}.mhd
   ${TEMP}/LWFGTest${DATASET_ID}.mha
@@ -291,13 +244,21 @@ ADD_TEST(LSMTVE7_${DATASET_ID}
   )
 
 IF( LSTK_SANDBOX_USE_VTK )
+
 # Screen shots of segmentations
-ADD_TEST(SCRNLSM_${DATASET_ID}
+SCREEN_SHOT( ${DATASET_ID}   0.0   LSMT3_ )
+SCREEN_SHOT( ${DATASET_ID}   0.0   LSMT4_ )
+SCREEN_SHOT( ${DATASET_ID}   0.0   LSMT5_ )
+SCREEN_SHOT( ${DATASET_ID}   0.0   LSMT6_ )
+SCREEN_SHOT( ${DATASET_ID}   0.0   LSMT7_ )
+
+ADD_TEST(SCRN_ALSM_${DATASET_ID}
   ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
   ${DATASET_ROI}
   ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  0.0
   1
-  ${TEMP}/SCRNLSM_${DATASET_ID}.png
+  ${TEMP}/SCRN_ALSM_${DATASET_ID}.png
   ${TEMP}/LSMT3_${DATASET_ID}.mha
   ${TEMP}/LSMT4_${DATASET_ID}.mha
   ${TEMP}/LSMT5_${DATASET_ID}.mha
