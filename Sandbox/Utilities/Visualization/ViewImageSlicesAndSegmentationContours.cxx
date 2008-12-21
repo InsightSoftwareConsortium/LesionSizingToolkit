@@ -151,8 +151,10 @@ int main(int argc, char * argv [] )
     newContourModule->SetContourColor( 1, 0, 0 );
     newContourModule->SetContourVisibility( 1 );
     newContourModule->SetPlaneOrigin( seedPoint );
-
     newContourModule->SetSegmentation( segmentationReader->GetOutput() );
+ 
+    newContourModule->Update();
+
     renderer->AddActor( newContourModule->GetActor() );
     }
 

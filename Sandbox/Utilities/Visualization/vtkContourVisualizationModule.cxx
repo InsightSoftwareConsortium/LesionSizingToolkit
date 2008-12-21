@@ -148,7 +148,11 @@ void vtkContourVisualizationModule::SetPlaneOrigin( double origin[3] )
   this->SlicePosition[0] = origin[0];
   this->SlicePosition[1] = origin[1];
   this->SlicePosition[2] = origin[2];
+  this->Modified();
+}
 
+void vtkContourVisualizationModule::Update()
+{
   vtkImageData * segmentation = 
     dynamic_cast<vtkImageData *>( this->ResliceFilter->GetInput() );
 
@@ -160,40 +164,8 @@ void vtkContourVisualizationModule::SetPlaneOrigin( double origin[3] )
   sliceOrigin[1] = segmentationOrigin[1];
   sliceOrigin[2] = segmentationOrigin[2];
 
-  switch( this->SliceOrientation )
-    {
-    case SLICE_ORIENTATION_YZ:
-      {
-      sliceOrigin[0] = this->SlicePosition[0];
-      break;
-      }
-    case SLICE_ORIENTATION_XZ:
-      {
-      sliceOrigin[1] = this->SlicePosition[1];
-      break;
-      }
-    case SLICE_ORIENTATION_XY:
-      {
-      sliceOrigin[2] = this->SlicePosition[2];
-      break;
-      }
-    }
-
-  this->ResliceFilter->SetOutputOrigin( sliceOrigin );
-  this->ContourFilter->Update();
-}
-
-void vtkContourVisualizationModule::SetPlaneOrientation( int orientation )
-{
-  this->SliceOrientation = orientation;
-
-  vtkImageData * segmentation = 
-    dynamic_cast<vtkImageData *>( this->ResliceFilter->GetInput() );
-
-  double * segmentationOrigin  = segmentation->GetOrigin();
   int    * segmentationExtent  = segmentation->GetExtent();
 
-  double sliceOrigin[3];
   int    sliceExtent[6];
 
   sliceExtent[0] = segmentationExtent[0]; 
@@ -203,11 +175,8 @@ void vtkContourVisualizationModule::SetPlaneOrientation( int orientation )
   sliceExtent[4] = segmentationExtent[4]; 
   sliceExtent[5] = segmentationExtent[5];
 
-  sliceOrigin[0] = segmentationOrigin[0];
-  sliceOrigin[1] = segmentationOrigin[1];
-  sliceOrigin[2] = segmentationOrigin[2];
 
-  switch( orientation )
+  switch( this->SliceOrientation )
     {
     case SLICE_ORIENTATION_YZ:
       {
@@ -242,6 +211,12 @@ void vtkContourVisualizationModule::SetPlaneOrientation( int orientation )
            sliceExtent[4], sliceExtent[5] );
 
   this->ContourFilter->Update();
+}
+
+void vtkContourVisualizationModule::SetPlaneOrientation( int orientation )
+{
+  this->SliceOrientation = orientation;
+  this->Modified();
 }
 
 void vtkContourVisualizationModule::ForceContourUpdate()

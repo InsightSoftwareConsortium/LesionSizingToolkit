@@ -78,6 +78,10 @@ public:
   
   // Update the contour filter to reflect the current state
   // of the segmentation.
+  void Update();
+
+  // Update the contour filter to reflect the current state
+  // of the segmentation.
   void ForceContourUpdate();
 
   // Slice orientations used by ImageViewer
