@@ -151,6 +151,10 @@ int main(int argc, char * argv [] )
 
   // set the interpolation type to nearest neighbour
   imageViewer->GetImageActor()->SetInterpolate( 0 );
+  imageViewer->SetColorLevel( -400 );
+  imageViewer->SetColorWindow( 1500 );
+  imageViewer->SetSliceOrientation( vtkImageViewer2::SLICE_ORIENTATION_XY );
+  imageViewer->SetSlice( 10 );  // FIXME
 
   imageViewer->SetInput( imageReader->GetOutput() );
 
