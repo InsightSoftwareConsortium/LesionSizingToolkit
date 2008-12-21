@@ -109,7 +109,81 @@ ADD_TEST(CTRG_${DATASET_ID}
   )
 
 IF( LSTK_SANDBOX_USE_VTK )
+
 # Screen shots of feature generators
+ADD_TEST(SCRN_GMSFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
+  ${DATASET_ROI}
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  1
+  ${TEMP}/GMSFGTest${DATASET_ID}.png
+  ${TEMP}/GMSFGTest${DATASET_ID}.mhd
+  )
+
+ADD_TEST(SCRN_SFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
+  ${DATASET_ROI}
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  1
+  ${TEMP}/SFGTest${DATASET_ID}.png
+  ${TEMP}/SFGTest${DATASET_ID}.mhd
+  )
+
+ADD_TEST(SCRN_LWFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
+  ${DATASET_ROI}
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  1
+  ${TEMP}/LWFGTest${DATASET_ID}.png
+  ${TEMP}/LWFGTest${DATASET_ID}.mhd
+  )
+
+ADD_TEST(SCRN_SVFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
+  ${DATASET_ROI}
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  1
+  ${TEMP}/SVFGTest${DATASET_ID}.png
+  ${TEMP}/SVFGTest${DATASET_ID}.mhd
+  )
+
+ADD_TEST(SCRN_SVSFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
+  ${DATASET_ROI}
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  1
+  ${TEMP}/SVSFGTest${DATASET_ID}.png
+  ${TEMP}/SVSFGTest${DATASET_ID}.mhd
+  )
+
+ADD_TEST(SCRN_SLSFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
+  ${DATASET_ROI}
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  1
+  ${TEMP}/SLSFGTest${DATASET_ID}.png
+  ${TEMP}/SLSFGTest${DATASET_ID}.mhd
+  )
+
+ADD_TEST(SCRN_DSFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
+  ${DATASET_ROI}
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  1
+  ${TEMP}/DSFGTest${DATASET_ID}.png
+  ${TEMP}/DSFGTest${DATASET_ID}.mhd
+  )
+
+ADD_TEST(SCRN_FTFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
+  ${DATASET_ROI}
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  1
+  ${TEMP}/FTFGTest${DATASET_ID}.png
+  ${TEMP}/FTFGTest${DATASET_ID}.mhd
+  )
+
+
 ADD_TEST(SCRNFG_${DATASET_ID}
   ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
   ${DATASET_ROI}
