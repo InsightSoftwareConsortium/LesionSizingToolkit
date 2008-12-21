@@ -19,19 +19,16 @@
 
 #include "itkProcessObject.h"
 #include "itkImage.h"
-#include "itkDataObjectDecorator.h"
-#include "itkSpatialObject.h"
+#include "itkLandmarkSpatialObject.h"
+#include "itkSpatialObjectReader.h"
 
 namespace itk
 {
 
 /** \class LandmarksReader
- * \brief Class that generates features (typically images) used as input for a segmentation method.
+ * \brief Class that reads a file containing spatial object landmarks.
  *
- * The typical use of this class would be to generate the edge-map needed by a
- * Level Set filter to internally compute its speed image.
- *
- * SpatialObjects are used as inputs and outputs of this class.
+ * A LandmarkSpatialObject is produced as output.
  *
  * \ingroup SpatialObjectFilters
  */
@@ -41,9 +38,9 @@ class ITK_EXPORT LandmarksReader : public ProcessObject
 public:
   /** Standard class typedefs. */
   typedef LandmarksReader              Self;
-  typedef ProcessObject                 Superclass;
-  typedef SmartPointer<Self>            Pointer;
-  typedef SmartPointer<const Self>      ConstPointer;
+  typedef ProcessObject                Superclass;
+  typedef SmartPointer<Self>           Pointer;
+  typedef SmartPointer<const Self>     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -56,13 +53,16 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef SpatialObject< NDimension >           SpatialObjectType;
+  typedef LandmarkSpatialObject< NDimension >   SpatialObjectType;
   typedef typename SpatialObjectType::Pointer   SpatialObjectPointer;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
   const SpatialObjectType * GetOutput() const;
 
+  /** Set / Get the input filename */
+  itkSetStringMacro( FileName );
+  itkGetStringMacro( FileName );
 
 protected:
   LandmarksReader();
@@ -76,7 +76,13 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 
-  std::string      m_FileName;
+  typedef SpatialObjectReader< NDimension, unsigned short >   SpatialObjectReaderType;
+  typedef typename SpatialObjectReaderType::Pointer           SpatialObjectReaderPointer;
+  typedef typename SpatialObjectReaderType::SceneType         SceneType;
+  typedef typename SceneType::ObjectListType                  ObjectListType;
+
+  std::string                     m_FileName;
+  SpatialObjectReaderPointer      m_SpatialObjectReader;
 };
 
 } // end namespace itk

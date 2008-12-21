@@ -18,6 +18,7 @@
 #define __itkLandmarksReader_txx
 
 #include "itkLandmarksReader.h"
+#include "itkSpatialObjectReader.h"
 
 
 namespace itk
@@ -31,6 +32,10 @@ LandmarksReader<NDimension>
 ::LandmarksReader()
 {
   this->SetNumberOfRequiredOutputs( 1 );
+
+  typename SpatialObjectType::Pointer outputObject = SpatialObjectType::New();
+
+  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
 }
 
 
@@ -49,6 +54,55 @@ LandmarksReader<NDimension>
 ::GetOutput() const
 {
   return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
+}
+
+template <unsigned int NDimension>
+void
+LandmarksReader<NDimension>
+::GenerateData()
+{
+  this->m_SpatialObjectReader->SetFileName( this->GetFileName() );
+
+  this->m_SpatialObjectReader->Update();
+
+  typename SpatialObjectReaderType::ScenePointer scene = this->m_SpatialObjectReader->GetScene();
+
+  if( !scene )
+    {
+    itkExceptionMacro("Couldn't fine a scene in file" << this->GetFileName() );
+    }
+
+  ObjectListType * sceneChildren = scene->GetObjects(999999);
+
+  typename ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
+
+  typename SpatialObjectType::Pointer landmarkSpatialObject;
+
+  while( spatialObjectItr != sceneChildren->end() ) 
+    {
+    std::string objectName = (*spatialObjectItr)->GetTypeName();
+    if( objectName == "LandmarkSpatialObject" )
+      {
+      const SpatialObjectType * landmarkSpatialObjectRawPointer = 
+        dynamic_cast< const SpatialObjectType * >( spatialObjectItr->GetPointer() );
+      landmarkSpatialObject =
+        const_cast< SpatialObjectType * >( landmarkSpatialObjectRawPointer );
+      break;
+      }
+    spatialObjectItr++;
+    }
+
+  if( landmarkSpatialObject.IsNull() )
+    {
+    itkExceptionMacro("Input file does not contain landmarks");
+    }
+ 
+  landmarkSpatialObject->DisconnectPipeline();
+
+  SpatialObjectType * outputObject =
+    dynamic_cast< SpatialObjectType * >(this->ProcessObject::GetOutput(0));
+
+  outputObject->SetPoints( landmarkSpatialObject->GetPoints() );
 }
 
 /*

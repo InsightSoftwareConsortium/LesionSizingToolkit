@@ -31,6 +31,29 @@ int main( int argc, char * argv [] )
   const unsigned int Dimension = 3;
 
   //
+  //  Reading the landmarks file with the itkLandmarksReader.
+  //
+  typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
+  
+  LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
+
+  std::string inputFileName = argv[1];
+
+  landmarksReader->SetFileName( inputFileName );
+  landmarksReader->SetFileName( argv[1] );
+
+  std::string recoveredFileName = landmarksReader->GetFileName();
+
+  if( recoveredFileName != inputFileName )
+    {
+    std::cerr << "Error in Set/GetFileName()" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  landmarksReader->Update();
+
+
+  //
   // Reading the landmarks file by using direct ITK classes
   //
   typedef itk::SpatialObjectReader< 3, unsigned short > SpatialObjectReaderType;
