@@ -119,6 +119,8 @@ int main(int argc, char * argv [] )
 
   imageReader->SetFileName( argv[1] );
   imageReader->Update();
+  
+  vtkImageData * inputImage = imageReader->GetOutput();
 
   float isoValue = atof( argv[3] );
 
@@ -154,7 +156,20 @@ int main(int argc, char * argv [] )
   imageViewer->SetColorLevel( -400 );
   imageViewer->SetColorWindow( 1500 );
   imageViewer->SetSliceOrientation( vtkImageViewer2::SLICE_ORIENTATION_XY );
-  imageViewer->SetSlice( 10 );  // FIXME
+
+  double imageOrigin[3];
+  double imageSpacing[3];
+
+  inputImage->GetSpacing( imageSpacing );
+  inputImage->GetOrigin( imageOrigin );
+
+  //
+  // NOTE: The following computation assumes that the ZZ component of the
+  // Direction matrix is positive.  
+  //
+  const unsigned int sliceNumber = ( seedPoint[2] - imageOrigin[2] ) / imageSpacing[2];
+
+  imageViewer->SetSlice( sliceNumber );
 
   imageViewer->SetInput( imageReader->GetOutput() );
 
