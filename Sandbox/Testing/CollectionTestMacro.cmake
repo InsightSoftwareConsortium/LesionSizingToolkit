@@ -108,6 +108,21 @@ ADD_TEST(CTRG_${DATASET_ID}
   500   # Upper Threshold
   )
 
+# Screen shots of feature generators
+ADD_TEST(SCRNFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
+  ${DATASET_ROI}
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  ${TEMP}/GMSFGTest${DATASET_ID}.mhd
+  ${TEMP}/SFGTest${DATASET_ID}.mhd
+  ${TEMP}/LWFGTest${DATASET_ID}.mha
+  ${TEMP}/SVFGTest${DATASET_ID}.mhd
+  ${TEMP}/SVSFGTest${DATASET_ID}.mhd
+  ${TEMP}/SLSFGTest${DATASET_ID}.mhd
+  ${TEMP}/DSFGTest${DATASET_ID}.mhd
+  ${TEMP}/FTFGTest${DATASET_ID}.mhd
+  )
+
 ADD_TEST(LSMT3_${DATASET_ID}
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
   ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
@@ -198,6 +213,18 @@ ADD_TEST(LSMTVE7_${DATASET_ID}
   ${TEMP}/VolumeEstimation_${DATASET_ID}.txt
   )
 
+
+# Screen shots of segmentations
+ADD_TEST(SCRNLSM_${DATASET_ID}
+  ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
+  ${DATASET_ROI}
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  ${TEMP}/LSMT3_${DATASET_ID}.mha
+  ${TEMP}/LSMT4_${DATASET_ID}.mha
+  ${TEMP}/LSMT5_${DATASET_ID}.mha
+  ${TEMP}/LSMT6_${DATASET_ID}.mha
+  ${TEMP}/LSMT7_${DATASET_ID}.mha
+  )
 
 ENDMACRO(TEST_DATASET)
 
