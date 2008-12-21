@@ -108,6 +108,7 @@ ADD_TEST(CTRG_${DATASET_ID}
   500   # Upper Threshold
   )
 
+IF( LSTK_SANDBOX_USE_VTK )
 # Screen shots of feature generators
 ADD_TEST(SCRNFG_${DATASET_ID}
   ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
@@ -122,6 +123,7 @@ ADD_TEST(SCRNFG_${DATASET_ID}
   ${TEMP}/DSFGTest${DATASET_ID}.mhd
   ${TEMP}/FTFGTest${DATASET_ID}.mhd
   )
+ENDIF( LSTK_SANDBOX_USE_VTK )
 
 ADD_TEST(LSMT3_${DATASET_ID}
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
@@ -204,7 +206,6 @@ ADD_TEST(LSMTVE6_${DATASET_ID}
   ${TEMP}/VolumeEstimation_${DATASET_ID}.txt
   )
 
-
 ADD_TEST(LSMTVE7_${DATASET_ID}
   ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest2
   ${TEMP}/LSMT7_${DATASET_ID}.mha
@@ -213,7 +214,7 @@ ADD_TEST(LSMTVE7_${DATASET_ID}
   ${TEMP}/VolumeEstimation_${DATASET_ID}.txt
   )
 
-
+IF( LSTK_SANDBOX_USE_VTK )
 # Screen shots of segmentations
 ADD_TEST(SCRNLSM_${DATASET_ID}
   ${CXX_TEST_PATH}/ViewImageSlicesAndSegmentationContours
@@ -225,7 +226,7 @@ ADD_TEST(SCRNLSM_${DATASET_ID}
   ${TEMP}/LSMT6_${DATASET_ID}.mha
   ${TEMP}/LSMT7_${DATASET_ID}.mha
   )
+ENDIF( LSTK_SANDBOX_USE_VTK )
 
 ENDMACRO(TEST_DATASET)
-
 
