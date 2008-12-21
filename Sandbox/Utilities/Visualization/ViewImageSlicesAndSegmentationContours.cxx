@@ -122,7 +122,11 @@ int main(int argc, char * argv [] )
 
   float isoValue = atof( argv[3] );
 
+  std::cout << "Iso-Value = " << isoValue << std::endl;
+
   bool produceScreenshot = atoi( argv[4] );
+
+  std::cout << "Produce Screen shot = " << produceScreenshot << std::endl;
 
   unsigned int numberOfArgumentsBeforeSegmentations = 5;
 
@@ -158,7 +162,10 @@ int main(int argc, char * argv [] )
   for(unsigned int segmentationId=0; segmentationId < numberOfSegmentations; segmentationId++)
     {
     VTK_CREATE( vtkMetaImageReader, segmentationReader );
-    segmentationReader->SetFileName( argv[segmentationId+numberOfArgumentsBeforeSegmentations] );
+
+    std::string segmentationFileName = argv[segmentationId+numberOfArgumentsBeforeSegmentations];
+    std::cout << "Segmentation file name = " << segmentationFileName << std::endl;
+    segmentationReader->SetFileName( segmentationFileName.c_str() );
     segmentationReader->Update();
 
     VTK_CREATE( vtkContourVisualizationModule, newContourModule );
@@ -194,8 +201,12 @@ int main(int argc, char * argv [] )
     windowToImageFilter->SetInput( renderWindow );
     windowToImageFilter->Update();
 
+    std::string screenShotFileName = argv[5];
+
+    std::cout << "Screen shot file name = " << screenShotFileName << std::endl;
+
     screenShotWriter->SetInput( windowToImageFilter->GetOutput() );
-    screenShotWriter->SetFileName( argv[4] );
+    screenShotWriter->SetFileName( screenShotFileName.c_str() );
     
     renderWindow->Render();
     screenShotWriter->Write();
