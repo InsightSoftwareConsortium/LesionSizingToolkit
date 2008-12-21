@@ -33,6 +33,8 @@ LandmarksReader<NDimension>
 {
   this->SetNumberOfRequiredOutputs( 1 );
 
+  this->m_SpatialObjectReader = SpatialObjectReaderType::New();
+
   typename SpatialObjectType::Pointer outputObject = SpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
