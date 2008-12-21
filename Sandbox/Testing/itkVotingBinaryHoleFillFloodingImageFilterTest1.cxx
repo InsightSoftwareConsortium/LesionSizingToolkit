@@ -35,14 +35,16 @@ int main( int argc, char * argv[] )
     }
 
 
-  typedef   unsigned char  PixelType;
+  typedef signed short   InputPixelType;
+  typedef unsigned char  OutputPixelType;
 
   const unsigned int Dimension = 3;
 
-  typedef itk::Image< PixelType, Dimension >   ImageType;
+  typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
 
-  typedef itk::ImageFileReader< ImageType >  ReaderType;
-  typedef itk::ImageFileWriter< ImageType >  WriterType;
+  typedef itk::ImageFileReader< InputImageType >   ReaderType;
+  typedef itk::ImageFileWriter< OutputImageType >  WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -50,23 +52,25 @@ int main( int argc, char * argv[] )
   reader->SetFileName( argv[1] );
   writer->SetFileName( argv[2] );
 
-  typedef itk::BinaryThresholdImageFilter< ImageType, ImageType > ThresholderType;
+  typedef itk::BinaryThresholdImageFilter< 
+    InputImageType, OutputImageType > ThresholderType;
 
   ThresholderType::Pointer thresholder = ThresholderType::New();
 
   thresholder->SetLowerThreshold( atoi( argv[3] ) );
-  thresholder->SetUpperThreshold( itk::NumericTraits< PixelType >::max() );
+  thresholder->SetUpperThreshold( itk::NumericTraits< InputPixelType >::max() );
 
   thresholder->SetOutsideValue(  0 );
   thresholder->SetInsideValue( 255 );
  
-  typedef itk::VotingBinaryHoleFillFloodingImageFilter< ImageType, ImageType >  FilterType;
+  typedef itk::VotingBinaryHoleFillFloodingImageFilter< 
+    OutputImageType, OutputImageType >  FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
-  const unsigned int radius = atoi( argv[3] );
+  const unsigned int radius = atoi( argv[4] );
 
-  ImageType::SizeType indexRadius;
+  OutputImageType::SizeType indexRadius;
   
   indexRadius[0] = radius; // radius along x
   indexRadius[1] = radius; // radius along y
@@ -77,11 +81,11 @@ int main( int argc, char * argv[] )
   filter->SetBackgroundValue(   0 );
   filter->SetForegroundValue( 255 );
 
-  const unsigned int majorityThreshold = atoi( argv[4] );
+  const unsigned int majorityThreshold = atoi( argv[5] );
 
   filter->SetMajorityThreshold( majorityThreshold  );
 
-  const unsigned int maximumNumberOfIterations = atoi( argv[5] );
+  const unsigned int maximumNumberOfIterations = atoi( argv[6] );
 
   filter->SetMaximumNumberOfIterations( maximumNumberOfIterations  );
 
@@ -91,7 +95,8 @@ int main( int argc, char * argv[] )
     return EXIT_FAILURE;
     }
 
-  filter->SetInput( reader->GetOutput() );
+  thresholder->SetInput( reader->GetOutput() );
+  filter->SetInput( thresholder->GetOutput() );
   writer->SetInput( filter->GetOutput() );
   writer->Update();
 

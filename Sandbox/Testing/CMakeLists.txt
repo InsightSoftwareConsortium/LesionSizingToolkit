@@ -233,10 +233,10 @@ ADD_TEST(itkVotingBinaryHoleFillFloodingImageFilterTest1
   ${EXECUTABLE_OUTPUT_PATH}/itkVotingBinaryHoleFillFloodingImageFilterTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/VotingBinaryHoleFillFloodingImageFilterTest1_1.mha
-  200  # threshold value
-  2    # neighborhood radius
-  1    # majority
-  100  # iterations
+  -400  # threshold value
+  2     # neighborhood radius
+  1     # majority
+  100   # iterations
   )
 
 ADD_TEST(itkConnectedThresholdSegmentationModuleTest1 
