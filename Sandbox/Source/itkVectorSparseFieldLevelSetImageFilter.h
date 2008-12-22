@@ -37,8 +37,8 @@ class SparseFieldLevelSetNode
 {
 public:
   TValueType                  m_Value;
-  SparseFieldLevelSetNode   * m_Next;
-  SparseFieldLevelSetNode   * m_Previous;
+  SparseFieldLevelSetNode   * Next;
+  SparseFieldLevelSetNode   * Previous;
 };
 
 /**
