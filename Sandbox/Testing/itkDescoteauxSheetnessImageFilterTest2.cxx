@@ -184,7 +184,10 @@ int main( int argc, char * argv [] )
 
   while( !citr.IsAtEnd() )
     {
-    if( iitr.Get() > meanValue )
+
+    bool closeToSheet = ( vnl_math_abs( iitr.GetIndex()[2] - planeIndex[2] ) < 2 );
+
+    if( iitr.Get() > meanValue || closeToSheet )
       {
       if( citr.Get() < 0.9 )
         {
