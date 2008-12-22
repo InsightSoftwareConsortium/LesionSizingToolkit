@@ -145,6 +145,12 @@ TARGET_LINK_LIBRARIES(itkMinimumFeatureAggregatorTest1 LesionSizingSandbox)
 ADD_EXECUTABLE(itkMinimumFeatureAggregatorTest2 itkMinimumFeatureAggregatorTest2.cxx )
 TARGET_LINK_LIBRARIES(itkMinimumFeatureAggregatorTest2 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkMaximumFeatureAggregatorTest1 itkMaximumFeatureAggregatorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkMaximumFeatureAggregatorTest1 LesionSizingSandbox)
+
+ADD_EXECUTABLE(itkMaximumFeatureAggregatorTest2 itkMaximumFeatureAggregatorTest2.cxx )
+TARGET_LINK_LIBRARIES(itkMaximumFeatureAggregatorTest2 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkWeightedSumFeatureAggregatorTest1 itkWeightedSumFeatureAggregatorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkWeightedSumFeatureAggregatorTest1 LesionSizingSandbox)
 
@@ -481,6 +487,24 @@ ADD_TEST(itkMinimumFeatureAggregatorTest2
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/MinimumFeatureAggregatorTest2_1.mha
+  0.5
+  1.0
+  )
+
+ADD_TEST(itkMaximumFeatureAggregatorTest1 
+  ${CXX_TEST_PATH}/itkMaximumFeatureAggregatorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/MaximumFeatureAggregatorTest1_1.mha
+  0.5
+  1.0
+  )
+
+ADD_TEST(itkMaximumFeatureAggregatorTest2 
+  ${CXX_TEST_PATH}/itkMaximumFeatureAggregatorTest2
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/MaximumFeatureAggregatorTest2_1.mha
   0.5
   1.0
   )
