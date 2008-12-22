@@ -100,19 +100,19 @@ ADD_TEST(DSFG_${DATASET_ID}
   ${DATASET_ROI}
   ${TEMP}/DSFG_Test${DATASET_ID}.mha
   1.0  # Sigma
-  0.5  # Sheetness
-  2.0  # Bloobiness
-  1.0  # Noise
+  100.0  # Sheetness
+  100.0  # Bloobiness
+  100.0  # Noise
   )
 
 ADD_TEST(FTFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkFrangiTubularnessFeatureGeneratorTest1
   ${DATASET_ROI}
   ${TEMP}/FTFG_Test${DATASET_ID}.mha
-  1.0  # Sigma
-  0.5  # Sheetness
-  2.0  # Bloobiness
-  1.0  # Noise
+  1.0    # Sigma
+  100.0  # Sheetness
+  100.0  # Bloobiness
+  100.0  # Noise
   )
 
 ADD_TEST(CTRG_${DATASET_ID}

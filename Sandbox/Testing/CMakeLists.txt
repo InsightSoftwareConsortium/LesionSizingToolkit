@@ -382,30 +382,30 @@ ADD_TEST(itkDescoteauxSheetnessImageFilterTest1
   ${CXX_TEST_PATH}/itkDescoteauxSheetnessImageFilterTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/DescoteauxSheetnesImageFilterTest1_1.mha
-  1.0  # Sigma
-  1.0  # Sheetness
-  0.5  # Bloobiness
-  2.0  # Noise
+  1.0    # Sigma
+  100.0  # Sheetness
+  100.0  # Bloobiness
+  100.0  # Noise
   )
 
 ADD_TEST(itkDescoteauxSheetnessImageFilterTest2 
   ${CXX_TEST_PATH}/itkDescoteauxSheetnessImageFilterTest2
   ${TEMP}/DescoteauxSheetnesImageFilterTest2_1.mha
-  1    # Search for Bright sheets
-  1.0  # Sigma
-  1.0  # Sheetness
-  0.5  # Bloobiness
-  2.0  # Noise
+  1      # Search for Bright sheets
+  1.0    # Sigma
+  100.0  # Sheetness
+  100.0  # Bloobiness
+  100.0  # Noise
   )
 
 ADD_TEST(itkDescoteauxSheetnessFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/DescoteauxSheetnessFeatureGeneratorTest1_1.mha
-  1.0  # Sigma
-  1.0  # Sheetness
-  0.5  # Bloobiness
-  2.0  # Noise
+  1.0    # Sigma
+  100.0  # Sheetness
+  100.0  # Bloobiness
+  100.0  # Noise
   )
 
 ADD_TEST(itkFrangiTubularnessFeatureGeneratorTest1 
