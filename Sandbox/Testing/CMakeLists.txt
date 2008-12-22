@@ -393,9 +393,9 @@ ADD_TEST(itkDescoteauxSheetnessImageFilterTest2
   ${TEMP}/DescoteauxSheetnesImageFilterTest2_1.mha
   1      # Search for Bright sheets
   1.0    # Sigma
-  100.0  # Sheetness
-  100.0  # Bloobiness
-  100.0  # Noise
+  1.0    # Sheetness (go easy on the synthetic image)
+  0.5    # Bloobiness
+  0.5    # Noise
   )
 
 ADD_TEST(itkDescoteauxSheetnessFeatureGeneratorTest1 
