@@ -77,26 +77,31 @@ int main( int argc, char * argv [] )
   double lowerthreshold = 100;
   double upperthreshold = 200;
 
-  featureGenerator->SetSigma( 1.0 );
+  featureGenerator->SetSigma( 1.5 );
   featureGenerator->SetUpperThreshold( 1000 );
   featureGenerator->SetLowerThreshold(   50 );
 
+  double tolerance = 1e-4;
+
   featureGenerator->SetSigma( sigma );
-  if( featureGenerator->GetSigma() != sigma );
+
+  if( vnl_math_abs( featureGenerator->GetSigma() - sigma ) > tolerance )
     {
     std::cerr << "Error in Set/GetSigma()" << std::endl;
+    std::cerr << "It should be " << sigma << std::endl;
+    std::cerr << "but got " << featureGenerator->GetSigma() << std::endl;
     return EXIT_FAILURE;
     }
 
   featureGenerator->SetLowerThreshold( lowerthreshold );
-  if( featureGenerator->GetLowerThreshold() != lowerthreshold );
+  if( vnl_math_abs( featureGenerator->GetLowerThreshold() - lowerthreshold ) > tolerance )
     {
     std::cerr << "Error in Set/GetLowerThreshold()" << std::endl;
     return EXIT_FAILURE;
     }
 
   featureGenerator->SetUpperThreshold( upperthreshold );
-  if( featureGenerator->GetUpperThreshold() != upperthreshold );
+  if( vnl_math_abs( featureGenerator->GetUpperThreshold() - upperthreshold ) > tolerance )
     {
     std::cerr << "Error in Set/GetUpperThreshold()" << std::endl;
     return EXIT_FAILURE;
