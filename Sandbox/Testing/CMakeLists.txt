@@ -403,6 +403,7 @@ ADD_TEST(itkDescoteauxSheetnessFeatureGeneratorTest1
   ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/DescoteauxSheetnessFeatureGeneratorTest1_1.mha
+  1      # Search for Bright sheets
   1.0    # Sigma
   100.0  # Sheetness
   100.0  # Bloobiness

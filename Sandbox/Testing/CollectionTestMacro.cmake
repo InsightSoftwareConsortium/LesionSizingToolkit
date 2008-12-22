@@ -99,7 +99,8 @@ ADD_TEST(DSFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
   ${DATASET_ROI}
   ${TEMP}/DSFG_Test${DATASET_ID}.mha
-  1.0  # Sigma
+  1      # Search for Bright sheets
+  1.0    # Sigma
   100.0  # Sheetness
   100.0  # Bloobiness
   100.0  # Noise
