@@ -74,7 +74,6 @@ int main( int argc, char * argv [] )
   inputImage->SetRegions( region );
   inputImage->Allocate();
 
-  inputImage->FillBuffer( 0 );
 
   typedef itk::ImageRegionIterator< InputImageType > IteratorType;
 
@@ -95,12 +94,20 @@ int main( int argc, char * argv [] )
 
   itr.GoToBegin();
 
+  InputPixelType brightValue = 500;
+  InputPixelType darkValue = 0;
+
+  inputImage->FillBuffer( darkValue );
+
+  InputImageType::IndexType firstIndex;
+  firstIndex.Fill(0);
+  std::cout << "First pixel value = " << inputImage->GetPixel(firstIndex) << std::endl; 
   //
   // Populate the inputImage with a bright XY plane  
   //
   while( !itr.IsAtEnd() )
     {
-    itr.Set( 500 );
+    itr.Set( brightValue );
     ++itr;
     }
 
@@ -155,6 +162,58 @@ int main( int argc, char * argv [] )
   std::cout << "Name Of Class = " << sheetnessFilter->GetNameOfClass() << std::endl;
 
   sheetnessFilter->Print( std::cout );
+
+  OutputImageType::ConstPointer outputImage = sheetnessFilter->GetOutput();
+
+  std::cout << "Output Image = " << std::endl;
+  outputImage->Print( std::cout );
+
+  typedef itk::ImageRegionConstIterator< OutputImageType >  ConstIterator;
+
+  ConstIterator citr( outputImage, outputImage->GetBufferedRegion() );
+  IteratorType  iitr( inputImage, inputImage->GetBufferedRegion() );
+
+  citr.GoToBegin();
+  iitr.GoToBegin();
+
+  bool failed = false;
+
+  InputPixelType meanValue = ( brightValue + darkValue ) / 2.0;
+
+  std::cout << "Mean Input Value = " << meanValue << std::endl;
+
+  while( !citr.IsAtEnd() )
+    {
+    if( iitr.Get() > meanValue )
+      {
+      if( citr.Get() < 0.9 )
+        {
+        std::cerr << "Detection bright failure at index " << citr.GetIndex();
+        std::cerr << " Input = " << iitr.Get();
+        std::cerr << " Sheetness = " << citr.Get() << std::endl;
+        failed = true;
+        }
+      }
+    else
+      {
+      if( citr.Get() > 0.1 )
+        {
+        std::cerr << "Detection dark failure at index " << citr.GetIndex();
+        std::cerr << " Input = " << iitr.Get();
+        std::cerr << " Sheetness = " << citr.Get() << std::endl;
+        failed = true;
+        }
+      }
+
+    ++citr;
+    ++iitr;
+    }
+
+  if( failed )
+    {
+    std::cerr << "The output values didn't match expected values" << std::endl;
+    return EXIT_FAILURE;
+    }
 
   return EXIT_SUCCESS;
 }
