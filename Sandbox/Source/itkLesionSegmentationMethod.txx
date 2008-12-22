@@ -44,6 +44,8 @@ LesionSegmentationMethod<NDimension>
   typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+
+  this->m_ProgressAccumulator = ProgressAccumulator::New();
   this->m_ProgressAccumulator->SetMiniPipelineFilter(this);
 }
 
