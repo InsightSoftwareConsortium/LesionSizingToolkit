@@ -22,10 +22,10 @@
 int main( int argc, char * argv [] )
 {
 
-  if( argc < 3 )
+  if( argc < 2 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [sheetness bloobiness noise]" << std::endl;
+    std::cerr << argv[0] << " outputImage [sigma sheetness bloobiness noise]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -52,7 +52,7 @@ int main( int argc, char * argv [] )
   HessianFilterType::Pointer hessian = HessianFilterType::New();
   EigenAnalysisFilterType::Pointer eigen = EigenAnalysisFilterType::New();
 
-  InputImageType::Pointer image = InputImageType::New();
+  InputImageType::Pointer inputImage = InputImageType::New();
 
   InputImageType::SpacingType spacing;
 
@@ -60,7 +60,7 @@ int main( int argc, char * argv [] )
   spacing[1] = 0.5;
   spacing[2] = 0.5;
   
-  image->SetSpacing( spacing );
+  inputImage->SetSpacing( spacing );
 
 
   InputImageType::SizeType  size;
@@ -71,10 +71,10 @@ int main( int argc, char * argv [] )
   InputImageType::RegionType region;
   region.SetSize( size );
 
-  image->SetRegions( region );
-  image->Allocate();
+  inputImage->SetRegions( region );
+  inputImage->Allocate();
 
-  image->FillBuffer( 0 );
+  inputImage->FillBuffer( 0 );
 
   typedef itk::ImageRegionIterator< InputImageType > IteratorType;
 
@@ -91,12 +91,12 @@ int main( int argc, char * argv [] )
   planeRegion.SetSize( planeSize );
   planeRegion.SetIndex( planeIndex );
 
-  IteratorType itr( image, planeRegion );
+  IteratorType itr( inputImage, planeRegion );
 
   itr.GoToBegin();
 
   //
-  // Populate the image with a bright XY plane  
+  // Populate the inputImage with a bright XY plane  
   //
   while( !itr.IsAtEnd() )
     {
@@ -115,22 +115,22 @@ int main( int argc, char * argv [] )
 
   if( argc > 3 )
     {
-    hessian->SetSigma( atof( argv[3] ) );
+    hessian->SetSigma( atof( argv[2] ) );
     }
 
   if( argc > 4 )
     {
-    sheetnessFilter->SetSheetnessNormalization( atof( argv[4] ) );
+    sheetnessFilter->SetSheetnessNormalization( atof( argv[3] ) );
     }
 
   if( argc > 5 )
     {
-    sheetnessFilter->SetBloobinessNormalization( atof( argv[5] ) );
+    sheetnessFilter->SetBloobinessNormalization( atof( argv[4] ) );
     }
 
   if( argc > 6 )
     {
-    sheetnessFilter->SetNoiseNormalization( atof( argv[6] ) );
+    sheetnessFilter->SetNoiseNormalization( atof( argv[5] ) );
     }
 
   sheetnessFilter->SetDetectBrightSheets(true);
@@ -139,7 +139,7 @@ int main( int argc, char * argv [] )
 
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetFileName( argv[2] );
+  writer->SetFileName( argv[1] );
   writer->SetInput( sheetnessFilter->GetOutput() );
 
   try 
