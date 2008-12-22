@@ -26,7 +26,7 @@ int main( int argc, char * argv [] )
   if( argc < 3 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [sheetness bloobiness noise]" << std::endl;
+    std::cerr << argv[0] << " inputImage outputImage [sigma sheetness bloobiness noise]" << std::endl;
     return EXIT_FAILURE;
     }
 
