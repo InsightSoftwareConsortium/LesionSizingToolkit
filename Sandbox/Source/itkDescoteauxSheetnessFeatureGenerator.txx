@@ -37,6 +37,12 @@ DescoteauxSheetnessFeatureGenerator<NDimension>
   this->m_SheetnessFilter = SheetnessFilterType::New();
   this->m_RescaleFilter = RescaleFilterType::New();
 
+  // Allow progressive memory release
+  this->m_HessianFilter->ReleaseDataFlagOn();
+  this->m_EigenAnalysisFilter->ReleaseDataFlagOn();
+  this->m_SheetnessFilter->ReleaseDataFlagOn();
+  this->m_RescaleFilter->ReleaseDataFlagOn();
+
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
