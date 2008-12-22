@@ -102,6 +102,9 @@ private:
   vtkContourVisualizationModule(const vtkContourVisualizationModule&);   // Not implemented.
   void operator=(const vtkContourVisualizationModule&);  // Not implemented.
 
+  // Compute the iso-value from the data range
+  void SetAutoIsoValue();
+
   // Objects need for displaying contours
   vtkContourFilter               *ContourFilter;
   vtkPolyDataMapper              *PolyDataMapper;
@@ -119,6 +122,9 @@ private:
 
   // Orientation of the current slice across the dataset
   int                             SliceOrientation;
+
+  // Indicate whether the user has called SetIsoValue() or not.
+  bool                            IsoValueSetByUser;
 };
 
 #endif

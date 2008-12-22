@@ -199,6 +199,8 @@ int main(int argc, char * argv [] )
  
     newContourModule->Update();
 
+    std::cout << "Iso-value used = " << newContourModule->GetIsoValue() << std::endl;
+
     renderer->AddActor( newContourModule->GetActor() );
     }
 

@@ -69,6 +69,7 @@ vtkContourVisualizationModule::vtkContourVisualizationModule()
   this->SlicePosition[2] = 0;
 
   this->SliceOrientation = SLICE_ORIENTATION_XY;
+  this->IsoValueSetByUser = false;
 }
 
 vtkContourVisualizationModule::~vtkContourVisualizationModule()
@@ -95,14 +96,17 @@ vtkContourVisualizationModule::~vtkContourVisualizationModule()
     }
 }
 
-
 void vtkContourVisualizationModule::SetSegmentation( vtkImageData * input )
 {
   // Draw contours around the segmented regions
   this->ResliceFilter->SetInput( input );
+}
+
+void vtkContourVisualizationModule::SetAutoIsoValue()
+{
   double range[2];
   this->GetScalarRange(range);
-  this->ContourFilter->SetValue( 0, (range[1] - range[0]) / 2.0 ); 
+  this->ContourFilter->SetValue( 0, (range[1] + range[0]) / 2.0 ); 
 }
 
 double vtkContourVisualizationModule::GetIsoValue()
@@ -212,6 +216,11 @@ void vtkContourVisualizationModule::Update()
            sliceExtent[2], sliceExtent[3],
            sliceExtent[4], sliceExtent[5] );
 
+  if( !this->IsoValueSetByUser )
+    {
+    this->SetAutoIsoValue();
+    }
+
   this->ContourFilter->Update();
 
   this->ContourFilter->GetOutput()->Print( std::cout );
@@ -232,6 +241,7 @@ void vtkContourVisualizationModule::ForceContourUpdate()
 void vtkContourVisualizationModule::SetIsoValue( double isovalue )
 {
   this->ContourFilter->SetValue( 0, isovalue );
+  this->IsoValueSetByUser = true;
 }
 
 void vtkContourVisualizationModule::GetScalarRange(double range[2])
