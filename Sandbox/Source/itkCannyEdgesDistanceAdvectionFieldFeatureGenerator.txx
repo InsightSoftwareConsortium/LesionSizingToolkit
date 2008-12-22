@@ -38,6 +38,12 @@ CannyEdgesDistanceAdvectionFieldFeatureGenerator<NDimension>
   this->m_MultiplyFilter    = MultiplyFilterType::New();
   this->m_GradientFilter    = GradientFilterType::New();
 
+  this->m_CastFilter->ReleaseDataFlagOn();
+  this->m_DistanceMapFilter->ReleaseDataFlagOn();
+  this->m_CannyFilter->ReleaseDataFlagOn();
+  this->m_MultiplyFilter->ReleaseDataFlagOn();
+  this->m_GradientFilter->ReleaseDataFlagOn();
+
   typename OutputImageSpatialObjectType::Pointer 
     outputObject = OutputImageSpatialObjectType::New();
 

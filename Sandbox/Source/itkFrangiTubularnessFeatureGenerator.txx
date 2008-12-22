@@ -36,6 +36,10 @@ FrangiTubularnessFeatureGenerator<NDimension>
   this->m_EigenAnalysisFilter = EigenAnalysisFilterType::New();
   this->m_SheetnessFilter = SheetnessFilterType::New();
 
+  this->m_HessianFilter->ReleaseDataFlagOn();
+  this->m_EigenAnalysisFilter->ReleaseDataFlagOn();
+  this->m_SheetnessFilter->ReleaseDataFlagOn();
+
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );

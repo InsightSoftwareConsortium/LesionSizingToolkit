@@ -36,6 +36,10 @@ CannyEdgesDistanceFeatureGenerator<NDimension>
   this->m_DistanceMapFilter = DistanceMapFilterType::New();
   this->m_CannyFilter       = CannyEdgeFilterType::New();
 
+  this->m_CastFilter->ReleaseDataFlagOn();
+  this->m_DistanceMapFilter->ReleaseDataFlagOn();
+  this->m_CannyFilter->ReleaseDataFlagOn();
+
   typename OutputImageSpatialObjectType::Pointer 
     outputObject = OutputImageSpatialObjectType::New();
 

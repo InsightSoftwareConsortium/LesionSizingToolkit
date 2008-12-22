@@ -36,6 +36,9 @@ SatoVesselnessFeatureGenerator<NDimension>
   this->m_HessianFilter = HessianFilterType::New();
   this->m_VesselnessFilter = VesselnessMeasureFilterType::New();
 
+  this->m_HessianFilter->ReleaseDataFlagOn();
+  this->m_VesselnessFilter->ReleaseDataFlagOn();
+
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );

@@ -33,6 +33,8 @@ SatoVesselnessSigmoidFeatureGenerator<NDimension>
 {
   this->m_SigmoidFilter = SigmoidFilterType::New();
 
+  this->m_SigmoidFilter->ReleaseDataFlagOn();
+
   this->m_SigmoidAlpha =  -1.0;
   this->m_SigmoidBeta = 90.0;
 }

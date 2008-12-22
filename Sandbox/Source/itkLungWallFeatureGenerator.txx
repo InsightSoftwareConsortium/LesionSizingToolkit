@@ -37,6 +37,9 @@ LungWallFeatureGenerator<NDimension>
   this->m_ThresholdFilter = ThresholdFilterType::New();
   this->m_VotingHoleFillingFilter = VotingHoleFillingFilterType::New();
 
+  this->m_ThresholdFilter->ReleaseDataFlagOn();
+  this->m_VotingHoleFillingFilter->ReleaseDataFlagOn();
+
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );

@@ -36,6 +36,10 @@ SatoLocalStructureFeatureGenerator<NDimension>
   this->m_EigenAnalysisFilter = EigenAnalysisFilterType::New();
   this->m_LocalStructureFilter = LocalStructureFilterType::New();
 
+  this->m_HessianFilter->ReleaseDataFlagOn();
+  this->m_EigenAnalysisFilter->ReleaseDataFlagOn();
+  this->m_LocalStructureFilter->ReleaseDataFlagOn();
+
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );

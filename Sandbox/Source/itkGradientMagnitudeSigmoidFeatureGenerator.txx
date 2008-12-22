@@ -36,6 +36,9 @@ GradientMagnitudeSigmoidFeatureGenerator<NDimension>
   this->m_GradientFilter = GradientFilterType::New();
   this->m_SigmoidFilter = SigmoidFilterType::New();
 
+  this->m_GradientFilter->ReleaseDataFlagOn();
+  this->m_SigmoidFilter->ReleaseDataFlagOn();
+
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );

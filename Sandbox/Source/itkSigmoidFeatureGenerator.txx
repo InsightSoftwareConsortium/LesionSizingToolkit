@@ -35,6 +35,8 @@ SigmoidFeatureGenerator<NDimension>
 
   this->m_SigmoidFilter = SigmoidFilterType::New();
 
+  this->m_SigmoidFilter->ReleaseDataFlagOn();
+
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
