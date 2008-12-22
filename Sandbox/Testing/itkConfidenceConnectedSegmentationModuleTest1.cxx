@@ -19,7 +19,7 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "itkSpatialObjectReader.h"
+#include "itkLandmarksReader.h"
 
 int main( int argc, char * argv [] )
 {
@@ -43,44 +43,13 @@ int main( int argc, char * argv [] )
   typedef itk::ImageFileReader< FeatureImageType >     FeatureReaderType;
   typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
 
-  typedef itk::SpatialObjectReader< 3, unsigned short > SpatialObjectReaderType;
+  typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
+  
+  LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
-  SpatialObjectReaderType::Pointer landmarkPointsReader = SpatialObjectReaderType::New();
+  landmarksReader->SetFileName( argv[1] );
+  landmarksReader->Update();
 
-  landmarkPointsReader->SetFileName( argv[1] );
-  landmarkPointsReader->Update();
-
-  SpatialObjectReaderType::ScenePointer scene = landmarkPointsReader->GetScene();
-
-  if( !scene )
-    {
-    std::cerr << "No Scene : [FAILED]" << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  std::cout << "Number of object in the scene:" << scene->GetNumberOfObjects(1) << std::endl;
-
-  typedef SpatialObjectReaderType::SceneType::ObjectListType     ObjectListType;
-
-  ObjectListType * sceneChildren = scene->GetObjects(999999);
-
-  ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
-
-  typedef SegmentationModuleType::InputSpatialObjectType  InputSpatialObjectType; 
-
-  const InputSpatialObjectType * landmarkSpatialObject = NULL;
-
-  while( spatialObjectItr != sceneChildren->end() ) 
-    {
-    std::string objectName = (*spatialObjectItr)->GetTypeName();
-    if( objectName == "LandmarkSpatialObject" )
-      {
-      landmarkSpatialObject = 
-        dynamic_cast< const InputSpatialObjectType * >( spatialObjectItr->GetPointer() );
-      }
-    spatialObjectItr++;
-    }
- 
   FeatureReaderType::Pointer featureReader = FeatureReaderType::New();
 
   featureReader->SetFileName( argv[2] );
@@ -114,7 +83,7 @@ int main( int argc, char * argv [] )
   featureObject->SetImage( featureImage );
 
   segmentationModule->SetFeature( featureObject );
-  segmentationModule->SetInput( landmarkSpatialObject );
+  segmentationModule->SetInput( landmarksReader->GetOutput() );
 
   const double sigmaMultiplier = (argc > 4) ? atof( argv[4] ) : 2.0;
   segmentationModule->SetSigmaMultiplier( sigmaMultiplier );
