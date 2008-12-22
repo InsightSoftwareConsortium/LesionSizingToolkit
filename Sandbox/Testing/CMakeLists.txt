@@ -215,7 +215,7 @@ ADD_TEST(itkLesionSegmentationMethodTest3
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest3
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/LesionSegmentationMethodTest3_1.mhd
+  ${TEMP}/LesionSegmentationMethodTest3_1.mha
   0.5
   1.0
   )
@@ -250,7 +250,7 @@ ADD_TEST(itkConnectedThresholdSegmentationModuleTest1
   ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1 
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/ConnectedThresholdSegmentationModuleTest1_1.mhd
+  ${TEMP}/ConnectedThresholdSegmentationModuleTest1_1.mha
   -700
   500
   )
@@ -259,7 +259,7 @@ ADD_TEST(itkConfidenceConnectedSegmentationModuleTest1
   ${CXX_TEST_PATH}/itkConfidenceConnectedSegmentationModuleTest1 
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mhd
+  ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mha
   1.7
   )
 
@@ -274,7 +274,7 @@ ADD_TEST(itkFastMarchingSegmentationModuleTest1-PartSolidLesion1
 ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
+  ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mha
   0.7
   -10.0
   90.0
@@ -283,14 +283,14 @@ ADD_TEST(itkGradientMagnitudeSigmoidFeatureGeneratorTest1
 ADD_TEST(GradientMagnitudeImageFilterTest1
   ${CXX_TEST_PATH}/GradientMagnitudeImageFilter
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/GradientMagnitudeImageFilterTest1_1.mhd
+  ${TEMP}/GradientMagnitudeImageFilterTest1_1.mha
   0.7 # Sigma
   )
 
 ADD_TEST(itkSigmoidFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/SigmoidFeatureGeneratorTest1_1.mhd
+  ${TEMP}/SigmoidFeatureGeneratorTest1_1.mha
   1.0
   -700.0 
   )
@@ -298,7 +298,7 @@ ADD_TEST(itkSigmoidFeatureGeneratorTest1
 ADD_TEST(itkLungWallFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/LungWallFeatureGeneratorTest1_1.mhd
+  ${TEMP}/LungWallFeatureGeneratorTest1_1.mha
   -400.0 
   )
 
@@ -311,17 +311,17 @@ ADD_TEST(LandmarkSpatialObjectWriterTest1
 ADD_TEST(CannyEdgeDetectionImageFilterTest1
   ${CXX_TEST_PATH}/CannyEdgeDetectionImageFilter
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/CannyEdgeDetectionImageFilterTest1_1.mhd
+  ${TEMP}/CannyEdgeDetectionImageFilterTest1_1.mha
   0.7 # Sigma
   150 # Upper hysteresis threshold
   75  # Lower hysteresis threshold
-  ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest1_1.mhd
+  ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest1_1.mha
   )
 
 ADD_TEST(itkCannyEdgesDistanceFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkCannyEdgesDistanceFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/CannyEdgesDistanceFeatureGeneratorTest1_1.mhd
+  ${TEMP}/CannyEdgesDistanceFeatureGeneratorTest1_1.mha
   0.7 # Sigma
   150 # Upper hysteresis threshold
   75  # Lower hysteresis threshold
@@ -330,7 +330,7 @@ ADD_TEST(itkCannyEdgesDistanceFeatureGeneratorTest1
 ADD_TEST(itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/CannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1_1.mhd
+  ${TEMP}/CannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1_1.mha
   0.7 # Sigma
   150 # Upper hysteresis threshold
   75  # Lower hysteresis threshold
@@ -339,7 +339,7 @@ ADD_TEST(itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1
 ADD_TEST(itkSatoVesselnessFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/SatoVesselnessFeatureGeneratorTest1_1.mhd
+  ${TEMP}/SatoVesselnessFeatureGeneratorTest1_1.mha
   1.0
   0.5
   2.0
@@ -348,7 +348,7 @@ ADD_TEST(itkSatoVesselnessFeatureGeneratorTest1
 ADD_TEST(itkSatoVesselnessSigmoidFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/SatoVesselnessSigmoidFeatureGeneratorTest1_1.mhd
+  ${TEMP}/SatoVesselnessSigmoidFeatureGeneratorTest1_1.mha
   1.0
   0.5
   2.0
@@ -360,7 +360,7 @@ ADD_TEST(itkSatoVesselnessSigmoidFeatureGeneratorTest1
 ADD_TEST(itkSatoLocalStructureFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/SatoLocalStructureFeatureGeneratorTest1_1.mhd
+  ${TEMP}/SatoLocalStructureFeatureGeneratorTest1_1.mha
   1.0
   0.5
   2.0
@@ -369,7 +369,7 @@ ADD_TEST(itkSatoLocalStructureFeatureGeneratorTest1
 ADD_TEST(itkLocalStructureImageFilterTest1 
   ${CXX_TEST_PATH}/itkLocalStructureImageFilterTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/LocalStructureImageFilterTest1_1.mhd
+  ${TEMP}/LocalStructureImageFilterTest1_1.mha
   1.0
   0.5
   2.0
@@ -378,7 +378,7 @@ ADD_TEST(itkLocalStructureImageFilterTest1
 ADD_TEST(itkDescoteauxSheetnessImageFilterTest1 
   ${CXX_TEST_PATH}/itkDescoteauxSheetnessImageFilterTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/DescoteauxSheetnesImageFilterTest1_1.mhd
+  ${TEMP}/DescoteauxSheetnesImageFilterTest1_1.mha
   1.0
   0.5
   2.0
@@ -387,7 +387,7 @@ ADD_TEST(itkDescoteauxSheetnessImageFilterTest1
 ADD_TEST(itkDescoteauxSheetnessFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/DescoteauxSheetnessFeatureGeneratorTest1_1.mhd
+  ${TEMP}/DescoteauxSheetnessFeatureGeneratorTest1_1.mha
   1.0
   0.5
   2.0
@@ -396,7 +396,7 @@ ADD_TEST(itkDescoteauxSheetnessFeatureGeneratorTest1
 ADD_TEST(itkFrangiTubularnessFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkFrangiTubularnessFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/FrangiTubularnessFeatureGeneratorTest1_1.mhd
+  ${TEMP}/FrangiTubularnessFeatureGeneratorTest1_1.mha
   1.0
   0.5
   2.0
@@ -404,9 +404,9 @@ ADD_TEST(itkFrangiTubularnessFeatureGeneratorTest1
 
 ADD_TEST(itkGeodesicActiveContourLevelSetSegmentationModuleTest1 
   ${CXX_TEST_PATH}/itkGeodesicActiveContourLevelSetSegmentationModuleTest1 
-  ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mhd
-  ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
-  ${TEMP}/GeodesicActiveContourLevelSetSegmentationModuleTest1_1.mhd
+  ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mha
+  ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mha
+  ${TEMP}/GeodesicActiveContourLevelSetSegmentationModuleTest1_1.mha
   )
 
 
@@ -415,9 +415,9 @@ SET_TESTS_PROPERTIES( itkGeodesicActiveContourLevelSetSegmentationModuleTest1
 
 ADD_TEST(itkShapeDetectionLevelSetSegmentationModuleTest1 
   ${CXX_TEST_PATH}/itkShapeDetectionLevelSetSegmentationModuleTest1 
-  ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mhd
-  ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mhd
-  ${TEMP}/ShapeDetectionLevelSetSegmentationModuleTest1_1.mhd
+  ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mha
+  ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mha
+  ${TEMP}/ShapeDetectionLevelSetSegmentationModuleTest1_1.mha
   100.0   # Propagation Scaling
     1.0   # Curvature Scaling
   )
@@ -428,9 +428,9 @@ SET_TESTS_PROPERTIES( itkShapeDetectionLevelSetSegmentationModuleTest1
 
 ADD_TEST(itkShapeDetectionLevelSetSegmentationModuleTest2 
   ${CXX_TEST_PATH}/itkShapeDetectionLevelSetSegmentationModuleTest1 
-  ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mhd
-  ${TEMP}/CannyEdgesDistanceFeatureGeneratorTest1_1.mhd
-  ${TEMP}/ShapeDetectionLevelSetSegmentationModuleTest2_1.mhd
+  ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mha
+  ${TEMP}/CannyEdgesDistanceFeatureGeneratorTest1_1.mha
+  ${TEMP}/ShapeDetectionLevelSetSegmentationModuleTest2_1.mha
   100.0   # Propagation Scaling
     1.0   # Curvature Scaling
   )
@@ -445,7 +445,7 @@ ADD_TEST(itkFeatureAggregatorTest1
   ${CXX_TEST_PATH}/itkFeatureAggregatorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/FeatureAggregatorTest1_1.mhd
+  ${TEMP}/FeatureAggregatorTest1_1.mha
   0.5
   1.0
   )
@@ -454,7 +454,7 @@ ADD_TEST(itkMinimumFeatureAggregatorTest1
   ${CXX_TEST_PATH}/itkMinimumFeatureAggregatorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/MinimumFeatureAggregatorTest1_1.mhd
+  ${TEMP}/MinimumFeatureAggregatorTest1_1.mha
   0.5
   1.0
   )
@@ -463,7 +463,7 @@ ADD_TEST(itkMinimumFeatureAggregatorTest2
   ${CXX_TEST_PATH}/itkMinimumFeatureAggregatorTest2
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/MinimumFeatureAggregatorTest2_1.mhd
+  ${TEMP}/MinimumFeatureAggregatorTest2_1.mha
   0.5
   1.0
   )
@@ -472,7 +472,7 @@ ADD_TEST(itkWeightedSumFeatureAggregatorTest1
   ${CXX_TEST_PATH}/itkWeightedSumFeatureAggregatorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/WeightedSumFeatureAggregatorTest1_1.mhd
+  ${TEMP}/WeightedSumFeatureAggregatorTest1_1.mha
   0.5
   1.0
   )

@@ -10,7 +10,7 @@ ADD_TEST(SCRN_${CONTOUR_ID}_${DATASET_ID}
   ${ISO_VALUE}
   1
   ${TEMP}/${CONTOUR_ID}Test${DATASET_ID}.png
-  ${TEMP}/${CONTOUR_ID}Test${DATASET_ID}.mhd
+  ${TEMP}/${CONTOUR_ID}Test${DATASET_ID}.mha
   )
 
 ENDMACRO(SCREEN_SHOT)
@@ -19,19 +19,19 @@ ENDMACRO(SCREEN_SHOT)
 
 MACRO(TEST_DATASET DATASET_ID DATASET_DIRECTORY ROI_X ROI_Y ROI_Z ROI_DX ROI_DY ROI_DZ)
 
-SET(DATASET_ROI ${TEMP}/${DATASET_ID}_ROI.mhd)
+SET(DATASET_ROI ${TEMP}/${DATASET_ID}_ROI.mha)
 
 # Dicom to Meta
 ADD_TEST(DTM_${DATASET_ID}
   ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
   ${TEST_CORNELL_DATA_ROOT}/${DATASET_DIRECTORY}
-  ${TEMP}/${DATASET_ID}.mhd
+  ${TEMP}/${DATASET_ID}.mha
   )
 
 # Extract Region of Interest
 ADD_TEST(ROI_${DATASET_ID}
   ${CXX_TEST_PATH}/ImageReadRegionOfInterestWrite
-  ${TEMP}/${DATASET_ID}.mhd
+  ${TEMP}/${DATASET_ID}.mha
   ${DATASET_ROI}
   ${ROI_X} ${ROI_Y} ${ROI_Z} 
   ${ROI_DX} ${ROI_DY} ${ROI_DZ} 
@@ -41,7 +41,7 @@ ADD_TEST(ROI_${DATASET_ID}
 ADD_TEST(GMSFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   ${DATASET_ROI}
-  ${TEMP}/GMSFGTest${DATASET_ID}.mhd
+  ${TEMP}/GMSFGTest${DATASET_ID}.mha
   0.7    # Sigma
   -0.1   # Alpha
   150.0  # Beta
@@ -51,7 +51,7 @@ ADD_TEST(GMSFG_${DATASET_ID}
 ADD_TEST(SFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
   ${DATASET_ROI}
-  ${TEMP}/SFGTest${DATASET_ID}.mhd
+  ${TEMP}/SFGTest${DATASET_ID}.mha
    100.0 # Alpha
   -200.0 # Beta: Lung Threshold
   )
@@ -68,7 +68,7 @@ ADD_TEST(LWFG_${DATASET_ID}
 ADD_TEST(SVFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
   ${DATASET_ROI}
-  ${TEMP}/SVFGTest${DATASET_ID}.mhd
+  ${TEMP}/SVFGTest${DATASET_ID}.mha
   1.0   # Sigma
   0.5   # Vesselness Alpha1
   2.0   # Vesselness Alpha2
@@ -78,7 +78,7 @@ ADD_TEST(SVFG_${DATASET_ID}
 ADD_TEST(SVSFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
   ${DATASET_ROI}
-  ${TEMP}/SVSFGTest${DATASET_ID}.mhd
+  ${TEMP}/SVSFGTest${DATASET_ID}.mha
   1.0   # Sigma
   0.5   # Vesselness Alpha1
   2.0   # Vesselness Alpha2
@@ -89,7 +89,7 @@ ADD_TEST(SVSFG_${DATASET_ID}
 ADD_TEST(SLSFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
   ${DATASET_ROI}
-  ${TEMP}/SLSFGTest${DATASET_ID}.mhd
+  ${TEMP}/SLSFGTest${DATASET_ID}.mha
   1.0  # Sigma
   0.5  # Alpha
   2.0  # Gamma
@@ -98,7 +98,7 @@ ADD_TEST(SLSFG_${DATASET_ID}
 ADD_TEST(DSFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorTest1
   ${DATASET_ROI}
-  ${TEMP}/DSFGTest${DATASET_ID}.mhd
+  ${TEMP}/DSFGTest${DATASET_ID}.mha
   1.0  # Sigma
   0.5  # Sheetness
   2.0  # Bloobiness
@@ -108,7 +108,7 @@ ADD_TEST(DSFG_${DATASET_ID}
 ADD_TEST(FTFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkFrangiTubularnessFeatureGeneratorTest1
   ${DATASET_ROI}
-  ${TEMP}/FTFGTest${DATASET_ID}.mhd
+  ${TEMP}/FTFGTest${DATASET_ID}.mha
   1.0  # Sigma
   0.5  # Sheetness
   2.0  # Bloobiness
@@ -119,7 +119,7 @@ ADD_TEST(CTRG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1
   ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
   ${DATASET_ROI}
-  ${TEMP}/CTRGTest${DATASET_ID}.mhd
+  ${TEMP}/CTRGTest${DATASET_ID}.mha
   -700  # Lower Threshold
   500   # Upper Threshold
   )
@@ -143,14 +143,14 @@ ADD_TEST(SCRN_AFG_${DATASET_ID}
   0.0
   1
   ${TEMP}/SCRN_AFG_${DATASET_ID}.png
-  ${TEMP}/GMSFGTest${DATASET_ID}.mhd
-  ${TEMP}/SFGTest${DATASET_ID}.mhd
+  ${TEMP}/GMSFGTest${DATASET_ID}.mha
+  ${TEMP}/SFGTest${DATASET_ID}.mha
   ${TEMP}/LWFGTest${DATASET_ID}.mha
-  ${TEMP}/SVFGTest${DATASET_ID}.mhd
-  ${TEMP}/SVSFGTest${DATASET_ID}.mhd
-  ${TEMP}/SLSFGTest${DATASET_ID}.mhd
-  ${TEMP}/DSFGTest${DATASET_ID}.mhd
-  ${TEMP}/FTFGTest${DATASET_ID}.mhd
+  ${TEMP}/SVFGTest${DATASET_ID}.mha
+  ${TEMP}/SVSFGTest${DATASET_ID}.mha
+  ${TEMP}/SLSFGTest${DATASET_ID}.mha
+  ${TEMP}/DSFGTest${DATASET_ID}.mha
+  ${TEMP}/FTFGTest${DATASET_ID}.mha
   )
 ENDIF( LSTK_SANDBOX_USE_VTK )
 
