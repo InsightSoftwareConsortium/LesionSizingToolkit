@@ -21,8 +21,7 @@
 #include "itkImage.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "itkSpatialObject.h"
-#include "itkSpatialObjectReader.h"
+#include "itkLandmarksReader.h"
 #include "itkImageMaskSpatialObject.h"
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
@@ -143,45 +142,14 @@ int main( int argc, char * argv [] )
 
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
-  typedef itk::SpatialObjectReader< 3, unsigned short > SpatialObjectReaderType;
+  typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
+  
+  LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
-  SpatialObjectReaderType::Pointer landmarkPointsReader = SpatialObjectReaderType::New();
+  landmarksReader->SetFileName( argv[1] );
+  landmarksReader->Update();
 
-  landmarkPointsReader->SetFileName( argv[1] );
-  landmarkPointsReader->Update();
-
-  SpatialObjectReaderType::ScenePointer scene = landmarkPointsReader->GetScene();
-
-  if( !scene )
-    {
-    std::cerr << "No Scene : [FAILED]" << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  std::cout << "Number of object in the scene:" << scene->GetNumberOfObjects(1) << std::endl;
-
-  typedef SpatialObjectReaderType::SceneType::ObjectListType     ObjectListType;
-
-  ObjectListType * sceneChildren = scene->GetObjects(999999);
-
-  ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
-
-  typedef SegmentationModuleType::InputSpatialObjectType  InputSpatialObjectType; 
-
-  const InputSpatialObjectType * landmarkSpatialObject = NULL;
-
-  while( spatialObjectItr != sceneChildren->end() ) 
-    {
-    std::string objectName = (*spatialObjectItr)->GetTypeName();
-    if( objectName == "LandmarkSpatialObject" )
-      {
-      landmarkSpatialObject = 
-        dynamic_cast< const InputSpatialObjectType * >( spatialObjectItr->GetPointer() );
-      }
-    spatialObjectItr++;
-    }
- 
-  lesionSegmentationMethod->SetInitialSegmentation( landmarkSpatialObject );
+  lesionSegmentationMethod->SetInitialSegmentation( landmarksReader->GetOutput() );
 
   lesionSegmentationMethod->Update();
 

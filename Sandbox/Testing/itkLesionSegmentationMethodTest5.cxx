@@ -13,9 +13,9 @@
 
 =========================================================================*/
 
-// The test runs a shape detection level set from user supplied seed points
-// and then runs the shape detection level set with the results from the 
-// fast marching to get the final segmentation.
+// The test runs a shape detection level set from user supplied segmentation
+// and then runs the shape detection level set using as input level set the
+// segmentation supplied by the user.
 
 #include "itkLesionSegmentationMethod.h"
 #include "itkImage.h"
@@ -36,7 +36,7 @@ int main( int argc, char * argv [] )
   if( argc < 3 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << "\n\tlandmarksFile\n\tinputImage\n\toutputImage ";
+    std::cerr << argv[0] << "\n\tinputSegmentation\n\tinputImage\n\toutputImage ";
     std::cerr << "\n\t[RMSErrorForShapeDetection]"
               << "\n\t[IterationsForShapeDetection]"
               << "\n\t[CurvatureScalingForShapeDetection]"
