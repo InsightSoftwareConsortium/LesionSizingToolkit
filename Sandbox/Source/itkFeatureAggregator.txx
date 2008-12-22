@@ -41,6 +41,7 @@ FeatureAggregator<NDimension>
   typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->m_ProgressAccumulator->SetMiniPipelineFilter(this);
 }
 
 
@@ -139,6 +140,11 @@ FeatureAggregator<NDimension>
 
   while( gitr != gend )
     {
+    // Assuming that most of the time is spent in generating the features and
+    // hardly negligible time is spent in consolidating the features
+    this->m_ProgressAccumulator->RegisterInternalFilter(
+            *gitr, 1.0/this->m_FeatureGenerators.size());      
+
     (*gitr)->Update();
     ++gitr;
     }

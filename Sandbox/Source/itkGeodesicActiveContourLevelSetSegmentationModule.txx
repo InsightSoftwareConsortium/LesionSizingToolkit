@@ -19,6 +19,7 @@
 
 #include "itkGeodesicActiveContourLevelSetSegmentationModule.h"
 #include "itkGeodesicActiveContourLevelSetImageFilter.h"
+#include "itkProgressAccumulator.h"
 
 
 namespace itk
@@ -78,8 +79,12 @@ GeodesicActiveContourLevelSetSegmentationModule<NDimension>
   filter->SetPropagationScaling( this->GetPropagationScaling() );
   filter->SetCurvatureScaling( this->GetCurvatureScaling() );
   filter->SetAdvectionScaling( this->GetAdvectionScaling() );
-
   filter->UseImageSpacingOn();
+
+  // Progress reporting - forward events from the fast marching filter.
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter( filter, 1.0 );  
 
   filter->Update();
 

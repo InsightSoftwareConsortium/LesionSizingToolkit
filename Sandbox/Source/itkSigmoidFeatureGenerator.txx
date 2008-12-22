@@ -18,7 +18,7 @@
 #define __itkSigmoidFeatureGenerator_txx
 
 #include "itkSigmoidFeatureGenerator.h"
-
+#include "itkProgressAccumulator.h"
 
 namespace itk
 {
@@ -91,6 +91,11 @@ void
 SigmoidFeatureGenerator<NDimension>
 ::GenerateData()
 {
+  // Report progress.
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter( this->m_SigmoidFilter, 1.0 );  
+
   typename InputImageSpatialObjectType::ConstPointer inputObject =
     dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
 
@@ -107,10 +112,8 @@ SigmoidFeatureGenerator<NDimension>
     }
 
   this->m_SigmoidFilter->SetInput( inputImage );
-
   this->m_SigmoidFilter->SetAlpha( this->m_Alpha );
   this->m_SigmoidFilter->SetBeta( this->m_Beta );
-
   this->m_SigmoidFilter->SetOutputMinimum( 0.0 );
   this->m_SigmoidFilter->SetOutputMaximum( 1.0 );
 

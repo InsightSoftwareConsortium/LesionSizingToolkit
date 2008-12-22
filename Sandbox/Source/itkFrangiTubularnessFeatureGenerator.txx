@@ -100,6 +100,13 @@ void
 FrangiTubularnessFeatureGenerator<NDimension>
 ::GenerateData()
 {
+  // Report progress.
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter( this->m_HessianFilter, .5 );
+  progress->RegisterInternalFilter( this->m_EigenAnalysisFilter, .25 );
+  progress->RegisterInternalFilter( this->m_SheetnessFilter, .25 );
+
   typename InputImageSpatialObjectType::ConstPointer inputObject = 
     dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
 

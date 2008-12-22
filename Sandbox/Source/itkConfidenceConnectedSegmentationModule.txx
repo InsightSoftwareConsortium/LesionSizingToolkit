@@ -18,6 +18,7 @@
 #define __itkConfidenceConnectedSegmentationModule_txx
 
 #include "itkConfidenceConnectedSegmentationModule.h"
+#include "itkProgressAccumulator.h"
 
 
 namespace itk
@@ -97,6 +98,11 @@ ConfidenceConnectedSegmentationModule<NDimension>
   filter->SetReplaceValue( 1.0 );
   filter->SetNumberOfIterations( 5 );
   filter->SetInitialNeighborhoodRadius( 2 );
+
+  // Report progress.
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter( filter, 1.0 );
 
   filter->Update();
 

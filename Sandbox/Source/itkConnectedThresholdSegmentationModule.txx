@@ -18,6 +18,7 @@
 #define __itkConnectedThresholdSegmentationModule_txx
 
 #include "itkConnectedThresholdSegmentationModule.h"
+#include "itkProgressAccumulator.h"
 
 
 namespace itk
@@ -95,6 +96,11 @@ ConnectedThresholdSegmentationModule<NDimension>
   filter->SetLower( this->m_LowerThreshold );
   filter->SetUpper( this->m_UpperThreshold );
   filter->SetReplaceValue( 1.0 );
+
+  // Report progress.
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter( filter, 1.0 );
 
   filter->Update();
 

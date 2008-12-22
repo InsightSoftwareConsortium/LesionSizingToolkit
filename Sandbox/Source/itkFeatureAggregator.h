@@ -20,6 +20,7 @@
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"
 #include "itkImageSpatialObject.h"
+#include "itkProgressAccumulator.h"
 
 namespace itk
 {
@@ -82,6 +83,8 @@ protected:
   typedef typename FeatureGeneratorType::SpatialObjectType      InputFeatureType;
 
   const InputFeatureType * GetInputFeature( unsigned int featureId ) const;
+
+  ProgressAccumulator::Pointer              m_ProgressAccumulator;
 
 private:
   FeatureAggregator(const Self&); //purposely not implemented

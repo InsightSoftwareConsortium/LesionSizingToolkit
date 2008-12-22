@@ -22,6 +22,7 @@
 #include "itkFastMarchingImageFilter.h"
 #include "itkIntensityWindowingImageFilter.h"
 #include "itkImageFileWriter.h"
+#include "itkProgressAccumulator.h"
 
 namespace itk
 {
@@ -89,6 +90,11 @@ FastMarchingSegmentationModule<NDimension>
 
   filter->SetStoppingValue( this->m_StoppingValue );
 
+  // Progress reporting - forward events from the fast marching filter.
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter( filter, 0.9 );
+  
   const InputSpatialObjectType * inputSeeds = this->GetInternalInputLandmarks();
   const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
 
@@ -134,6 +140,7 @@ FastMarchingSegmentationModule<NDimension>
   windowing->SetWindowMaximum(  this->m_StoppingValue );
   windowing->SetOutputMaximum( -4.0 );
   windowing->SetOutputMinimum(  4.0 );
+  progress->RegisterInternalFilter( windowing, 0.9 );  
   windowing->Update();
 
   this->PackOutputImageInOutputSpatialObject( windowing->GetOutput() );

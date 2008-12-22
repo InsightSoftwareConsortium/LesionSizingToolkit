@@ -18,6 +18,7 @@
 #define __itkSatoVesselnessSigmoidFeatureGenerator_txx
 
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
+#include "itkProgressAccumulator.h"
 
 
 namespace itk
@@ -70,6 +71,13 @@ SatoVesselnessSigmoidFeatureGenerator<NDimension>
 ::GenerateData()
 {
   this->Superclass::GenerateData();
+
+  // Report progress. Actually, the superclass will report upto 1 in
+  // the superclass's generate data method. This will start again
+  // from 0, but that's ok. :)
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter( this->m_SigmoidFilter, 1.0 ); 
 
   //
   // Take the output of the superclass, and do further processing on it.

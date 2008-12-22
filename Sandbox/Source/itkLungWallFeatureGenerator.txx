@@ -18,6 +18,7 @@
 #define __itkLungWallFeatureGenerator_txx
 
 #include "itkLungWallFeatureGenerator.h"
+#include "itkProgressAccumulator.h"
 
 
 namespace itk
@@ -112,6 +113,12 @@ LungWallFeatureGenerator<NDimension>
     {
     itkExceptionMacro("Missing input image");
     }
+
+  // Report progress.
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter( this->m_ThresholdFilter, 0.1 );
+  progress->RegisterInternalFilter( this->m_VotingHoleFillingFilter, 0.9 );
 
   this->m_ThresholdFilter->SetInput( inputImage );
   this->m_VotingHoleFillingFilter->SetInput( this->m_ThresholdFilter->GetOutput() );

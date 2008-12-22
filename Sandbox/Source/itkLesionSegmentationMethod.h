@@ -23,6 +23,7 @@
 #include "itkSpatialObject.h"
 #include "itkFeatureGenerator.h"
 #include "itkSegmentationModule.h"
+#include "itkProgressAccumulator.h"
 
 namespace itk
 {
@@ -119,6 +120,8 @@ private:
   FeatureGeneratorArrayType                 m_FeatureGenerators;
 
   SegmentationModulePointer                 m_SegmentationModule;
+
+  ProgressAccumulator::Pointer              m_ProgressAccumulator;
 
 
   /** This method calls the Update() method of each one of the feature generators */

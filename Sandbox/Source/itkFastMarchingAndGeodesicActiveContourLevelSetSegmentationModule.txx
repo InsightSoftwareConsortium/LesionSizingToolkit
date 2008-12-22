@@ -19,6 +19,7 @@
 
 #include "itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule.h"
 #include "itkGeodesicActiveContourLevelSetImageFilter.h"
+#include "itkProgressAccumulator.h"
 
 
 namespace itk
@@ -69,6 +70,13 @@ void
 FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>
 ::GenerateData()
 {
+  // Report progress.
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter( this->m_FastMarchingModule, 0.3 );
+  progress->RegisterInternalFilter( 
+      this->m_GeodesicActiveContourLevelSetModule, 0.7 );
+
   this->m_FastMarchingModule->SetInput( this->GetInput() );
   this->m_FastMarchingModule->SetFeature( this->GetFeature() );
   this->m_FastMarchingModule->Update();

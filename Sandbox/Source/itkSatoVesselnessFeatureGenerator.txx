@@ -18,6 +18,7 @@
 #define __itkSatoVesselnessFeatureGenerator_txx
 
 #include "itkSatoVesselnessFeatureGenerator.h"
+#include "itkProgressAccumulator.h"
 
 
 namespace itk
@@ -101,6 +102,12 @@ void
 SatoVesselnessFeatureGenerator<NDimension>
 ::GenerateData()
 {
+  // Report progress.
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter( this->m_HessianFilter, .7 );
+  progress->RegisterInternalFilter( this->m_VesselnessFilter, .3 );
+
   typename InputImageSpatialObjectType::ConstPointer inputObject =
     dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
 

@@ -44,6 +44,7 @@ LesionSegmentationMethod<NDimension>
   typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->m_ProgressAccumulator->SetMiniPipelineFilter(this);
 }
 
 
@@ -134,6 +135,8 @@ LesionSegmentationMethod<NDimension>
 
   while( gitr != gend )
     {
+    this->m_ProgressAccumulator->RegisterInternalFilter(
+            *gitr, 0.5/this->m_FeatureGenerators.size());
     (*gitr)->Update();
     ++gitr;
     }
@@ -176,6 +179,8 @@ void
 LesionSegmentationMethod<NDimension>
 ::ExecuteSegmentationModule()
 {
+  this->m_ProgressAccumulator->RegisterInternalFilter(
+                      this->m_SegmentationModule, 0.5);
   this->m_SegmentationModule->SetInput( this->m_InitialSegmentation ); 
   this->m_SegmentationModule->Update();
 }
