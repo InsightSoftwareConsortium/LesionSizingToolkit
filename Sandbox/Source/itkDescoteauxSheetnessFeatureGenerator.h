@@ -89,6 +89,12 @@ public:
   itkSetMacro( NoiseNormalization, double );
   itkGetMacro( NoiseNormalization, double );
 
+  /** Defines whether the filter will look for Bright sheets over a Dark
+   * background or for Dark sheets over a Bright background. */
+  itkSetMacro( DetectBrightSheets, bool );
+  itkGetMacro( DetectBrightSheets, bool );
+  itkBooleanMacro( DetectBrightSheets );
+
 protected:
   DescoteauxSheetnessFeatureGenerator();
   virtual ~DescoteauxSheetnessFeatureGenerator();
@@ -129,6 +135,7 @@ private:
   double      m_SheetnessNormalization;
   double      m_BloobinessNormalization;
   double      m_NoiseNormalization;
+  bool        m_DetectBrightSheets;
 };
 
 } // end namespace itk

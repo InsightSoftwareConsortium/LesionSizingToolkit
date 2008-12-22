@@ -95,6 +95,37 @@ int main( int argc, char * argv [] )
     }
 
 
+  featureGenerator->DetectBrightSheetsOff();
+  featureGenerator->SetDetectBrightSheets( true );
+  if( !featureGenerator->GetDetectBrightSheets() )
+    {
+    std::cerr << "Error in Set/GetDetectBrightSheets()" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  featureGenerator->SetDetectBrightSheets( false );
+  if( featureGenerator->GetDetectBrightSheets() )
+    {
+    std::cerr << "Error in Set/GetDetectBrightSheets()" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  featureGenerator->DetectBrightSheetsOn();
+  if( !featureGenerator->GetDetectBrightSheets() )
+    {
+    std::cerr << "Error in DetectBrightSheetsOn()" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  featureGenerator->DetectBrightSheetsOff();
+  if( featureGenerator->GetDetectBrightSheets() )
+    {
+    std::cerr << "Error in DetectBrightSheetsOff()" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  // Finally leave it On
+  featureGenerator->DetectBrightSheetsOn();
 
   try 
     {

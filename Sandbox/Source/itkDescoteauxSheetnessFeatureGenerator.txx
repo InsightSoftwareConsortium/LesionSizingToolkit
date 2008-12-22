@@ -44,6 +44,7 @@ DescoteauxSheetnessFeatureGenerator<NDimension>
   this->m_SheetnessNormalization = 0.5;
   this->m_BloobinessNormalization = 2.0;
   this->m_NoiseNormalization = 1.0;
+  this->m_DetectBrightSheets = true;
 }
 
 
@@ -118,6 +119,7 @@ DescoteauxSheetnessFeatureGenerator<NDimension>
   this->m_SheetnessFilter->SetSheetnessNormalization( this->m_SheetnessNormalization );
   this->m_SheetnessFilter->SetBloobinessNormalization( this->m_BloobinessNormalization );
   this->m_SheetnessFilter->SetNoiseNormalization( this->m_NoiseNormalization );
+  this->m_SheetnessFilter->SetDetectBrightSheets( this->m_DetectBrightSheets );
 
   this->m_SheetnessFilter->Update();
 
