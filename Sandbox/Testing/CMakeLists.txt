@@ -382,6 +382,7 @@ ADD_TEST(itkDescoteauxSheetnessImageFilterTest1
   ${CXX_TEST_PATH}/itkDescoteauxSheetnessImageFilterTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/DescoteauxSheetnesImageFilterTest1_1.mha
+  1      # Search for Bright sheets
   1.0    # Sigma
   100.0  # Sheetness
   100.0  # Bloobiness

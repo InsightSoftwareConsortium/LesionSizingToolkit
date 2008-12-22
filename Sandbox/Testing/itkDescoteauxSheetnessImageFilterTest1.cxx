@@ -26,7 +26,7 @@ int main( int argc, char * argv [] )
   if( argc < 3 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [sigma sheetness bloobiness noise]" << std::endl;
+    std::cerr << argv[0] << " inputImage outputImage [(bright1/dark:0) sigma sheetness bloobiness noise]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -65,24 +65,31 @@ int main( int argc, char * argv [] )
   eigen->SetInput( hessian->GetOutput() );
   sheetnessFilter->SetInput( eigen->GetOutput() );
 
+  sheetnessFilter->SetDetectBrightSheets(true);
+
   if( argc > 3 )
     {
-    hessian->SetSigma( atof( argv[3] ) );
+    sheetnessFilter->SetDetectBrightSheets( atoi( argv[3] ) );
     }
 
   if( argc > 4 )
     {
-    sheetnessFilter->SetSheetnessNormalization( atof( argv[4] ) );
+    hessian->SetSigma( atof( argv[4] ) );
     }
 
   if( argc > 5 )
     {
-    sheetnessFilter->SetBloobinessNormalization( atof( argv[5] ) );
+    sheetnessFilter->SetSheetnessNormalization( atof( argv[5] ) );
     }
 
   if( argc > 6 )
     {
-    sheetnessFilter->SetNoiseNormalization( atof( argv[6] ) );
+    sheetnessFilter->SetBloobinessNormalization( atof( argv[6] ) );
+    }
+
+  if( argc > 7 )
+    {
+    sheetnessFilter->SetNoiseNormalization( atof( argv[7] ) );
     }
 
 
