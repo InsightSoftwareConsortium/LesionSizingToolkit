@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -62,7 +62,7 @@ FeatureAggregator<NDimension>
 template <unsigned int NDimension>
 void
 FeatureAggregator<NDimension>
-::AddFeatureGenerator( FeatureGeneratorType * generator ) 
+::AddFeatureGenerator( FeatureGeneratorType * generator )
 {
   this->m_FeatureGenerators.push_back( generator );
 }
@@ -78,13 +78,13 @@ FeatureAggregator<NDimension>
 
 
 template <unsigned int NDimension>
-const typename FeatureAggregator<NDimension>::InputFeatureType * 
+const typename FeatureAggregator<NDimension>::InputFeatureType *
 FeatureAggregator<NDimension>
 ::GetInputFeature( unsigned int featureId ) const
 {
   if( featureId >= this->GetNumberOfInputFeatures() )
     {
-    itkExceptionMacro("Feature Id" << featureId << " doesn't exist"); 
+    itkExceptionMacro("Feature Id" << featureId << " doesn't exist");
     }
   return this->m_FeatureGenerators[featureId]->GetFeature();
 }
@@ -101,7 +101,7 @@ FeatureAggregator<NDimension>
   Superclass::PrintSelf( os, indent );
 
   os << indent << "Feature generators = ";
-  
+
   FeatureGeneratorConstIterator gitr = this->m_FeatureGenerators.begin();
   FeatureGeneratorConstIterator gend = this->m_FeatureGenerators.end();
 
@@ -142,8 +142,7 @@ FeatureAggregator<NDimension>
     {
     // Assuming that most of the time is spent in generating the features and
     // hardly negligible time is spent in consolidating the features
-    this->m_ProgressAccumulator->RegisterInternalFilter(
-            *gitr, 1.0/this->m_FeatureGenerators.size());      
+    this->m_ProgressAccumulator->RegisterInternalFilter( *gitr, 1.0/this->m_FeatureGenerators.size());
 
     (*gitr)->Update();
     ++gitr;
