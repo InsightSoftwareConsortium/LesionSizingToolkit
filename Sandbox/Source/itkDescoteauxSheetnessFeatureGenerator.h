@@ -24,14 +24,16 @@
 #include "itkSymmetricSecondRankTensor.h"
 #include "itkSymmetricEigenAnalysisImageFilter.h"
 #include "itkDescoteauxSheetnessImageFilter.h"
+#include "itkRescaleIntensityImageFilter.h"
 
 namespace itk
 {
 
 /** \class DescoteauxSheetnessFeatureGenerator
- * \brief Generates a feature image by computing measures based on the Hessian Eigenvalues.
+ * \brief Generates a feature image by computing a Sheetness measures based on
+ * the Hessian Eigenvalues.
  *
- * The typical use of this class would be to generate a map of {blobs, tubes, sheets}.
+ * This is based on the filter proposed by Descoteux et al.
  *
  * SpatialObjects are used as inputs and outputs of this class.
  *
@@ -127,9 +129,12 @@ private:
  
   typedef  DescoteauxSheetnessImageFilter< EigenValueImageType, OutputImageType >         SheetnessFilterType;
 
+  typedef  RescaleIntensityImageFilter< OutputImageType, OutputImageType >                RescaleFilterType;
+
   typename HessianFilterType::Pointer             m_HessianFilter;
   typename EigenAnalysisFilterType::Pointer       m_EigenAnalysisFilter;
   typename SheetnessFilterType::Pointer           m_SheetnessFilter;
+  typename RescaleFilterType::Pointer             m_RescaleFilter;
 
   double      m_Sigma;
   double      m_SheetnessNormalization;

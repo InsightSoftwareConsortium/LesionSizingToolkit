@@ -35,6 +35,7 @@ DescoteauxSheetnessFeatureGenerator<NDimension>
   this->m_HessianFilter = HessianFilterType::New();
   this->m_EigenAnalysisFilter = EigenAnalysisFilterType::New();
   this->m_SheetnessFilter = SheetnessFilterType::New();
+  this->m_RescaleFilter = RescaleFilterType::New();
 
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
@@ -113,6 +114,7 @@ DescoteauxSheetnessFeatureGenerator<NDimension>
   this->m_HessianFilter->SetInput( inputImage );
   this->m_EigenAnalysisFilter->SetInput( this->m_HessianFilter->GetOutput() );
   this->m_SheetnessFilter->SetInput( this->m_EigenAnalysisFilter->GetOutput() );
+  this->m_RescaleFilter->SetInput( this->m_SheetnessFilter->GetOutput() );
 
   this->m_HessianFilter->SetSigma( this->m_Sigma );
   this->m_EigenAnalysisFilter->SetDimension( Dimension );
@@ -121,9 +123,12 @@ DescoteauxSheetnessFeatureGenerator<NDimension>
   this->m_SheetnessFilter->SetNoiseNormalization( this->m_NoiseNormalization );
   this->m_SheetnessFilter->SetDetectBrightSheets( this->m_DetectBrightSheets );
 
-  this->m_SheetnessFilter->Update();
+  this->m_RescaleFilter->SetOutputMinimum( 0.0 );
+  this->m_RescaleFilter->SetOutputMaximum( 1.0 );
 
-  typename OutputImageType::Pointer outputImage = this->m_SheetnessFilter->GetOutput();
+  this->m_RescaleFilter->Update();
+
+  typename OutputImageType::Pointer outputImage = this->m_RescaleFilter->GetOutput();
 
   outputImage->DisconnectPipeline();
 
