@@ -25,7 +25,7 @@ namespace itk
   
 /** \class DescoteauxSheetnessImageFilter
  *
- * \brief Computes a measure of Tube-Bifurcation from the Hessian Eigenvalues
+ * \brief Computes a measure of Sheetness from the Hessian Eigenvalues
  *
  * Based on the "Sheetness" measure proposed by Decouteaux et. al.
  * 
@@ -39,21 +39,22 @@ namespace itk
 namespace Function {  
   
 template< class TInput, class TOutput>
-class Bifurcationess
+class Sheetness
 {
 public:
-  Bifurcationess() 
+  Sheetness() 
     {
     m_Alpha = 0.5; // suggested value in the paper
     m_Gamma = 0.5; // suggested value in the paper;
     m_C     = 1.0;
+    m_DetectBrightSheets = true;
     }
-  ~Bifurcationess() {}
-  bool operator!=( const Bifurcationess & ) const
+  ~Sheetness() {}
+  bool operator!=( const Sheetness & ) const
     {
     return false;
     }
-  bool operator==( const Bifurcationess & other ) const
+  bool operator==( const Sheetness & other ) const
     {
     return !(*this != other);
     }
@@ -71,6 +72,9 @@ public:
 
     //
     // Sort the values by their absolute value.
+    // At the end of the sorting we should have
+    // 
+    //          l1 <= l2 <= l3
     //
     if( l2 > l3 )
       {
@@ -102,22 +106,32 @@ public:
       a2 = tmpa;
       }
     
-    //
-    // Reject bright tubes and bright ridges over dark background
-    //
-    if( a3 < 0.0 ) 
+    if( this->m_DetectBrightSheets )
       {
-      return sheetness;
+      if( a3 > 0.0 ) 
+        {
+        return static_cast<TOutput>( sheetness );
+        }
+      }
+    else
+      {
+      if( a3 < 0.0 ) 
+        {
+        return static_cast<TOutput>( sheetness );
+        }
       }
 
 
-    if( static_cast<double>( A[2] ) < vnl_math::eps )
+    //
+    // Avoid divisions by zero (or close to zero)
+    //
+    if( static_cast<double>( l3 ) < vnl_math::eps )
       {
       return static_cast<TOutput>( sheetness );
       } 
 
     const double Rs = l2 / l3;
-    const double Rb = vnl_math_abs( a3 + a3 - a2 - a1 ) / l3;
+    const double Rb = vnl_math_abs( l3 + l3 - l2 - l1 ) / l3;
     const double Rn = vcl_sqrt( l3*l3 + l2*l2 + l1*l1 );
 
     sheetness  =         vcl_exp( - ( Rs * Rs ) / ( 2.0 * m_Alpha * m_Alpha ) ); 
@@ -138,11 +152,20 @@ public:
     {
     this->m_C = value;
     }
+  void SetDetectBrightSheets( bool value )
+    {
+    this->m_DetectBrightSheets = value;
+    }
+  void SetDetectDarkSheets( bool value )
+    {
+    this->m_DetectBrightSheets = !value;
+    }
 
 private:
-  double m_Alpha;
-  double m_Gamma;
-  double m_C;
+  double    m_Alpha;
+  double    m_Gamma;
+  double    m_C;
+  bool      m_DetectBrightSheets;
 }; 
 }
 
@@ -150,7 +173,7 @@ template <class TInputImage, class TOutputImage>
 class ITK_EXPORT DescoteauxSheetnessImageFilter :
     public
 UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                        Function::Bifurcationess< typename TInputImage::PixelType, 
+                        Function::Sheetness< typename TInputImage::PixelType, 
                                        typename TOutputImage::PixelType>   >
 {
 public:
@@ -158,7 +181,7 @@ public:
   typedef DescoteauxSheetnessImageFilter    Self;
   typedef UnaryFunctorImageFilter<
     TInputImage,TOutputImage, 
-    Function::Bifurcationess< 
+    Function::Sheetness< 
       typename TInputImage::PixelType, 
       typename TOutputImage::PixelType> >   Superclass;
   typedef SmartPointer<Self>                Pointer;
@@ -188,7 +211,14 @@ public:
     {
     this->GetFunctor().SetC( value );
     }
-
+  void SetDetectBrightSheets( bool value )
+    {
+    this->GetFunctor().SetDetectBrightSheets( value );
+    }
+  void SetDetectDarkSheets( bool value )
+    {
+    this->GetFunctor().SetDetectDarkSheets( value );
+    }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
