@@ -77,7 +77,7 @@ MaximumFeatureAggregator<NDimension>
   consolidatedFeatureImage->CopyInformation( firstFeatureImage );
   consolidatedFeatureImage->SetRegions( firstFeatureImage->GetBufferedRegion() );
   consolidatedFeatureImage->Allocate();
-  consolidatedFeatureImage->FillBuffer( NumericTraits< FeaturePixelType >::max() );
+  consolidatedFeatureImage->FillBuffer( NumericTraits< FeaturePixelType >::NonpositiveMin() );
 
   const unsigned int numberOfFeatures = this->GetNumberOfInputFeatures();
 
