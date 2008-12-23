@@ -59,6 +59,11 @@ public:
   typedef typename SpatialObjectType::Pointer         SpatialObjectPointer;
   typedef typename SpatialObjectType::ConstPointer    SpatialObjectConstPointer;
 
+  /** Type of the image and specific SpatialObject produced as output */
+  typedef float                                                 OutputPixelType;
+  typedef Image< OutputPixelType, NDimension >                  OutputImageType;
+  typedef ImageSpatialObject< NDimension, OutputPixelType >     OutputImageSpatialObjectType;
+
   /** Type of the class that will generate input features in the form of
    * spatial objects. */
   typedef FeatureGenerator< Dimension >         FeatureGeneratorType;

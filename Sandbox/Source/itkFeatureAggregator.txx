@@ -34,11 +34,7 @@ FeatureAggregator<NDimension>
 {
   this->SetNumberOfRequiredOutputs( 1 );  // for the Transform
 
-  typedef float                                                 OutputPixelType;
-  typedef Image< OutputPixelType, NDimension >                  OutputImageType;
-  typedef ImageSpatialObject< NDimension, OutputPixelType >     OutputSpatialObjectType;
-
-  typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
+  typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
 

@@ -62,6 +62,11 @@ public:
    * when computing the weighted sum. */
   void virtual AddWeight( double weight );
 
+  /** Type of the image and specific SpatialObject produced as output */
+  typedef typename Superclass::OutputPixelType                OutputPixelType;
+  typedef typename Superclass::OutputImageType                OutputImageType;
+  typedef typename Superclass::OutputImageSpatialObjectType   OutputImageSpatialObjectType;
+
 protected:
   WeightedSumFeatureAggregator();
   virtual ~WeightedSumFeatureAggregator();
