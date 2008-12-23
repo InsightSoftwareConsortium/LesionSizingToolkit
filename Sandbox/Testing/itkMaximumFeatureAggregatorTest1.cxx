@@ -20,7 +20,6 @@
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
-#include "itkConnectedThresholdSegmentationModule.h"
 
 
 int main( int argc, char * argv [] )
@@ -98,40 +97,16 @@ int main( int argc, char * argv [] )
   sigmoidGenerator->SetAlpha(  1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
  
-  typedef itk::ConnectedThresholdSegmentationModule< Dimension >   SegmentationModuleType;
-  
-  SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-
-
-  double lowerThreshold = 0.5;
-  double upperThreshold = 1.0;
-
-  if( argc > 4 )
-    {
-    lowerThreshold = atof( argv[4] );
-    }
-
-  if( argc > 5 )
-    {
-    upperThreshold = atof( argv[5] );
-    }
-
-  segmentationModule->SetLowerThreshold( lowerThreshold );
-  segmentationModule->SetUpperThreshold( upperThreshold );
-
 
   featureAggregator->Update();
 
-  
-  typedef SegmentationModuleType::SpatialObjectType           SpatialObjectType;
-  typedef SegmentationModuleType::OutputSpatialObjectType     OutputSpatialObjectType;
-  typedef SegmentationModuleType::OutputImageType             OutputImageType;
+  SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
-  SpatialObjectType::ConstPointer segmentation = featureAggregator->GetFeature();
+  typedef AggregatorType::OutputImageSpatialObjectType       OutputImageSpatialObjectType;
+  OutputImageSpatialObjectType::ConstPointer outputObject = 
+    dynamic_cast< const OutputImageSpatialObjectType * >( finalFeature.GetPointer() );
 
-  OutputSpatialObjectType::ConstPointer outputObject = 
-    dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
-
+  typedef AggregatorType::OutputImageType       OutputImageType;
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
   typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
