@@ -26,7 +26,7 @@ int main( int argc, char * argv [] )
   if( argc < 3 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << "inputImage outputImage " << std::endl;
+    std::cerr << argv[0] << " inputImage outputImage [(bright1/dark:0) sigma sheetness bloobiness noise ]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -39,7 +39,7 @@ int main( int argc, char * argv [] )
   typedef itk::ImageFileReader< InputImageType > InputImageReaderType;
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
 
-  inputImageReader->SetFileName( argv[2] );
+  inputImageReader->SetFileName( argv[1] );
 
   try 
     {
@@ -149,7 +149,7 @@ int main( int argc, char * argv [] )
   typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
 
-  writer->SetFileName( argv[3] );
+  writer->SetFileName( argv[2] );
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 

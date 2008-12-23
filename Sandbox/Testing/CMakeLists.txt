@@ -516,8 +516,11 @@ ADD_TEST(itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1
   ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/DescoteauxSheetnessFeatureGeneratorMultiScaleTest1_1.mha
-  0.5
-  1.0
+  1      # Search for Bright sheets
+  1.0    # Sigma
+  100.0  # Sheetness
+  100.0  # Bloobiness
+  100.0  # Noise
   )
 
 ADD_TEST(itkWeightedSumFeatureAggregatorTest1 
