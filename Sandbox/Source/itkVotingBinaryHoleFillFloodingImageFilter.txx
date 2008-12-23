@@ -23,6 +23,7 @@
 #include "itkImageRegionExclusionIteratorWithIndex.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkOffset.h"
+#include "itkProgressReporter.h"
 
 namespace itk
 {
@@ -95,10 +96,17 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
   this->m_TotalNumberOfPixelsChanged = 0;
   this->m_NumberOfPixelsChangedInLastIteration = 0;
 
+  // Progress reporting
+  ProgressReporter progress(this, 0, m_MaximumNumberOfIterations);
+  
   while( this->m_CurrentIterationNumber < this->m_MaximumNumberOfIterations ) 
     {
     this->VisitAllSeedsAndTransitionTheirState();
     this->m_CurrentIterationNumber++;
+    
+    progress.CompletedPixel();   // not really a pixel but an iteration
+    this->InvokeEvent( IterationEvent() );
+    
     if( this->m_NumberOfPixelsChangedInLastIteration ==  0 )
       {
       break;
@@ -237,7 +245,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
   while( seedItr != this->m_SeedArray1->end() )
     {
-    this->SetCurrentPixelIndex( *seedItr );
+    this->m_CurrentPixelIndex = *seedItr;
 
     if( this->TestForQuorumAtCurrentPixel() )
       {
