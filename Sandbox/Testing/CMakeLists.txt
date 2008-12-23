@@ -151,6 +151,9 @@ TARGET_LINK_LIBRARIES(itkMaximumFeatureAggregatorTest1 LesionSizingSandbox)
 ADD_EXECUTABLE(itkMaximumFeatureAggregatorTest2 itkMaximumFeatureAggregatorTest2.cxx )
 TARGET_LINK_LIBRARIES(itkMaximumFeatureAggregatorTest2 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1 itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1.cxx )
+TARGET_LINK_LIBRARIES(itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkWeightedSumFeatureAggregatorTest1 itkWeightedSumFeatureAggregatorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkWeightedSumFeatureAggregatorTest1 LesionSizingSandbox)
 
@@ -505,6 +508,14 @@ ADD_TEST(itkMaximumFeatureAggregatorTest2
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/MaximumFeatureAggregatorTest2_1.mha
+  0.5
+  1.0
+  )
+
+ADD_TEST(itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1 
+  ${CXX_TEST_PATH}/itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/DescoteauxSheetnessFeatureGeneratorMultiScaleTest1_1.mha
   0.5
   1.0
   )
