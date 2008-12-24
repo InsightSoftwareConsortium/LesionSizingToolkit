@@ -27,10 +27,10 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 6 )
+  if( argc < 7 )
     {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << " inputImageFile outputImageFile radius majority maxNumberOfIterations" << std::endl;
+    std::cerr << argv[0] << " inputImageFile outputImageFile inputThreshold radius majority maxNumberOfIterations" << std::endl;
     return EXIT_FAILURE;
     }
 
