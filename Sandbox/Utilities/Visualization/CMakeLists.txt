@@ -20,3 +20,6 @@ ADD_EXECUTABLE(ViewImageSlicesAndSegmentationContours
   )
 TARGET_LINK_LIBRARIES(ViewImageSlicesAndSegmentationContours ${ITK_VTK_LIBRARIES})
 
+ADD_EXECUTABLE(AntiAliasBinaryImageFilter AntiAliasBinaryImageFilter.cxx )
+TARGET_LINK_LIBRARIES(AntiAliasBinaryImageFilter ${ITK_VTK_LIBRARIES})
+
