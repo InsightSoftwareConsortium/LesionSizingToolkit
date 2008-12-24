@@ -19,6 +19,7 @@
 #include "vtkContourFilter.h"
 #include "vtkImageData.h"
 #include "vtkPolyDataWriter.h"
+#include "vtkSTLWriter.h"
 #include "vtkSmartPointer.h"
 #include "vtksys/SystemTools.hxx"
 
@@ -45,8 +46,6 @@ int main(int argc, char * argv [] )
   
   float isoValue = atof( argv[2] );
 
-  std::cout << "Iso-Value = " << isoValue << std::endl;
-
   VTK_CREATE( vtkContourFilter, contourFilter );
 
   contourFilter->SetValue( 0, isoValue ); 
@@ -63,6 +62,15 @@ int main(int argc, char * argv [] )
     polyDataWriter->SetFileName( argv[3] );
     polyDataWriter->Update();
     }
+
+  if( surfaceFileNameExtension == ".stl" )
+    {
+    VTK_CREATE( vtkSTLWriter, stlWriter );
+    stlWriter->SetInput( contourFilter->GetOutput() );
+    stlWriter->SetFileName( argv[3] );
+    stlWriter->Update();
+    }
+
 
   return EXIT_SUCCESS;
 }
