@@ -18,6 +18,7 @@
 #define __itkGradientMagnitudeSigmoidFeatureGenerator_txx
 
 #include "itkGradientMagnitudeSigmoidFeatureGenerator.h"
+#include "itkProgressAccumulator.h"
 
 
 namespace itk
@@ -102,6 +103,12 @@ void
 GradientMagnitudeSigmoidFeatureGenerator<NDimension>
 ::GenerateData()
 {
+  // Report progress.
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+  progress->RegisterInternalFilter( this->m_GradientFilter, 0.5 );  
+  progress->RegisterInternalFilter( this->m_SigmoidFilter, 0.5 );  
+  
   typename InputImageSpatialObjectType::ConstPointer inputObject =
     dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
 

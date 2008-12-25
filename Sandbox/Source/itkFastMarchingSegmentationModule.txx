@@ -21,7 +21,6 @@
 #include "itkImageRegionIterator.h"
 #include "itkFastMarchingImageFilter.h"
 #include "itkIntensityWindowingImageFilter.h"
-#include "itkImageFileWriter.h"
 #include "itkProgressAccumulator.h"
 
 namespace itk
@@ -115,6 +114,8 @@ FastMarchingSegmentationModule<NDimension>
   for( unsigned int i=0; i < numberOfPoints; i++ )
     {
     featureImage->TransformPhysicalPointToIndex( points[i].GetPosition(), index );
+
+    std::cout << "Seed added at : " << index << std::endl;
   
     NodeType node;
 
@@ -140,7 +141,7 @@ FastMarchingSegmentationModule<NDimension>
   windowing->SetWindowMaximum(  this->m_StoppingValue );
   windowing->SetOutputMaximum( -4.0 );
   windowing->SetOutputMinimum(  4.0 );
-  progress->RegisterInternalFilter( windowing, 0.9 );  
+  progress->RegisterInternalFilter( windowing, 0.1 );  
   windowing->Update();
 
   this->PackOutputImageInOutputSpatialObject( windowing->GetOutput() );
