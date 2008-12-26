@@ -157,6 +157,9 @@ TARGET_LINK_LIBRARIES(itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1 Lesi
 ADD_EXECUTABLE(itkSatoVesselnessFeatureGeneratorMultiScaleTest1 itkSatoVesselnessFeatureGeneratorMultiScaleTest1.cxx )
 TARGET_LINK_LIBRARIES(itkSatoVesselnessFeatureGeneratorMultiScaleTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1 itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1.cxx )
+TARGET_LINK_LIBRARIES(itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkWeightedSumFeatureAggregatorTest1 itkWeightedSumFeatureAggregatorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkWeightedSumFeatureAggregatorTest1 LesionSizingSandbox)
 
@@ -364,11 +367,11 @@ ADD_TEST(itkSatoVesselnessSigmoidFeatureGeneratorTest1
   ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/SatoVesselnessSigmoidFeatureGeneratorTest1_1.mha
-  1.0
-  0.5
-  2.0
-  -10
-  80
+  1.0   # Sigma
+  0.5   # Alpha 1
+  2.0   # Alpha 2
+  -10   # Sigmoid Alpha
+  80    # Sigmoid Bets
   )
 
 ADD_TEST(itkSatoLocalStructureFeatureGeneratorTest1 
@@ -529,9 +532,20 @@ ADD_TEST(itkSatoVesselnessFeatureGeneratorMultiScaleTest1
   ${CXX_TEST_PATH}/itkSatoVesselnessFeatureGeneratorMultiScaleTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/SatoVesselnessFeatureGeneratorMultiScaleTest1_1.mha
-  1.0    # First Sigma
+  1.0  # First Sigma
   0.5  # Alpha 1
   2.0  # Alpha 2
+  )
+
+ADD_TEST(itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1 
+  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/SatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1_1.mha
+  1.0  # First Sigma
+  0.5  # Alpha 1
+  2.0  # Alpha 2
+  -10  # Sigmoid Alpha
+  80   # Sigmoid Bets
   )
 
 ADD_TEST(itkWeightedSumFeatureAggregatorTest1 
