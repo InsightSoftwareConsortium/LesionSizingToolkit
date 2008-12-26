@@ -211,8 +211,6 @@ ImportPixelBuffer( vtkVVPluginInfo *info, const vtkVVProcessDataStruct *pds )
   m_ImportFilter->SetRegion(  region  );
 
   unsigned int totalNumberOfPixels = region.GetNumberOfPixels();
-  unsigned int numberOfComponents = info->InputVolumeNumberOfComponents;
-  unsigned int numberOfPixelsPerSlice = size[0] * size[1];
 
   PixelType *dataBlockStart = static_cast< PixelType * >( pds->inData );
 
