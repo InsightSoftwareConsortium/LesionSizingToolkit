@@ -64,6 +64,14 @@ ADD_TEST(LWFG_${DATASET_ID}
   -400.0 # Lung Threshold
   )
 
+# Morphological Openning Feature Generator
+ADD_TEST(MOFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkMorphologicalOpenningFeatureGeneratorTest1
+  ${DATASET_ROI}
+  ${TEMP}/MOFG_Test${DATASET_ID}.mha
+  -400.0 # Lung Threshold
+  )
+
 # Sato Vesselness Feature Generator
 ADD_TEST(SVFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
@@ -131,6 +139,7 @@ IF( LSTK_SANDBOX_USE_VTK )
 SCREEN_SHOT( ${DATASET_ID} 0.5 GMSFG )
 SCREEN_SHOT( ${DATASET_ID} 0.5 SFG )
 SCREEN_SHOT( ${DATASET_ID} 0.5 LWFG )
+SCREEN_SHOT( ${DATASET_ID} 0.5 MOFG )
 SCREEN_SHOT( ${DATASET_ID} 0.5 SVFG )
 SCREEN_SHOT( ${DATASET_ID} 0.5 SVSFG )
 SCREEN_SHOT( ${DATASET_ID} 0.5 SLSFG )
@@ -147,6 +156,7 @@ ADD_TEST(SCRN_AFG_${DATASET_ID}
   ${TEMP}/GMSFG_Test${DATASET_ID}.mha
   ${TEMP}/SFG_Test${DATASET_ID}.mha
   ${TEMP}/LWFG_Test${DATASET_ID}.mha
+  ${TEMP}/MOFG_Test${DATASET_ID}.mha
   ${TEMP}/SVFG_Test${DATASET_ID}.mha
   ${TEMP}/SVSFG_Test${DATASET_ID}.mha
   ${TEMP}/SLSFG_Test${DATASET_ID}.mha
