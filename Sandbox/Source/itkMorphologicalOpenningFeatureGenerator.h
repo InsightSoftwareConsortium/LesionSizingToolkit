@@ -14,15 +14,17 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkLungWallFeatureGenerator_h
-#define __itkLungWallFeatureGenerator_h
+#ifndef __itkMorphologicalOpenningFeatureGenerator_h
+#define __itkMorphologicalOpenningFeatureGenerator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"
 #include "itkImageSpatialObject.h"
 #include "itkBinaryThresholdImageFilter.h"
 #include "itkVotingBinaryHoleFillFloodingImageFilter.h"
+#include "itkBinaryBallStructuringElement.h"
 #include "itkBinaryMorphologicalOpeningImageFilter.h"
+#include "itkCastImageFilter.h"
 
 namespace itk
 {
@@ -103,17 +105,24 @@ private:
     InputImageType, InternalImageType >                   ThresholdFilterType;
   typedef typename ThresholdFilterType::Pointer           ThresholdFilterPointer;
 
+  typedef BinaryBallStructuringElement< InternalPixelType, Dimension > KernelType;
   typedef BinaryMorphologicalOpeningImageFilter< 
-    InternalImageType, InternalImageType >                OpenningFilterType;
+    InternalImageType, InternalImageType, KernelType >    OpenningFilterType;
   typedef typename OpenningFilterType::Pointer            OpenningFilterPointer;
 
   typedef VotingBinaryHoleFillFloodingImageFilter<
-    InternalImageType, OutputImageType >                  VotingHoleFillingFilterType;
+    InternalImageType, InternalImageType >                VotingHoleFillingFilterType;
   typedef typename VotingHoleFillingFilterType::Pointer   VotingHoleFillingFilterPointer;
+
+  typedef CastImageFilter<
+    InternalImageType, OutputImageType >                  CastingFilterType;
+  typedef typename CastingFilterType::Pointer             CastingFilterPointer;
+
 
   ThresholdFilterPointer                m_ThresholdFilter;
   OpenningFilterPointer                 m_OpenningFilter;
   VotingHoleFillingFilterPointer        m_VotingHoleFillingFilter;
+  CastingFilterPointer                  m_CastingFilter;
 
   InputPixelType                        m_LungThreshold;
 };
@@ -121,7 +130,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkLungWallFeatureGenerator.txx"
+# include "itkMorphologicalOpenningFeatureGenerator.txx"
 #endif
 
 #endif

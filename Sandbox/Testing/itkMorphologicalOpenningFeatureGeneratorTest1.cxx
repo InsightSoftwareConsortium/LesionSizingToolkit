@@ -13,7 +13,7 @@
 
 =========================================================================*/
 
-#include "itkLungWallFeatureGenerator.h"
+#include "itkMorphologicalOpenningFeatureGenerator.h"
 #include "itkImage.h"
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
@@ -58,10 +58,10 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  typedef itk::LungWallFeatureGenerator< Dimension >   LungWallFeatureGeneratorType;
-  typedef LungWallFeatureGeneratorType::SpatialObjectType    SpatialObjectType;
+  typedef itk::MorphologicalOpenningFeatureGenerator< Dimension >   FeatureGeneratorType;
+  typedef FeatureGeneratorType::SpatialObjectType    SpatialObjectType;
 
-  LungWallFeatureGeneratorType::Pointer  featureGenerator = LungWallFeatureGeneratorType::New();
+  FeatureGeneratorType::Pointer  featureGenerator = FeatureGeneratorType::New();
   
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();

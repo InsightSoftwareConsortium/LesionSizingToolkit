@@ -37,10 +37,12 @@ MorphologicalOpenningFeatureGenerator<NDimension>
   this->m_ThresholdFilter = ThresholdFilterType::New();
   this->m_OpenningFilter = OpenningFilterType::New();
   this->m_VotingHoleFillingFilter = VotingHoleFillingFilterType::New();
+  this->m_CastingFilter = CastingFilterType::New();
 
   this->m_ThresholdFilter->ReleaseDataFlagOn();
   this->m_OpenningFilter->ReleaseDataFlagOn();
   this->m_VotingHoleFillingFilter->ReleaseDataFlagOn();
+  this->m_CastingFilter->ReleaseDataFlagOn();
 
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
@@ -124,11 +126,13 @@ MorphologicalOpenningFeatureGenerator<NDimension>
   progress->SetMiniPipelineFilter(this);
   progress->RegisterInternalFilter( this->m_ThresholdFilter, 0.1 );
   progress->RegisterInternalFilter( this->m_OpenningFilter, 0.2 );
-  progress->RegisterInternalFilter( this->m_VotingHoleFillingFilter, 0.7 );
+  progress->RegisterInternalFilter( this->m_VotingHoleFillingFilter, 0.6 );
+  progress->RegisterInternalFilter( this->m_CastingFilter, 0.1 );
 
   this->m_ThresholdFilter->SetInput( inputImage );
   this->m_OpenningFilter->SetInput( this->m_ThresholdFilter->GetOutput() );
   this->m_VotingHoleFillingFilter->SetInput( this->m_OpenningFilter->GetOutput() );
+  this->m_CastingFilter->SetInput( this->m_VotingHoleFillingFilter->GetOutput() );
 
   this->m_ThresholdFilter->SetLowerThreshold( this->m_LungThreshold );
   this->m_ThresholdFilter->SetUpperThreshold( 3000 );
@@ -136,18 +140,20 @@ MorphologicalOpenningFeatureGenerator<NDimension>
   this->m_ThresholdFilter->SetInsideValue( 1.0 );
   this->m_ThresholdFilter->SetOutsideValue( 0.0 );
 
+
   typename InternalImageType::SizeType  ballManhattanRadius;
 
   ballManhattanRadius.Fill( 3 );
 
-  typedef BinaryBallStructuringElement< InternalPixelType, Dimension > KernelType;
   KernelType ball;
-  KernelType::SizeType ballSize;
-  ballSize.Fill( ballManhattanRadius );
+  typename KernelType::SizeType ballSize;
+  ballSize.Fill( 1 );
   ball.SetRadius( ballSize );
   ball.CreateStructuringElement();
    
   this->m_OpenningFilter->SetKernel( ball );
+  this->m_OpenningFilter->SetBackgroundValue( 0.0 );
+  this->m_OpenningFilter->SetForegroundValue( 1.0 );
 
   this->m_VotingHoleFillingFilter->SetRadius( ballManhattanRadius );
   this->m_VotingHoleFillingFilter->SetBackgroundValue( 0.0 );
@@ -155,12 +161,12 @@ MorphologicalOpenningFeatureGenerator<NDimension>
   this->m_VotingHoleFillingFilter->SetMajorityThreshold( 1 );
   this->m_VotingHoleFillingFilter->SetMaximumNumberOfIterations( 1000 );
 
-  this->m_VotingHoleFillingFilter->Update();
+  this->m_CastingFilter->Update();
 
   std::cout << "Used " << this->m_VotingHoleFillingFilter->GetCurrentIterationNumber() << " iterations " << std::endl;
   std::cout << "Changed " << this->m_VotingHoleFillingFilter->GetTotalNumberOfPixelsChanged() << " pixels " << std::endl;
 
-  typename OutputImageType::Pointer outputImage = this->m_VotingHoleFillingFilter->GetOutput();
+  typename OutputImageType::Pointer outputImage = this->m_CastingFilter->GetOutput();
 
   outputImage->DisconnectPipeline();
 
