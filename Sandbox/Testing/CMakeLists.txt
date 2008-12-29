@@ -178,6 +178,9 @@ TARGET_LINK_LIBRARIES(itkSigmoidFeatureGeneratorTest1 LesionSizingSandbox)
 ADD_EXECUTABLE(itkLungWallFeatureGeneratorTest1 itkLungWallFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkLungWallFeatureGeneratorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkMorphologicalOpenningFeatureGeneratorTest1 itkMorphologicalOpenningFeatureGeneratorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkMorphologicalOpenningFeatureGeneratorTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkSatoVesselnessFeatureGeneratorTest1 itkSatoVesselnessFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkSatoVesselnessFeatureGeneratorTest1 LesionSizingSandbox)
 
@@ -317,6 +320,13 @@ ADD_TEST(itkLungWallFeatureGeneratorTest1
   ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/LungWallFeatureGeneratorTest1_1.mha
+  -400.0 
+  )
+
+ADD_TEST(itkMorphologicalOpenningFeatureGeneratorTest1 
+  ${CXX_TEST_PATH}/itkMorphologicalOpenningFeatureGeneratorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/MorphologicalOpenningFeatureGeneratorTest1_1.mha
   -400.0 
   )
 
