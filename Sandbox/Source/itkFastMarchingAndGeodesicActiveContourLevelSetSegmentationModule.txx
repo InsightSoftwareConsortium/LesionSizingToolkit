@@ -36,6 +36,7 @@ FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>
   this->m_FastMarchingModule = FastMarchingModuleType::New();
   this->m_FastMarchingModule->SetDistanceFromSeeds(1.0);
   this->m_FastMarchingModule->SetStoppingValue( 100.0 );
+  this->m_FastMarchingModule->SetRescaleOutput(false);
   this->m_GeodesicActiveContourLevelSetModule = GeodesicActiveContourLevelSetModuleType::New();
 }
 

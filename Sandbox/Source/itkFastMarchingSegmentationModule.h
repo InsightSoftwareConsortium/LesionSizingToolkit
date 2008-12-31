@@ -80,6 +80,10 @@ public:
   itkSetMacro( DistanceFromSeeds, double );
   itkGetMacro( DistanceFromSeeds, double );
 
+  /** Rescale the output to the range [-4,4]. Default ON */
+  itkSetMacro( RescaleOutput, bool );
+  itkGetMacro( RescaleOutput, bool );
+
 protected:
   FastMarchingSegmentationModule();
   virtual ~FastMarchingSegmentationModule();
@@ -100,6 +104,7 @@ protected:
 
   double m_StoppingValue;
   double m_DistanceFromSeeds;
+  bool   m_RescaleOutput;
 
 private:
   FastMarchingSegmentationModule(const Self&); //purposely not implemented
