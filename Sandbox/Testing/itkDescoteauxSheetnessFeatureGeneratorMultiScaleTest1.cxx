@@ -23,10 +23,10 @@
 int main( int argc, char * argv [] )
 {
 
-  if( argc < 3 )
+  if( argc < 5 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [(bright1/dark:0) sigma sheetness bloobiness noise ]" << std::endl;
+    std::cerr << argv[0] << " inputImage outputImage (bright=1/dark=0) sigma numberOfScales [sheetness bloobiness noise ]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -52,61 +52,6 @@ int main( int argc, char * argv [] )
     }
 
 
-  typedef itk::MaximumFeatureAggregator< Dimension >   AggregatorType;
-
-  AggregatorType::Pointer  featureAggregator = AggregatorType::New();
-
-  typedef itk::DescoteauxSheetnessFeatureGenerator< Dimension >   DescoteauxSheetnessFeatureGeneratorType;
-  typedef DescoteauxSheetnessFeatureGeneratorType::SpatialObjectType    SpatialObjectType;
-
-  DescoteauxSheetnessFeatureGeneratorType::Pointer  featureGenerator1 = DescoteauxSheetnessFeatureGeneratorType::New();
-  DescoteauxSheetnessFeatureGeneratorType::Pointer  featureGenerator2 = DescoteauxSheetnessFeatureGeneratorType::New();
-  DescoteauxSheetnessFeatureGeneratorType::Pointer  featureGenerator3 = DescoteauxSheetnessFeatureGeneratorType::New();
-  DescoteauxSheetnessFeatureGeneratorType::Pointer  featureGenerator4 = DescoteauxSheetnessFeatureGeneratorType::New();
-  
-  if( argc > 3 )
-    {
-    featureGenerator1->SetDetectBrightSheets( atoi( argv[3] ) );
-    featureGenerator2->SetDetectBrightSheets( atoi( argv[3] ) );
-    featureGenerator3->SetDetectBrightSheets( atoi( argv[3] ) );
-    featureGenerator4->SetDetectBrightSheets( atoi( argv[3] ) );
-    }
-
-  if( argc > 4 )
-    {
-    double smallestSigma = atof( argv[4] );
-    featureGenerator1->SetSigma( smallestSigma );
-    featureGenerator2->SetSigma( smallestSigma * 2.0 );
-    featureGenerator3->SetSigma( smallestSigma * 4.0 );
-    featureGenerator4->SetSigma( smallestSigma * 8.0 );
-    }
-
-  if( argc > 5 )
-    {
-    featureGenerator1->SetSheetnessNormalization( atof( argv[5] ) );
-    featureGenerator2->SetSheetnessNormalization( atof( argv[5] ) );
-    featureGenerator3->SetSheetnessNormalization( atof( argv[5] ) );
-    featureGenerator4->SetSheetnessNormalization( atof( argv[5] ) );
-    }
-
-  if( argc > 6 )
-    {
-    featureGenerator1->SetBloobinessNormalization( atof( argv[6] ) );
-    featureGenerator2->SetBloobinessNormalization( atof( argv[6] ) );
-    featureGenerator3->SetBloobinessNormalization( atof( argv[6] ) );
-    featureGenerator4->SetBloobinessNormalization( atof( argv[6] ) );
-    }
-
-  if( argc > 7 )
-    {
-    featureGenerator1->SetNoiseNormalization( atof( argv[7] ) );
-    featureGenerator2->SetNoiseNormalization( atof( argv[7] ) );
-    featureGenerator3->SetNoiseNormalization( atof( argv[7] ) );
-    featureGenerator4->SetNoiseNormalization( atof( argv[7] ) );
-    }
-
-  typedef AggregatorType::SpatialObjectType    SpatialObjectType;
-
   typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -116,15 +61,51 @@ int main( int argc, char * argv [] )
 
   inputObject->SetImage( inputImage );
 
-  featureGenerator1->SetInput( inputObject );
-  featureGenerator2->SetInput( inputObject );
-  featureGenerator3->SetInput( inputObject );
-  featureGenerator4->SetInput( inputObject );
 
-  featureAggregator->AddFeatureGenerator( featureGenerator1 );
-  featureAggregator->AddFeatureGenerator( featureGenerator2 );
-  featureAggregator->AddFeatureGenerator( featureGenerator3 );
-  featureAggregator->AddFeatureGenerator( featureGenerator4 );
+  typedef itk::MaximumFeatureAggregator< Dimension >   AggregatorType;
+
+  AggregatorType::Pointer  featureAggregator = AggregatorType::New();
+
+  typedef itk::DescoteauxSheetnessFeatureGenerator< Dimension >         DescoteauxSheetnessFeatureGeneratorType;
+  typedef DescoteauxSheetnessFeatureGeneratorType::SpatialObjectType    SpatialObjectType;
+  typedef DescoteauxSheetnessFeatureGeneratorType::Pointer              FeatureGeneratorPointer;
+  typedef std::vector< FeatureGeneratorPointer >                        FeatureGeneratorArray;
+
+  FeatureGeneratorArray  featureGeneratorArray;
+
+  unsigned int octave = 1;
+  double smallestSigma = atof( argv[4] );
+  
+  const unsigned int numberOfScales = atoi( argv[5] );
+
+  for( unsigned int k = 0; k < numberOfScales; k++ )
+    {
+    DescoteauxSheetnessFeatureGeneratorType::Pointer  featureGenerator = DescoteauxSheetnessFeatureGeneratorType::New();
+    featureGeneratorArray.push_back( featureGenerator );
+
+    featureGenerator->SetDetectBrightSheets( atoi( argv[3] ) );
+    featureGenerator->SetSigma( smallestSigma * octave );
+
+    if( argc > 6 )
+      {
+      featureGenerator->SetSheetnessNormalization( atof( argv[6] ) );
+      }
+
+    if( argc > 7 )
+      {
+      featureGenerator->SetBloobinessNormalization( atof( argv[7] ) );
+      }
+
+    if( argc > 8 )
+      {
+      featureGenerator->SetNoiseNormalization( atof( argv[8] ) );
+      }
+
+    octave *= 2;
+
+    featureGenerator->SetInput( inputObject );
+    featureAggregator->AddFeatureGenerator( featureGenerator );
+    }
 
   try 
     {

@@ -532,7 +532,8 @@ ADD_TEST(itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/DescoteauxSheetnessFeatureGeneratorMultiScaleTest1_1.mha
   1      # Search for Bright sheets
-  1.0    # Sigma
+  1.0    # Smallest Sigma
+  3      # Number of scales
   100.0  # Sheetness
   100.0  # Bloobiness
   100.0  # Noise
