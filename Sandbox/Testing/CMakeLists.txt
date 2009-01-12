@@ -3,9 +3,15 @@ SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 SET(TEST_DATA_ROOT ${LesionSizingKitSandbox_SOURCE_DIR}/../Data)
 SET(TEMP ${LesionSizingKitSandbox_BINARY_DIR}/Testing/Temporary)
 
+INCLUDE(CollectionTestMacro.cmake)
+
 FIND_PATH(TEST_CORNELL_DATA_ROOT README.txt DOC "Directory with data from the Cornell ELCAP database")
 
+FIND_PATH(TEST_NIST_DATA_ROOT  LevineJResNIST2008b.pdf DOC "Directory with data from the NIST Phantom database")
+
 OPTION(TEST_CORNELL_COLLECTION "Run tests in the collection of datasets from Cornell" OFF)
+
+OPTION(TEST_NIST_PHANTOM_COLLECTION "Run tests in the collection of phantom datasets from NIST" OFF)
 
 ADD_EXECUTABLE(itkSystemInformationSandbox itkSystemInformation.cxx )
 TARGET_LINK_LIBRARIES(itkSystemInformationSandbox LesionSizingSandbox)
@@ -568,10 +574,18 @@ ADD_TEST(itkWeightedSumFeatureAggregatorTest1
   1.0
   )
 
+ENDIF(TEST_CORNELL_DATA_ROOT)
+
+
 IF(TEST_CORNELL_COLLECTION)
-  INCLUDE(CollectionTestMacro.cmake)
-  INCLUDE(CornellCollectionTests.cmake)
+  IF(TEST_CORNELL_DATA_ROOT)
+    INCLUDE(CornellCollectionTests.cmake)
+  ENDIF(TEST_CORNELL_DATA_ROOT)
 ENDIF(TEST_CORNELL_COLLECTION)
 
-ENDIF(TEST_CORNELL_DATA_ROOT)
+IF(TEST_NIST_PHANTOM_COLLECTION)
+  IF(TEST_NIST_DATA_ROOT)
+    INCLUDE(NISTPhantomCollectionTests.cmake)
+  ENDIF(TEST_NIST_DATA_ROOT)
+ENDIF(TEST_NIST_PHANTOM_COLLECTION)
 
