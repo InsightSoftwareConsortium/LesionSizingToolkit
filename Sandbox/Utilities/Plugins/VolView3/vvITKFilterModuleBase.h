@@ -56,7 +56,7 @@ public:
 
 
   /**  Destructor */
-  ~FilterModuleBase() 
+  virtual ~FilterModuleBase() 
     {
     }
 

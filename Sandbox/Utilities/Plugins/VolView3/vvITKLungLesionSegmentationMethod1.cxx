@@ -53,7 +53,7 @@ public:
 
   // Description:
   // The destructor
-  ~LungLesionSegmentationMethod1Runner();
+  virtual ~LungLesionSegmentationMethod1Runner();
 
   // Description:
   // Imports the two input images from Volview into ITK
