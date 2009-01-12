@@ -26,7 +26,7 @@ int main( int argc, char * argv [] )
   if( argc < 3 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [variance upperthreshold lowerthreshold]" << std::endl;
+    std::cerr << argv[0] << " inputImage outputImage [sigma upperthreshold lowerthreshold]" << std::endl;
     return EXIT_FAILURE;
     }
 
