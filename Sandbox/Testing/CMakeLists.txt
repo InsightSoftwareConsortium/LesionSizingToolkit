@@ -169,6 +169,9 @@ TARGET_LINK_LIBRARIES(itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1 Le
 ADD_EXECUTABLE(itkWeightedSumFeatureAggregatorTest1 itkWeightedSumFeatureAggregatorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkWeightedSumFeatureAggregatorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkCannyEdgesFeatureGeneratorTest1 itkCannyEdgesFeatureGeneratorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkCannyEdgesFeatureGeneratorTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkCannyEdgesDistanceFeatureGeneratorTest1 itkCannyEdgesDistanceFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkCannyEdgesDistanceFeatureGeneratorTest1 LesionSizingSandbox)
 
@@ -356,6 +359,15 @@ ADD_TEST(itkCannyEdgesDistanceFeatureGeneratorTest1
   ${CXX_TEST_PATH}/itkCannyEdgesDistanceFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/CannyEdgesDistanceFeatureGeneratorTest1_1.mha
+  0.7 # Sigma
+  150 # Upper hysteresis threshold
+  75  # Lower hysteresis threshold
+  )
+
+ADD_TEST(itkCannyEdgesFeatureGeneratorTest1 
+  ${CXX_TEST_PATH}/itkCannyEdgesFeatureGeneratorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/CannyEdgesFeatureGeneratorTest1_1.mha
   0.7 # Sigma
   150 # Upper hysteresis threshold
   75  # Lower hysteresis threshold
