@@ -45,8 +45,11 @@ CannyEdgesFeatureGenerator<NDimension>
   this->m_UpperThreshold = NumericTraits< InternalPixelType >::max();
   this->m_LowerThreshold = NumericTraits< InternalPixelType >::min();
 
-  this->m_RescaleFilter->SetOutputMinimum( 0.0 );
-  this->m_RescaleFilter->SetOutputMaximum( 1.0 );
+  this->m_RescaleFilter->SetOutputMinimum( 1.0 );
+  this->m_RescaleFilter->SetOutputMaximum( 0.0 );
+
+  this->m_RescaleFilter->SetWindowMinimum( 0.0 );
+  this->m_RescaleFilter->SetWindowMaximum( 1.0 );
 }
 
 

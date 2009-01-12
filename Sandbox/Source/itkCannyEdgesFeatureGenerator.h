@@ -22,7 +22,7 @@
 #include "itkImageSpatialObject.h"
 #include "itkCastImageFilter.h"
 #include "itkCannyEdgeDetectionImageFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
+#include "itkIntensityWindowingImageFilter.h"
 
 namespace itk
 {
@@ -125,7 +125,7 @@ private:
     InternalImageType, InternalImageType >            CannyEdgeFilterType;
   typedef typename CannyEdgeFilterType::Pointer       CannyEdgeFilterPointer;
 
-  typedef RescaleIntensityImageFilter<
+  typedef IntensityWindowingImageFilter<
     InternalImageType, InternalImageType >            RescaleFilterType;
   typedef typename RescaleFilterType::Pointer         RescaleFilterPointer;
 
@@ -141,7 +141,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkCannyEdgesDistanceFeatureGenerator.txx"
+# include "itkCannyEdgesFeatureGenerator.txx"
 #endif
 
 #endif
