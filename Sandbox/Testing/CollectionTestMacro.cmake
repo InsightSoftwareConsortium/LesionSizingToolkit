@@ -74,9 +74,19 @@ ADD_TEST(MOFG_${DATASET_ID}
 
 # Canny Edges Feature Generator
 ADD_TEST(CEFG_${DATASET_ID}
-  ${CXX_TEST_PATH}/itkCannyEdgesDistanceFeatureGeneratorTest1
+  ${CXX_TEST_PATH}/itkCannyEdgesFeatureGeneratorTest1
   ${DATASET_ROI}
   ${TEMP}/CEFG_Test${DATASET_ID}.mha
+  1.0 # Variance
+  5.0 # Upper threshold
+  0.5 # Lower threshold
+  )
+
+# Canny Edges Feature Generator
+ADD_TEST(CEDFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkCannyEdgesDistanceFeatureGeneratorTest1
+  ${DATASET_ROI}
+  ${TEMP}/CEDFG_Test${DATASET_ID}.mha
   1.0 # Variance
   5.0 # Upper threshold
   0.5 # Lower threshold
