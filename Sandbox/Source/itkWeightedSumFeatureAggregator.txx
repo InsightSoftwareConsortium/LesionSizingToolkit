@@ -136,7 +136,6 @@ WeightedSumFeatureAggregator<NDimension>
     dynamic_cast< FeatureSpatialObjectType * >(this->ProcessObject::GetOutput(0));
 
   outputObject->SetImage( consolidatedFeatureImage );
-   
 }
 
 } // end namespace itk
