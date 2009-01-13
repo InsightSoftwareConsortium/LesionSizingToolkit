@@ -283,6 +283,14 @@ ADD_TEST(LSMT8_${DATASET_OBJECT_ID}
   ${TEMP}/LSMT8_Test${DATASET_OBJECT_ID}.mha
   )
 
+
+ADD_TEST(LSMT9_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest9
+  ${SEEDS_FILE}
+  ${DATASET_ROI}
+  ${TEMP}/LSMT9_Test${DATASET_OBJECT_ID}.mha
+  )
+
 ADD_TEST(LSMTVE3_${DATASET_OBJECT_ID}
   ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest2
   ${TEMP}/LSMT3_Test${DATASET_OBJECT_ID}.mha
@@ -319,6 +327,22 @@ ADD_TEST(LSMTVE7_${DATASET_OBJECT_ID}
   ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest2
   ${TEMP}/LSMT7_Test${DATASET_OBJECT_ID}.mha
   LSMT7
+  ${DATASET_ID}
+  ${TEMP}/VolumeEstimation_${DATASET_OBJECT_ID}.txt
+  )
+
+ADD_TEST(LSMTVE8_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest2
+  ${TEMP}/LSMT8_Test${DATASET_OBJECT_ID}.mha
+  LSMT8
+  ${DATASET_ID}
+  ${TEMP}/VolumeEstimation_${DATASET_OBJECT_ID}.txt
+  )
+
+ADD_TEST(LSMTVE9_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest2
+  ${TEMP}/LSMT9_Test${DATASET_OBJECT_ID}.mha
+  LSMT9
   ${DATASET_ID}
   ${TEMP}/VolumeEstimation_${DATASET_OBJECT_ID}.txt
   )
