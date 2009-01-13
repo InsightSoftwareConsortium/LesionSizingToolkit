@@ -38,7 +38,7 @@ int main( int argc, char * argv[] )
   typedef    float    InputPixelType;
   typedef    float    OutputPixelType;
 
-  const unsigned Dimension = 2;
+  const unsigned Dimension = 3;
 
   typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
@@ -76,7 +76,7 @@ int main( int argc, char * argv[] )
     {
     writer->Update();
     }
-  catch( itk::ExceptionMacro & excp )
+  catch( itk::ExceptionObject & excp )
     {
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
