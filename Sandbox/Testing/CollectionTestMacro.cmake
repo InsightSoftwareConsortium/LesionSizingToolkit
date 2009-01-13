@@ -234,6 +234,13 @@ ADD_TEST(LSMT7_${DATASET_ID}
   ${TEMP}/LSMT7_Test${DATASET_ID}.mha
   )
 
+ADD_TEST(LSMT8_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest8
+  ${TEST_DATA_ROOT}/Input/${DATASET_ID}_Seeds.txt
+  ${DATASET_ROI}
+  ${TEMP}/LSMT8_Test${DATASET_ID}.mha
+  )
+
 ADD_TEST(LSMTVE3_${DATASET_ID}
   ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest2
   ${TEMP}/LSMT3_Test${DATASET_ID}.mha

@@ -142,6 +142,9 @@ TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest6 LesionSizingSandbox)
 ADD_EXECUTABLE(itkLesionSegmentationMethodTest7 itkLesionSegmentationMethodTest7.cxx )
 TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest7 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkLesionSegmentationMethodTest8 itkLesionSegmentationMethodTest8.cxx )
+TARGET_LINK_LIBRARIES(itkLesionSegmentationMethodTest8 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkFeatureAggregatorTest1 itkFeatureAggregatorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkFeatureAggregatorTest1 LesionSizingSandbox)
 
