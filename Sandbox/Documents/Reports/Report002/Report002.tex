@@ -124,54 +124,70 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 \clearpage
 }
 
-\newcommand{\composeFigureFromDatasetSegmentations}[1]{
+\newcommand{\composeFigureFromDatasetSegmentations}[2]{
 
-\subsubsection{Segmentation Results for Dataset #1}
+\subsubsection{Segmentation Results for Dataset #1 #2}
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{LSMT3_Test#1.png}
-\itkcaption[Dataset #1 Segmentation Method 3]{Dataset #1 Results of Segmentation Method 3.}
-\label{fig:Dataset#1LSMT3}
+\includegraphics[width=1.0\textwidth]{LSMT3_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Segmentation Method 3]{Dataset #1 #2 Results of Segmentation Method 3.}
+\label{fig:Dataset#1#2LSMT3}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{LSMT4_Test#1.png}
-\itkcaption[Dataset #1 Segmentation Method 4]{Dataset #1 Results of Segmentation Method 4.}
-\label{fig:Dataset#1LSMT4}
+\includegraphics[width=1.0\textwidth]{LSMT4_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Segmentation Method 4]{Dataset #1 #2 Results of Segmentation Method 4.}
+\label{fig:Dataset#1#2LSMT4}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{LSMT5_Test#1.png}
-\itkcaption[Dataset #1 Segmentation Method 5]{Dataset #1 Results of Segmentation Method 5.}
-\label{fig:Dataset#1LSMT5}
+\includegraphics[width=1.0\textwidth]{LSMT5_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Segmentation Method 5]{Dataset #1 #2 Results of Segmentation Method 5.}
+\label{fig:Dataset#1#2LSMT5}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{LSMT6_Test#1.png}
-\itkcaption[Dataset #1 Segmentation Method 6]{Dataset #1 Results of Segmentation Method 6.}
-\label{fig:Dataset#1LSMT6}
+\includegraphics[width=1.0\textwidth]{LSMT6_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Segmentation Method 6]{Dataset #1 #2 Results of Segmentation Method 6.}
+\label{fig:Dataset#1#2LSMT6}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{LSMT7_Test#1.png}
-\itkcaption[Dataset #1 Segmentation Method 7]{Dataset #1 Results of Segmentation Method 7.}
-\label{fig:Dataset#1LSMT7}
+\includegraphics[width=1.0\textwidth]{LSMT7_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Segmentation Method 7]{Dataset #1 #2 Results of Segmentation Method 7.}
+\label{fig:Dataset#1#2LSMT7}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{SCRN_ALSM_#1.png}
-\itkcaption[Dataset #1 Segmentations]{Dataset #1 Results of Segmentations.}
+\includegraphics[width=1.0\textwidth]{LSMT8_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Segmentation Method 8]{Dataset #1 #2 Results of Segmentation Method 8.}
+\label{fig:Dataset#1#2LSMT8}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{LSMT9_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Segmentation Method 9]{Dataset #1 #2 Results of Segmentation Method 9.}
+\label{fig:Dataset#1#2LSMT9}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{SCRN_ALSM_#1_#2.png}
+\itkcaption[Dataset #1 #2 Segmentations]{Dataset #1 #2 Results of Segmentations.}
 \label{fig:Dataset#1Segmentations}
 \end{figure}
 \clearpage
@@ -180,7 +196,7 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 \newcommand{\insertResultsForDataset}[2]{
 \subsection{Dataset #1 #2}
 \composeFigureFromDatasetFeatures{#1}{#2}
-%\composeFigureFromDatasetSegmentations{#1}{#2}
+\composeFigureFromDatasetSegmentations{#1}{#2}
 }
 
 \maketitle
