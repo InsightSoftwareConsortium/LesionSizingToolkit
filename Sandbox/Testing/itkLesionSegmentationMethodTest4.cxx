@@ -123,8 +123,8 @@ int main( int argc, char * argv [] )
   sigmoidGenerator->SetBeta( -200.0 );
  
   gradientMagnitudeSigmoidGenerator->SetSigma( 1.0 );
-  gradientMagnitudeSigmoidGenerator->SetAlpha( -0.1 );
-  gradientMagnitudeSigmoidGenerator->SetBeta( 150.0 );
+  gradientMagnitudeSigmoidGenerator->SetAlpha( -100.0 );
+  gradientMagnitudeSigmoidGenerator->SetBeta( 300.0 );
 
   typedef itk::FastMarchingSegmentationModule< Dimension >   SegmentationModuleType;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
