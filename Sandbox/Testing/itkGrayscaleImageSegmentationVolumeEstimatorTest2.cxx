@@ -72,6 +72,13 @@ int main( int argc, char * argv [] )
 
   const VolumeEstimatorType::RealType volume = volumeEstimator->GetVolume();
 
+  //
+  // Compute the radius of the equivalent-volume sphere
+  //
+  const double radius3 = ( ( volume * 3.0 ) / ( 4.0 * vnl_math::pi ) );
+  const double radius = vnl_math_cuberoot( radius3 );
+
+
   const std::string segmentationMethodID = argv[2];
   const std::string datasetID = argv[3];
   const std::string outpuFileName = argv[4];
@@ -85,7 +92,8 @@ int main( int argc, char * argv [] )
 
   ouputFile << segmentationMethodID << "  ";
   ouputFile << datasetID << "  ";
-  ouputFile <<  volume << std::endl;
+  ouputFile << volume << "   ";
+  ouputFile << radius << std::endl;
 
   ouputFile.close();
 
