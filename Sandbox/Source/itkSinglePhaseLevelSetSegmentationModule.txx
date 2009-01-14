@@ -45,6 +45,7 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
   this->m_CurvatureScaling = 75.0;
   this->m_PropagationScaling = 100.0;
   this->m_ZeroSetInputImage = NULL;
+  this->m_InvertOutputIntensities = true;
 }
 
 
