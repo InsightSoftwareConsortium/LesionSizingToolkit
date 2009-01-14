@@ -89,7 +89,7 @@ int main( int argc, char * argv [] )
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
  
   typedef itk::GradientMagnitudeSigmoidFeatureGenerator< Dimension >   GradientMagnitudeSigmoidFeatureGeneratorType;
-  GradientMagnitudeSigmoidFeatureGeneratorType::Pointer  gradientMagnitudeSigmoidFeatureGenerator = 
+  GradientMagnitudeSigmoidFeatureGeneratorType::Pointer  gradientMagnitudeSigmoidGenerator = 
     GradientMagnitudeSigmoidFeatureGeneratorType::New();
  
   typedef itk::MinimumFeatureAggregator< Dimension >   FeatureAggregatorType;
@@ -97,7 +97,7 @@ int main( int argc, char * argv [] )
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
-  featureAggregator->AddFeatureGenerator( gradientMagnitudeSigmoidFeatureGenerator );
+  featureAggregator->AddFeatureGenerator( gradientMagnitudeSigmoidGenerator );
   lesionSegmentationMethod->AddFeatureGenerator( featureAggregator );
 
   typedef MethodType::SpatialObjectType    SpatialObjectType;
@@ -113,16 +113,16 @@ int main( int argc, char * argv [] )
   lungWallGenerator->SetInput( inputObject );
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
-  gradientMagnitudeSigmoidFeatureGenerator->SetInput( inputObject );
+  gradientMagnitudeSigmoidGenerator->SetInput( inputObject );
   lungWallGenerator->SetLungThreshold( -400 );
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
   vesselnessGenerator->SetAlpha2( 2.0 );
   sigmoidGenerator->SetAlpha(  1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
-  gradientMagnitudeSigmoidFeatureGenerator->SetSigma( 1.0 );
-  gradientMagnitudeSigmoidFeatureGenerator->SetAlpha( -10 );
-  gradientMagnitudeSigmoidFeatureGenerator->SetBeta( 90 );
+  gradientMagnitudeSigmoidGenerator->SetSigma( 1.0 );
+  gradientMagnitudeSigmoidGenerator->SetAlpha( -100.0 );
+  gradientMagnitudeSigmoidGenerator->SetBeta( 300 );
  
   typedef itk::FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule< Dimension > SegmentationModuleType;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
