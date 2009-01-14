@@ -19,6 +19,7 @@
 
 #include "itkSinglePhaseLevelSetSegmentationModule.h"
 #include "itkLandmarkSpatialObject.h"
+#include "itkRescaleIntensityImageFilter.h"
 
 namespace itk
 {
@@ -129,6 +130,18 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
 ::PackOutputImageInOutputSpatialObject( OutputImageType * image )
 {
   typename OutputImageType::Pointer outputImage = image;
+
+  if( this->m_InvertOutputIntensities )
+    {
+    typedef itk::RescaleIntensityImageFilter< OutputImageType, OutputImageType > RescaleFilterType;
+    typename RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
+    rescaler->SetInput( outputImage );
+    rescaler->SetOutputMinimum(  4.0 ); // Note that the values must be [4:-4] here to 
+    rescaler->SetOutputMaximum( -4.0 ); // make sure that we invert and not just rescale.
+    rescaler->InPlaceOn();
+    rescaler->Update();
+    outputImage = rescaler->GetOutput();
+    }
 
   outputImage->DisconnectPipeline();
 

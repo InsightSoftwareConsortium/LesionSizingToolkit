@@ -17,7 +17,7 @@
 #ifndef __itkFastMarchingSegmentationModule_h
 #define __itkFastMarchingSegmentationModule_h
 
-#include "itkSegmentationModule.h"
+#include "itkSinglePhaseLevelSetSegmentationModule.h"
 #include "itkImageSpatialObject.h"
 #include "itkLandmarkSpatialObject.h"
 
@@ -34,20 +34,20 @@ namespace itk
  * \ingroup SpatialObjectFilters
  */
 template <unsigned int NDimension>
-class ITK_EXPORT FastMarchingSegmentationModule : public SegmentationModule<NDimension>
+class ITK_EXPORT FastMarchingSegmentationModule : public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef FastMarchingSegmentationModule        Self;
-  typedef SegmentationModule<NDimension>        Superclass;
-  typedef SmartPointer<Self>                    Pointer;
-  typedef SmartPointer<const Self>              ConstPointer;
+  typedef FastMarchingSegmentationModule                        Self;
+  typedef SinglePhaseLevelSetSegmentationModule<NDimension>     Superclass;
+  typedef SmartPointer<Self>                                    Pointer;
+  typedef SmartPointer<const Self>                              ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FastMarchingSegmentationModule, SegmentationModule);
+  itkTypeMacro(FastMarchingSegmentationModule, SinglePhaseLevelSetSegmentationModule);
 
   /** Dimension of the space */
   itkStaticConstMacro(Dimension, unsigned int, NDimension);
@@ -80,10 +80,6 @@ public:
   itkSetMacro( DistanceFromSeeds, double );
   itkGetMacro( DistanceFromSeeds, double );
 
-  /** Rescale the output to the range [-4,4]. Default ON */
-  itkSetMacro( RescaleOutput, bool );
-  itkGetMacro( RescaleOutput, bool );
-
 protected:
   FastMarchingSegmentationModule();
   virtual ~FastMarchingSegmentationModule();
@@ -93,18 +89,11 @@ protected:
    * the segmentation. */
   void  GenerateData ();
 
-  /** Set the output image as cargo of the output SpatialObject. */
-  void PackOutputImageInOutputSpatialObject( OutputImageType * outputImage );
-
   /** Extract the input set of landmark points to be used as seeds. */
   const InputSpatialObjectType * GetInternalInputLandmarks() const;
 
-  /** Extract the input feature image from the input feature spatial object. */
-  const FeatureImageType * GetInternalFeatureImage() const;
-
   double m_StoppingValue;
   double m_DistanceFromSeeds;
-  bool   m_RescaleOutput;
 
 private:
   FastMarchingSegmentationModule(const Self&); //purposely not implemented

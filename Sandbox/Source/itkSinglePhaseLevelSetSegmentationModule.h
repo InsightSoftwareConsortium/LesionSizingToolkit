@@ -89,6 +89,19 @@ public:
   itkSetMacro( MaximumNumberOfIterations, unsigned int );
   itkGetMacro( MaximumNumberOfIterations, unsigned int );
 
+  /** Invert the output image. This is a convenience method intended to make
+   * uniform the convention that segmentations are encoded with positive values
+   * in the pixels inside of the segmented object and negative values in the
+   * pixels outside of the segmented object. This is opposed to the general
+   * convention of ITK level sets, where the values inside the object are
+   * negative, and for this reason they must be inverted here. By default the
+   * intensities must be inverted, and therefore, by default this variable will
+   * be set to true. However, when combining multiple level sets in a sequence,
+   * this variable should be set to false. */
+  itkSetMacro( InvertOutputIntensities, bool );
+  itkGetMacro( InvertOutputIntensities, bool );
+  itkBooleanMacro( InvertOutputIntensities );
+  
 protected:
   SinglePhaseLevelSetSegmentationModule();
   virtual ~SinglePhaseLevelSetSegmentationModule();
@@ -117,6 +130,8 @@ private:
 
   unsigned int  m_MaximumNumberOfIterations;
   double        m_MaximumRMSError;
+
+  bool          m_InvertOutputIntensities;
 
   typedef typename InputImageType::ConstPointer  ImageConstPointer;
   mutable ImageConstPointer m_ZeroSetInputImage;

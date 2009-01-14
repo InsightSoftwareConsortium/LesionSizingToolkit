@@ -37,7 +37,6 @@ FastMarchingSegmentationModule<NDimension>
                       NumericTraits<OutputPixelType>::max() / 2.0 ) );
 
   this->m_DistanceFromSeeds = 0.0;
-  this->m_RescaleOutput = true;
   
   this->SetNumberOfRequiredInputs( 2 );
   this->SetNumberOfRequiredOutputs( 1 );
@@ -93,7 +92,7 @@ FastMarchingSegmentationModule<NDimension>
   // Progress reporting - forward events from the fast marching filter.
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( filter, m_RescaleOutput ? 0.9 : 1.0 );
+  progress->RegisterInternalFilter( filter, 0.9 );
   
   const InputSpatialObjectType * inputSeeds = this->GetInternalInputLandmarks();
   const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
@@ -116,8 +115,6 @@ FastMarchingSegmentationModule<NDimension>
     {
     featureImage->TransformPhysicalPointToIndex( points[i].GetPosition(), index );
 
-    std::cout << "Seed added at : " << index << std::endl;
-  
     NodeType node;
 
     // By starting the FastMarching front at this value,
@@ -133,26 +130,20 @@ FastMarchingSegmentationModule<NDimension>
   filter->SetTrialPoints( trialPoints );
   filter->Update();
 
+  // Rescale the values to make the output intensity fit in the expected
+  // range of [-4:4]
+  typedef itk::IntensityWindowingImageFilter<  OutputImageType, OutputImageType > WindowingFilterType;
+  typename WindowingFilterType::Pointer windowing = WindowingFilterType::New();
+  windowing->SetInput( filter->GetOutput() );
+  windowing->SetWindowMinimum( -this->m_DistanceFromSeeds );
+  windowing->SetWindowMaximum(  this->m_StoppingValue );
+  windowing->SetOutputMinimum( -4.0 );
+  windowing->SetOutputMaximum(  4.0 );
+  windowing->InPlaceOn();
+  progress->RegisterInternalFilter( windowing, 0.1 );  
+  windowing->Update();
 
-  if (this->m_RescaleOutput)
-    {
-    // Rescale the values to make the output intensity fit in the expected
-    // range of [-4:4]
-    typedef itk::IntensityWindowingImageFilter<  OutputImageType, OutputImageType > WindowingFilterType;
-    typename WindowingFilterType::Pointer windowing = WindowingFilterType::New();
-    windowing->SetInput( filter->GetOutput() );
-    windowing->SetWindowMinimum( -this->m_DistanceFromSeeds );
-    windowing->SetWindowMaximum(  this->m_StoppingValue );
-    windowing->SetOutputMinimum( -4.0 );
-    windowing->SetOutputMaximum(  4.0 );
-    progress->RegisterInternalFilter( windowing, 0.1 );  
-    windowing->Update();
-    this->PackOutputImageInOutputSpatialObject( windowing->GetOutput() );
-    }
-  else
-    {
-    this->PackOutputImageInOutputSpatialObject( filter->GetOutput() );
-    }
+  this->PackOutputImageInOutputSpatialObject( windowing->GetOutput() );
 }
 
 
@@ -169,41 +160,6 @@ FastMarchingSegmentationModule<NDimension>
     dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
 
   return inputObject;
-}
-
-
-/**
- * This method is intended to be used only by the subclasses to extract the
- * input feature image from the input feature SpatialObject.
- */
-template <unsigned int NDimension>
-const typename FastMarchingSegmentationModule<NDimension>::FeatureImageType *
-FastMarchingSegmentationModule<NDimension>
-::GetInternalFeatureImage() const
-{
-  const FeatureSpatialObjectType * featureObject =
-    dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
-
-  const FeatureImageType * featureImage = featureObject->GetImage();
-
-  return featureImage;
-}
-
-
-/**
- * This method is intended to be used only by the subclasses to insert the
- * output image as cargo of the output spatial object.
- */
-template <unsigned int NDimension>
-void
-FastMarchingSegmentationModule<NDimension>
-::PackOutputImageInOutputSpatialObject( OutputImageType * image )
-{
-  typename OutputImageType::Pointer outputImage = image;
-  outputImage->DisconnectPipeline();
-  OutputSpatialObjectType * outputObject =
-    dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
-  outputObject->SetImage( outputImage );
 }
 
 } // end namespace itk
