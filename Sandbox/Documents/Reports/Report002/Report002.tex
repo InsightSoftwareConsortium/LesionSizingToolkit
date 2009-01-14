@@ -1,0 +1,226 @@
+\documentclass{InsightArticle}
+
+\usepackage[dvips]{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  hyperref should be the last package to be loaded.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvips,
+bookmarks,
+bookmarksopen,
+backref,
+colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
+]{hyperref}
+
+\title{Computed Tomography Phantom Segmentation Results}
+
+\release{1.00}
+
+\author{Karthik Krishnan, Luis Ibanez, Wes Turner, Harvey Cline, Rick Avila}
+\authoraddress{Kitware Inc., Clifton Park, NY}
+
+\date{\today}
+
+\begin{document}
+
+\ifpdf
+\else
+   %
+   % Commands for including Graphics when using latex
+   % 
+   \DeclareGraphicsExtensions{.eps,.jpg,.gif,.tiff,.bmp,.png}
+   \DeclareGraphicsRule{.jpg}{eps}{.jpg.bb}{`convert #1 eps:-}
+   \DeclareGraphicsRule{.gif}{eps}{.gif.bb}{`convert #1 eps:-}
+   \DeclareGraphicsRule{.tiff}{eps}{.tiff.bb}{`convert #1 eps:-}
+   \DeclareGraphicsRule{.bmp}{eps}{.bmp.bb}{`convert #1 eps:-}
+   \DeclareGraphicsRule{.png}{eps}{.png.bb}{`convert #1 eps:-}
+\fi
+
+\newcommand{\composeFigureFromDatasetFeatures}[1]{
+
+\subsubsection{Feature Generator Results for Dataset #1}
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{GMSFG_Test#1.png}
+\itkcaption[Dataset #1 Gradient Magnitude Sigmoid Feature]{Dataset #1 Results of Gradient Magnitude Sigmoid Feature Generator.}
+\label{fig:Dataset#1GMSFG}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{SFG_Test#1.png}
+\itkcaption[Dataset #1 Sigmoid Feature]{Dataset #1 Results of Sigmoid Feature Generator.}
+\label{fig:Dataset#1SFG}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{LWFG_Test#1.png}
+\itkcaption[Dataset #1 Lung Wall Feature]{Dataset #1 Results of Lung Wall Feature Generator.}
+\label{fig:Dataset#1LWFG}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{MOFG_Test#1.png}
+\itkcaption[Dataset #1 Morphological Openning Feature]{Dataset #1 Results of Morphological Openning Feature Generator.}
+\label{fig:Dataset#1MOFG}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{SVFG_Test#1.png}
+\itkcaption[Dataset #1 Sato Vesselness Feature]{Dataset #1 Results of Sato Vesselness Feature Generator.}
+\label{fig:Dataset#1SVFG}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{SVSFG_Test#1.png}
+\itkcaption[Dataset #1 Sato Vesselness Sigmoid Feature]{Dataset #1 Results of Sato Vesselness Sigmoid Feature Generator.}
+\label{fig:Dataset#1SVSFG}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{SLSFG_Test#1.png}
+\itkcaption[Dataset #1 Sato Local Structure Feature]{Dataset #1 Results of Sato Local Structure Feature Generator.}
+\label{fig:Dataset#1SLSFG}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{DSFG_Test#1.png}
+\itkcaption[Dataset #1 Descoteaux Sheetness Feature]{Dataset #1 Results of Descoteaux Sheetness Feature Generator.}
+\label{fig:Dataset#1DSFG}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{FTFG_Test#1.png}
+\itkcaption[Dataset #1 Frangi Tubularness Feature]{Dataset #1 Results of Frangi Tubularness Feature Generator.}
+\label{fig:Dataset#1FTFG}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{SCRN_AFG_#1.png}
+\itkcaption[Dataset #1 Features]{Dataset #1 Results of Feature Generators.}
+\label{fig:Dataset#1Features}
+\end{figure}
+\clearpage
+}
+
+\newcommand{\composeFigureFromDatasetSegmentations}[1]{
+
+\subsubsection{Segmentation Results for Dataset #1}
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{LSMT3_Test#1.png}
+\itkcaption[Dataset #1 Segmentation Method 3]{Dataset #1 Results of Segmentation Method 3.}
+\label{fig:Dataset#1LSMT3}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{LSMT4_Test#1.png}
+\itkcaption[Dataset #1 Segmentation Method 4]{Dataset #1 Results of Segmentation Method 4.}
+\label{fig:Dataset#1LSMT4}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{LSMT5_Test#1.png}
+\itkcaption[Dataset #1 Segmentation Method 5]{Dataset #1 Results of Segmentation Method 5.}
+\label{fig:Dataset#1LSMT5}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{LSMT6_Test#1.png}
+\itkcaption[Dataset #1 Segmentation Method 6]{Dataset #1 Results of Segmentation Method 6.}
+\label{fig:Dataset#1LSMT6}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{LSMT7_Test#1.png}
+\itkcaption[Dataset #1 Segmentation Method 7]{Dataset #1 Results of Segmentation Method 7.}
+\label{fig:Dataset#1LSMT7}
+\end{figure}
+\clearpage
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{SCRN_ALSM_#1.png}
+\itkcaption[Dataset #1 Segmentations]{Dataset #1 Results of Segmentations.}
+\label{fig:Dataset#1Segmentations}
+\end{figure}
+\clearpage
+}
+
+\newcommand{\insertResultsForDataset}[1]{
+\subsection{Dataset #1}
+\composeFigureFromDatasetFeatures{#1}
+\composeFigureFromDatasetSegmentations{#1}
+}
+
+\maketitle
+
+\ifhtml
+\chapter*{Front Matter\label{front}}
+\fi
+
+
+\begin{abstract}
+\noindent
+This document summarizes the results of lung lesion segmentation methods
+applied to chest CT scans datasets. In particular, this report focuses on the
+behavior of the segmentation method when applied to a region of interest around
+a specific lesion.
+
+The figures presented in this report are generated by running the testing suite
+over the dataset collection, and therefore should be reproducible in any
+computer that has access to that collection.
+\end{abstract}
+
+\tableofcontents
+
+\section{Introduction}
+
+This report presents the results of applying the algorithm to a collection of
+datasets. The results are presented both as a visual rendering of the resulting
+segmentations and by providing quantitative estimations of lesion volume.
+
+\section{Algorithm Description}
+
+\section{Segmentation Results Visualizations}
+
+\insertResultsForDataset{SL0074}
+\insertResultsForDataset{SM0052}
+\insertResultsForDataset{SM0054}
+
+\small
+\listoffigures
+\listoftables
+\normalsize
+
+\end{document}
+
