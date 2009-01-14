@@ -38,87 +38,88 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
    \DeclareGraphicsRule{.png}{eps}{.png.bb}{`convert #1 eps:-}
 \fi
 
-\newcommand{\composeFigureFromDatasetFeatures}[1]{
 
-\subsubsection{Feature Generator Results for Dataset #1}
+\newcommand{\composeFigureFromDatasetFeatures}[2]{
+
+\subsubsection{Feature Generator Results for Dataset #1 #2}
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{GMSFG_Test#1.png}
-\itkcaption[Dataset #1 Gradient Magnitude Sigmoid Feature]{Dataset #1 Results of Gradient Magnitude Sigmoid Feature Generator.}
-\label{fig:Dataset#1GMSFG}
+\includegraphics[width=1.0\textwidth]{GMSFG_Test#1_#2.png}
+\itkcaption[Dataset #1 Gradient Magnitude Sigmoid Feature]{Dataset #1 #2 Results of Gradient Magnitude Sigmoid Feature Generator.}
+\label{fig:Dataset#1#2GMSFG}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{SFG_Test#1.png}
-\itkcaption[Dataset #1 Sigmoid Feature]{Dataset #1 Results of Sigmoid Feature Generator.}
-\label{fig:Dataset#1SFG}
+\includegraphics[width=1.0\textwidth]{SFG_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Sigmoid Feature]{Dataset #1 #2 Results of Sigmoid Feature Generator.}
+\label{fig:Dataset#1#2SFG}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{LWFG_Test#1.png}
-\itkcaption[Dataset #1 Lung Wall Feature]{Dataset #1 Results of Lung Wall Feature Generator.}
-\label{fig:Dataset#1LWFG}
+\includegraphics[width=1.0\textwidth]{LWFG_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Lung Wall Feature]{Dataset #1 #2 Results of Lung Wall Feature Generator.}
+\label{fig:Dataset#1#2LWFG}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{MOFG_Test#1.png}
-\itkcaption[Dataset #1 Morphological Openning Feature]{Dataset #1 Results of Morphological Openning Feature Generator.}
-\label{fig:Dataset#1MOFG}
+\includegraphics[width=1.0\textwidth]{MOFG_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Morphological Openning Feature]{Dataset #1 #2 Results of Morphological Openning Feature Generator.}
+\label{fig:Dataset#1#2MOFG}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{SVFG_Test#1.png}
-\itkcaption[Dataset #1 Sato Vesselness Feature]{Dataset #1 Results of Sato Vesselness Feature Generator.}
-\label{fig:Dataset#1SVFG}
+\includegraphics[width=1.0\textwidth]{SVFG_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Sato Vesselness Feature]{Dataset #1 #2 Results of Sato Vesselness Feature Generator.}
+\label{fig:Dataset#1#2SVFG}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{SVSFG_Test#1.png}
-\itkcaption[Dataset #1 Sato Vesselness Sigmoid Feature]{Dataset #1 Results of Sato Vesselness Sigmoid Feature Generator.}
-\label{fig:Dataset#1SVSFG}
+\includegraphics[width=1.0\textwidth]{SVSFG_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Sato Vesselness Sigmoid Feature]{Dataset #1 #2 Results of Sato Vesselness Sigmoid Feature Generator.}
+\label{fig:Dataset#1#2SVSFG}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{SLSFG_Test#1.png}
-\itkcaption[Dataset #1 Sato Local Structure Feature]{Dataset #1 Results of Sato Local Structure Feature Generator.}
-\label{fig:Dataset#1SLSFG}
+\includegraphics[width=1.0\textwidth]{SLSFG_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Sato Local Structure Feature]{Dataset #1 #2 Results of Sato Local Structure Feature Generator.}
+\label{fig:Dataset#1#2SLSFG}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{DSFG_Test#1.png}
-\itkcaption[Dataset #1 Descoteaux Sheetness Feature]{Dataset #1 Results of Descoteaux Sheetness Feature Generator.}
-\label{fig:Dataset#1DSFG}
+\includegraphics[width=1.0\textwidth]{DSFG_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Descoteaux Sheetness Feature]{Dataset #1 #2 Results of Descoteaux Sheetness Feature Generator.}
+\label{fig:Dataset#1#2DSFG}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{FTFG_Test#1.png}
-\itkcaption[Dataset #1 Frangi Tubularness Feature]{Dataset #1 Results of Frangi Tubularness Feature Generator.}
-\label{fig:Dataset#1FTFG}
+\includegraphics[width=1.0\textwidth]{FTFG_Test#1_#2.png}
+\itkcaption[Dataset #1 #2 Frangi Tubularness Feature]{Dataset #1 #2 Results of Frangi Tubularness Feature Generator.}
+\label{fig:Dataset#1#2FTFG}
 \end{figure}
 \clearpage
 
 \begin{figure}
 \center
-\includegraphics[width=1.0\textwidth]{SCRN_AFG_#1.png}
-\itkcaption[Dataset #1 Features]{Dataset #1 Results of Feature Generators.}
-\label{fig:Dataset#1Features}
+\includegraphics[width=1.0\textwidth]{SCRN_AFG_#1_#2.png}
+\itkcaption[Dataset #1 #2 Features]{Dataset #1 #2 Results of Feature Generators.}
+\label{fig:Dataset#1#2Features}
 \end{figure}
 \clearpage
 }
@@ -176,10 +177,10 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 \clearpage
 }
 
-\newcommand{\insertResultsForDataset}[1]{
-\subsection{Dataset #1}
-\composeFigureFromDatasetFeatures{#1}
-\composeFigureFromDatasetSegmentations{#1}
+\newcommand{\insertResultsForDataset}[2]{
+\subsection{Dataset #1 #2}
+\composeFigureFromDatasetFeatures{#1}{#2}
+%\composeFigureFromDatasetSegmentations{#1}{#2}
 }
 
 \maketitle
@@ -213,9 +214,7 @@ segmentations and by providing quantitative estimations of lesion volume.
 
 \section{Segmentation Results Visualizations}
 
-\insertResultsForDataset{SL0074}
-\insertResultsForDataset{SM0052}
-\insertResultsForDataset{SM0054}
+\insertResultsForDataset{NIST003}{001}
 
 \small
 \listoffigures

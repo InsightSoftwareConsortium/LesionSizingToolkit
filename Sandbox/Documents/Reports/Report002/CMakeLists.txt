@@ -24,7 +24,7 @@ SET(REPORT_SRCS
 #
 #  Get the list of figures generated during testing
 #
-FILE(GLOB REPORT_GENERATED_FIGURES "${LesionSizingKitSandbox_BINARY_DIR}/Testing/Temporary/*.png")
+FILE(GLOB REPORT_GENERATED_FIGURES "${LesionSizingKitSandbox_BINARY_DIR}/Testing/Temporary/*NIST*.png")
 
 SET(PROJECT_REPORT_SOURCE_DIR "${PROJECT_SOURCE_DIR}")
 SET(PROJECT_REPORT_BINARY_DIR "${PROJECT_BINARY_DIR}")
