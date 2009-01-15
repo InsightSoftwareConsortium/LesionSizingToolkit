@@ -199,6 +199,27 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 \composeFigureFromDatasetSegmentations{#1}{#2}
 }
 
+\newcommand{\insertResultsForStack}[1]{
+\insertResultsForDataset{#1}{001}
+\insertResultsForDataset{#1}{002}
+\insertResultsForDataset{#1}{003}
+\insertResultsForDataset{#1}{004}
+\insertResultsForDataset{#1}{005}
+\insertResultsForDataset{#1}{006}
+\insertResultsForDataset{#1}{007}
+\insertResultsForDataset{#1}{008}
+\insertResultsForDataset{#1}{009}
+\insertResultsForDataset{#1}{010}
+\insertResultsForDataset{#1}{011}
+\insertResultsForDataset{#1}{012}
+\insertResultsForDataset{#1}{013}
+\insertResultsForDataset{#1}{014}
+\insertResultsForDataset{#1}{015}
+\insertResultsForDataset{#1}{016}
+\insertResultsForDataset{#1}{017}
+\insertResultsForDataset{#1}{018}
+}
+
 \maketitle
 
 \ifhtml
@@ -263,7 +284,7 @@ in mind that the following sphere diameters where present in the phantom
 \item 7.938 mm
 \end{itemize}
 
-the types of beads are paired in two types of stacks.
+The types of beads are paired in two types of stacks.
 
 \begin{itemize}
 \item Stack A: contains beads of diameters
@@ -281,42 +302,25 @@ the types of beads are paired in two types of stacks.
 When evaluating precision of the segmentations we will verify that every bead
 is compared to the appropriate base value from the list above.
 
+Figure~\ref{fig:GlobalView} shows a slice of the phantom, where the 14 plastic
+boxes storing the LEGO stacks are visible.
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{NIST_A.png}
+\itkcaption[Global View of the Phantom]{Global View of the NIST Phantom}
+\label{fig:GlobalView}
+\end{figure}
+\clearpage
+
 \section{Algorithm Description}
 
 \section{Segmentation Results Visualizations}
 
-\insertResultsForDataset{NIST001}{001}
-\insertResultsForDataset{NIST001}{002}
-\insertResultsForDataset{NIST001}{003}
-%\insertResultsForDataset{NIST001}{004}
-%\insertResultsForDataset{NIST001}{005}
-%\insertResultsForDataset{NIST001}{006}
-
-\insertResultsForDataset{NIST002}{001}
-%\insertResultsForDataset{NIST002}{002}
-%\insertResultsForDataset{NIST002}{003}
-%\insertResultsForDataset{NIST002}{004}
-%\insertResultsForDataset{NIST002}{005}
-%\insertResultsForDataset{NIST002}{006}
-
-\insertResultsForDataset{NIST003}{001}
-\insertResultsForDataset{NIST003}{002}
-\insertResultsForDataset{NIST003}{003}
-\insertResultsForDataset{NIST003}{004}
-\insertResultsForDataset{NIST003}{005}
-\insertResultsForDataset{NIST003}{006}
-%\insertResultsForDataset{NIST003}{007}
-%\insertResultsForDataset{NIST003}{008}
-%\insertResultsForDataset{NIST003}{009}
-%\insertResultsForDataset{NIST003}{010}
-%\insertResultsForDataset{NIST003}{011}
-%\insertResultsForDataset{NIST003}{012}
-%\insertResultsForDataset{NIST003}{013}
-%\insertResultsForDataset{NIST003}{014}
-%\insertResultsForDataset{NIST003}{015}
-%\insertResultsForDataset{NIST003}{016}
-%\insertResultsForDataset{NIST003}{017}
-%\insertResultsForDataset{NIST003}{018}
+\insertResultsForStack{NIST001}
+%\insertResultsForStack{NIST002}
+%\insertResultsForStack{NIST003}
+%\insertResultsForStack{NIST004}
 
 \small
 \listoffigures
