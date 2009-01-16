@@ -91,6 +91,7 @@ int main( int argc, char * argv [] )
   lungWallGenerator->SetInput( inputObject );
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
+  cannyEdgesGenerator->SetInput( inputObject );
 
   lungWallGenerator->SetLungThreshold( -400 );
 
@@ -99,11 +100,10 @@ int main( int argc, char * argv [] )
   vesselnessGenerator->SetAlpha2( 2.0 );
   vesselnessGenerator->SetSigmoidAlpha( -10.0 );
   vesselnessGenerator->SetSigmoidBeta( 80.0 );
- 
-  sigmoidGenerator->SetAlpha(   1.0  );
+
+  sigmoidGenerator->SetAlpha(   1.0 );
   sigmoidGenerator->SetBeta( -200.0 );
- 
-  cannyEdgesGenerator->SetInput( inputObject );
+
   cannyEdgesGenerator->SetSigma( 1.0 );
   cannyEdgesGenerator->SetUpperThreshold( 150.0 );
   cannyEdgesGenerator->SetLowerThreshold( 75.0 );
@@ -125,7 +125,6 @@ int main( int argc, char * argv [] )
   writer->SetFileName( argv[2] );
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
-
 
   try 
     {
