@@ -117,6 +117,9 @@ int main( int argc, char * argv [] )
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
   vesselnessGenerator->SetAlpha2( 2.0 );
+  vesselnessGenerator->SetSigmoidAlpha( -10.0 );
+  vesselnessGenerator->SetSigmoidBeta( 80.0 );
+  vesselnessGenerator->SetAlpha2( 2.0 );
   sigmoidGenerator->SetAlpha(  1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
   cannyEdgesGenerator->SetSigma( 1.0 );
