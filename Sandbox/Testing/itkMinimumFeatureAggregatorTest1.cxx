@@ -103,6 +103,7 @@ int main( int argc, char * argv [] )
   sigmoidGenerator->SetAlpha(   1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
  
+  cannyEdgesGenerator->SetInput( inputObject );
   cannyEdgesGenerator->SetSigma( 1.0 );
   cannyEdgesGenerator->SetUpperThreshold( 150.0 );
   cannyEdgesGenerator->SetLowerThreshold( 75.0 );
