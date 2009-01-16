@@ -89,7 +89,7 @@ ADD_TEST(SFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
   ${DATASET_ROI}
   ${TEMP}/SFG_Test${DATASET_ID}.mha
-   100.0 # Alpha
+     1.0 # Alpha
   -200.0 # Beta: Lung Threshold
   )
 
