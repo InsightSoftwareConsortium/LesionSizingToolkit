@@ -25,8 +25,8 @@
 #include "itkImageMaskSpatialObject.h"
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
+#include "itkCannyEdgesFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
-#include "itkGradientMagnitudeSigmoidFeatureGenerator.h"
 #include "itkFastMarchingSegmentationModule.h"
 #include "itkMinimumFeatureAggregator.h"
 
@@ -83,22 +83,20 @@ int main( int argc, char * argv [] )
   typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
  
-  typedef itk::GradientMagnitudeSigmoidFeatureGenerator< Dimension > GradientMagnitudeSigmoidGeneratorType;
-  GradientMagnitudeSigmoidGeneratorType::Pointer gradientMagnitudeSigmoidGenerator = 
-    GradientMagnitudeSigmoidGeneratorType::New();
-
+  typedef itk::CannyEdgesFeatureGenerator< Dimension >   CannyEdgesFeatureGeneratorType;
+  CannyEdgesFeatureGeneratorType::Pointer  cannyEdgesGenerator = CannyEdgesFeatureGeneratorType::New();
+ 
   typedef itk::MinimumFeatureAggregator< Dimension >   FeatureAggregatorType;
   FeatureAggregatorType::Pointer featureAggregator = FeatureAggregatorType::New();
 
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
-  featureAggregator->AddFeatureGenerator( gradientMagnitudeSigmoidGenerator );
+  featureAggregator->AddFeatureGenerator( cannyEdgesGenerator );
 
   lesionSegmentationMethod->AddFeatureGenerator( featureAggregator );
 
   typedef MethodType::SpatialObjectType    SpatialObjectType;
-
   typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -111,20 +109,22 @@ int main( int argc, char * argv [] )
   lungWallGenerator->SetInput( inputObject );
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
-  gradientMagnitudeSigmoidGenerator->SetInput( inputObject );
+  cannyEdgesGenerator->SetInput( inputObject );
 
   lungWallGenerator->SetLungThreshold( -400 );
 
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
   vesselnessGenerator->SetAlpha2( 2.0 );
- 
-  sigmoidGenerator->SetAlpha(  1.0  );
-  sigmoidGenerator->SetBeta( -200.0 );
- 
-  gradientMagnitudeSigmoidGenerator->SetSigma( 1.0 );
-  gradientMagnitudeSigmoidGenerator->SetAlpha( -100.0 );
-  gradientMagnitudeSigmoidGenerator->SetBeta( 300.0 );
+  vesselnessGenerator->SetSigmoidAlpha( -10.0 );
+  vesselnessGenerator->SetSigmoidBeta( 80.0 );
+
+  sigmoidGenerator->SetAlpha(   1.0 );
+  sigmoidGenerator->SetBeta(  -200.0 );
+
+  cannyEdgesGenerator->SetSigma( 1.0 );
+  cannyEdgesGenerator->SetUpperThreshold( 150.0 );
+  cannyEdgesGenerator->SetLowerThreshold( 75.0 );
 
   typedef itk::FastMarchingSegmentationModule< Dimension >   SegmentationModuleType;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
