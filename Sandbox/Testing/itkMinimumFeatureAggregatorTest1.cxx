@@ -19,6 +19,7 @@
 #include "itkImageFileWriter.h"
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
+#include "itkCannyEdgesFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
 
 
@@ -28,8 +29,7 @@ int main( int argc, char * argv [] )
   if( argc < 3 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " landmarksFile inputImage outputImage ";
-    std::cerr << " [lowerThreshold upperThreshold] " << std::endl;
+    std::cerr << argv[0] << " inputImage outputImage ";
     return EXIT_FAILURE;
     }
 
@@ -42,7 +42,7 @@ int main( int argc, char * argv [] )
   typedef itk::ImageFileReader< InputImageType > InputImageReaderType;
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
 
-  inputImageReader->SetFileName( argv[2] );
+  inputImageReader->SetFileName( argv[1] );
 
   try 
     {
@@ -68,9 +68,13 @@ int main( int argc, char * argv [] )
   typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
  
+  typedef itk::CannyEdgesFeatureGenerator< Dimension >   CannyEdgesFeatureGeneratorType;
+  CannyEdgesFeatureGeneratorType::Pointer  cannyEdgesGenerator = CannyEdgesFeatureGeneratorType::New();
+ 
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
+  featureAggregator->AddFeatureGenerator( cannyEdgesGenerator );
 
 
   typedef AggregatorType::SpatialObjectType    SpatialObjectType;
@@ -93,10 +97,15 @@ int main( int argc, char * argv [] )
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
   vesselnessGenerator->SetAlpha2( 2.0 );
+  vesselnessGenerator->SetSigmoidAlpha( -10.0 );
+  vesselnessGenerator->SetSigmoidBeta( 80.0 );
  
-  sigmoidGenerator->SetAlpha(  1.0  );
+  sigmoidGenerator->SetAlpha(   1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
  
+  cannyEdgesGenerator->SetSigma( 1.0 );
+  cannyEdgesGenerator->SetUpperThreshold( 150.0 );
+  cannyEdgesGenerator->SetLowerThreshold( 75.0 );
 
   featureAggregator->Update();
 
@@ -112,7 +121,7 @@ int main( int argc, char * argv [] )
   typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
 
-  writer->SetFileName( argv[3] );
+  writer->SetFileName( argv[2] );
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 

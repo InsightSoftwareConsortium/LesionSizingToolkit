@@ -524,20 +524,14 @@ ADD_TEST(itkFeatureAggregatorTest1
 
 ADD_TEST(itkMinimumFeatureAggregatorTest1 
   ${CXX_TEST_PATH}/itkMinimumFeatureAggregatorTest1
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/MinimumFeatureAggregatorTest1_1.mha
-  0.5
-  1.0
   )
 
 ADD_TEST(itkMinimumFeatureAggregatorTest2 
   ${CXX_TEST_PATH}/itkMinimumFeatureAggregatorTest2
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/MinimumFeatureAggregatorTest2_1.mha
-  0.5
-  1.0
   )
 
 ADD_TEST(itkMaximumFeatureAggregatorTest1 
