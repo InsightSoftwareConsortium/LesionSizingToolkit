@@ -93,10 +93,12 @@ int main( int argc, char * argv [] )
  
   typedef itk::MinimumFeatureAggregator< Dimension >   FeatureAggregatorType;
   FeatureAggregatorType::Pointer featureAggregator = FeatureAggregatorType::New();
+
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
-  featureAggregator->AddFeatureGenerator( sigmoidGenerator );
   featureAggregator->AddFeatureGenerator( cannyEdgesGenerator );
+  featureAggregator->AddFeatureGenerator( sigmoidGenerator );
+
   lesionSegmentationMethod->AddFeatureGenerator( featureAggregator );
 
   typedef MethodType::SpatialObjectType    SpatialObjectType;
@@ -113,19 +115,22 @@ int main( int argc, char * argv [] )
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
   cannyEdgesGenerator->SetInput( inputObject );
+
   lungWallGenerator->SetLungThreshold( -400 );
+
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
   vesselnessGenerator->SetAlpha2( 2.0 );
   vesselnessGenerator->SetSigmoidAlpha( -10.0 );
   vesselnessGenerator->SetSigmoidBeta( 80.0 );
-  vesselnessGenerator->SetAlpha2( 2.0 );
-  sigmoidGenerator->SetAlpha(  1.0  );
-  sigmoidGenerator->SetBeta( -200.0 );
+
+  sigmoidGenerator->SetAlpha(   1.0 );
+  sigmoidGenerator->SetBeta(  -200.0 );
+
   cannyEdgesGenerator->SetSigma( 1.0 );
   cannyEdgesGenerator->SetUpperThreshold( 150.0 );
   cannyEdgesGenerator->SetLowerThreshold( 75.0 );
- 
+
   typedef itk::FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule< Dimension > SegmentationModuleType;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
   segmentationModule->SetMaximumRMSError( argc > 4 ? atof(argv[4]) : 0.0002 );
@@ -145,6 +150,7 @@ int main( int argc, char * argv [] )
   landmarksReader->Update();
 
   lesionSegmentationMethod->SetInitialSegmentation( landmarksReader->GetOutput() );
+
   lesionSegmentationMethod->Update();
 
   
@@ -156,13 +162,16 @@ int main( int argc, char * argv [] )
 
   OutputSpatialObjectType::ConstPointer outputObject = 
     dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
+
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
   typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
+
   writer->SetFileName( argv[3] );
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
+
 
   try 
     {
