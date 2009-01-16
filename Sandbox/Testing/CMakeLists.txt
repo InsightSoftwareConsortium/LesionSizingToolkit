@@ -6,12 +6,13 @@ SET(TEMP ${LesionSizingKitSandbox_BINARY_DIR}/Testing/Temporary)
 INCLUDE(CollectionTestMacro.cmake)
 
 FIND_PATH(TEST_CORNELL_DATA_ROOT README.txt DOC "Directory with data from the Cornell ELCAP database")
-
 FIND_PATH(TEST_NIST_DATA_ROOT  LevineJResNIST2008b.pdf DOC "Directory with data from the NIST Phantom database")
+FIND_PATH(TEST_FDA_DATA_ROOT  phantom_diameter_measures.xls DOC "Directory with data from the FDA Phantom database")
 
 OPTION(TEST_CORNELL_COLLECTION "Run tests in the collection of datasets from Cornell" OFF)
-
 OPTION(TEST_NIST_PHANTOM_COLLECTION "Run tests in the collection of phantom datasets from NIST" OFF)
+OPTION(TEST_FDA_PHANTOM_COLLECTION "Run tests in the collection of phantom datasets from FDA" OFF)
+
 
 ADD_EXECUTABLE(itkSystemInformationSandbox itkSystemInformation.cxx )
 TARGET_LINK_LIBRARIES(itkSystemInformationSandbox LesionSizingSandbox)
@@ -612,4 +613,10 @@ IF(TEST_NIST_PHANTOM_COLLECTION)
     INCLUDE(NISTPhantomCollectionTests.cmake)
   ENDIF(TEST_NIST_DATA_ROOT)
 ENDIF(TEST_NIST_PHANTOM_COLLECTION)
+
+IF(TEST_FDA_PHANTOM_COLLECTION)
+  IF(TEST_FDA_DATA_ROOT)
+    INCLUDE(FDAPhantomCollectionTests.cmake)
+  ENDIF(TEST_FDA_DATA_ROOT)
+ENDIF(TEST_FDA_PHANTOM_COLLECTION)
 
