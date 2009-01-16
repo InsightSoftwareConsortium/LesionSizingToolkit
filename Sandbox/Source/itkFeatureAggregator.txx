@@ -32,7 +32,7 @@ template <unsigned int NDimension>
 FeatureAggregator<NDimension>
 ::FeatureAggregator()
 {
-  this->SetNumberOfRequiredOutputs( 1 );  // for the Transform
+  this->SetNumberOfRequiredOutputs( 1 );
 
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
