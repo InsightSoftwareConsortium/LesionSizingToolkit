@@ -13,9 +13,10 @@ COMPUTE_SEGMENTATIONS( ${DATASET_ID} 001 )
 ENDMACRO(TEST_FDA_PHANTOM_DATASET)
 
 
+#  "raida/mag4/phantom_studies/Yamamoto-018/25ma1/3632/6591"
 TEST_FDA_PHANTOM_DATASET(FDA6591Full FDA6591 
-  "raida/mag4/phantom_studies/Yamamoto-018/25ma1/3632/6591"
-  100 170 180 
-  100 120  64
+  "6591"
+  370 250 320 
+   60  50  70
   )
 
