@@ -93,6 +93,14 @@ ADD_TEST(SFG_${DATASET_ID}
   -200.0 # Beta: Lung Threshold
   )
 
+# Binary Threshold Feature Generator
+ADD_TEST(BTFG_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkBinaryThresholdFeatureGeneratorTest1
+  ${DATASET_ROI}
+  ${TEMP}/BTFG_Test${DATASET_ID}.mha
+  -200.0 # Beta: Lung Threshold
+  )
+
 # Lung Wall Feature Generator
 ADD_TEST(LWFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1

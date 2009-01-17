@@ -27,6 +27,7 @@
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkCannyEdgesFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
+#include "itkBinaryThresholdFeatureGenerator.h"
 #include "itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule.h"
 #include "itkMinimumFeatureAggregator.h"
 
@@ -88,6 +89,9 @@ int main( int argc, char * argv [] )
   typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
  
+  typedef itk::BinaryThresholdFeatureGenerator< Dimension >   BinaryThresholdFeatureGeneratorType;
+  BinaryThresholdFeatureGeneratorType::Pointer  thresholdGenerator = BinaryThresholdFeatureGeneratorType::New();
+ 
   typedef itk::CannyEdgesFeatureGenerator< Dimension >   CannyEdgesFeatureGeneratorType;
   CannyEdgesFeatureGeneratorType::Pointer  cannyEdgesGenerator = CannyEdgesFeatureGeneratorType::New();
  
@@ -97,7 +101,8 @@ int main( int argc, char * argv [] )
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( cannyEdgesGenerator );
-  featureAggregator->AddFeatureGenerator( sigmoidGenerator );
+//  featureAggregator->AddFeatureGenerator( sigmoidGenerator );
+  featureAggregator->AddFeatureGenerator( thresholdGenerator );
 
   lesionSegmentationMethod->AddFeatureGenerator( featureAggregator );
 
@@ -114,6 +119,7 @@ int main( int argc, char * argv [] )
   lungWallGenerator->SetInput( inputObject );
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
+  thresholdGenerator->SetInput( inputObject );
   cannyEdgesGenerator->SetInput( inputObject );
 
   lungWallGenerator->SetLungThreshold( -400 );
@@ -126,6 +132,8 @@ int main( int argc, char * argv [] )
 
   sigmoidGenerator->SetAlpha(   1.0 );
   sigmoidGenerator->SetBeta(  -200.0 );
+
+  thresholdGenerator->SetThreshold(  -200.0 );
 
   cannyEdgesGenerator->SetSigma( 1.0 );
   cannyEdgesGenerator->SetUpperThreshold( 150.0 );

@@ -197,6 +197,9 @@ TARGET_LINK_LIBRARIES(itkGradientMagnitudeSigmoidFeatureGeneratorTest1 LesionSiz
 ADD_EXECUTABLE(itkSigmoidFeatureGeneratorTest1 itkSigmoidFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkSigmoidFeatureGeneratorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkBinaryThresholdFeatureGeneratorTest1 itkBinaryThresholdFeatureGeneratorTest1.cxx )
+TARGET_LINK_LIBRARIES(itkBinaryThresholdFeatureGeneratorTest1 LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkLungWallFeatureGeneratorTest1 itkLungWallFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkLungWallFeatureGeneratorTest1 LesionSizingSandbox)
 
@@ -335,6 +338,13 @@ ADD_TEST(itkSigmoidFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/SigmoidFeatureGeneratorTest1_1.mha
   1.0
+  -700.0 
+  )
+
+ADD_TEST(itkBinaryThresholdFeatureGeneratorTest1 
+  ${CXX_TEST_PATH}/itkBinaryThresholdFeatureGeneratorTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/BinaryThresholdGeneratorTest1_1.mha
   -700.0 
   )
 
