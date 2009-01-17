@@ -89,6 +89,7 @@ FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>
   m_GeodesicActiveContourLevelSetModule->SetMaximumNumberOfIterations( this->GetMaximumNumberOfIterations() );
   m_GeodesicActiveContourLevelSetModule->SetPropagationScaling( this->GetPropagationScaling() );
   m_GeodesicActiveContourLevelSetModule->SetCurvatureScaling( this->GetCurvatureScaling() );
+  m_GeodesicActiveContourLevelSetModule->SetAdvectionScaling( this->GetAdvectionScaling() );
   m_GeodesicActiveContourLevelSetModule->Update();
 
   this->PackOutputImageInOutputSpatialObject( const_cast< OutputImageType * >(
