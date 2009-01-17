@@ -27,7 +27,6 @@
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkCannyEdgesFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
-#include "itkBinaryThresholdFeatureGenerator.h"
 #include "itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule.h"
 #include "itkMinimumFeatureAggregator.h"
 
@@ -89,9 +88,6 @@ int main( int argc, char * argv [] )
   typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
  
-  typedef itk::BinaryThresholdFeatureGenerator< Dimension >   BinaryThresholdFeatureGeneratorType;
-  BinaryThresholdFeatureGeneratorType::Pointer  thresholdGenerator = BinaryThresholdFeatureGeneratorType::New();
- 
   typedef itk::CannyEdgesFeatureGenerator< Dimension >   CannyEdgesFeatureGeneratorType;
   CannyEdgesFeatureGeneratorType::Pointer  cannyEdgesGenerator = CannyEdgesFeatureGeneratorType::New();
  
@@ -101,8 +97,7 @@ int main( int argc, char * argv [] )
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( cannyEdgesGenerator );
-//  featureAggregator->AddFeatureGenerator( sigmoidGenerator );
-  featureAggregator->AddFeatureGenerator( thresholdGenerator );
+  featureAggregator->AddFeatureGenerator( sigmoidGenerator );
 
   lesionSegmentationMethod->AddFeatureGenerator( featureAggregator );
 
@@ -119,7 +114,6 @@ int main( int argc, char * argv [] )
   lungWallGenerator->SetInput( inputObject );
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
-  thresholdGenerator->SetInput( inputObject );
   cannyEdgesGenerator->SetInput( inputObject );
 
   lungWallGenerator->SetLungThreshold( -400 );
@@ -130,10 +124,8 @@ int main( int argc, char * argv [] )
   vesselnessGenerator->SetSigmoidAlpha( -10.0 );
   vesselnessGenerator->SetSigmoidBeta( 80.0 );
 
-  sigmoidGenerator->SetAlpha(   1.0 );
+  sigmoidGenerator->SetAlpha(  100.0 );
   sigmoidGenerator->SetBeta(  -200.0 );
-
-  thresholdGenerator->SetThreshold(  -200.0 );
 
   cannyEdgesGenerator->SetSigma( 1.0 );
   cannyEdgesGenerator->SetUpperThreshold( 150.0 );
@@ -144,8 +136,8 @@ int main( int argc, char * argv [] )
   segmentationModule->SetMaximumRMSError( argc > 4 ? atof(argv[4]) : 0.0002 );
   segmentationModule->SetMaximumNumberOfIterations( argc > 5 ? atoi(argv[5]) : 300 );
   segmentationModule->SetCurvatureScaling( argc > 6 ? atof(argv[6]) : 1.0 );
-  segmentationModule->SetPropagationScaling( argc > 7 ? atof(argv[7]) : 10.0 );
-  segmentationModule->SetAdvectionScaling( argc > 8 ? atof(argv[8]) : 50.0 );
+  segmentationModule->SetPropagationScaling( argc > 7 ? atof(argv[7]) : 500.0 );
+  segmentationModule->SetAdvectionScaling( argc > 8 ? atof(argv[8]) : 0.0 );
   segmentationModule->SetStoppingValue( argc > 9 ? atof(argv[9]) : 5.0 );
   segmentationModule->SetDistanceFromSeeds( argc > 10 ? atof(argv[10]) : 2.0 );
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
