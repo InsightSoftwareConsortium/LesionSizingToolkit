@@ -33,7 +33,7 @@ BinaryThresholdFeatureGenerator<NDimension>
   this->SetNumberOfRequiredInputs( 1 );
   this->SetNumberOfRequiredOutputs( 1 );
 
-  this->m_BinaryThresholdFilter = SigmoidFilterType::New();
+  this->m_BinaryThresholdFilter = BinaryThresholdFilterType::New();
 
   this->m_BinaryThresholdFilter->ReleaseDataFlagOn();
 
@@ -115,8 +115,8 @@ BinaryThresholdFeatureGenerator<NDimension>
   this->m_BinaryThresholdFilter->SetInput( inputImage );
   this->m_BinaryThresholdFilter->SetLowerThreshold( this->m_Threshold );
   this->m_BinaryThresholdFilter->SetUpperThreshold( itk::NumericTraits< OutputPixelType >::max() );
-  this->m_BinaryThresholdFilter->SetOutputMinimum( 0.0 );
-  this->m_BinaryThresholdFilter->SetOutputMaximum( 1.0 );
+  this->m_BinaryThresholdFilter->SetOutsideValue( 0.0 );
+  this->m_BinaryThresholdFilter->SetInsideValue( 1.0 );
 
   this->m_BinaryThresholdFilter->Update();
 
