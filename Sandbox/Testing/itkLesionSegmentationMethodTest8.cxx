@@ -125,9 +125,9 @@ int main( int argc, char * argv [] )
   vesselnessGenerator->SetSigmoidBeta( 80.0 );
 
   sigmoidGenerator->SetAlpha(  100.0 );
-  sigmoidGenerator->SetBeta(  -200.0 );
+  sigmoidGenerator->SetBeta(  -500.0 );
 
-  cannyEdgesGenerator->SetSigma( 1.0 );
+  cannyEdgesGenerator->SetSigma( inputImage->GetSpacing()[2] );
   cannyEdgesGenerator->SetUpperThreshold( 150.0 );
   cannyEdgesGenerator->SetLowerThreshold( 75.0 );
 
