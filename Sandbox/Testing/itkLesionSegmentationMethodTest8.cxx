@@ -127,7 +127,13 @@ int main( int argc, char * argv [] )
   sigmoidGenerator->SetAlpha(  100.0 );
   sigmoidGenerator->SetBeta(  -500.0 );
 
-  cannyEdgesGenerator->SetSigma( inputImage->GetSpacing()[2] );
+  double spacing[3] = { inputImage->GetSpacing()[0],
+                        inputImage->GetSpacing()[1],
+                        inputImage->GetSpacing()[2] };
+  double maxSpacing = (spacing[0] > spacing[1] ? spacing[0] : spacing[1]);
+  maxSpacing = (maxSpacing > spacing[1] ? maxSpacing : spacing[1]);
+  
+  cannyEdgesGenerator->SetSigma( maxSpacing );
   cannyEdgesGenerator->SetUpperThreshold( 150.0 );
   cannyEdgesGenerator->SetLowerThreshold( 75.0 );
 
