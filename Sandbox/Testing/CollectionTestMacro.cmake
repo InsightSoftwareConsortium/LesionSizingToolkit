@@ -90,7 +90,7 @@ ADD_TEST(SFG_${DATASET_ID}
   ${DATASET_ROI}
   ${TEMP}/SFG_Test${DATASET_ID}.mha
    100.0 # Alpha
-  -200.0 # Beta: Lung Threshold
+  -500.0 # Beta: Lung Threshold
   )
 
 # Binary Threshold Feature Generator
