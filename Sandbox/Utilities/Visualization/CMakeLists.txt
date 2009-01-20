@@ -26,3 +26,6 @@ TARGET_LINK_LIBRARIES(AntiAliasBinaryImageFilter ${ITK_VTK_LIBRARIES})
 ADD_EXECUTABLE(SurfaceExtraction SurfaceExtraction.cxx )
 TARGET_LINK_LIBRARIES(SurfaceExtraction ${ITK_VTK_LIBRARIES})
 
+ADD_EXECUTABLE(IsoSurfaceVolumeEstimation IsoSurfaceVolumeEstimation.cxx )
+TARGET_LINK_LIBRARIES(IsoSurfaceVolumeEstimation ${ITK_VTK_LIBRARIES})
+

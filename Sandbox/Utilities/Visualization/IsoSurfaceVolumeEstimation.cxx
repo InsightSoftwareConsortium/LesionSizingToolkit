@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    SurfaceExtraction.cxx
+  Module:    IsoSurfaceVolumeEstimation.cxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -22,6 +22,7 @@
 #include "vtkSTLWriter.h"
 #include "vtkSmartPointer.h"
 #include "vtksys/SystemTools.hxx"
+#include "vtkMassProperties.h"
 
 
 #define VTK_CREATE(type, name) \
@@ -31,10 +32,10 @@
 int main(int argc, char * argv [] )
 {  
 
-  if( argc < 4 )
+  if( argc < 3 )
     {
     std::cerr << "Missing parameters" << std::endl;
-    std::cerr << "Usage: " << argv[0] << " imageFileName isoValue outputSurface";
+    std::cerr << "Usage: " << argv[0] << " imageFileName isoValue ";
     std::cerr << std::endl;
     return 1;
     }
@@ -52,24 +53,11 @@ int main(int argc, char * argv [] )
   contourFilter->SetInput( imageReader->GetOutput() );
 
 
-  std::string surfaceFileNameExtension = 
-    vtksys::SystemTools::GetFilenameLastExtension( argv[3] );
+  VTK_CREATE( vtkMassProperties, massProperties );
+  massProperties->SetInput( contourFilter->GetOutput() );
+  double volume = massProperties->GetVolume();
 
-  if( surfaceFileNameExtension == ".vtk" )
-    {
-    VTK_CREATE( vtkPolyDataWriter, polyDataWriter );
-    polyDataWriter->SetInput( contourFilter->GetOutput() );
-    polyDataWriter->SetFileName( argv[3] );
-    polyDataWriter->Update();
-    }
-
-  if( surfaceFileNameExtension == ".stl" )
-    {
-    VTK_CREATE( vtkSTLWriter, stlWriter );
-    stlWriter->SetInput( contourFilter->GetOutput() );
-    stlWriter->SetFileName( argv[3] );
-    stlWriter->Update();
-    }
+  std::cout << "Volume = " << volume << " mm3" << std::endl;
 
   return EXIT_SUCCESS;
 }
