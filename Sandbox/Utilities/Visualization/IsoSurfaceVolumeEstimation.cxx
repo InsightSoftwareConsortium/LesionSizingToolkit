@@ -33,7 +33,7 @@
 int main(int argc, char * argv [] )
 {  
 
-  if( argc < 3 )
+  if( argc < 6 )
     {
     std::cerr << "Missing parameters" << std::endl;
     std::cerr << "Usage: " << argv[0] << " imageFileName isoValue ";
@@ -68,9 +68,9 @@ int main(int argc, char * argv [] )
   const double radius = vnl_math_cuberoot( radius3 );
 
 
-  const std::string segmentationMethodID = argv[2];
-  const std::string datasetID = argv[3];
-  const std::string outpuFileName = argv[4];
+  const std::string segmentationMethodID = argv[3];
+  const std::string datasetID = argv[4];
+  const std::string outpuFileName = argv[5];
 
   //
   // Append the value to the file containing estimations for this dataset.
