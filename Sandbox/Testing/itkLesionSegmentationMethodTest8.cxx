@@ -145,7 +145,7 @@ int main( int argc, char * argv [] )
   segmentationModule->SetPropagationScaling( argc > 7 ? atof(argv[7]) : 500.0 );
   segmentationModule->SetAdvectionScaling( argc > 8 ? atof(argv[8]) : 0.0 );
   segmentationModule->SetStoppingValue( argc > 9 ? atof(argv[9]) : 5.0 );
-  segmentationModule->SetDistanceFromSeeds( argc > 10 ? atof(argv[10]) : 2.0 );
+  segmentationModule->SetDistanceFromSeeds( argc > 10 ? atof(argv[10]) : 1.0 );
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
   typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
