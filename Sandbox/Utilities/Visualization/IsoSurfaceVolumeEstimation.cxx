@@ -33,11 +33,11 @@
 int main(int argc, char * argv [] )
 {  
 
-  if( argc < 6 )
+  if( argc < 7 )
     {
     std::cerr << "Missing parameters" << std::endl;
     std::cerr << "Usage: " << argv[0] << " imageFileName isoValue ";
-    std::cerr << " MethodID DatasetID ouputTextFile " << std::endl;
+    std::cerr << " MethodID DatasetID ExpectedVolume ouputTextFile " << std::endl;
     std::cerr << std::endl;
     return 1;
     }
@@ -70,7 +70,12 @@ int main(int argc, char * argv [] )
 
   const std::string segmentationMethodID = argv[3];
   const std::string datasetID = argv[4];
-  const std::string outpuFileName = argv[5];
+  const double  expectedVolume = atof( argv[5] );
+  const std::string outpuFileName = argv[6];
+
+  const double volumeDifference = expectedVolume - volume;
+
+  const double errorPercent = volumeDifference / expectedVolume * 100.0;
 
   //
   // Append the value to the file containing estimations for this dataset.
@@ -81,7 +86,9 @@ int main(int argc, char * argv [] )
 
   ouputFile << segmentationMethodID << "  ";
   ouputFile << datasetID << "  ";
+  ouputFile << expectedVolume << "   ";
   ouputFile << volume << "   ";
+  ouputFile << errorPercent << "   ";
   ouputFile << radius << std::endl;
 
   ouputFile.close();

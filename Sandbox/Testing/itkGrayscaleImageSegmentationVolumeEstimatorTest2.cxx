@@ -23,10 +23,10 @@
 int main( int argc, char * argv [] )
 {
 
-  if( argc < 5 )
+  if( argc < 6 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputSegmentationImage MethodID DatasetID ouputTextFile " << std::endl;
+    std::cerr << argv[0] << " inputSegmentationImage MethodID DatasetID ExpectedVolume ouputTextFile " << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -81,7 +81,12 @@ int main( int argc, char * argv [] )
 
   const std::string segmentationMethodID = argv[2];
   const std::string datasetID = argv[3];
-  const std::string outpuFileName = argv[4];
+  const double  expectedVolume = atof( argv[4] );
+  const std::string outpuFileName = argv[5];
+
+  const double volumeDifference = expectedVolume - volume;
+
+  const double errorPercent = volumeDifference / expectedVolume * 100.0;
 
   //
   // Append the value to the file containing estimations for this dataset.
@@ -92,7 +97,9 @@ int main( int argc, char * argv [] )
 
   ouputFile << segmentationMethodID << "  ";
   ouputFile << datasetID << "  ";
+  ouputFile << expectedVolume << "   ";
   ouputFile << volume << "   ";
+  ouputFile << errorPercent << "   ";
   ouputFile << radius << std::endl;
 
   ouputFile.close();
