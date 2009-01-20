@@ -22,6 +22,7 @@
 #include "vtkSTLWriter.h"
 #include "vtkSmartPointer.h"
 #include "vtksys/SystemTools.hxx"
+#include "vtkMassProperties.h"
 
 
 #define VTK_CREATE(type, name) \
@@ -71,6 +72,12 @@ int main(int argc, char * argv [] )
     stlWriter->Update();
     }
 
+
+  VTK_CREATE( vtkMassProperties, massProperties );
+  massProperties->SetInput( contourFilter->GetOutput() );
+  double volume = massProperties->GetVolume();
+
+  std::cout << "Volume = " << volume << " mm3" << std::endl;
 
   return EXIT_SUCCESS;
 }
