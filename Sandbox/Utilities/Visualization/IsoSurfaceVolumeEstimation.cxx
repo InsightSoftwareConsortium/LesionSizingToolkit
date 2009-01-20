@@ -23,6 +23,7 @@
 #include "vtkSmartPointer.h"
 #include "vtksys/SystemTools.hxx"
 #include "vtkMassProperties.h"
+#include "vnl/vnl_math.h"
 
 
 #define VTK_CREATE(type, name) \
@@ -36,6 +37,7 @@ int main(int argc, char * argv [] )
     {
     std::cerr << "Missing parameters" << std::endl;
     std::cerr << "Usage: " << argv[0] << " imageFileName isoValue ";
+    std::cerr << " MethodID DatasetID ouputTextFile " << std::endl;
     std::cerr << std::endl;
     return 1;
     }
@@ -58,6 +60,31 @@ int main(int argc, char * argv [] )
   double volume = massProperties->GetVolume();
 
   std::cout << "Volume = " << volume << " mm3" << std::endl;
+
+  //
+  // Compute the radius of the equivalent-volume sphere
+  //
+  const double radius3 = ( ( volume * 3.0 ) / ( 4.0 * vnl_math::pi ) );
+  const double radius = vnl_math_cuberoot( radius3 );
+
+
+  const std::string segmentationMethodID = argv[2];
+  const std::string datasetID = argv[3];
+  const std::string outpuFileName = argv[4];
+
+  //
+  // Append the value to the file containing estimations for this dataset.
+  //
+  std::ofstream ouputFile;
+
+  ouputFile.open( outpuFileName.c_str(), std::ios_base::app );
+
+  ouputFile << segmentationMethodID << "  ";
+  ouputFile << datasetID << "  ";
+  ouputFile << volume << "   ";
+  ouputFile << radius << std::endl;
+
+  ouputFile.close();
 
   return EXIT_SUCCESS;
 }
