@@ -73,7 +73,9 @@ int main(int argc, char * argv [] )
   const double  expectedVolume = atof( argv[5] );
   const std::string outpuFileName = argv[6];
 
-  const double volumeDifference = expectedVolume - volume;
+  const double volumeDifference = volume - expectedVolume;
+
+  const double ratio = volume / expectedVolume;
 
   const double errorPercent = volumeDifference / expectedVolume * 100.0;
 
@@ -89,6 +91,7 @@ int main(int argc, char * argv [] )
   ouputFile << expectedVolume << "   ";
   ouputFile << volume << "   ";
   ouputFile << errorPercent << "   ";
+  ouputFile << ratio << "   ";
   ouputFile << radius << std::endl;
 
   ouputFile.close();
