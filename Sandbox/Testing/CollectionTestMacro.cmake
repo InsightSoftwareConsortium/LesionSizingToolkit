@@ -150,7 +150,7 @@ ADD_TEST(CEFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkCannyEdgesFeatureGeneratorTest1
   ${DATASET_ROI}
   ${TEMP}/CEFG_Test${DATASET_ID}.mha
-    1.0 # Variance
+    1.0 # Sigma
   150.0 # Upper threshold
    75.0 # Lower threshold
   )
@@ -160,7 +160,7 @@ ADD_TEST(CEDFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkCannyEdgesDistanceFeatureGeneratorTest1
   ${DATASET_ROI}
   ${TEMP}/CEDFG_Test${DATASET_ID}.mha
-    1.0 # Variance
+    1.0 # Sigma
   150.0 # Upper threshold
    75.0 # Lower threshold
   )
