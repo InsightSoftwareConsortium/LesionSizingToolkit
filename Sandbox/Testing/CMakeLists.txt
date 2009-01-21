@@ -29,6 +29,9 @@ TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter ITKIO)
 ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter LaplacianRecursiveGaussianImageFilter.cxx )
 TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter ITKIO)
 
+ADD_EXECUTABLE(ResampleVolumeToBeIsotropic ResampleVolumeToBeIsotropic.cxx )
+TARGET_LINK_LIBRARIES(ResampleVolumeToBeIsotropic ITKIO)
+
 ADD_EXECUTABLE(GradientMagnitudeImageFilter GradientMagnitudeImageFilter.cxx )
 TARGET_LINK_LIBRARIES(GradientMagnitudeImageFilter ITKIO)
 
