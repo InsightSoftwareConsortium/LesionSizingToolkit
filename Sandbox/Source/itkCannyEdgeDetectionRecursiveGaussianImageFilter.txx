@@ -329,6 +329,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 
   // 1.Apply the Gaussian Filter to the input image.-------
   m_GaussianFilter->SetSigma( this->m_Sigma );
+  m_GaussianFilter->SetNormalizeAcrossScale( true );
   m_GaussianFilter->SetInput(input);
   m_GaussianFilter->Update();
 
