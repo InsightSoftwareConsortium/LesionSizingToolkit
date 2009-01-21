@@ -33,8 +33,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter()
 {
   unsigned int i;
 
-  m_Variance.Fill(0.0);
-  m_MaximumError.Fill(0.01);
+  m_Sigma = 1.0;
 
   m_OutsideValue = NumericTraits<OutputImagePixelType>::Zero;
   m_Threshold = NumericTraits<OutputImagePixelType>::Zero;
@@ -329,8 +328,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   this->AllocateUpdateBuffer();
 
   // 1.Apply the Gaussian Filter to the input image.-------
-  m_GaussianFilter->SetVariance(m_Variance);
-  m_GaussianFilter->SetMaximumError(m_MaximumError);
+  m_GaussianFilter->SetSigma( this->m_Sigma );
   m_GaussianFilter->SetInput(input);
   m_GaussianFilter->Update();
 
@@ -646,8 +644,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 {
   Superclass::PrintSelf(os,indent);
 
-  os << "Variance: " << m_Variance << std::endl;
-  os << "MaximumError: " << m_MaximumError << std::endl;
+  os << "Sigma: " << m_Sigma << std::endl;
   os << indent << "Threshold: "
      << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_Threshold)
      << std::endl;

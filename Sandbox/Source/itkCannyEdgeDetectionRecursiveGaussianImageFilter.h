@@ -21,7 +21,7 @@
 #include "itkImage.h"
 #include "itkFixedArray.h"
 #include "itkConstNeighborhoodIterator.h"
-#include "itkDiscreteGaussianImageFilter.h"
+#include "itkSmoothingRecursiveGaussianImageFilter.h"
 #include "itkMultiplyImageFilter.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkMultiThreader.h"
@@ -70,8 +70,8 @@ public:
  * by the algorithm.
  *
  * \par 
- * Variance and Maximum error are used in the Gaussian smoothing of the input
- * image.  See  itkDiscreteGaussianImageFilter for information on these
+ * Sigma is used in the Gaussian smoothing of the input image.
+ * See  itkSmoothingRecursiveGaussianImageFilter for information on these
  * parameters.
  *
  * \par
@@ -83,7 +83,7 @@ public:
  * \todo Edge-linking will be added when an itk connected component labeling
  * algorithm is available.
  *
- * \sa DiscreteGaussianImageFilter
+ * \sa SmoothingRecursiveGaussianImageFilter
  * \sa ZeroCrossingImageFilter
  * \sa ThresholdImageFilter */
 template<class TInputImage, class TOutputImage>
@@ -142,41 +142,9 @@ public:
   /** Typedef of double containers */
   typedef FixedArray<double, itkGetStaticConstMacro(ImageDimension)> ArrayType;
 
-  /** Standard get/set macros for filter parameters. */
-  itkSetMacro(Variance, ArrayType);
-  itkGetMacro(Variance, const ArrayType);
-  itkSetMacro(MaximumError, ArrayType);
-  itkGetMacro(MaximumError, const ArrayType);
-  
-  /** Set/Get the Variance parameter used by the Gaussian smoothing
-      filter in this algorithm */
-  void SetVariance(const typename ArrayType::ValueType v)
-    {
-    for (unsigned int i=0; i < TInputImage::ImageDimension; i++)
-      {
-      if (m_Variance[i] != v)
-        {
-        m_Variance.Fill(v);
-        this->Modified();
-        break;
-        }
-      }
-    }
-  
-  /** Set/Get the MaximumError paramter used by the Gaussian smoothing filter
-      in this algorithm */
-  void SetMaximumError(const typename ArrayType::ValueType v)
-    {
-    for (unsigned int i=0; i < TInputImage::ImageDimension; i++)
-      {
-      if (m_MaximumError[i] != v)
-        {
-        m_MaximumError.Fill(v);
-        this->Modified();
-        break;
-        }
-      }
-    }
+  /** Smoothing parameters for the Gaussian filter. */
+  itkSetMacro(Sigma, double);
+  itkGetMacro(Sigma, double);
   
   /* Set the Threshold value for detected edges. */
   void SetThreshold(const OutputImagePixelType th)
@@ -240,7 +208,7 @@ protected:
 
   void GenerateData();
 
-  typedef DiscreteGaussianImageFilter<InputImageType, OutputImageType>
+  typedef SmoothingRecursiveGaussianImageFilter<InputImageType, OutputImageType>
                                                       GaussianImageFilterType;
   typedef MultiplyImageFilter< OutputImageType, 
               OutputImageType, OutputImageType>       MultiplyImageFilterType;
@@ -324,7 +292,7 @@ private:
   Compute2ndDerivativePosThreaderCallback( void *arg );
 
   /** The variance of the Gaussian Filter used in this filter */
-  ArrayType m_Variance;
+  double m_Sigma;
 
   /** The maximum error of the gaussian blurring kernel in each dimensional
    * direction.  */
