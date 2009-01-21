@@ -21,7 +21,7 @@
 #include "itkImage.h"
 #include "itkImageSpatialObject.h"
 #include "itkCastImageFilter.h"
-#include "itkCannyEdgeDetectionImageFilter.h"
+#include "itkCannyEdgeDetectionRecursiveGaussianImageFilter.h"
 #include "itkSignedMaurerDistanceMapImageFilter.h"
 #include "itkGradientImageFilter.h"
 #include "itkMultiplyImageFilter.h"
@@ -123,7 +123,7 @@ private:
   typedef CastImageFilter<
     InputImageType, InternalImageType >               CastFilterType;
   typedef typename CastFilterType::Pointer            CastFilterPointer;
-  typedef CannyEdgeDetectionImageFilter<
+  typedef CannyEdgeDetectionRecursiveGaussianImageFilter<
     InternalImageType, InternalImageType >            CannyEdgeFilterType;
   typedef typename CannyEdgeFilterType::Pointer       CannyEdgeFilterPointer;
 
