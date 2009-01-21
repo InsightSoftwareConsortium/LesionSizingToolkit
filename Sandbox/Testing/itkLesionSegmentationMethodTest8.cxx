@@ -37,7 +37,10 @@ int main( int argc, char * argv [] )
     {
     std::cerr << "Applies fast marhching followed by segmentation using geodesic active contours. Arguments" << std::endl;
     std::cerr << argv[0] << "\n\tlandmarksFile\n\tinputImage\n\toutputImage ";
-    std::cerr << "\n\t[RMSErrorForGeodesicActiveContour]"
+    std::cerr << "\n\t[CannySigma]"
+              << "\n\t[CannyUpperThreshold]"
+              << "\n\t[CannyLowerThreshold]"
+              << "\n\t[RMSErrorForGeodesicActiveContour]"
               << "\n\t[IterationsForGeodesicActiveContour]"
               << "\n\t[CurvatureScalingForGeodesicActiveContour]"
               << "\n\t[PropagationScalingForGeodesicActiveContour]"
@@ -133,19 +136,19 @@ int main( int argc, char * argv [] )
   double maxSpacing = (spacing[0] > spacing[1] ? spacing[0] : spacing[1]);
   maxSpacing = (maxSpacing > spacing[1] ? maxSpacing : spacing[1]);
   
-  cannyEdgesGenerator->SetSigma( maxSpacing );
-  cannyEdgesGenerator->SetUpperThreshold( 150.0 );
-  cannyEdgesGenerator->SetLowerThreshold( 75.0 );
+  cannyEdgesGenerator->SetSigma( argc > 4 ? atof(argv[4]) : maxSpacing );
+  cannyEdgesGenerator->SetUpperThreshold( argc > 5 ? atof(argv[5]) : 150.0 );
+  cannyEdgesGenerator->SetLowerThreshold( argc > 6 ? atof(argv[6]) :  75.0 );
 
   typedef itk::FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule< Dimension > SegmentationModuleType;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-  segmentationModule->SetMaximumRMSError( argc > 4 ? atof(argv[4]) : 0.0002 );
-  segmentationModule->SetMaximumNumberOfIterations( argc > 5 ? atoi(argv[5]) : 300 );
-  segmentationModule->SetCurvatureScaling( argc > 6 ? atof(argv[6]) : 1.0 );
-  segmentationModule->SetPropagationScaling( argc > 7 ? atof(argv[7]) : 500.0 );
-  segmentationModule->SetAdvectionScaling( argc > 8 ? atof(argv[8]) : 0.0 );
-  segmentationModule->SetStoppingValue( argc > 9 ? atof(argv[9]) : 5.0 );
-  segmentationModule->SetDistanceFromSeeds( argc > 10 ? atof(argv[10]) : 1.0 );
+  segmentationModule->SetMaximumRMSError( argc > 7 ? atof(argv[7]) : 0.0002 );
+  segmentationModule->SetMaximumNumberOfIterations( argc > 8 ? atoi(argv[8]) : 300 );
+  segmentationModule->SetCurvatureScaling( argc > 9 ? atof(argv[9]) : 1.0 );
+  segmentationModule->SetPropagationScaling( argc > 10 ? atof(argv[10]) : 500.0 );
+  segmentationModule->SetAdvectionScaling( argc > 11 ? atof(argv[11]) : 0.0 );
+  segmentationModule->SetStoppingValue( argc > 12 ? atof(argv[12]) : 5.0 );
+  segmentationModule->SetDistanceFromSeeds( argc > 13 ? atof(argv[13]) : 0.5 );
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
   typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
