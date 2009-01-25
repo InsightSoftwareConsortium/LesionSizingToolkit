@@ -22,10 +22,12 @@
 int main( int argc, char * argv [] )
 {
 
-  if( argc < 3 )
+  if( argc < 5 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImageEigenValue1 [sigma]";
+    std::cerr << argv[0] << " inputImage outputImageHessianMatrix ";
+    std::cerr << " outputImageEigenValues ";
+    std::cerr << " Sigma " << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -67,18 +69,45 @@ int main( int argc, char * argv [] )
   EigenAnalysisFilterType::Pointer eigenFilter = EigenAnalysisFilterType::New();
 
   hessianFilter->SetInput( reader->GetOutput() );
+
+  hessianFilter->SetSigma( atof( argv[4] ) );
+
+  typedef itk::ImageFileWriter< HessianFilterType::OutputImageType >    HessianWriterType;
+  HessianWriterType::Pointer hessianWriter = HessianWriterType::New();
+
+  hessianWriter->SetFileName( argv[2] );
+  hessianWriter->SetInput( hessianFilter->GetOutput() );
+  hessianWriter->UseCompressionOn();
+
+
+  try 
+    {
+    std::cout << "Hessian..." << std::endl;
+    hessianFilter->Update();
+    std::cout << "Hessian writer..." << std::endl;
+    hessianWriter->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
+
   eigenFilter->SetInput( hessianFilter->GetOutput() );
 
   typedef itk::ImageFileWriter< EigenValueImageType >    WriterType;
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetFileName( argv[2] );
+  writer->SetFileName( argv[3] );
   writer->SetInput( eigenFilter->GetOutput() );
   writer->UseCompressionOn();
 
 
   try 
     {
+    std::cout << "Eigenvalues..." << std::endl;
+    eigenFilter->Update();
+    std::cout << "Writer..." << std::endl;
     writer->Update();
     }
   catch( itk::ExceptionObject & excp )
@@ -89,3 +118,4 @@ int main( int argc, char * argv [] )
 
   return EXIT_SUCCESS;
 }
+
