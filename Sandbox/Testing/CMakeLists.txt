@@ -32,6 +32,9 @@ TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter ITKIO)
 ADD_EXECUTABLE(itkHessian3DTest1 itkHessian3DTest1.cxx )
 TARGET_LINK_LIBRARIES(itkHessian3DTest1 ITKIO)
 
+ADD_EXECUTABLE(itkHessian3DTest2 itkHessian3DTest2.cxx )
+TARGET_LINK_LIBRARIES(itkHessian3DTest2 ITKIO)
+
 ADD_EXECUTABLE(ResampleVolumeToBeIsotropic ResampleVolumeToBeIsotropic.cxx )
 TARGET_LINK_LIBRARIES(ResampleVolumeToBeIsotropic ITKIO)
 
