@@ -134,7 +134,7 @@ int main( int argc, char * argv [] )
                         inputImage->GetSpacing()[1],
                         inputImage->GetSpacing()[2] };
   double maxSpacing = (spacing[0] > spacing[1] ? spacing[0] : spacing[1]);
-  maxSpacing = (maxSpacing > spacing[1] ? maxSpacing : spacing[1]);
+  maxSpacing = (maxSpacing > spacing[2] ? maxSpacing : spacing[2]);
   
   cannyEdgesGenerator->SetSigma( argc > 4 ? atof(argv[4]) : maxSpacing );
   cannyEdgesGenerator->SetUpperThreshold( argc > 5 ? atof(argv[5]) : 150.0 );
