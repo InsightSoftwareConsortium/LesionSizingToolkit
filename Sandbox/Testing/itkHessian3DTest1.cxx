@@ -95,6 +95,9 @@ int main( int argc, char * argv [] )
 
   eigenFilter->SetInput( hessianFilter->GetOutput() );
 
+  eigenFilter->SetDimension( Dimension );
+  eigenFilter->OrderEigenValuesBy( EigenAnalysisFilterType::FunctorType::OrderByValue );
+
   typedef itk::ImageFileWriter< EigenValueImageType >    WriterType;
   WriterType::Pointer writer = WriterType::New();
 
