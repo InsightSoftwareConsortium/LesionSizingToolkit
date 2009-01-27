@@ -79,7 +79,7 @@ int main( int argc, char * argv [] )
 
   hessianWriter->SetFileName( argv[2] );
   hessianWriter->SetInput( hessianFilter->GetOutput() );
-  hessianWriter->UseCompressionOn();
+  hessianWriter->UseCompressionOff();
 
 
   try 
@@ -105,7 +105,7 @@ int main( int argc, char * argv [] )
 
   writer->SetFileName( argv[3] );
   writer->SetInput( eigenFilter->GetOutput() );
-  writer->UseCompressionOn();
+  writer->UseCompressionOff();
 
 
   try 
