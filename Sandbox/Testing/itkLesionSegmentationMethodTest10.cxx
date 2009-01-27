@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Lesion Sizing Toolkit
-  Module:    itkLesionSegmentationMethodTest8.cxx
+  Module:    itkLesionSegmentationMethodTest10.cxx
 
   Copyright (c) Kitware Inc. 
   All rights reserved.
@@ -23,6 +23,7 @@
 #include "itkImageFileWriter.h"
 #include "itkLandmarksReader.h"
 #include "itkImageMaskSpatialObject.h"
+#include "itkIsotropicResampler.h"
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkCannyEdgesFeatureGenerator.h"
@@ -112,12 +113,31 @@ int main( int argc, char * argv [] )
 
   inputImage->DisconnectPipeline();
 
+  typedef itk::IsotropicResampler< Dimension >   ResampleFilterType;
+  typedef ResampleFilterType::SpatialObjectType    SpatialObjectType;
+
+  ResampleFilterType::Pointer  resampler = ResampleFilterType::New();
+ 
   inputObject->SetImage( inputImage );
 
-  lungWallGenerator->SetInput( inputObject );
-  vesselnessGenerator->SetInput( inputObject );
-  sigmoidGenerator->SetInput( inputObject );
-  cannyEdgesGenerator->SetInput( inputObject );
+  resampler->SetInput( inputObject );
+
+  try 
+    {
+    resampler->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  SpatialObjectType::ConstPointer resampledObject = resampler->GetOutput();
+
+  lungWallGenerator->SetInput( resampledObject );
+  vesselnessGenerator->SetInput( resampledObject );
+  sigmoidGenerator->SetInput( resampledObject );
+  cannyEdgesGenerator->SetInput( resampledObject );
 
   lungWallGenerator->SetLungThreshold( -400 );
 
