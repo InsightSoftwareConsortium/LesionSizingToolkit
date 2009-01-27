@@ -124,6 +124,28 @@ FeatureAggregator<NDimension>
   this->ConsolidateFeatures();
 }
 
+template <unsigned int NDimension>
+unsigned long
+FeatureAggregator<NDimension>
+::GetMTime() const
+{
+  // MTime is the max of mtime of all feature generators.
+  unsigned long mtime = this->Superclass::GetMTime();
+  FeatureGeneratorConstIterator gitr = this->m_FeatureGenerators.begin();
+  FeatureGeneratorConstIterator gend = this->m_FeatureGenerators.end();
+  while( gitr != gend )
+    {
+    const unsigned long t = (*gitr)->GetMTime();
+    if (t > mtime) 
+      {
+      mtime = t;
+      }
+    ++gitr;
+    }
+
+  return mtime;
+}
+
 
 /**
  * Update feature generators
