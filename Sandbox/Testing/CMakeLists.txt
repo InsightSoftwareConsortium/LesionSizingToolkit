@@ -23,6 +23,9 @@ TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite ITKIO)
 ADD_EXECUTABLE(ImageReadRegionOfInterestWrite ImageReadRegionOfInterestWrite.cxx )
 TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite ITKIO)
 
+ADD_EXECUTABLE(ImageReadRegionOfInterestAroundSeedWrite ImageReadRegionOfInterestAroundSeedWrite.cxx )
+TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestAroundSeedWrite ITKIO)
+
 ADD_EXECUTABLE(CannyEdgeDetectionImageFilter CannyEdgeDetectionImageFilter.cxx )
 TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter ITKIO)
 
