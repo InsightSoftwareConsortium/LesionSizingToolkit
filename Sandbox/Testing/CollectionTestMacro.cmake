@@ -181,7 +181,7 @@ ADD_TEST(SVSFG_${DATASET_ID}
   ${DATASET_ROI}
   ${TEMP}/SVSFG_Test${DATASET_ID}.mha
   1.0   # Sigma
-  0.5   # Vesselness Alpha1
+  0.1   # Vesselness Alpha1
   2.0   # Vesselness Alpha2
   -10.0 # Sigmoid Alpha
   80.0  # Sigmoid Beta
