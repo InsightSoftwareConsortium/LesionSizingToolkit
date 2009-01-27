@@ -35,6 +35,9 @@ TARGET_LINK_LIBRARIES(itkHessian3DTest1 ITKIO)
 ADD_EXECUTABLE(itkHessian3DTest2 itkHessian3DTest2.cxx )
 TARGET_LINK_LIBRARIES(itkHessian3DTest2 ITKIO)
 
+ADD_EXECUTABLE(itkIsotropicResamplerTest1 itkIsotropicResamplerTest1.cxx )
+TARGET_LINK_LIBRARIES(itkIsotropicResamplerTest1 ITKIO)
+
 ADD_EXECUTABLE(ResampleVolumeToBeIsotropic ResampleVolumeToBeIsotropic.cxx )
 TARGET_LINK_LIBRARIES(ResampleVolumeToBeIsotropic ITKIO)
 
@@ -285,6 +288,12 @@ ADD_TEST(itkRegionCompetitionImageFilterTest1 ${CXX_TEST_PATH}/itkRegionCompetit
 ADD_TEST(itkSegmentationVolumeEstimatorTest1 ${CXX_TEST_PATH}/itkSegmentationVolumeEstimatorTest1 )
 
 ADD_TEST(itkGrayscaleImageSegmentationVolumeEstimatorTest1 ${CXX_TEST_PATH}/itkGrayscaleImageSegmentationVolumeEstimatorTest1 )
+
+ADD_TEST(itkIsotropicResamplerTest1 
+  ${CXX_TEST_PATH}/itkIsotropicResamplerTest1
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/IsotropicResamplerTest1.mha
+  )
 
 ADD_TEST(itkLandmarksReaderTest1
   ${EXECUTABLE_OUTPUT_PATH}/itkLandmarksReaderTest1
