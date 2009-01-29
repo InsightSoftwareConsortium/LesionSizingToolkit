@@ -69,9 +69,26 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
+  const InputImageType * inputImage = inputImageReader->GetOutput();
+
+  typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
+  
+  LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
+
+  landmarksReader->SetFileName( argv[1] );
+  landmarksReader->Update();
+
+  typedef itk::LandmarkSpatialObject< Dimension >   SeedSpatialObjectType;
+  typedef SeedSpatialObjectType::PointListType      PointListType;
+
+  const SeedSpatialObjectType * landmarks = landmarksReader->GetOutput();
+
   SegmentationMethodType::Pointer segmentationMethod = SegmentationMethodType::New();
 
-  segmentationMethod->SetInput( inputImageReader->GetOutput() );
+  segmentationMethod->SetInput( inputImage );
+  segmentationMethod->SetSeeds( landmarks->GetPoints() );
+
+  segmentationMethod->SetRegionOfInterest( inputImage->GetBufferedRegion() );
 
   typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
