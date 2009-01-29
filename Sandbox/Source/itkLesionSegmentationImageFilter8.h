@@ -40,7 +40,7 @@ namespace itk
 /** \class LesionSegmentationImageFilter8
  */
 template<class TInputImage, class TOutputImage>
-class VTK_EXPORT LesionSegmentationImageFilter8
+class LesionSegmentationImageFilter8
   : public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -74,6 +74,9 @@ public:
   /** ImageDimension constant    */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension);
+
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension);
 
   /** Get a status message for display purposes */
   itkGetStringMacro( StatusMessage );
