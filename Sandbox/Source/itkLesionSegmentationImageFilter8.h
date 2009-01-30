@@ -119,6 +119,10 @@ public:
     return m_StatusMessage.length() ? m_StatusMessage.c_str() : NULL;
     }
 
+  /** Override the superclass implementation so as to set the flag on all the
+   * filters within our lesion segmentation pipeline */
+  virtual void SetAbortGenerateData( bool );
+
 protected:
   LesionSegmentationImageFilter8();
   LesionSegmentationImageFilter8(const Self&) {}

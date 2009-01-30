@@ -174,15 +174,6 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   this->GetOutput()->SetBufferedRegion( this->GetOutput()->GetRequestedRegion() );
   this->GetOutput()->Allocate();
  
-  /* DEBUG REMOVEME
-  typedef itk::ImageFileReader< OutputImageType > OutputImageReaderType;
-  OutputImageReaderType::Pointer outputReader = OutputImageReaderType::New();
-  outputReader->SetFileName("f:/Kitware/VolView/bin/Dashboard-Static/bin/Release/fastmarchingoutput.mha");
-  outputReader->Update();
-  this->GraftOutput(outputReader->GetOutput());
-  return;*/
-  // END DEBUG REMOVEME
-  
   typename  InputImageType::ConstPointer  input  = this->GetInput();
 
   // Crop
@@ -190,9 +181,6 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   m_CropFilter->SetRegionOfInterest(m_RegionOfInterest);
   m_CropFilter->Update(); 
  
-  //this->GraftOutput(m_CropFilter->GetOutput());
-  //return;
-
   // Convert the output of cropping to a spatial object that can be fed into
   // the lesion segmentation method
   typename InputImageType::Pointer inputImage = m_CropFilter->GetOutput();
@@ -281,6 +269,16 @@ void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
       }
     }
 }
+
+template <class TInputImage, class TOutputImage>
+void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
+::SetAbortGenerateData( bool abort )
+{
+  this->Superclass::SetAbortGenerateData(abort);
+  this->m_CropFilter->SetAbortGenerateData(abort);
+  this->m_LesionSegmentationMethod->SetAbortGenerateData(abort);
+}
+
 
 template <class TInputImage, class TOutputImage>
 void 

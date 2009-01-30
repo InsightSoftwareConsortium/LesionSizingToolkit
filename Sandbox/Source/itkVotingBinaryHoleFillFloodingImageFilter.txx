@@ -97,7 +97,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
   this->m_NumberOfPixelsChangedInLastIteration = 0;
 
   // Progress reporting
-  ProgressReporter progress(this, 0, m_MaximumNumberOfIterations);
+  ProgressReporter progress(this, 0, m_MaximumNumberOfIterations, 100000);
   
   while( this->m_CurrentIterationNumber < this->m_MaximumNumberOfIterations ) 
     {
