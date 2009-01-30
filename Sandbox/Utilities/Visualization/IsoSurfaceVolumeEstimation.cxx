@@ -23,6 +23,8 @@
 #include "vtkSmartPointer.h"
 #include "vtksys/SystemTools.hxx"
 #include "vtkMassProperties.h"
+#include "vtkCleanPolyData.h"
+#include "vtkTriangleFilter.h"
 #include "vnl/vnl_math.h"
 
 
@@ -50,13 +52,19 @@ int main(int argc, char * argv [] )
   float isoValue = atof( argv[2] );
 
   VTK_CREATE( vtkContourFilter, contourFilter );
-
   contourFilter->SetValue( 0, isoValue ); 
   contourFilter->SetInput( imageReader->GetOutput() );
 
+  VTK_CREATE( vtkCleanPolyData, cleanPolyData );
+  cleanPolyData->SetInput( contourFilter->GetOutput() );
+
+  VTK_CREATE( vtkTriangleFilter, triangleFilter );
+  triangleFilter->SetInput( cleanPolyData->GetOutput() );
+  triangleFilter->PassVertsOff();
+  triangleFilter->PassLinesOff();
 
   VTK_CREATE( vtkMassProperties, massProperties );
-  massProperties->SetInput( contourFilter->GetOutput() );
+  massProperties->SetInput( triangleFilter->GetOutput() );
   double volume = massProperties->GetVolume();
 
   std::cout << "Volume = " << volume << " mm3" << std::endl;
