@@ -30,16 +30,7 @@ int main( int argc, char * argv [] )
     {
     std::cerr << "Applies fast marhching followed by segmentation using geodesic active contours. Arguments" << std::endl;
     std::cerr << argv[0] << "\n\tlandmarksFile\n\tinputImage\n\toutputImage ";
-    std::cerr << "\n\t[CannySigma]"
-              << "\n\t[CannyUpperThreshold]"
-              << "\n\t[CannyLowerThreshold]"
-              << "\n\t[RMSErrorForGeodesicActiveContour]"
-              << "\n\t[IterationsForGeodesicActiveContour]"
-              << "\n\t[CurvatureScalingForGeodesicActiveContour]"
-              << "\n\t[PropagationScalingForGeodesicActiveContour]"
-              << "\n\t[AdvectionScalingForGeodesicActiveContour]";
-    std::cerr << "\n\t[stopping time for fast marching]";
-    std::cerr << "\n\t[distance from seeds for fast marching]" << std::endl;
+    std::cerr << "\n\t[SigmoidBeta]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -89,6 +80,13 @@ int main( int argc, char * argv [] )
   segmentationMethod->SetSeeds( landmarks->GetPoints() );
 
   segmentationMethod->SetRegionOfInterest( inputImage->GetBufferedRegion() );
+
+  if( argc > 4 )
+    {
+    const double sigmoidBeta = atof( argv[4] );
+    std::cout << "Using SigmoidBeta = " << sigmoidBeta << std::endl;
+    segmentationMethod->SetSigmoidBeta( sigmoidBeta );
+    }
 
   typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
