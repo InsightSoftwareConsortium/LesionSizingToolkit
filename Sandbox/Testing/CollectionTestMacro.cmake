@@ -346,7 +346,15 @@ ADD_TEST(LSMT8b_${DATASET_OBJECT_ID}
   ${SEEDS_FILE}
   ${DATASET_ROI}
   ${TEMP}/LSMT8b_Test${DATASET_OBJECT_ID}.mha
-  -200
+  -200  # Threshold used for solid lesions
+  )
+
+ADD_TEST(LSMT8c_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest8b
+  ${SEEDS_FILE}
+  ${DATASET_ROI}
+  ${TEMP}/LSMT8c_Test${DATASET_OBJECT_ID}.mha
+  -500  # Threshold used for part-solid lesions
   )
 
 ADD_TEST(LSMT9_${DATASET_OBJECT_ID}
