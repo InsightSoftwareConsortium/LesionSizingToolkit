@@ -69,6 +69,9 @@ public:
    * SpatialObject. */
   const SpatialObjectType * GetOutput() const;
 
+  itkSetMacro( OutputSpacing, double );
+  itkGetMacro( OutputSpacing, double );
+
 protected:
   IsotropicResampler();
   virtual ~IsotropicResampler();
@@ -86,6 +89,8 @@ private:
   typedef Image< OutputPixelType, Dimension >         OutputImageType;
 
   typedef ImageSpatialObject< NDimension, OutputPixelType >  OutputImageSpatialObjectType;
+  
+  double    m_OutputSpacing;
 };
 
 } // end namespace itk

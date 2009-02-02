@@ -39,6 +39,8 @@ IsotropicResampler<NDimension>
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+
+  this->m_OutputSpacing = 0.2;  // 0.2 mm
 }
 
 
@@ -133,11 +135,10 @@ IsotropicResampler<NDimension>
 
   typename InputImageType::SpacingType outputSpacing;
 
-  const double finalSpacing = 0.2;  // 0.2 mm
 
-  outputSpacing[0] = finalSpacing;
-  outputSpacing[1] = finalSpacing;
-  outputSpacing[2] = finalSpacing;
+  outputSpacing[0] = this->m_OutputSpacing;
+  outputSpacing[1] = this->m_OutputSpacing;
+  outputSpacing[2] = this->m_OutputSpacing;
 
   resampler->SetOutputSpacing( outputSpacing );
 
