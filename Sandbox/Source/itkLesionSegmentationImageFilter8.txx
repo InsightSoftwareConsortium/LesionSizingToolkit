@@ -106,7 +106,7 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 
   if ( !this->GetInput() )
     {
-    InputImagePointer inputPtr  = 
+    typename InputImageType::Pointer inputPtr  = 
       const_cast< TInputImage *>( this->GetInput() );
 
     // Request the entire input image

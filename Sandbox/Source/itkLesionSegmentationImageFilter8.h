@@ -141,7 +141,7 @@ protected:
   typedef typename SegmentationModuleType::SpatialObjectType       SpatialObjectType;
   typedef typename SegmentationModuleType::OutputSpatialObjectType OutputSpatialObjectType;
   typedef ImageSpatialObject< ImageDimension, InputImagePixelType > InputImageSpatialObjectType;
-  typedef IsotropicResamplerImageFilter< ImageDimension > IsotropicResamplerType;
+  typedef IsotropicResamplerImageFilter< InputImageType, InputImageType > IsotropicResamplerType;
   typedef typename RegionType::SizeType SizeType;
   typedef MemberCommand< Self >  CommandType;
 
