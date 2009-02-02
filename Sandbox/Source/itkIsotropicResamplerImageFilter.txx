@@ -65,7 +65,9 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
 
   typename BSplineInterpolatorType::Pointer bsplineInterpolator = BSplineInterpolatorType::New();
 
+#if ITK_VERSION_MAJOR > 3 || (ITK_VERSION_MAJOR == 3 && ITK_VERSION_MINOR >= 10)
   bsplineInterpolator->UseImageDirectionOn();
+#endif
   bsplineInterpolator->SetSplineOrder( 3 );
 
   this->m_ResampleFilter->SetTransform( transform );
