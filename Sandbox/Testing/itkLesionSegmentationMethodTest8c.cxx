@@ -22,7 +22,6 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkLandmarksReader.h"
-#include "itkIsotropicResamplerImageFilter.h"
 #include "itkImageSpatialObject.h"
 
 int main( int argc, char * argv [] )
@@ -66,31 +65,6 @@ int main( int argc, char * argv [] )
 
   InputImageType::SpacingType inputSpacing = inputImage->GetSpacing();
 
-  typedef itk::IsotropicResamplerImageFilter< 
-    InputImageType, InputImageType >   ResampleFilterType;
-
-  ResampleFilterType::Pointer  resampler = ResampleFilterType::New();
- 
-  double minSpacing = 
-    (inputSpacing[0] < inputSpacing[1] ? inputSpacing[0] : inputSpacing[1]);
-  minSpacing = (minSpacing < inputSpacing[2] ? minSpacing : inputSpacing[2]);
-
-  resampler->SetOutputSpacing( minSpacing / 2.0 );
-
-  resampler->SetDefaultPixelValue( -1024 );
-
-  resampler->SetInput( inputImage );
-
-  try 
-    {
-    resampler->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
-
   typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
   
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
@@ -115,7 +89,7 @@ int main( int argc, char * argv [] )
   // Automatically set to the maxSpacing of the input.
   // segmentationMethod->SetCannySigma( maxSpacing );
 
-  segmentationMethod->SetInput( resampler->GetOutput() );
+  segmentationMethod->SetInput( inputImage );
   segmentationMethod->SetSeeds( landmarks->GetPoints() );
   segmentationMethod->SetRegionOfInterest( inputImage->GetBufferedRegion() );
 
