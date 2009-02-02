@@ -22,7 +22,8 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkLandmarksReader.h"
-#include "itkIsotropicResampler.h"
+#include "itkIsotropicResamplerImageFilter.h"
+#include "itkImageSpatialObject.h"
 
 int main( int argc, char * argv [] )
 {
@@ -63,16 +64,22 @@ int main( int argc, char * argv [] )
 
   const InputImageType * inputImage = inputImageReader->GetOutput();
 
-  typedef itk::IsotropicResampler< Dimension >   ResampleFilterType;
-  typedef ResampleFilterType::SpatialObjectType    SpatialObjectType;
+  InputImageType::SpacingType inputSpacing = inputImage->GetSpacing();
+
+  typedef itk::IsotropicResamplerImageFilter< 
+    InputImageType, InputImageType >   ResampleFilterType;
 
   ResampleFilterType::Pointer  resampler = ResampleFilterType::New();
  
-  InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
+  double minSpacing = 
+    (inputSpacing[0] < inputSpacing[1] ? inputSpacing[0] : inputSpacing[1]);
+  minSpacing = (minSpacing < inputSpacing[2] ? minSpacing : inputSpacing[2]);
 
-  inputObject->SetImage( inputImage );
+  resampler->SetOutputSpacing( minSpacing / 2.0 );
 
-  resampler->SetInput( inputObject );
+  resampler->SetDefaultPixelValue( -1024 );
+
+  resampler->SetInput( inputImage );
 
   try 
     {
@@ -83,9 +90,6 @@ int main( int argc, char * argv [] )
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
     }
-
-  SpatialObjectType::ConstPointer resampledObject = resampler->GetOutput();
-
 
   typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
   
@@ -101,9 +105,14 @@ int main( int argc, char * argv [] )
 
   SegmentationMethodType::Pointer segmentationMethod = SegmentationMethodType::New();
 
-  const InputImageType * resampledImage = resampledObject->GetITKImageBase();
+  // Set the sigma for canny as the maximum inputSpacing
+  double maxSpacing = 
+    (inputSpacing[0] > inputSpacing[1] ? inputSpacing[0] : inputSpacing[1]);
+  maxSpacing = (maxSpacing > inputSpacing[2] ? maxSpacing : inputSpacing[2]);
 
-  segmentationMethod->SetInput( resampledImage );
+  segmentationMethod->SetCannySigma( maxSpacing );
+
+  segmentationMethod->SetInput( resampler->GetOutput() );
   segmentationMethod->SetSeeds( landmarks->GetPoints() );
 
   segmentationMethod->SetRegionOfInterest( inputImage->GetBufferedRegion() );
