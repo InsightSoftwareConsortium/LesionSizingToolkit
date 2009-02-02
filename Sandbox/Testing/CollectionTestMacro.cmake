@@ -347,6 +347,7 @@ ADD_TEST(LSMT8b_${DATASET_OBJECT_ID}
   ${DATASET_ROI}
   ${TEMP}/LSMT8b_Test${DATASET_OBJECT_ID}.mha
   -200  # Threshold used for solid lesions
+  0     # Don't supersample
   )
 
 ADD_TEST(LSMT8c_${DATASET_OBJECT_ID}
@@ -355,7 +356,27 @@ ADD_TEST(LSMT8c_${DATASET_OBJECT_ID}
   ${DATASET_ROI}
   ${TEMP}/LSMT8c_Test${DATASET_OBJECT_ID}.mha
   -500  # Threshold used for part-solid lesions
+  0     # Don't supersample
   )
+
+ADD_TEST(LSMT8d_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest8b
+  ${SEEDS_FILE}
+  ${DATASET_ROI}
+  ${TEMP}/LSMT8d_Test${DATASET_OBJECT_ID}.mha
+  -200  # Threshold used for solid lesions
+  1     # Supersample
+  )
+
+ADD_TEST(LSMT8e_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest8b
+  ${SEEDS_FILE}
+  ${DATASET_ROI}
+  ${TEMP}/LSMT8e_Test${DATASET_OBJECT_ID}.mha
+  -500  # Threshold used for part-solid lesions
+  1     # Supersample
+  )
+
 
 ADD_TEST(LSMT9_${DATASET_OBJECT_ID}
   ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest9

@@ -30,7 +30,7 @@ int main( int argc, char * argv [] )
     {
     std::cerr << "Applies fast marhching followed by segmentation using geodesic active contours. Arguments" << std::endl;
     std::cerr << argv[0] << "\n\tlandmarksFile\n\tinputImage\n\toutputImage ";
-    std::cerr << "\n\t[SigmoidBeta]" << std::endl;
+    std::cerr << "\n\t[SigmoidBeta] [supersample:0/1]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -87,6 +87,14 @@ int main( int argc, char * argv [] )
     std::cout << "Using SigmoidBeta = " << sigmoidBeta << std::endl;
     segmentationMethod->SetSigmoidBeta( sigmoidBeta );
     }
+
+  if( argc > 5 )
+    {
+    const bool resample = atof( argv[5] );
+    std::cout << "Using resampling " << std::endl;
+    segmentationMethod->SetUseIsotropicResampling( resample );
+    }
+
 
   typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
