@@ -39,6 +39,7 @@ LesionSegmentationImageFilter8()
   m_FeatureAggregator = FeatureAggregatorType::New();
   m_SegmentationModule = SegmentationModuleType::New();
   m_CropFilter = CropFilterType::New();
+  m_IsotropicResampler = IsotropicResamplerType::New();
   m_InputSpatialObject = InputImageSpatialObjectType::New();
 
   // Report progress.
@@ -57,6 +58,8 @@ LesionSegmentationImageFilter8()
       itk::ProgressEvent(), m_CommandObserver );
   m_CropFilter->AddObserver( 
       itk::ProgressEvent(), m_CommandObserver );
+  m_IsotropicResampler->AddObserver( 
+      itk::ProgressEvent(), m_CommandObserver );
 
   // Connect pipeline
   m_LungWallFeatureGenerator->SetInput( m_InputSpatialObject );
@@ -70,14 +73,6 @@ LesionSegmentationImageFilter8()
   m_LesionSegmentationMethod->AddFeatureGenerator( m_FeatureAggregator );
   m_LesionSegmentationMethod->SetSegmentationModule( m_SegmentationModule );
 
-  this->m_SigmoidBeta = -500.0;
-  this->m_CannySigma = 1.0;
-  this->m_CannySigmaSetByUser = false;
-  this->m_FastMarchingStoppingTime = 5.0;
-  this->m_FastMarchingDistanceFromSeeds = 0.5;  
-
-  this->m_StatusMessage = "";
-
   // Populate some parameters
   m_LungWallFeatureGenerator->SetLungThreshold( -400 );
   m_VesselnessFeatureGenerator->SetSigma( 1.0 );
@@ -86,31 +81,21 @@ LesionSegmentationImageFilter8()
   m_VesselnessFeatureGenerator->SetSigmoidAlpha( -10.0 );
   m_VesselnessFeatureGenerator->SetSigmoidBeta( 80.0 );
   m_SigmoidFeatureGenerator->SetAlpha( 100.0 );
-  m_SigmoidFeatureGenerator->SetBeta( this->m_SigmoidBeta );
+  m_SigmoidFeatureGenerator->SetBeta( -500.0 );
   m_CannyEdgesFeatureGenerator->SetSigma(1.0);
   m_CannyEdgesFeatureGenerator->SetUpperThreshold( 150.0 );
   m_CannyEdgesFeatureGenerator->SetLowerThreshold( 75.0 );
+  m_FastMarchingStoppingTime = 5.0;
+  m_FastMarchingDistanceFromSeeds = 0.5;  
+  m_SigmoidBeta = -500.0;
+  m_StatusMessage = "";
   m_SegmentationModule->SetCurvatureScaling(1.0);
   m_SegmentationModule->SetAdvectionScaling(0.0);
   m_SegmentationModule->SetPropagationScaling(500.0);
   m_SegmentationModule->SetMaximumRMSError(0.0002);
   m_SegmentationModule->SetMaximumNumberOfIterations(300);
 }
-  
-template <class TInputImage, class TOutputImage>
-void 
-LesionSegmentationImageFilter8<TInputImage,TOutputImage>
-::SetCannySigma( double sigma )
-{
-  itkDebugMacro("setting Canny Sigma to " << sigma);
-  if (this->m_CannySigma != sigma)
-    {
-    this->m_CannySigma = sigma;
-    this->Modified();
-    } 
-  this->m_CannySigmaSetByUser = true;
-}
-
+ 
 template <class TInputImage, class TOutputImage>
 void 
 LesionSegmentationImageFilter8<TInputImage,TOutputImage>
@@ -118,6 +103,15 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
+
+  if ( !this->GetInput() )
+    {
+    InputImagePointer inputPtr  = 
+      const_cast< TInputImage *>( this->GetInput() );
+
+    // Request the entire input image
+    inputPtr->SetRequestedRegion(inputPtr->GetLargestPossibleRegion());  
+    }
 }
 
 template <class TInputImage, class TOutputImage>
@@ -125,6 +119,8 @@ void
 LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 ::GenerateOutputInformation() 
 {
+  typedef typename SizeType::SizeValueType SizeValueType;
+
   // get pointers to the input and output
   typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
   typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
@@ -134,14 +130,30 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
     return;
     }
 
-  // Set the output image size to the same value as the region of interest.
-  RegionType region;
-  IndexType  start;
-  start.Fill(0);
+  // Compute the spacing after isotropic resampling.
+  double minSpacing = NumericTraits< double >::max();
+  for (int i = 0; i < ImageDimension; i++)
+    {
+    minSpacing = (minSpacing > inputPtr->GetSpacing()[i] ? 
+                  inputPtr->GetSpacing()[i] : minSpacing);
+    }
+  
+  // Compute the new size due to isotropic upresampling of the cropped region
+  SizeType resampledSize;
+  for (int i = 0; i < ImageDimension; i++)
+    {
+    const double d = m_RegionOfInterest.GetSize()[i] 
+                     * inputPtr->GetSpacing()[i] / minSpacing;
+    resampledSize[i] = static_cast<SizeValueType>( d );
+    }  
 
-  region.SetSize( m_RegionOfInterest.GetSize() );
-  region.SetIndex( start );
- 
+  // Compute the regions due to resampling
+  IndexType start;
+  start.Fill(0);
+  // RegionType region( start, resampledSize ); // Does not work ??
+  RegionType region( start, m_RegionOfInterest.GetSize() );
+  m_ResampledSize = resampledSize;
+
   // Copy Information without modification.
   outputPtr->CopyInformation( inputPtr );
 
@@ -176,6 +188,11 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
     }
   
   outputPtr->SetOrigin( outputOrigin );  
+
+  // Adjust the spacing to the isotropic spacing
+  typename Superclass::InputImageType::SpacingType outputSpacing;
+  outputSpacing.Fill( minSpacing );
+  outputPtr->SetSpacing( outputSpacing );
 }
 
   
@@ -189,7 +206,8 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   m_SegmentationModule->SetStoppingValue(m_FastMarchingStoppingTime);
 
   // Allocate the output
-  this->GetOutput()->SetBufferedRegion( this->GetOutput()->GetRequestedRegion() );
+  this->GetOutput()->SetLargestPossibleRegion( m_ResampledSize );
+  this->GetOutput()->SetBufferedRegion( m_ResampledSize );
   this->GetOutput()->Allocate();
  
   typename  InputImageType::ConstPointer  input  = this->GetInput();
@@ -199,25 +217,35 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   m_CropFilter->SetRegionOfInterest(m_RegionOfInterest);
   m_CropFilter->Update(); 
  
-  // Convert the output of cropping to a spatial object that can be fed into
+  // Resample to isotropic dimensions. We will resample to the min(Spacing).
+
+  m_IsotropicResampler->SetInput( m_CropFilter->GetOutput() );
+  double minSpacing = NumericTraits< double >::max();
+  double maxSpacing = NumericTraits< double >::min();  
+  for (int i = 0; i < ImageDimension; i++)
+    {
+    minSpacing = (minSpacing > input->GetSpacing()[i] ? 
+                  input->GetSpacing()[i] : minSpacing);
+    maxSpacing = (maxSpacing < input->GetSpacing()[i] ? 
+                  input->GetSpacing()[i] : maxSpacing);
+    }
+  m_IsotropicResampler->SetOutputSpacing( minSpacing );
+  m_IsotropicResampler->Update();
+
+  // Convert the output of resampling to a spatial object that can be fed into
   // the lesion segmentation method
-  typename InputImageType::Pointer inputImage = m_CropFilter->GetOutput();
+
+  typename InputImageType::Pointer inputImage = m_IsotropicResampler->GetOutput();
   inputImage->DisconnectPipeline();
   m_InputSpatialObject->SetImage(inputImage);
-
-  if( !this->m_CannySigmaSetByUser )
-    {
-    // Set the sigma for canny as the maximum spacing
-    typename InputImageType::SpacingType spacing = inputImage->GetSpacing();
-    double maxSpacing = (spacing[0] > spacing[1] ? spacing[0] : spacing[1]);
-    maxSpacing = (maxSpacing > spacing[2] ? maxSpacing : spacing[2]);
-    this->m_CannySigma = maxSpacing;
-    }
-
-  m_CannyEdgesFeatureGenerator->SetSigma( this->m_CannySigma );
   
+  // Sigma for the canny is the max spacing of the original input (before 
+  // resampling)
+
+  m_CannyEdgesFeatureGenerator->SetSigma( maxSpacing );
 
   // Seeds
+
   typename SeedSpatialObjectType::Pointer seedSpatialObject =
     SeedSpatialObjectType::New();
   seedSpatialObject->SetPoints(m_Seeds);
@@ -257,6 +285,12 @@ void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
       this->UpdateProgress( m_CropFilter->GetProgress() );
       }
 
+    if (dynamic_cast< IsotropicResamplerType * >(caller))
+      {
+      this->m_StatusMessage = "Isotropic resampling of data using BSpline interpolation..";
+      this->UpdateProgress( m_IsotropicResampler->GetProgress() );
+      }
+    
     else if (dynamic_cast< LungWallGeneratorType * >(caller))
       {
       // Given its iterative nature.. a cranky heuristic here.

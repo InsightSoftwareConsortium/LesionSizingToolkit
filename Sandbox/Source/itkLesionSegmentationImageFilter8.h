@@ -32,6 +32,7 @@
 #include "itkRegionOfInterestImageFilter.h"
 #include "itkLesionSegmentationMethod.h"
 #include "itkMinimumFeatureAggregator.h"
+#include "itkIsotropicResamplerImageFilter.h"
 #include <string>
 
 namespace itk
@@ -104,9 +105,6 @@ public:
   itkSetMacro( SigmoidBeta, double );
   itkGetMacro( SigmoidBeta, double );
   
-  void SetCannySigma( double );
-  itkGetMacro( CannySigma, double );
-  
   typedef itk::LandmarkSpatialObject< ImageDimension > SeedSpatialObjectType;
   typedef typename SeedSpatialObjectType::PointListType PointListType;
 
@@ -121,7 +119,7 @@ public:
 
   /** Override the superclass implementation so as to set the flag on all the
    * filters within our lesion segmentation pipeline */
-  virtual void SetAbortGenerateData( bool );
+  virtual void SetAbortGenerateData( const bool );
 
 protected:
   LesionSegmentationImageFilter8();
@@ -142,8 +140,9 @@ protected:
   typedef RegionOfInterestImageFilter< InputImageType, InputImageType > CropFilterType; 
   typedef typename SegmentationModuleType::SpatialObjectType       SpatialObjectType;
   typedef typename SegmentationModuleType::OutputSpatialObjectType OutputSpatialObjectType;
-  typedef itk::ImageSpatialObject< ImageDimension, InputImagePixelType > InputImageSpatialObjectType;
-  typedef typename RegionType::SizeType           SizeType;
+  typedef ImageSpatialObject< ImageDimension, InputImagePixelType > InputImageSpatialObjectType;
+  typedef IsotropicResamplerImageFilter< ImageDimension > IsotropicResamplerType;
+  typedef typename RegionType::SizeType SizeType;
   typedef MemberCommand< Self >  CommandType;
 
 
@@ -151,8 +150,6 @@ private:
   virtual ~LesionSegmentationImageFilter8(){};
 
   double                                m_SigmoidBeta;
-  double                                m_CannySigma;
-  bool                                  m_CannySigmaSetByUser;
   double                                m_FastMarchingStoppingTime;
   double                                m_FastMarchingDistanceFromSeeds;
 
@@ -164,11 +161,13 @@ private:
   typename FeatureAggregatorType::Pointer        m_FeatureAggregator;
   typename SegmentationModuleType::Pointer       m_SegmentationModule;
   typename CropFilterType::Pointer               m_CropFilter;
-  typename InputImageSpatialObjectType::Pointer  m_InputSpatialObject;
+  typename IsotropicResamplerType::Pointer       m_IsotropicResampler;
   typename CommandType::Pointer                  m_CommandObserver;
   RegionType                                     m_RegionOfInterest;
   std::string                                    m_StatusMessage;
   typename SeedSpatialObjectType::PointListType  m_Seeds;
+  SizeType                                       m_ResampledSize;
+  typename InputImageSpatialObjectType::Pointer  m_InputSpatialObject;
 };
 
 } //end of namespace itk
