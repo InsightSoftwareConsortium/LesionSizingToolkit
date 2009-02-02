@@ -109,12 +109,14 @@ int main( int argc, char * argv [] )
   double maxSpacing = 
     (inputSpacing[0] > inputSpacing[1] ? inputSpacing[0] : inputSpacing[1]);
   maxSpacing = (maxSpacing > inputSpacing[2] ? maxSpacing : inputSpacing[2]);
+  std::cout << "Sigma for canny is the maxSpacing of the input = " 
+            << maxSpacing << std::endl;
 
-  segmentationMethod->SetCannySigma( maxSpacing );
+  // Automatically set to the maxSpacing of the input.
+  // segmentationMethod->SetCannySigma( maxSpacing );
 
   segmentationMethod->SetInput( resampler->GetOutput() );
   segmentationMethod->SetSeeds( landmarks->GetPoints() );
-
   segmentationMethod->SetRegionOfInterest( inputImage->GetBufferedRegion() );
 
   if( argc > 4 )
