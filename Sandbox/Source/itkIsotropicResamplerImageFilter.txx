@@ -44,6 +44,60 @@ IsotropicResamplerImageFilter<TInputImage, TOutputImage>::
 template< class TInputImage, class TOutputImage >
 void
 IsotropicResamplerImageFilter< TInputImage, TOutputImage >
+::GenerateOutputInformation()
+{
+  // call the superclass' implementation of this method
+  this->Superclass::GenerateOutputInformation();
+
+  // get pointers to the input and output
+  typedef typename OutputImageType::Pointer       OutputImagePointer;
+  OutputImagePointer outputPtr = this->GetOutput();
+  if ( !outputPtr )
+    {
+    return;
+    }
+
+  const InputImageType * inputImage = this->GetInput();
+  if( !inputImage )
+    {
+    itkExceptionMacro("Missing input image");
+    }
+  
+  const typename InputImageType::SpacingType & inputSpacing = inputImage->GetSpacing();
+  typename InputImageType::SpacingType outputSpacing;
+  outputSpacing[0] = this->m_OutputSpacing;
+  outputSpacing[1] = this->m_OutputSpacing;
+  outputSpacing[2] = this->m_OutputSpacing;
+
+  typedef typename InputImageType::SizeType   SizeType;
+  SizeType inputSize = inputImage->GetLargestPossibleRegion().GetSize();
+  typedef typename SizeType::SizeValueType SizeValueType;
+  const double dx = inputSize[0] * inputSpacing[0] / outputSpacing[0];
+  const double dy = inputSize[1] * inputSpacing[1] / outputSpacing[1];
+  const double dz = inputSize[2] * inputSpacing[2] / outputSpacing[2];
+
+  typename InputImageType::SizeType   finalSize;
+  finalSize[0] = static_cast<SizeValueType>( dx );
+  finalSize[1] = static_cast<SizeValueType>( dy );
+  finalSize[2] = static_cast<SizeValueType>( dz );
+  
+  typename TOutputImage::RegionType outputLargestPossibleRegion;
+  typename TOutputImage::RegionType::IndexType index;
+  index.Fill(0);
+  outputLargestPossibleRegion.SetSize( finalSize );
+  outputLargestPossibleRegion.SetIndex( index );
+  outputPtr->SetLargestPossibleRegion( outputLargestPossibleRegion );
+  outputPtr->SetSpacing( outputSpacing );
+  outputPtr->SetOrigin( inputImage->GetOrigin() );
+
+#if ITK_VERSION_MAJOR > 3 || (ITK_VERSION_MAJOR == 3 && ITK_VERSION_MINOR >= 10)
+  outputPtr->SetDirection( m_OutputDirection );
+#endif
+}
+
+template< class TInputImage, class TOutputImage >
+void
+IsotropicResamplerImageFilter< TInputImage, TOutputImage >
 ::GenerateData()
 {
   // Report progress.
@@ -51,7 +105,6 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
   progress->SetMiniPipelineFilter(this);
 
   const InputImageType * inputImage = this->GetInput();
-
   if( !inputImage )
     {
     itkExceptionMacro("Missing input image");

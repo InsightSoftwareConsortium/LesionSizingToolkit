@@ -79,6 +79,13 @@ public:
    * filters within our lesion segmentation pipeline */
   virtual void SetAbortGenerateData( bool );
 
+  /** ResampleImageFilter produces an image which is a different size
+   * than its input.  As such, it needs to provide an implementation
+   * for GenerateOutputInformation() in order to inform the pipeline
+   * execution model.  The original documentation of this method is
+   * below. \sa ProcessObject::GenerateOutputInformaton() */
+  virtual void GenerateOutputInformation( void );
+  
 protected:
   IsotropicResamplerImageFilter();
   void PrintSelf(std::ostream& os, Indent indent) const;
