@@ -95,7 +95,7 @@ private:
   typedef typename ResampleFilterType::Pointer             ResampleFilterPointer;
 
   ResampleFilterPointer     m_ResampleFilter;
-  PixelType                 m_DefaultPixelValue;
+  OutputImagePixelType      m_DefaultPixelValue;
 };
 
 } //end of namespace itk
