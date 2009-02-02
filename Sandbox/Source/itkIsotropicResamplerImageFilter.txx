@@ -91,7 +91,7 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
   outputPtr->SetOrigin( inputImage->GetOrigin() );
 
 #if ITK_VERSION_MAJOR > 3 || (ITK_VERSION_MAJOR == 3 && ITK_VERSION_MINOR >= 10)
-  outputPtr->SetDirection( m_OutputDirection );
+  outputPtr->SetDirection( inputImage->GetDirection() );
 #endif
 }
 
