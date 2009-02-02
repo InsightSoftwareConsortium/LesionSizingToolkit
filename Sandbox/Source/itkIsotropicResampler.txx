@@ -124,9 +124,11 @@ IsotropicResampler<NDimension>
 
   typename BSplineInterpolatorType::Pointer bsplineInterpolator = BSplineInterpolatorType::New();
 
+#if ITK_VERSION_MAJOR > 3 || (ITK_VERSION_MAJOR == 3 && ITK_VERSION_MINOR >= 10)
   bsplineInterpolator->UseImageDirectionOn();
-  bsplineInterpolator->SetSplineOrder( 3 );
+#endif
 
+  bsplineInterpolator->SetSplineOrder( 3 );
   resampler->SetTransform( transform );
   resampler->SetInterpolator( bsplineInterpolator );
   resampler->SetDefaultPixelValue( -1024 ); // Hounsfield Units for Air
