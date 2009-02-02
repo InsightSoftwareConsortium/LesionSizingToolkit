@@ -94,6 +94,7 @@ LesionSegmentationImageFilter8()
   m_SegmentationModule->SetPropagationScaling(500.0);
   m_SegmentationModule->SetMaximumRMSError(0.0002);
   m_SegmentationModule->SetMaximumNumberOfIterations(300);
+  m_UseIsotropicResampling = true;
 }
  
 template <class TInputImage, class TOutputImage>
@@ -147,15 +148,16 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
     resampledSize[i] = static_cast<SizeValueType>( d );
     }  
 
+  // Copy Information without modification.
+  outputPtr->CopyInformation( inputPtr );
+
   // Compute the regions due to resampling
+
   IndexType start;
   start.Fill(0);
   // RegionType region( start, resampledSize ); // Does not work ??
   RegionType region( start, m_RegionOfInterest.GetSize() );
   m_ResampledSize = resampledSize;
-
-  // Copy Information without modification.
-  outputPtr->CopyInformation( inputPtr );
 
   // Adjust output region
   outputPtr->SetLargestPossibleRegion(region);
@@ -189,10 +191,13 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
   
   outputPtr->SetOrigin( outputOrigin );  
 
-  // Adjust the spacing to the isotropic spacing
-  typename Superclass::InputImageType::SpacingType outputSpacing;
-  outputSpacing.Fill( minSpacing );
-  outputPtr->SetSpacing( outputSpacing );
+  if (m_UseIsotropicResampling)
+    {
+    // Adjust the spacing to the isotropic spacing
+    typename Superclass::InputImageType::SpacingType outputSpacing;
+    outputSpacing.Fill( minSpacing );
+    outputPtr->SetSpacing( outputSpacing );
+    }
 }
 
   
@@ -206,42 +211,59 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   m_SegmentationModule->SetStoppingValue(m_FastMarchingStoppingTime);
 
   // Allocate the output
-  this->GetOutput()->SetLargestPossibleRegion( m_ResampledSize );
-  this->GetOutput()->SetBufferedRegion( m_ResampledSize );
+  if (!this->m_UseIsotropicResampling)
+    {
+    this->GetOutput()->SetBufferedRegion( this->GetOutput()->GetRequestedRegion() );
+    }
+  else
+    {
+    this->GetOutput()->SetLargestPossibleRegion( m_ResampledSize );
+    this->GetOutput()->SetBufferedRegion( m_ResampledSize );
+    }
   this->GetOutput()->Allocate();
  
+  // Get the input image
   typename  InputImageType::ConstPointer  input  = this->GetInput();
 
   // Crop
   m_CropFilter->SetInput(input);
   m_CropFilter->SetRegionOfInterest(m_RegionOfInterest);
   m_CropFilter->Update(); 
- 
-  // Resample to isotropic dimensions. We will resample to the min(Spacing).
+  typename InputImageType::Pointer inputImage = m_CropFilter->GetOutput();
 
-  m_IsotropicResampler->SetInput( m_CropFilter->GetOutput() );
-  double minSpacing = NumericTraits< double >::max();
-  double maxSpacing = NumericTraits< double >::min();  
-  for (int i = 0; i < ImageDimension; i++)
-    {
-    minSpacing = (minSpacing > input->GetSpacing()[i] ? 
-                  input->GetSpacing()[i] : minSpacing);
-    maxSpacing = (maxSpacing < input->GetSpacing()[i] ? 
-                  input->GetSpacing()[i] : maxSpacing);
+  if (m_UseIsotropicResampling)
+    { 
+    // Resample to isotropic dimensions. We will resample to the min(Spacing).
+
+    m_IsotropicResampler->SetInput( m_CropFilter->GetOutput() );
+    double minSpacing = NumericTraits< double >::max();
+    for (int i = 0; i < ImageDimension; i++)
+      {
+      minSpacing = (minSpacing > input->GetSpacing()[i] ? 
+                    input->GetSpacing()[i] : minSpacing);
+      }
+    m_IsotropicResampler->SetOutputSpacing( minSpacing );
+    m_IsotropicResampler->Update();
+    inputImage = m_IsotropicResampler->GetOutput();
     }
-  m_IsotropicResampler->SetOutputSpacing( minSpacing );
-  m_IsotropicResampler->Update();
 
-  // Convert the output of resampling to a spatial object that can be fed into
+
+  // Convert the output of resampling (or cropping based on 
+  // m_UseIsotropicResampling) to a spatial object that can be fed into
   // the lesion segmentation method
 
-  typename InputImageType::Pointer inputImage = m_IsotropicResampler->GetOutput();
   inputImage->DisconnectPipeline();
   m_InputSpatialObject->SetImage(inputImage);
   
   // Sigma for the canny is the max spacing of the original input (before 
   // resampling)
 
+  double maxSpacing = NumericTraits< double >::min();  
+  for (int i = 0; i < ImageDimension; i++)
+    {
+    maxSpacing = (maxSpacing < input->GetSpacing()[i] ? 
+                    input->GetSpacing()[i] : maxSpacing);
+    }
   m_CannyEdgesFeatureGenerator->SetSigma( maxSpacing );
 
   // Seeds

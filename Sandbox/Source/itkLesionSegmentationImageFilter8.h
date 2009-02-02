@@ -99,11 +99,18 @@ public:
   void ProgressUpdate( Object * caller, 
                        const EventObject & event );
 
+  /** Set the ROI */
   itkSetMacro( RegionOfInterest, RegionType );
   itkGetMacro( RegionOfInterest, RegionType );
 
+  /** Set the beta for the sigmoid intensity feature */
   itkSetMacro( SigmoidBeta, double );
   itkGetMacro( SigmoidBeta, double );
+
+  /** Turn On/Off isotropic resampling prior to running the segmentation */
+  itkSetMacro( UseIsotropicResampling, bool );
+  itkGetMacro( UseIsotropicResampling, bool );
+  itkBooleanMacro( UseIsotropicResampling );
   
   typedef itk::LandmarkSpatialObject< ImageDimension > SeedSpatialObjectType;
   typedef typename SeedSpatialObjectType::PointListType PointListType;
@@ -168,6 +175,7 @@ private:
   typename SeedSpatialObjectType::PointListType  m_Seeds;
   SizeType                                       m_ResampledSize;
   typename InputImageSpatialObjectType::Pointer  m_InputSpatialObject;
+  bool                                           m_UseIsotropicResampling;
 };
 
 } //end of namespace itk
