@@ -70,6 +70,14 @@ LesionSegmentationImageFilter8()
   m_LesionSegmentationMethod->AddFeatureGenerator( m_FeatureAggregator );
   m_LesionSegmentationMethod->SetSegmentationModule( m_SegmentationModule );
 
+  this->m_SigmoidBeta = -500.0;
+  this->m_CannySigma = 1.0;
+  this->m_CannySigmaSetByUser = false;
+  this->m_FastMarchingStoppingTime = 5.0;
+  this->m_FastMarchingDistanceFromSeeds = 0.5;  
+
+  this->m_StatusMessage = "";
+
   // Populate some parameters
   m_LungWallFeatureGenerator->SetLungThreshold( -400 );
   m_VesselnessFeatureGenerator->SetSigma( 1.0 );
@@ -78,21 +86,31 @@ LesionSegmentationImageFilter8()
   m_VesselnessFeatureGenerator->SetSigmoidAlpha( -10.0 );
   m_VesselnessFeatureGenerator->SetSigmoidBeta( 80.0 );
   m_SigmoidFeatureGenerator->SetAlpha( 100.0 );
-  m_SigmoidFeatureGenerator->SetBeta( -500.0 );
+  m_SigmoidFeatureGenerator->SetBeta( this->m_SigmoidBeta );
   m_CannyEdgesFeatureGenerator->SetSigma(1.0);
   m_CannyEdgesFeatureGenerator->SetUpperThreshold( 150.0 );
   m_CannyEdgesFeatureGenerator->SetLowerThreshold( 75.0 );
-  m_FastMarchingStoppingTime = 5.0;
-  m_FastMarchingDistanceFromSeeds = 0.5;  
-  m_SigmoidBeta = -500.0;
-  m_StatusMessage = "";
   m_SegmentationModule->SetCurvatureScaling(1.0);
   m_SegmentationModule->SetAdvectionScaling(0.0);
   m_SegmentationModule->SetPropagationScaling(500.0);
   m_SegmentationModule->SetMaximumRMSError(0.0002);
   m_SegmentationModule->SetMaximumNumberOfIterations(300);
 }
- 
+  
+template <class TInputImage, class TOutputImage>
+void 
+LesionSegmentationImageFilter8<TInputImage,TOutputImage>
+::SetCannySigma( double sigma )
+{
+  itkDebugMacro("setting Canny Sigma to " << sigma);
+  if (this->m_CannySigma != sigma)
+    {
+    this->m_CannySigma = sigma;
+    this->Modified();
+    } 
+  this->m_CannySigmaSetByUser = true;
+}
+
 template <class TInputImage, class TOutputImage>
 void 
 LesionSegmentationImageFilter8<TInputImage,TOutputImage>
@@ -187,13 +205,16 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   inputImage->DisconnectPipeline();
   m_InputSpatialObject->SetImage(inputImage);
 
-  // Set the sigma for canny as the maximum spacing
-  double spacing[3] = { inputImage->GetSpacing()[0],
-                        inputImage->GetSpacing()[1],
-                        inputImage->GetSpacing()[2] };
-  double maxSpacing = (spacing[0] > spacing[1] ? spacing[0] : spacing[1]);
-  maxSpacing = (maxSpacing > spacing[2] ? maxSpacing : spacing[2]);
-  m_CannyEdgesFeatureGenerator->SetSigma( maxSpacing );
+  if( !this->m_CannySigmaSetByUser )
+    {
+    // Set the sigma for canny as the maximum spacing
+    typename InputImageType::SpacingType spacing = inputImage->GetSpacing();
+    double maxSpacing = (spacing[0] > spacing[1] ? spacing[0] : spacing[1]);
+    maxSpacing = (maxSpacing > spacing[2] ? maxSpacing : spacing[2]);
+    this->m_CannySigma = maxSpacing;
+    }
+
+  m_CannyEdgesFeatureGenerator->SetSigma( this->m_CannySigma );
   
 
   // Seeds

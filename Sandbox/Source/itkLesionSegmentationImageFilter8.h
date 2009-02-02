@@ -78,9 +78,6 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
 
-  /** Get a status message for display purposes */
-  itkGetStringMacro( StatusMessage );
-  
   virtual void GenerateInputRequestedRegion() 
             throw(InvalidRequestedRegionError);
 
@@ -107,6 +104,9 @@ public:
   itkSetMacro( SigmoidBeta, double );
   itkGetMacro( SigmoidBeta, double );
   
+  void SetCannySigma( double );
+  itkGetMacro( CannySigma, double );
+  
   typedef itk::LandmarkSpatialObject< ImageDimension > SeedSpatialObjectType;
   typedef typename SeedSpatialObjectType::PointListType PointListType;
 
@@ -114,7 +114,7 @@ public:
   PointListType GetSeeds() { return m_Seeds; }
   
   // Return the status message
-  const char *GetStatusMessage() 
+  const char *GetStatusMessage() const
     {
     return m_StatusMessage.length() ? m_StatusMessage.c_str() : NULL;
     }
@@ -150,11 +150,12 @@ protected:
 private:
   virtual ~LesionSegmentationImageFilter8(){};
 
-  double                                m_Sigma;
   double                                m_SigmoidBeta;
-  double                                m_CannyEdgesBeta;
+  double                                m_CannySigma;
+  bool                                  m_CannySigmaSetByUser;
   double                                m_FastMarchingStoppingTime;
   double                                m_FastMarchingDistanceFromSeeds;
+
   typename LesionSegmentationMethodType::Pointer m_LesionSegmentationMethod;
   typename LungWallGeneratorType::Pointer        m_LungWallFeatureGenerator;
   typename VesselnessGeneratorType::Pointer      m_VesselnessFeatureGenerator;
