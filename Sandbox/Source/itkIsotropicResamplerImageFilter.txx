@@ -32,6 +32,7 @@ IsotropicResamplerImageFilter()
 
   this->m_OutputSpacing = 0.2;  // 0.2 mm
   this->m_DefaultPixelValue = static_cast< OutputImagePixelType >(0.0);
+  this->m_ResampleFilter = ResampleFilterType::New();
 }
   
 template <class TInputImage, class TOutputImage>
