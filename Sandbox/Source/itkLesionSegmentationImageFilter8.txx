@@ -138,13 +138,24 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
     minSpacing = (minSpacing > inputPtr->GetSpacing()[i] ? 
                   inputPtr->GetSpacing()[i] : minSpacing);
     }
+
+  // Try and reduce the anisotropy.
+  SpacingType outputSpacing = inputPtr->GetSpacing();
+  for (int i = 0; i < ImageDimension; i++)
+    {
+    if (outputSpacing[i]/minSpacing > 2.0)
+      {
+      outputSpacing[i] /= 2.0;
+      }
+    }
+  
   
   // Compute the new size due to isotropic upresampling of the cropped region
   SizeType resampledSize;
   for (int i = 0; i < ImageDimension; i++)
     {
     const double d = m_RegionOfInterest.GetSize()[i] 
-                     * inputPtr->GetSpacing()[i] / minSpacing;
+                     * inputPtr->GetSpacing()[i] / outputSpacing[i];
     resampledSize[i] = static_cast<SizeValueType>( d );
     }  
 
@@ -155,12 +166,19 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 
   IndexType start;
   start.Fill(0);
-  // RegionType region( start, resampledSize ); // Does not work ??
-  RegionType region( start, m_RegionOfInterest.GetSize() );
+  //if (m_UseIsotropicResampling)
+    {
+    //RegionType region( start, resampledSize ); // Does not work ??
+    //outputPtr->SetLargestPossibleRegion(region);
+    }
+  //else 
+    {
+    RegionType region( start, m_RegionOfInterest.GetSize() );
+    outputPtr->SetLargestPossibleRegion(region);
+    }
+
   m_ResampledSize = resampledSize;
 
-  // Adjust output region
-  outputPtr->SetLargestPossibleRegion(region);
 
   // Correct origin of the extracted region.
   IndexType roiStart( m_RegionOfInterest.GetIndex() );
@@ -193,9 +211,6 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 
   if (m_UseIsotropicResampling)
     {
-    // Adjust the spacing to the isotropic spacing
-    typename Superclass::InputImageType::SpacingType outputSpacing;
-    outputSpacing.Fill( minSpacing );
     outputPtr->SetSpacing( outputSpacing );
     }
 }
@@ -219,6 +234,7 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
     {
     this->GetOutput()->SetLargestPossibleRegion( m_ResampledSize );
     this->GetOutput()->SetBufferedRegion( m_ResampledSize );
+    this->GetOutput()->SetRequestedRegion( m_ResampledSize );
     }
   this->GetOutput()->Allocate();
  
@@ -242,7 +258,18 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
       minSpacing = (minSpacing > input->GetSpacing()[i] ? 
                     input->GetSpacing()[i] : minSpacing);
       }
-    m_IsotropicResampler->SetOutputSpacing( minSpacing );
+
+    // Try and reduce the anisotropy.
+    SpacingType outputSpacing = input->GetSpacing();
+    for (int i = 0; i < ImageDimension; i++)
+      {
+      if (outputSpacing[i]/minSpacing > 2.0)
+        {
+        outputSpacing[i] /= 2.0;
+        }
+      }
+   
+    m_IsotropicResampler->SetOutputSpacing( outputSpacing );
     m_IsotropicResampler->Update();
     inputImage = m_IsotropicResampler->GetOutput();
     }
@@ -286,11 +313,12 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   outputImage->DisconnectPipeline();
   this->GraftOutput(outputImage);
 
-  /*typedef ImageFileWriter< OutputImageType > WriterType;
+  typedef ImageFileWriter< OutputImageType > WriterType;
   typename WriterType::Pointer writer = WriterType::New();
   writer->SetFileName("output.mha");
   writer->SetInput(outputImage);
-  writer->Write();*/
+  writer->UseCompressionOn();
+  writer->Write();
 }
 
 

@@ -19,6 +19,7 @@
 
 #include "itkResampleImageFilter.h"
 #include "itkImage.h"
+#include "itkBSplineInterpolateImageFunction.h"
 
 namespace itk
 {
@@ -50,6 +51,9 @@ public:
 
   /** Define pixel types. */
   typedef typename TOutputImage::PixelType  OutputImagePixelType;
+  typedef typename InputImageType::SizeType SizeType;
+  typedef typename SizeType::SizeValueType SizeValueType;
+  typedef typename InputImageType::SpacingType SpacingType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -64,8 +68,8 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
 
-  itkSetMacro( OutputSpacing, double );
-  itkGetMacro( OutputSpacing, double );
+  itkSetMacro( OutputSpacing, SpacingType );
+  itkGetMacro( OutputSpacing, SpacingType );
 
   itkSetMacro( DefaultPixelValue, OutputImagePixelType );
   itkGetMacro( DefaultPixelValue, OutputImagePixelType );
@@ -97,7 +101,7 @@ private:
   IsotropicResamplerImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  double    m_OutputSpacing;
+  SpacingType m_OutputSpacing;
   typedef ResampleImageFilter< TInputImage, TOutputImage > ResampleFilterType;
   typedef typename ResampleFilterType::Pointer             ResampleFilterPointer;
 

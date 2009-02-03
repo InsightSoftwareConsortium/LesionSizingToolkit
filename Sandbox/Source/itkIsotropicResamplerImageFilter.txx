@@ -30,7 +30,7 @@ IsotropicResamplerImageFilter()
   this->SetNumberOfRequiredInputs( 1 );
   this->SetNumberOfRequiredOutputs( 1 );
 
-  this->m_OutputSpacing = 0.2;  // 0.2 mm
+  this->m_OutputSpacing.Fill( 0.2 );  // 0.2 mm
   this->m_DefaultPixelValue = static_cast< OutputImagePixelType >(0.0);
   this->m_ResampleFilter = ResampleFilterType::New();
 }
@@ -63,23 +63,14 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
     itkExceptionMacro("Missing input image");
     }
   
-  const typename InputImageType::SpacingType & inputSpacing = inputImage->GetSpacing();
-  typename InputImageType::SpacingType outputSpacing;
-  outputSpacing[0] = this->m_OutputSpacing;
-  outputSpacing[1] = this->m_OutputSpacing;
-  outputSpacing[2] = this->m_OutputSpacing;
+  const SpacingType & inputSpacing = inputImage->GetSpacing();
 
-  typedef typename InputImageType::SizeType   SizeType;
-  SizeType inputSize = inputImage->GetLargestPossibleRegion().GetSize();
-  typedef typename SizeType::SizeValueType SizeValueType;
-  const double dx = inputSize[0] * inputSpacing[0] / outputSpacing[0];
-  const double dy = inputSize[1] * inputSpacing[1] / outputSpacing[1];
-  const double dz = inputSize[2] * inputSpacing[2] / outputSpacing[2];
-
-  typename InputImageType::SizeType   finalSize;
-  finalSize[0] = static_cast<SizeValueType>( dx );
-  finalSize[1] = static_cast<SizeValueType>( dy );
-  finalSize[2] = static_cast<SizeValueType>( dz );
+  SizeType inputSize = inputImage->GetLargestPossibleRegion().GetSize(), finalSize;
+  for (unsigned int i = 0; i < ImageDimension; i++)
+    {
+    const double dx = inputSize[i] * inputSpacing[i] / m_OutputSpacing[i];
+    finalSize[i] = static_cast<SizeValueType>( dx );
+    }
   
   typename TOutputImage::RegionType outputLargestPossibleRegion;
   typename TOutputImage::RegionType::IndexType index;
@@ -87,7 +78,7 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
   outputLargestPossibleRegion.SetSize( finalSize );
   outputLargestPossibleRegion.SetIndex( index );
   outputPtr->SetLargestPossibleRegion( outputLargestPossibleRegion );
-  outputPtr->SetSpacing( outputSpacing );
+  outputPtr->SetSpacing( m_OutputSpacing );
   outputPtr->SetOrigin( inputImage->GetOrigin() );
 
 #if ITK_VERSION_MAJOR > 3 || (ITK_VERSION_MAJOR == 3 && ITK_VERSION_MINOR >= 10)
@@ -124,42 +115,21 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
 #endif
   bsplineInterpolator->SetSplineOrder( 3 );
 
+  const SpacingType & inputSpacing = inputImage->GetSpacing();
+  SizeType inputSize = inputImage->GetLargestPossibleRegion().GetSize(), finalSize;
+  for (unsigned int i = 0; i < ImageDimension; i++)
+    {
+    const double dx = inputSize[i] * inputSpacing[i] / m_OutputSpacing[i];
+    finalSize[i] = static_cast<SizeValueType>( dx );
+    }
+
   this->m_ResampleFilter->SetTransform( transform );
   this->m_ResampleFilter->SetInterpolator( bsplineInterpolator );
   this->m_ResampleFilter->SetDefaultPixelValue( this->m_DefaultPixelValue );
-
-  const typename InputImageType::SpacingType & inputSpacing = inputImage->GetSpacing();
-
-  typename InputImageType::SpacingType outputSpacing;
-
-
-  outputSpacing[0] = this->m_OutputSpacing;
-  outputSpacing[1] = this->m_OutputSpacing;
-  outputSpacing[2] = this->m_OutputSpacing;
-
-  this->m_ResampleFilter->SetOutputSpacing( outputSpacing );
-
+  this->m_ResampleFilter->SetOutputSpacing( m_OutputSpacing );
   this->m_ResampleFilter->SetOutputOrigin( inputImage->GetOrigin() );
   this->m_ResampleFilter->SetOutputDirection( inputImage->GetDirection() );
-
-  typedef typename InputImageType::SizeType   SizeType;
-
-  SizeType inputSize = inputImage->GetLargestPossibleRegion().GetSize();
-  
-  typedef typename SizeType::SizeValueType SizeValueType;
-
-  const double dx = inputSize[0] * inputSpacing[0] / outputSpacing[0];
-  const double dy = inputSize[1] * inputSpacing[1] / outputSpacing[1];
-  const double dz = inputSize[2] * inputSpacing[2] / outputSpacing[2];
-
-  typename InputImageType::SizeType   finalSize;
-
-  finalSize[0] = static_cast<SizeValueType>( dx );
-  finalSize[1] = static_cast<SizeValueType>( dy );
-  finalSize[2] = static_cast<SizeValueType>( dz );
-
   this->m_ResampleFilter->SetSize( finalSize );
-
   this->m_ResampleFilter->SetInput( inputImage );
 
   progress->RegisterInternalFilter( this->m_ResampleFilter, 1.0 );  

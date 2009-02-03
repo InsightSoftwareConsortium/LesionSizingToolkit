@@ -61,6 +61,7 @@ public:
   typedef typename TInputImage::PixelType   InputImagePixelType;
   typedef typename TOutputImage::PixelType  OutputImagePixelType;
   typedef typename TInputImage::IndexType   IndexType;
+  typedef typename InputImageType::SpacingType SpacingType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
