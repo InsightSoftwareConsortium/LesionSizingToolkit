@@ -313,12 +313,12 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   outputImage->DisconnectPipeline();
   this->GraftOutput(outputImage);
 
-  typedef ImageFileWriter< OutputImageType > WriterType;
+  /*typedef ImageFileWriter< OutputImageType > WriterType;
   typename WriterType::Pointer writer = WriterType::New();
   writer->SetFileName("output.mha");
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
-  writer->Write();
+  writer->Write();*/
 }
 
 
