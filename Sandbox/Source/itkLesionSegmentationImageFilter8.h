@@ -109,9 +109,17 @@ public:
   itkGetMacro( SigmoidBeta, double );
 
   /** Turn On/Off isotropic resampling prior to running the segmentation */
-  itkSetMacro( UseIsotropicResampling, bool );
-  itkGetMacro( UseIsotropicResampling, bool );
-  itkBooleanMacro( UseIsotropicResampling );
+  itkSetMacro( ResampleThickSliceData, bool );
+  itkGetMacro( ResampleThickSliceData, bool );
+  itkBooleanMacro( ResampleThickSliceData );
+
+  /** If ResampleThickSliceData is ON, set the maximum anisotropy. Defauls
+   * to twice the minimum spacing of the data. That will mean that 
+   * 0.7 x 0.7 x 1.25 mm CT data will not be resampled. However 
+   * 0.7 x 0.7 x 2.5 mm CT data will be resampled to 0.7 x 0.7 x 1.25 mm 
+   * thick slices. */
+  itkSetClampMacro( AnisotropyThreshold, double, 1.0, 10.0 );
+  itkGetMacro( AnisotropyThreshold, double );
   
   typedef itk::LandmarkSpatialObject< ImageDimension > SeedSpatialObjectType;
   typedef typename SeedSpatialObjectType::PointListType PointListType;
@@ -151,6 +159,7 @@ protected:
   typedef ImageSpatialObject< ImageDimension, InputImagePixelType > InputImageSpatialObjectType;
   typedef IsotropicResamplerImageFilter< InputImageType, InputImageType > IsotropicResamplerType;
   typedef typename RegionType::SizeType SizeType;
+  typedef typename SizeType::SizeValueType SizeValueType;  
   typedef MemberCommand< Self >  CommandType;
 
 
@@ -174,9 +183,9 @@ private:
   RegionType                                     m_RegionOfInterest;
   std::string                                    m_StatusMessage;
   typename SeedSpatialObjectType::PointListType  m_Seeds;
-  SizeType                                       m_ResampledSize;
   typename InputImageSpatialObjectType::Pointer  m_InputSpatialObject;
-  bool                                           m_UseIsotropicResampling;
+  bool                                           m_ResampleThickSliceData;
+  double                                         m_AnisotropyThreshold;
 };
 
 } //end of namespace itk

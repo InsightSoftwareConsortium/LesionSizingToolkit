@@ -94,7 +94,8 @@ LesionSegmentationImageFilter8()
   m_SegmentationModule->SetPropagationScaling(500.0);
   m_SegmentationModule->SetMaximumRMSError(0.0002);
   m_SegmentationModule->SetMaximumNumberOfIterations(300);
-  m_UseIsotropicResampling = true;
+  m_ResampleThickSliceData = true;
+  m_AnisotropyThreshold = 2.0;
 }
  
 template <class TInputImage, class TOutputImage>
@@ -120,17 +121,20 @@ void
 LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 ::GenerateOutputInformation() 
 {
-  typedef typename SizeType::SizeValueType SizeValueType;
-
   // get pointers to the input and output
   typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
   typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
-
   if ( !outputPtr || !inputPtr)
     {
     return;
     }
 
+  // Minipipeline is :
+  //   Input -> Crop -> Resample_if_too_anisotropic -> Segment
+
+  m_CropFilter->SetInput(inputPtr);
+  m_CropFilter->SetRegionOfInterest(m_RegionOfInterest);
+  
   // Compute the spacing after isotropic resampling.
   double minSpacing = NumericTraits< double >::max();
   for (int i = 0; i < ImageDimension; i++)
@@ -143,75 +147,22 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
   SpacingType outputSpacing = inputPtr->GetSpacing();
   for (int i = 0; i < ImageDimension; i++)
     {
-    if (outputSpacing[i]/minSpacing > 2.0)
+    if (outputSpacing[i]/minSpacing > m_AnisotropyThreshold && m_ResampleThickSliceData)
       {
-      outputSpacing[i] /= 2.0;
+      outputSpacing[i] = minSpacing * m_AnisotropyThreshold;
       }
     }
-  
-  
-  // Compute the new size due to isotropic upresampling of the cropped region
-  SizeType resampledSize;
-  for (int i = 0; i < ImageDimension; i++)
-    {
-    const double d = m_RegionOfInterest.GetSize()[i] 
-                     * inputPtr->GetSpacing()[i] / outputSpacing[i];
-    resampledSize[i] = static_cast<SizeValueType>( d );
-    }  
 
-  // Copy Information without modification.
-  outputPtr->CopyInformation( inputPtr );
-
-  // Compute the regions due to resampling
-
-  IndexType start;
-  start.Fill(0);
-  //if (m_UseIsotropicResampling)
-    {
-    //RegionType region( start, resampledSize ); // Does not work ??
-    //outputPtr->SetLargestPossibleRegion(region);
-    }
-  //else 
-    {
-    RegionType region( start, m_RegionOfInterest.GetSize() );
-    outputPtr->SetLargestPossibleRegion(region);
-    }
-
-  m_ResampledSize = resampledSize;
-
-
-  // Correct origin of the extracted region.
-  IndexType roiStart( m_RegionOfInterest.GetIndex() );
-  typename Superclass::OutputImageType::PointType  outputOrigin;
-  typedef Image< ITK_TYPENAME TInputImage::PixelType,
-    Superclass::InputImageDimension > ImageType;
-  typename ImageType::ConstPointer imagePtr =
-    dynamic_cast< const ImageType * >( inputPtr.GetPointer() );
-  if ( imagePtr )
-    {
-    // Input image supports TransformIndexToContinuousPoint
-    inputPtr->TransformIndexToPhysicalPoint( roiStart, outputOrigin);
+  if (m_ResampleThickSliceData)
+    {  
+    m_IsotropicResampler->SetInput( m_CropFilter->GetOutput() );
+    m_IsotropicResampler->SetOutputSpacing( outputSpacing );
+    m_IsotropicResampler->GenerateOutputInformation();
+    outputPtr->CopyInformation( m_IsotropicResampler->GetOutput() );
     }
   else
     {
-    // Generic type of image
-    const typename Superclass::InputImageType::PointType&
-      inputOrigin = inputPtr->GetOrigin();
-
-    const typename Superclass::InputImageType::SpacingType&
-      spacing = inputPtr->GetSpacing() ;
- 
-    for( unsigned int i=0; i<ImageDimension; i++)
-      {
-      outputOrigin[i] = inputOrigin[i] + roiStart[i] * spacing[i];
-      }
-    }
-  
-  outputPtr->SetOrigin( outputOrigin );  
-
-  if (m_UseIsotropicResampling)
-    {
-    outputPtr->SetSpacing( outputSpacing );
+    outputPtr->CopyInformation( m_CropFilter->GetOutput() );
     }
 }
 
@@ -226,57 +177,28 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   m_SegmentationModule->SetStoppingValue(m_FastMarchingStoppingTime);
 
   // Allocate the output
-  if (!this->m_UseIsotropicResampling)
-    {
-    this->GetOutput()->SetBufferedRegion( this->GetOutput()->GetRequestedRegion() );
-    }
-  else
-    {
-    this->GetOutput()->SetLargestPossibleRegion( m_ResampledSize );
-    this->GetOutput()->SetBufferedRegion( m_ResampledSize );
-    this->GetOutput()->SetRequestedRegion( m_ResampledSize );
-    }
+  this->GetOutput()->SetBufferedRegion( this->GetOutput()->GetRequestedRegion() );
   this->GetOutput()->Allocate();
  
   // Get the input image
-  typename  InputImageType::ConstPointer  input  = this->GetInput();
+  typename InputImageType::ConstPointer  input  = this->GetInput();
 
-  // Crop
-  m_CropFilter->SetInput(input);
-  m_CropFilter->SetRegionOfInterest(m_RegionOfInterest);
-  m_CropFilter->Update(); 
-  typename InputImageType::Pointer inputImage = m_CropFilter->GetOutput();
+  // Crop and perform thin slice resampling (done only if necessary)
+  m_CropFilter->Update();
 
-  if (m_UseIsotropicResampling)
-    { 
-    // Resample to isotropic dimensions. We will resample to the min(Spacing).
-
-    m_IsotropicResampler->SetInput( m_CropFilter->GetOutput() );
-    double minSpacing = NumericTraits< double >::max();
-    for (int i = 0; i < ImageDimension; i++)
-      {
-      minSpacing = (minSpacing > input->GetSpacing()[i] ? 
-                    input->GetSpacing()[i] : minSpacing);
-      }
-
-    // Try and reduce the anisotropy.
-    SpacingType outputSpacing = input->GetSpacing();
-    for (int i = 0; i < ImageDimension; i++)
-      {
-      if (outputSpacing[i]/minSpacing > 2.0)
-        {
-        outputSpacing[i] /= 2.0;
-        }
-      }
-   
-    m_IsotropicResampler->SetOutputSpacing( outputSpacing );
+  typename InputImageType::Pointer inputImage = NULL;
+  if (m_ResampleThickSliceData)
+    {
     m_IsotropicResampler->Update();
-    inputImage = m_IsotropicResampler->GetOutput();
+    inputImage = this->m_IsotropicResampler->GetOutput(); 
+    }
+  else 
+    {
+    inputImage = m_CropFilter->GetOutput();
     }
 
-
   // Convert the output of resampling (or cropping based on 
-  // m_UseIsotropicResampling) to a spatial object that can be fed into
+  // m_ResampleThickSliceData) to a spatial object that can be fed into
   // the lesion segmentation method
 
   inputImage->DisconnectPipeline();
@@ -313,7 +235,8 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   outputImage->DisconnectPipeline();
   this->GraftOutput(outputImage);
 
-  /*typedef ImageFileWriter< OutputImageType > WriterType;
+  /* // DEBUGGING CODE
+  typedef ImageFileWriter< OutputImageType > WriterType;
   typename WriterType::Pointer writer = WriterType::New();
   writer->SetFileName("output.mha");
   writer->SetInput(outputImage);
@@ -381,6 +304,7 @@ void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
 {
   this->Superclass::SetAbortGenerateData(abort);
   this->m_CropFilter->SetAbortGenerateData(abort);
+  this->m_IsotropicResampler->SetAbortGenerateData(abort);
   this->m_LesionSegmentationMethod->SetAbortGenerateData(abort);
 }
 

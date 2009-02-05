@@ -101,6 +101,14 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
     itkExceptionMacro("Missing input image");
     }
 
+  if (m_OutputSpacing == inputImage->GetSpacing())
+    {
+    // No need to resample. Desiered output spacing is the same as the input 
+    // spacing. Let's just graft the output and be done with it.
+    this->GraftOutput( const_cast< InputImageType * >(this->GetInput()) );
+    return;
+    }
+
   typedef itk::IdentityTransform< double, ImageDimension >  TransformType;
 
   typename TransformType::Pointer transform = TransformType::New();
