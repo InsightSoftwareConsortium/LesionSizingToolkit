@@ -92,7 +92,7 @@ int main( int argc, char * argv [] )
     {
     const bool resample = atof( argv[5] );
     std::cout << "Using resampling " << std::endl;
-    segmentationMethod->SetUseIsotropicResampling( resample );
+    segmentationMethod->SetResampleThickSliceData( resample );
     }
 
 
