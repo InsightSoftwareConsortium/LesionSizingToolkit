@@ -166,7 +166,6 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
   typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator fit;
 
-
   // Process only the internal face
   fit = faceList.begin();
   
@@ -418,6 +417,15 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
 
 template <class TInputImage, class TOutputImage>
+unsigned int
+VotingBinaryFloodingImageFilter<TInputImage,TOutputImage>
+::GetNeighborhoodSize() const
+{
+  return this->m_Neighborhood.Size();
+}
+
+
+template <class TInputImage, class TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::ComputeArrayOfNeighborhoodBufferOffsets()
@@ -464,7 +472,7 @@ void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::ComputeBirthThreshold()
 {
-  const unsigned int neighborhoodSize = this->m_Neighborhood.Size();
+  const unsigned int neighborhoodSize = this->GetNeighborhoodSize();
 
   // Take the number of neighbors, discount the central pixel, and take half of them.
   unsigned int threshold = static_cast<unsigned int>( (neighborhoodSize - 1 ) / 2.0 ); 
