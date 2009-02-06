@@ -140,6 +140,8 @@ private:
 
   void ComputeBirthThreshold();
 
+  unsigned int GetNeighborhoodSize() const;
+
   itkSetMacro( CurrentPixelIndex, IndexType );
   itkGetConstReferenceMacro( CurrentPixelIndex, IndexType );
 

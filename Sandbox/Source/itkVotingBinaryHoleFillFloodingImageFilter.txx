@@ -418,7 +418,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 unsigned int
-VotingBinaryFloodingImageFilter<TInputImage,TOutputImage>
+VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::GetNeighborhoodSize() const
 {
   return this->m_Neighborhood.Size();
