@@ -18,11 +18,10 @@
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
-
+#include "itksys/SystemTools.hxx"
 
 int main( int argc, char * argv [] )
 {
-
   if( argc < 6 )
     {
     std::cerr << "Missing Arguments" << std::endl;
@@ -30,18 +29,15 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-
   const unsigned int Dimension = 3;
 
   typedef itk::GrayscaleImageSegmentationVolumeEstimator<Dimension>  VolumeEstimatorType;
-
   typedef VolumeEstimatorType::InputImageSpatialObjectType    InputSpatialObjectType;
   typedef VolumeEstimatorType::InputImageType                 InputImageType;
-
+  typedef VolumeEstimatorType::InputImageSpatialObjectType  InputImageSpatialObjectType;
   typedef itk::ImageFileReader< InputImageType > InputImageReaderType;
 
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
-
   inputImageReader->SetFileName( argv[1] );
 
   try 
@@ -55,19 +51,13 @@ int main( int argc, char * argv [] )
     }
 
   InputImageType::Pointer inputImage = inputImageReader->GetOutput();
-
   inputImage->DisconnectPipeline();
 
   InputSpatialObjectType::Pointer inputImageSpatialObject = InputSpatialObjectType::New();
-
   inputImageSpatialObject->SetImage( inputImage );
 
   VolumeEstimatorType::Pointer  volumeEstimator = VolumeEstimatorType::New();
-
-  typedef VolumeEstimatorType::InputImageSpatialObjectType  InputImageSpatialObjectType;
-
   volumeEstimator->SetInput( inputImageSpatialObject );
-
   volumeEstimator->Update();
 
   const VolumeEstimatorType::RealType volume = volumeEstimator->GetVolume();
@@ -85,9 +75,7 @@ int main( int argc, char * argv [] )
   const std::string outpuFileName = argv[5];
 
   const double volumeDifference = volume - expectedVolume;
-  
   const double ratio = volume / expectedVolume;
-
   const double errorPercent = volumeDifference / expectedVolume * 100.0;
 
   //
@@ -95,7 +83,19 @@ int main( int argc, char * argv [] )
   //
   std::ofstream ouputFile;
 
+  // Check if the file exists. If it does not, let's print out the axis labels
+  // right at the top of the file.
+  const bool fileExists = 
+      itksys::SystemTools::FileExists( outpuFileName.c_str() );
+
   ouputFile.open( outpuFileName.c_str(), std::ios_base::app );
+
+  if (!fileExists)
+    {
+    ouputFile << "SegmentationMethodID DatasetID ExpectedVolume ComputedVolume " 
+               << "PercentError RatioOfComputedVolumeToExpectedVolume "
+               << "ComputedRadius " << std::endl;
+    }
 
   ouputFile << segmentationMethodID << "  ";
   ouputFile << datasetID << "  ";

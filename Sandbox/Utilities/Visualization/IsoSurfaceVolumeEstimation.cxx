@@ -92,7 +92,19 @@ int main(int argc, char * argv [] )
   //
   std::ofstream ouputFile;
 
+  // Check if the file exists. If it does not, let's print out the axis labels
+  // right at the top of the file.
+  const bool fileExists = 
+      vtksys::SystemTools::FileExists( outpuFileName.c_str() );
+
   ouputFile.open( outpuFileName.c_str(), std::ios_base::app );
+
+  if (!fileExists)
+    {
+    ouputFile << "SegmentationMethodID DatasetID ExpectedVolume ComputedVolume " 
+               << "PercentError RatioOfComputedVolumeToExpectedVolume "
+               << "ComputedRadius " << std::endl;
+    }
 
   ouputFile << segmentationMethodID << "  ";
   ouputFile << datasetID << "  ";
