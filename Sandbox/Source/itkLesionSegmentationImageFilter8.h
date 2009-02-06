@@ -117,8 +117,10 @@ public:
    * to twice the minimum spacing of the data. That will mean that 
    * 0.7 x 0.7 x 1.25 mm CT data will not be resampled. However 
    * 0.7 x 0.7 x 2.5 mm CT data will be resampled to 0.7 x 0.7 x 1.25 mm 
-   * thick slices. */
-  itkSetClampMacro( AnisotropyThreshold, double, 1.0, 10.0 );
+   * thick slices. Values less than 1.0 result in supersampling of the
+   * data. A value of 1 results in Isotropic resampling of the data. 
+   */
+  itkSetMacro( AnisotropyThreshold, double );
   itkGetMacro( AnisotropyThreshold, double );
   
   typedef itk::LandmarkSpatialObject< ImageDimension > SeedSpatialObjectType;
