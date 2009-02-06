@@ -19,6 +19,7 @@ CONVERT_DICOM_TO_META( ${COLLECTION_PATH} FDA_B "Yamamoto-018/25ma1/3632/6593" )
 CONVERT_DICOM_TO_META( ${COLLECTION_PATH} FDA_C "Yamamoto-019/100ma1/3650/7001" )
 CONVERT_DICOM_TO_META( ${COLLECTION_PATH} FDA_D "Yamamoto-019/100ma1/3650/7003" )
 CONVERT_DICOM_TO_META( ${COLLECTION_PATH} FDA_E "Yamamoto-020/yamamot/3688/7471" )
+CONVERT_DICOM_TO_META( ${COLLECTION_PATH} FDA_F "Yamamoto-020/yamamot/3688/7473" )
 
 # "raida/mag4/phantom_studies/Yamamoto-018/25ma1/3632/6591"
 # Contains 3 nodules of 5 mm, 10mm, 8mm on the right side of the image (left 
@@ -132,6 +133,29 @@ TEST_FDA_PHANTOM_DATASET(FDA_E FDA_E_02
 TEST_FDA_PHANTOM_DATASET(FDA_E FDA_E_03
   347 260 517
   31 31 73
+  226.01 # 8 mm
+  )
+
+# "raida/mag4/phantom_studies/Yamamoto-020/yamamot/3688/7473/00040001"
+# Contains 3 nodules of 5 mm, 10mm, 8mm on the right side of the image (left 
+# side of the patient) at 100 HU. The dataset has an interslice spacing of 1.5mm
+# Exposure 200mA
+
+TEST_FDA_PHANTOM_DATASET(FDA_F FDA_F_01
+  326 310 33
+  35 35 17
+  56.38 # 5mm 
+  )
+
+TEST_FDA_PHANTOM_DATASET(FDA_F FDA_F_02
+  386 252 84
+  37 36 22
+  452.83 # 10 mm
+  )
+
+TEST_FDA_PHANTOM_DATASET(FDA_F FDA_F_03
+  342 260 134
+  33 34 25
   226.01 # 8 mm
   )
 
