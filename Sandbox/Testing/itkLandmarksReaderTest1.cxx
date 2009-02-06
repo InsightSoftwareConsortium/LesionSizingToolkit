@@ -121,5 +121,8 @@ int main( int argc, char * argv [] )
       }
     }
 
+
+  landmarkPointsReader->Print( std::cout );
+
   return EXIT_SUCCESS;
 }
