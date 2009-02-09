@@ -95,10 +95,18 @@ int main( int argc, char * argv [] )
     segmentationMethod->SetResampleThickSliceData( resample );
     }
 
+  try 
+    {
+    segmentationMethod->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
 
   typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
-
   writer->SetFileName( argv[3] );
   writer->SetInput( segmentationMethod->GetOutput() );
   writer->UseCompressionOn();
