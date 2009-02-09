@@ -30,31 +30,50 @@ SCREEN_SHOT_FEATURES( ${DATASET_ID} 018 )
 ENDMACRO(TEST_NIST_PHANTOM_DATASET)
 
 
+# These phantoms have been arranged in the following configuration. If you look
+# along the axial view, 
+#             A
+#    
+#        CR1     CL1          
+#        CR2     CL2          
+#        CR3     CL3          
+# R      CR4     CL4       L
+#        CR5     CL5          
+#        CR6     CL6          
+#        CR7     CL7          
+#        
+#             P
+#
 CONVERT_DICOM_TO_META( ${COLLECTION_PATH} NIST_A "BX0317/20000101-135244-7-1")
 
 #
 # Extract ROI and compute features for it
 #
+# CR5 ..
 TEST_NIST_PHANTOM_DATASET(NIST_A NIST001 
   168  291   75
    70   40  110
   )
 
+# CR1 ..
 TEST_NIST_PHANTOM_DATASET(NIST_A NIST002 
   160  95   60
    70  40  110
   )
 
+# CL7
 TEST_NIST_PHANTOM_DATASET(NIST_A NIST003 
   310 390 120 
    70  40 110
   )
 
+# CR3 
 TEST_NIST_PHANTOM_DATASET(NIST_A NIST004 
   170 200 44 
    70  40 110
   )
 
+# CR7
 TEST_NIST_PHANTOM_DATASET(NIST_A NIST005 
   160 392   85
    70  40  110
