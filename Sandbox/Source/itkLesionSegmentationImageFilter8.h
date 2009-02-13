@@ -96,10 +96,6 @@ public:
   /** End concept checking */
 #endif
 
-
-  void ProgressUpdate( Object * caller, 
-                       const EventObject & event );
-
   /** Set the ROI */
   itkSetMacro( RegionOfInterest, RegionType );
   itkGetMacro( RegionOfInterest, RegionType );
@@ -128,6 +124,9 @@ public:
 
   void SetSeeds( PointListType p ) { this->m_Seeds = p; }
   PointListType GetSeeds() { return m_Seeds; }
+  
+  /** Report progress */
+  void ProgressUpdate( Object * caller, const EventObject & event );
   
   // Return the status message
   const char *GetStatusMessage() const
