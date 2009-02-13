@@ -46,6 +46,9 @@ SatoVesselnessFeatureGenerator<NDimension>
   this->m_Sigma =  1.0;
   this->m_Alpha1 = 0.5;
   this->m_Alpha2 = 2.0;
+
+  this->m_VesselEnhancingDiffusionFilter = VesselEnhancingDiffusionFilterType::New();
+  this->m_UseVesselEnhancingDiffusion = false;
 }
 
 
@@ -108,8 +111,6 @@ SatoVesselnessFeatureGenerator<NDimension>
   // Report progress.
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( this->m_HessianFilter, .7 );
-  progress->RegisterInternalFilter( this->m_VesselnessFilter, .3 );
 
   typename InputImageSpatialObjectType::ConstPointer inputObject =
     dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
@@ -126,8 +127,50 @@ SatoVesselnessFeatureGenerator<NDimension>
     itkExceptionMacro("Missing input image");
     }
 
-  this->m_HessianFilter->SetInput( inputImage );
-  this->m_VesselnessFilter->SetInput( this->m_HessianFilter->GetOutput() );
+
+  // Two alternative routes :
+  //
+  //   Input -> VED -> Sato
+  //   Input -> Hessian -> Sato
+  //
+  if (this->m_UseVesselEnhancingDiffusion)
+    {      
+    // Set the default scales for the vessel enhancing diffusion filter.
+
+    typename InputImageType::SpacingType spacing = inputImage->GetSpacing();
+    double minSpacing = itk::NumericTraits< double >::max();
+    for (unsigned int i = 0; i < InputImageType::ImageDimension; i++)
+      {
+      if (minSpacing > spacing[i]) 
+        {
+        minSpacing = spacing[i];
+        }
+      }
+     
+    std::vector< typename VesselEnhancingDiffusionFilterType::Precision > scales(5);
+    scales[0] = 1.0    * minSpacing;
+    scales[1] = 1.6067 * minSpacing;
+    scales[2] = 2.5833 * minSpacing;
+    scales[3] = 4.15   * minSpacing;
+    scales[4] = 6.66   * minSpacing;    
+    this->m_VesselEnhancingDiffusionFilter->SetDefaultPars();
+    this->m_VesselEnhancingDiffusionFilter->SetScales(scales);
+
+    this->m_VesselEnhancingDiffusionFilter->SetInput( inputImage );
+    this->m_HessianFilter->SetInput( m_VesselEnhancingDiffusionFilter->GetOutput() );
+    this->m_VesselnessFilter->SetInput( this->m_HessianFilter->GetOutput() );
+
+    progress->RegisterInternalFilter( this->m_VesselEnhancingDiffusionFilter, .8 );
+    progress->RegisterInternalFilter( this->m_HessianFilter, .1 );
+    progress->RegisterInternalFilter( this->m_VesselnessFilter, .1 );
+    }
+  else
+    {
+    this->m_HessianFilter->SetInput( inputImage );
+    this->m_VesselnessFilter->SetInput( this->m_HessianFilter->GetOutput() );
+    progress->RegisterInternalFilter( this->m_HessianFilter, .7 );
+    progress->RegisterInternalFilter( this->m_VesselnessFilter, .3 );
+    }
 
   this->m_HessianFilter->SetSigma( this->m_Sigma );
   this->m_VesselnessFilter->SetAlpha1( this->m_Alpha1 );

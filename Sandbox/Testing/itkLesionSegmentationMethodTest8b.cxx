@@ -30,24 +30,31 @@ int main( int argc, char * argv [] )
     {
     std::cerr << "Applies fast marhching followed by segmentation using geodesic active contours. Arguments" << std::endl;
     std::cerr << argv[0] << "\n\tlandmarksFile\n\tinputImage\n\toutputImage ";
-    std::cerr << "\n\t[SigmoidBeta] [supersample:0/1]" << std::endl;
+    std::cerr << "\n\t[SigmoidBeta] [-ResampleThickSliceData] [-UseVesselEnhancingDiffusion]" << std::endl;
     return EXIT_FAILURE;
     }
 
+  bool useVesselEnhancingDiffusion = false, resampleThickSliceData = false;
+  for (int i = 1; i < argc; i++)
+    {
+    useVesselEnhancingDiffusion |= (strcmp("-UseVesselEnhancingDiffusion", argv[i]) == 0);
+    resampleThickSliceData |= (strcmp("-ResampleThickSliceData", argv[i]) == 0);
+    }
 
   const unsigned int Dimension = 3;
-  typedef signed short   InputPixelType;
-  typedef float          OutputPixelType;
-
-  typedef itk::Image< InputPixelType,  Dimension > InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension > OutputImageType;
-
+  typedef signed short                              InputPixelType;
+  typedef float                                     OutputPixelType;
+  typedef itk::Image< InputPixelType,  Dimension >  InputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >  OutputImageType;
   typedef itk::LesionSegmentationImageFilter8< 
-    InputImageType, OutputImageType > SegmentationMethodType;
+          InputImageType, OutputImageType >         SegmentationMethodType;
+  typedef itk::ImageFileReader< InputImageType >    InputImageReaderType;
+  typedef itk::LandmarksReader< Dimension >         LandmarksReaderType;
+  typedef itk::LandmarkSpatialObject< Dimension >   SeedSpatialObjectType;
+  typedef SeedSpatialObjectType::PointListType      PointListType;
+  typedef itk::ImageFileWriter< OutputImageType >   OutputWriterType;
 
-  typedef itk::ImageFileReader< InputImageType > InputImageReaderType;
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
-
   inputImageReader->SetFileName( argv[2] );
 
   try 
@@ -62,23 +69,14 @@ int main( int argc, char * argv [] )
 
   const InputImageType * inputImage = inputImageReader->GetOutput();
 
-  typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
-  
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
-
   landmarksReader->SetFileName( argv[1] );
   landmarksReader->Update();
-
-  typedef itk::LandmarkSpatialObject< Dimension >   SeedSpatialObjectType;
-  typedef SeedSpatialObjectType::PointListType      PointListType;
-
   const SeedSpatialObjectType * landmarks = landmarksReader->GetOutput();
 
   SegmentationMethodType::Pointer segmentationMethod = SegmentationMethodType::New();
-
   segmentationMethod->SetInput( inputImage );
   segmentationMethod->SetSeeds( landmarks->GetPoints() );
-
   segmentationMethod->SetRegionOfInterest( inputImage->GetBufferedRegion() );
 
   if( argc > 4 )
@@ -88,12 +86,8 @@ int main( int argc, char * argv [] )
     segmentationMethod->SetSigmoidBeta( sigmoidBeta );
     }
 
-  if( argc > 5 )
-    {
-    const bool resample = atof( argv[5] );
-    std::cout << "Using resampling " << std::endl;
-    segmentationMethod->SetResampleThickSliceData( resample );
-    }
+  segmentationMethod->SetResampleThickSliceData( resampleThickSliceData );
+  segmentationMethod->SetUseVesselEnhancingDiffusion( useVesselEnhancingDiffusion );
 
   try 
     {
@@ -105,7 +99,6 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
   writer->SetFileName( argv[3] );
   writer->SetInput( segmentationMethod->GetOutput() );

@@ -46,7 +46,7 @@ int main (int argc, char ** argv)
 
   IT::SpacingType spacing = r->GetOutput()->GetSpacing();
   double minSpacing = itk::NumericTraits< double >::max();
-  for (int i = 0; i < IT::ImageDimension; i++)
+  for (unsigned int i = 0; i < IT::ImageDimension; i++)
     {
     if (minSpacing > spacing[i]) 
       {

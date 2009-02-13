@@ -23,6 +23,7 @@
 #include "itkHessian3DToVesselnessMeasureImageFilter.h"
 #include "itkHessianRecursiveGaussianImageFilter.h"
 #include "itkSymmetricSecondRankTensor.h"
+#include "itkVesselEnhancingDiffusion3DImageFilter.h"
 
 namespace itk
 {
@@ -86,6 +87,11 @@ public:
   itkSetMacro( Alpha2, double );
   itkGetMacro( Alpha2, double );
 
+  /** Use vessel enhancing diffusion ? Defaults to false. */
+  itkSetMacro( UseVesselEnhancingDiffusion, bool );
+  itkGetMacro( UseVesselEnhancingDiffusion, bool );
+  itkBooleanMacro( UseVesselEnhancingDiffusion );
+
 protected:
   SatoVesselnessFeatureGenerator();
   virtual ~SatoVesselnessFeatureGenerator();
@@ -109,13 +115,16 @@ private:
 
   typedef HessianRecursiveGaussianImageFilter< InputImageType >         HessianFilterType;
   typedef Hessian3DToVesselnessMeasureImageFilter< InternalPixelType >  VesselnessMeasureFilterType;
+  typedef VesselEnhancingDiffusion3DImageFilter< InputPixelType, Dimension > VesselEnhancingDiffusionFilterType;
 
   typename HessianFilterType::Pointer               m_HessianFilter;
   typename VesselnessMeasureFilterType::Pointer     m_VesselnessFilter;
+  typename VesselEnhancingDiffusionFilterType::Pointer m_VesselEnhancingDiffusionFilter;
 
   double      m_Sigma;
   double      m_Alpha1;
   double      m_Alpha2;
+  bool        m_UseVesselEnhancingDiffusion;
 };
 
 } // end namespace itk

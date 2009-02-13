@@ -95,7 +95,7 @@ LesionSegmentationImageFilter8()
   m_SegmentationModule->SetMaximumRMSError(0.0002);
   m_SegmentationModule->SetMaximumNumberOfIterations(300);
   m_ResampleThickSliceData = true;
-  m_AnisotropyThreshold = 2.0;
+  m_AnisotropyThreshold = 1.0;
 }
  
 template <class TInputImage, class TOutputImage>
@@ -308,6 +308,12 @@ void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
   this->m_LesionSegmentationMethod->SetAbortGenerateData(abort);
 }
 
+template <class TInputImage, class TOutputImage>
+void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
+::SetUseVesselEnhancingDiffusion( bool b )
+{
+  this->m_VesselnessFeatureGenerator->SetUseVesselEnhancingDiffusion(b);
+}
 
 template <class TInputImage, class TOutputImage>
 void 

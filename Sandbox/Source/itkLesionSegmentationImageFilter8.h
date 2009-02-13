@@ -118,6 +118,11 @@ public:
    */
   itkSetMacro( AnisotropyThreshold, double );
   itkGetMacro( AnisotropyThreshold, double );
+
+  /** Turn On/Off the use of vessel enhancing diffusion (R. Manniesing et al) 
+   * prior to computing the vesselness. This is slow. Defaults to false. */
+  virtual void SetUseVesselEnhancingDiffusion( bool );
+  itkBooleanMacro( UseVesselEnhancingDiffusion );
   
   typedef itk::LandmarkSpatialObject< ImageDimension > SeedSpatialObjectType;
   typedef typename SeedSpatialObjectType::PointListType PointListType;
