@@ -187,6 +187,12 @@ ADD_TEST(SVSFG_${DATASET_ID}
   80.0  # Sigmoid Beta
   )
 
+# Vessel enhancing diffusion test
+ADD_TEST(VED_${DATASET_ID}
+  ${CXX_TEST_PATH}/itkVEDTest
+  ${DATASET_ROI}
+  ${TEMP}/VED_Test${DATASET_ID}.mha  )
+
 ADD_TEST(SLSFG_${DATASET_ID}
   ${CXX_TEST_PATH}/itkSatoLocalStructureFeatureGeneratorTest1
   ${DATASET_ROI}

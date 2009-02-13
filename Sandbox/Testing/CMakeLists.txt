@@ -251,6 +251,9 @@ TARGET_LINK_LIBRARIES(itkDescoteauxSheetnessFeatureGeneratorTest1 LesionSizingSa
 ADD_EXECUTABLE(itkFrangiTubularnessFeatureGeneratorTest1 itkFrangiTubularnessFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkFrangiTubularnessFeatureGeneratorTest1 LesionSizingSandbox)
 
+ADD_EXECUTABLE(itkVEDTest itkVEDTest.cxx )
+TARGET_LINK_LIBRARIES(itkVEDTest LesionSizingSandbox)
+
 ADD_EXECUTABLE(itkSegmentationModuleTest1 itkSegmentationModuleTest1.cxx )
 TARGET_LINK_LIBRARIES(itkSegmentationModuleTest1 LesionSizingSandbox)
 
