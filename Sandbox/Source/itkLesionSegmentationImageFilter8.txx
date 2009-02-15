@@ -79,7 +79,7 @@ LesionSegmentationImageFilter8()
   m_VesselnessFeatureGenerator->SetAlpha1( 0.1 );
   m_VesselnessFeatureGenerator->SetAlpha2( 2.0 );
   m_VesselnessFeatureGenerator->SetSigmoidAlpha( -10.0 );
-  m_VesselnessFeatureGenerator->SetSigmoidBeta( 80.0 );
+  m_VesselnessFeatureGenerator->SetSigmoidBeta( 40.0 );
   m_SigmoidFeatureGenerator->SetAlpha( 100.0 );
   m_SigmoidFeatureGenerator->SetBeta( -500.0 );
   m_CannyEdgesFeatureGenerator->SetSigma(1.0);
