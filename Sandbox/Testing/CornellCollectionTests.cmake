@@ -111,3 +111,131 @@ TEST_CORNELL_DATASET(SS0026Full_a SS0026
   10000.0
   )
 
+TEST_CORNELL_DATASET(CornellZeroChange-ST0108-S02A02Full ST0108-S02A02
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0108/1.2.826.0.1.3680043.2.656.4.1.1.45/S02A02"
+  149 251 0
+  59 51 29
+  1992.76
+  )
+
+TEST_CORNELL_DATASET(CornellZeroChange-ST0108-S02A06Full ST0108-S02A06
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0108/1.2.826.0.1.3680043.2.656.4.1.1.45/S02A06"
+  159 251 0
+  47 46 17
+  1990.41
+  )
+
+TEST_CORNELL_DATASET(CornellZeroChange-ST0109-S03A01Full ST0109-S03A01
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0109/1.2.826.0.1.3680043.2.656.4.1.1.868/S03A01"
+  125 233 129
+  56 48 25
+  2390.58
+  )
+
+TEST_CORNELL_DATASET(CornellZeroChange-ST0100-S03A01Full ST0109-S03A02
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0109/1.2.826.0.1.3680043.2.656.4.1.1.868/S03A02"
+  126 256 0
+  56 44 30
+  2698.9
+  )
+
+#Fails in this case.
+TEST_CORNELL_DATASET(CornellZeroChange-ST0110-S02A01Full ST0110-S02A02
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0110/1.2.826.0.1.3680043.2.656.4.1.1.58/S02A02"
+  200 249 0
+  68 85 23
+  18078.2
+  )
+
+TEST_CORNELL_DATASET(CornellZeroChange-ST0111-S02A02Full ST0111-S02A02
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0111/1.2.826.0.1.3680043.2.656.4.1.1.62/S02A02"
+  364 238 0
+  69 55 17
+  3496.34
+  )
+
+TEST_CORNELL_DATASET(CornellZeroChange-ST0111-S02A05Full ST0111-S02A05
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0111/1.2.826.0.1.3680043.2.656.4.1.1.62/S02A05"
+  357 239 0
+  77 58 19
+  2484.37
+  )
+
+TEST_CORNELL_DATASET(CornellZeroChange-ST0112-S00A06Full ST0112-S00A06
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0112/1.2.826.0.1.3680043.2.656.4.1.1.749/S00A06"
+  119 282 0
+  61 58 13
+  290.076
+  )
+
+TEST_CORNELL_DATASET(CornellZeroChange-ST0112-S00A07Full ST0112-S00A07
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0112/1.2.826.0.1.3680043.2.656.4.1.1.749/S00A07"
+  118  273  0
+  57 57 13
+  297.629
+  )
+
+
+TEST_CORNELL_DATASET(CornellZeroChange-ST0113-S00A02Full ST0113-S00A02
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0113/1.2.826.0.1.3680043.2.656.4.1.1.794/S00A02"
+  111 260 0
+  53 58 17
+  670.271
+  )
+
+TEST_CORNELL_DATASET(CornellZeroChange-ST0113-S00A05Full ST0113-S00A05
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0113/1.2.826.0.1.3680043.2.656.4.1.1.794/S00A05"
+  107 249 0
+  57 69 15
+  654.427
+  )
+
+
+# Part solid case
+TEST_CORNELL_DATASET(CornellZeroChange-ST0114-S02A01Full ST0114-S02A01
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0114/1.2.826.0.1.3680043.2.656.4.1.1.1444/S02A01"
+  159  265  32 
+  86 91 56
+  3317.62  ) # solid volume was 2489.7mm^3
+
+# Data characteristics completely different from its pair above such as being 5mm slice thickness etc..
+# and having a very thin slab instead of the full dataset.. its unlikely that this is a fair comparison
+TEST_CORNELL_DATASET(CornellZeroChange-ST0114-S02A02Full ST0114-S02A02
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0114/1.2.826.0.1.3680043.2.656.4.1.1.1444/S02A02"
+  185  244  0
+  72 70 5
+  2864.81  ) # solid volume was 2120.05mm^3
+
+
+
+TEST_CORNELL_DATASET(CornellZeroChange-ST0115-S02A01Full ST0115-S02A01
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0115/11.2.826.0.1.3680043.2.656.4.1.1.1491/S02A01"
+  176  224  198
+  54 52 34
+  332.478  ) 
+
+# Pair omitted.. its characteristics are very different.
+
+
+
+# Data characteristics are very different... 
+TEST_CORNELL_DATASET(CornellZeroChange-ST0117-S02A04Full ST0117-S02A04
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0117/1.2.826.0.1.3680043.2.656.4.1.1.2012/S02A04"
+  130  283   0
+  58 53 5
+  422.54  ) 
+TEST_CORNELL_DATASET(CornellZeroChange-ST0117-S02A01Full ST0117-S02A01
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0117/1.2.826.0.1.3680043.2.656.4.1.1.2012/S02A01"
+  122  282  104
+  57 59 34
+  224.425  )
+
+
+
+# Part solid case
+TEST_CORNELL_DATASET(CornellZeroChange-ST0118-S02A03Full ST0118-S02A03
+  "Cornell\ Zero\ Change\ Data/PRST-20080922/ST0118/1.2.826.0.1.3680043.2.656.4.1.1.2012/S02A03"
+  383  242  0
+  53 59 10
+  1310.26  ) # solid part is 543.606
+
