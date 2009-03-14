@@ -63,6 +63,8 @@ int main( int argc, char * argv [] )
 
   BinaryThresholdFeatureGeneratorType::Pointer  featureGenerator = BinaryThresholdFeatureGeneratorType::New();
   
+  std::cout << featureGenerator->GetNameOfClass() << std::endl;
+  featureGenerator->Print( std::cout );
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -89,6 +91,9 @@ int main( int argc, char * argv [] )
     std::cerr << "Error in Set/GetThreshold()" << std::endl;
     return EXIT_FAILURE;
     }
+
+  std::cout << featureGenerator->GetNameOfClass() << std::endl;
+  featureGenerator->Print( std::cout );
 
   try 
     {
