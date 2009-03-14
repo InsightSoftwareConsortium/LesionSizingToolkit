@@ -63,14 +63,6 @@ public:
   typedef typename InputImageSpatialObjectType::Pointer     InputImageSpatialObjectPointer;
   typedef typename Superclass::SpatialObjectType            SpatialObjectType;
 
-  /** Input data that will be used for generating the feature. */
-  void SetInput( const SpatialObjectType * input );
-  const SpatialObjectType * GetInput() const;
-
-  /** Output data that carries the feature in the form of a
-   * SpatialObject. */
-  const SpatialObjectType * GetFeature() const;
-
   /** Value to be used to threshold the image. */
   itkSetMacro( Threshold, double );
   itkGetMacro( Threshold, double );

@@ -54,24 +54,6 @@ BinaryThresholdFeatureGenerator<NDimension>
 {
 }
 
-template <unsigned int NDimension>
-void
-BinaryThresholdFeatureGenerator<NDimension>
-::SetInput( const SpatialObjectType * spatialObject )
-{
-  // Process object is not const-correct so the const casting is required.
-  this->SetNthInput(0, const_cast<SpatialObjectType *>( spatialObject ));
-}
-
-template <unsigned int NDimension>
-const typename BinaryThresholdFeatureGenerator<NDimension>::SpatialObjectType *
-BinaryThresholdFeatureGenerator<NDimension>
-::GetFeature() const
-{
-  return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
-}
-
-
 /*
  * PrintSelf
  */
