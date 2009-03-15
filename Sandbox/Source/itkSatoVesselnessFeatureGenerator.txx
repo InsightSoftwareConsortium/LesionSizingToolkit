@@ -134,25 +134,25 @@ SatoVesselnessFeatureGenerator<NDimension>
   //   Input -> Hessian -> Sato
   //
   if (this->m_UseVesselEnhancingDiffusion)
-    {      
+    {
     // Set the default scales for the vessel enhancing diffusion filter.
 
     typename InputImageType::SpacingType spacing = inputImage->GetSpacing();
     double minSpacing = itk::NumericTraits< double >::max();
     for (unsigned int i = 0; i < InputImageType::ImageDimension; i++)
       {
-      if (minSpacing > spacing[i]) 
+      if (minSpacing > spacing[i])
         {
         minSpacing = spacing[i];
         }
       }
-     
+
     std::vector< typename VesselEnhancingDiffusionFilterType::Precision > scales(5);
     scales[0] = 1.0    * minSpacing;
     scales[1] = 1.6067 * minSpacing;
     scales[2] = 2.5833 * minSpacing;
     scales[3] = 4.15   * minSpacing;
-    scales[4] = 6.66   * minSpacing;    
+    scales[4] = 6.66   * minSpacing;
     this->m_VesselEnhancingDiffusionFilter->SetDefaultPars();
     this->m_VesselEnhancingDiffusionFilter->SetScales(scales);
 

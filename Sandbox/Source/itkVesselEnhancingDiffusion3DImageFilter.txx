@@ -6,9 +6,17 @@
   Date:      $Date$
   Version:   $Revision$
 
+  Copyright (c) Insight Software Consortium. All rights reserved.
+  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
 =========================================================================*/
 #ifndef __itkVesselEnhancingDiffusion3DImageFilter_txx
 #define __itkVesselEnhancingDiffusion3DImageFilter_txx
+
 #include "itkVesselEnhancingDiffusion3DImageFilter.h"
 
 #include "itkCastImageFilter.h"
@@ -31,8 +39,8 @@ namespace itk
 {
 
 // constructor
-template <class PixelType, unsigned int Dimension>
-VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
+template <class PixelType, unsigned int NDimension>
+VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 ::VesselEnhancingDiffusion3DImageFilter():
     m_TimeStep(NumericTraits<Precision>::Zero),
     m_Iterations(0),
@@ -42,36 +50,36 @@ VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
     m_Sensitivity(0.0),
     m_DarkObjectLightBackground(false)
 {
-	this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredInputs(1);
 }
 
 // printself for debugging
-template <class PixelType, unsigned int Dimension>
-void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
+template <class PixelType, unsigned int NDimension>
+void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 ::PrintSelf(std::ostream &os, Indent indent) const
 {
-	Superclass::PrintSelf(os,indent);
-	os << indent << "TimeStep 		            : " << m_TimeStep  << std::endl;
-	os << indent << "Iterations 		        : " << m_Iterations << std::endl;
-	os << indent << "RecalculateVesselness      : " << m_RecalculateVesselness << std::endl;
-	os << indent << "Scales 		: ";
-	for (unsigned int i=0; i<m_Scales.size(); ++i)
+  Superclass::PrintSelf(os,indent);
+  os << indent << "TimeStep                 : " << m_TimeStep  << std::endl;
+  os << indent << "Iterations             : " << m_Iterations << std::endl;
+  os << indent << "RecalculateVesselness      : " << m_RecalculateVesselness << std::endl;
+  os << indent << "Scales     : ";
+  for (unsigned int i=0; i<m_Scales.size(); ++i)
     {
-		os << m_Scales[i] << " ";
+    os << m_Scales[i] << " ";
     }
-	os << std::endl;
-	os << indent << "Epsilon 		            : " << m_Epsilon << std::endl;
-	os << indent << "Omega 			            : " << m_Omega << std::endl;
-	os << indent << "Sensitivity 		        : " << m_Sensitivity << std::endl;
+  os << std::endl;
+  os << indent << "Epsilon                 : " << m_Epsilon << std::endl;
+  os << indent << "Omega                   : " << m_Omega << std::endl;
+  os << indent << "Sensitivity             : " << m_Sensitivity << std::endl;
  os << indent << "DarkObjectLightBackground  : " << m_DarkObjectLightBackground << std::endl;
 }
 // singleiter
-template <class PixelType, unsigned int Dimension>
-void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
+template <class PixelType, unsigned int NDimension>
+void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 ::VED3DSingleIteration(typename PrecisionImageType::Pointer ci)
 {
   bool rec(false);
-  if (    (m_CurrentIteration == 1) || 
+  if (    (m_CurrentIteration == 1) ||
           (m_RecalculateVesselness == 0) ||
           (m_CurrentIteration % m_RecalculateVesselness == 0)
      )
@@ -83,7 +91,7 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
       std::cout.flush();
       }
     MaxVesselResponse (ci);
-    DiffusionTensor (); 
+    DiffusionTensor ();
     }
   if (m_Verbose)
     {
@@ -110,8 +118,8 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
   // division into faces and inner region
   typedef ZeroFluxNeumannBoundaryCondition<PrecisionImageType>    BT;
   typedef ConstShapedNeighborhoodIterator<PrecisionImageType,BT>  NT;
-  typedef typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<PrecisionImageType> 
-                                                                  FT; 
+  typedef typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<PrecisionImageType>
+                                                                  FT;
   BT                      b;
   typename NT::RadiusType r;
   r.Fill(1);
@@ -373,7 +381,7 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
 
       // evolution
       const Precision cv = itci.GetCenterPixel();
-      dit.Value() = cv + 
+      dit.Value() = cv +
           + rxx * ( xp * (itci.GetPixel(oxp) - cv)
                   + xm * (itci.GetPixel(oxm) - cv) )
           + ryy * ( yp * (itci.GetPixel(oyp) - cv)
@@ -403,12 +411,12 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
     {
     ito.Value() = iti.Value();
     }
-} 
+}
 
 // maxvesselresponse
-template <class PixelType, unsigned int Dimension>
-void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
-::MaxVesselResponse(const typename PrecisionImageType::Pointer im)	
+template <class PixelType, unsigned int NDimension>
+void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
+::MaxVesselResponse(const typename PrecisionImageType::Pointer im)
 {
 
   // alloc memory for hessian/tensor
@@ -470,7 +478,7 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
   vi->SetRegions(im->GetLargestPossibleRegion());
   vi->Allocate();
   vi->FillBuffer(NumericTraits<Precision>::Zero);
-  
+
 
   for (unsigned int i=0; i< m_Scales.size(); ++i)
     {
@@ -489,12 +497,12 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
     ImageRegionIterator<PrecisionImageType> itzz (m_Dzz, m_Dzz->GetLargestPossibleRegion());
     ImageRegionIterator<PrecisionImageType> vit(vi, vi->GetLargestPossibleRegion());
 
-    ImageRegionConstIterator<typename HessianType::OutputImageType> hit 
+    ImageRegionConstIterator<typename HessianType::OutputImageType> hit
         (hessian->GetOutput(), hessian->GetOutput()->GetLargestPossibleRegion());
 
-    for (itxx.GoToBegin(), itxy.GoToBegin(), itxz.GoToBegin(), 
+    for (itxx.GoToBegin(), itxy.GoToBegin(), itxz.GoToBegin(),
             ityy.GoToBegin(), ityz.GoToBegin(), itzz.GoToBegin(),
-            vit.GoToBegin(), hit.GoToBegin(); !vit.IsAtEnd(); 
+            vit.GoToBegin(), hit.GoToBegin(); !vit.IsAtEnd();
             ++itxx, ++itxy, ++itxz, ++ityy, ++ityz, ++itzz, ++hit, ++vit)
       {
       vnl_matrix<Precision> H(3,3);
@@ -509,8 +517,8 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
       vnl_symmetric_eigensystem<Precision> ES(H);
       vnl_vector<Precision> ev(3);
 
-      ev[0] = ES.get_eigenvalue(0); 
-      ev[1] = ES.get_eigenvalue(1); 
+      ev[0] = ES.get_eigenvalue(0);
+      ev[1] = ES.get_eigenvalue(1);
       ev[2] = ES.get_eigenvalue(2);
 
       if ( vcl_abs(ev[0]) > vcl_abs(ev[1])  ) std::swap(ev[0], ev[1]);
@@ -530,20 +538,18 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
         ityz.Value() = hit.Value()(1,2);
         itzz.Value() = hit.Value()(2,2);
         }
-      } 
-    } 
+      }
+    }
 }
 
 // vesselnessfunction
-template <class PixelType, unsigned int Dimension>
-typename VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>::Precision
-VesselEnhancingDiffusion3DImageFilter<PixelType,Dimension>::VesselnessFunction3D(
-  const Precision l1,
-  const Precision l2,
-  const Precision l3 )    
+template <class PixelType, unsigned int NDimension>
+typename VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::Precision
+VesselEnhancingDiffusion3DImageFilter<PixelType,NDimension>
+::VesselnessFunction3D( const Precision l1, const Precision l2, const Precision l3 )
 {
   Precision vesselness;
-  if (    (m_DarkObjectLightBackground && ((l2<=0) || (l3<=0))) 
+  if (    (m_DarkObjectLightBackground && ((l2<=0) || (l3<=0)))
           ||
           (!m_DarkObjectLightBackground && ( (l2>=0) || (l3 >=0)))
      )
@@ -573,9 +579,9 @@ VesselEnhancingDiffusion3DImageFilter<PixelType,Dimension>::VesselnessFunction3D
 }
 
 // diffusiontensor
-template <class PixelType, unsigned int Dimension>
-void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
-::DiffusionTensor() 
+template <class PixelType, unsigned int NDimension>
+void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
+::DiffusionTensor()
 {
   ImageRegionIterator<PrecisionImageType> itxx (m_Dxx, m_Dxx->GetLargestPossibleRegion());
   ImageRegionIterator<PrecisionImageType> itxy (m_Dxy, m_Dxy->GetLargestPossibleRegion());
@@ -619,8 +625,8 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
     // adjusting eigenvalues
     // static_cast required to prevent error with gcc 4.1.2
     evn[0]   = 1.0 + (m_Epsilon - 1.0) * vcl_pow(V,static_cast<Precision>(1.0/m_Sensitivity));
-    evn[1]   = 1.0 + (m_Epsilon - 1.0) * vcl_pow(V,static_cast<Precision>(1.0/m_Sensitivity)); 
-    evn[2]   = 1.0 + (m_Omega - 1.0 ) * vcl_pow(V,static_cast<Precision>(1.0/m_Sensitivity)); 
+    evn[1]   = 1.0 + (m_Epsilon - 1.0) * vcl_pow(V,static_cast<Precision>(1.0/m_Sensitivity));
+    evn[2]   = 1.0 + (m_Omega - 1.0 ) * vcl_pow(V,static_cast<Precision>(1.0/m_Sensitivity));
 
     vnl_matrix<Precision> LAM(3,3);
     LAM.fill(0);
@@ -637,11 +643,11 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
     ityz.Value() = HN(1,2);
     itzz.Value() = HN(2,2);
     }
-} 
+}
 
 // generatedata
-template <class PixelType, unsigned int Dimension>
-void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
+template <class PixelType, unsigned int NDimension>
+void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 ::GenerateData()
 {
   if (m_Verbose)
@@ -656,9 +662,9 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
   minmax->Update();
 
   const typename ImageType::SpacingType ispacing = this->GetInput()->GetSpacing();
-  const Precision htmax = 0.5 / 
-        (  1.0 / (ispacing[0] * ispacing[0]) 
-         + 1.0 / (ispacing[1] * ispacing[1]) 
+  const Precision htmax = 0.5 /
+        (  1.0 / (ispacing[0] * ispacing[0])
+         + 1.0 / (ispacing[1] * ispacing[1])
          + 1.0 / (ispacing[2] * ispacing[2]) );
 
   if (m_TimeStep == NumericTraits<Precision>::Zero)
@@ -666,7 +672,7 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
     m_TimeStep = htmax;
     }
 
-  if (m_TimeStep> htmax) 
+  if (m_TimeStep> htmax)
     {
     std::cerr << "the time step size is too large!" << std::endl;
     this->AllocateOutputs();
@@ -676,7 +682,7 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
   if (m_Verbose)
     {
     std::cout << "min/max             \t" << minmax->GetMinimum() << " " << minmax->GetMaximum() << std::endl;
-    std::cout << "iterations/timestep \t" << m_Iterations << " " << m_TimeStep << std::endl; 
+    std::cout << "iterations/timestep \t" << m_Iterations << " " << m_TimeStep << std::endl;
     std::cout << "recalc v            \t" << m_RecalculateVesselness << std::endl;
     std::cout << "scales              \t";
     for (unsigned int i=0; i<m_Scales.size(); ++i)
@@ -705,7 +711,7 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
   for (m_CurrentIteration=1; m_CurrentIteration<=m_Iterations; m_CurrentIteration++)
     {
     VED3DSingleIteration (ci);
-    } 
+    }
 
   typedef MinimumMaximumImageFilter<PrecisionImageType> MMT;
   typename MMT::Pointer mm = MMT::New();
@@ -733,4 +739,3 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, Dimension>
 } // end namespace itk
 
 #endif
-

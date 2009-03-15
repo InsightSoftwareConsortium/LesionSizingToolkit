@@ -165,5 +165,5 @@ IsotropicResamplerImageFilter<TInputImage,TOutputImage>
 }
 
 }//end of itk namespace
-#endif
 
+#endif

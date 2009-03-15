@@ -6,6 +6,13 @@
   Date:      $Date$
   Version:   $Revision$
 
+  Copyright (c) Insight Software Consortium. All rights reserved.
+  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
 =========================================================================*/
 #ifndef __itkVesselEnhancingDiffusion3DImageFilter_h
 #define __itkVesselEnhancingDiffusion3DImageFilter_h
@@ -26,9 +33,9 @@ namespace itk
  * Uses simple forward Euler scheme (explicit) with 3x3x3 stencil,
  * see eg phd of Joachim Weickert for theory and implementation regarding
  * the construction of this discretization scheme. See 'Vessel Enhancing
- * Diffusion', Manniesing, media 2006, for information regarding the 
+ * Diffusion', Manniesing, media 2006, for information regarding the
  * construction of the diffusion tensor.
- * 
+ *
  * - Stores all elements of the Hessian of the complete image during
  *   diffusion. An alternative implementation is to only store the
  *   scale for which the vesselness has maximum response, and to
@@ -36,7 +43,7 @@ namespace itk
  *   the current image, ie at iteration i + temp image, therefore the complete
  *   memory consumption approximately peaks at 8 times the input image
  *   (input image in float)
- * - The hessian is stored as six individual images, an alternative 
+ * - The hessian is stored as six individual images, an alternative
  *   implementation is to use the itk symmetric second rank tensor
  *   as pixeltype (and eg using the class SymmetricEigenAnalysisImage
  *   Filter). However, we are lazy, and using this since we rely
@@ -44,7 +51,7 @@ namespace itk
  * - note: most of computation time is spent at calculation of vesselness
  *   response
  *
- *   9 feb 2009 
+ *   9 feb 2009
  *      changed imagetype to precisionimage type of function call,
  *      thanks to Mark Rabotnikov
  *
@@ -62,16 +69,16 @@ namespace itk
  * email: r.manniesing@erasmusmc.nl
  *
 */
-template <class PixelType = short int, unsigned int Dimension = 3>
-class ITK_EXPORT VesselEnhancingDiffusion3DImageFilter : 
-    public ImageToImageFilter<Image<PixelType, Dimension> ,
-                              Image<PixelType, Dimension> >
+template <class PixelType = short int, unsigned int NDimension = 3>
+class ITK_EXPORT VesselEnhancingDiffusion3DImageFilter :
+    public ImageToImageFilter<Image<PixelType, NDimension> ,
+                              Image<PixelType, NDimension> >
 {
 
-public: 
+public:
   typedef float                                           Precision;
-  typedef Image<PixelType, Dimension>                     ImageType;
-  typedef Image<Precision,Dimension>                      PrecisionImageType;
+  typedef Image<PixelType, NDimension>                    ImageType;
+  typedef Image<Precision,NDimension>                     PrecisionImageType;
 
   typedef VesselEnhancingDiffusion3DImageFilter           Self;
   typedef ImageToImageFilter<ImageType,ImageType>         Superclass;
@@ -93,9 +100,9 @@ public:
   itkSetMacro(Omega, Precision);
   itkSetMacro(Sensitivity, Precision);
 
-  void SetScales(const std::vector<Precision> scales) 
-    { 
-    m_Scales = scales; 
+  void SetScales(const std::vector<Precision> scales)
+    {
+    m_Scales = scales;
     }
   itkBooleanMacro(DarkObjectLightBackground);
   itkSetMacro(DarkObjectLightBackground,bool);
@@ -127,27 +134,27 @@ public:
     m_Verbose                   = true;
     }
 
-protected: 
+protected:
   VesselEnhancingDiffusion3DImageFilter();
   ~VesselEnhancingDiffusion3DImageFilter() {};
   void PrintSelf(std::ostream &os, Indent indent) const;
   void GenerateData();
 
-private: 
+private:
 
-  VesselEnhancingDiffusion3DImageFilter(const Self&); 
-  void operator=(const Self&);            
+  VesselEnhancingDiffusion3DImageFilter(const Self&);
+  void operator=(const Self&);
 
-  Precision           	    m_TimeStep;
-  unsigned int          	  m_Iterations;
-  unsigned int           	  m_RecalculateVesselness;
-  Precision           	    m_Alpha;
-  Precision           	    m_Beta;
-  Precision           	    m_Gamma;
-  Precision           	    m_Epsilon;
-  Precision           	    m_Omega;
-  Precision           	    m_Sensitivity;
-  std::vector<Precision>    m_Scales;   
+  Precision                 m_TimeStep;
+  unsigned int              m_Iterations;
+  unsigned int              m_RecalculateVesselness;
+  Precision                 m_Alpha;
+  Precision                 m_Beta;
+  Precision                 m_Gamma;
+  Precision                 m_Epsilon;
+  Precision                 m_Omega;
+  Precision                 m_Sensitivity;
+  std::vector<Precision>    m_Scales;
   bool                      m_DarkObjectLightBackground;
   bool                      m_Verbose;
   unsigned int              m_CurrentIteration;
@@ -164,19 +171,16 @@ private:
 
   // Calculates maxvessel response of the range
   // of scales and stores the hessian of each voxel
-  // into the member images m_Dij. 
+  // into the member images m_Dij.
   void MaxVesselResponse (const typename PrecisionImageType::Pointer);
 
   // calculates diffusion tensor
   // based on current values of hessian (for which we have
-  // maximim vessel response). 
+  // maximim vessel response).
   void DiffusionTensor();
 
-  inline Precision VesselnessFunction3D ( // sorted magn increasing
-          const Precision,    // l1
-          const Precision,    // l2
-          const Precision     // l3
-          );
+  // Sorted magnitude increasing
+  inline Precision VesselnessFunction3D ( Precision, Precision, Precision );
 };
 
 
@@ -187,4 +191,3 @@ private:
 #endif
 
 #endif
-

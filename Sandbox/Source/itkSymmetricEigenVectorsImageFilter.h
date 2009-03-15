@@ -38,11 +38,14 @@ template< typename TInput, typename TOutputEigenValues, typename TOutputEigenVec
 class SymmetricEigenValuesAndVectorsFunction
 {
 public:
-  typedef typename TInput::RealValueType  RealValueType;
-  typedef TInput MatrixType;
+  typedef typename TInput::RealValueType    RealValueType;
+  typedef TInput                            MatrixType;
+
   SymmetricEigenValuesAndVectorsFunction() {}
   ~SymmetricEigenValuesAndVectorsFunction() {}
+
   typedef SymmetricEigenAnalysis< TInput, TOutputEigenValues, TOutputEigenVectors > CalculatorType;
+
   bool operator!=( const SymmetricEigenValuesAndVectorsFunction & ) const
     {
     return false;
@@ -128,21 +131,21 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef SymmetricEigenValuesAndVectorsImageFilter  Self;
+  typedef SymmetricEigenValuesAndVectorsImageFilter   Self;
   typedef UnaryFunctorImageFilter<
     TInputImage,TOutputImage, 
     Functor::SymmetricEigenValuesAndVectorsFunction< 
       typename TInputImage::PixelType,
       TEigenValue,
-      typename TOutputImage::PixelType > >   Superclass;
-  typedef SmartPointer<Self>                 Pointer;
-  typedef SmartPointer<const Self>           ConstPointer;
+      typename TOutputImage::PixelType > >            Superclass;
+  typedef SmartPointer<Self>                          Pointer;
+  typedef SmartPointer<const Self>                    ConstPointer;
 
-  typedef typename Superclass::OutputImageType    OutputImageType;
-  typedef typename TOutputImage::PixelType        OutputPixelType;
-  typedef typename TInputImage::PixelType         InputPixelType;
-  typedef typename InputPixelType::ValueType      InputValueType;
-  typedef typename Superclass::FunctorType        FunctorType; 
+  typedef typename Superclass::OutputImageType        OutputImageType;
+  typedef typename TOutputImage::PixelType            OutputPixelType;
+  typedef typename TInputImage::PixelType             InputPixelType;
+  typedef typename InputPixelType::ValueType          InputValueType;
+  typedef typename Superclass::FunctorType            FunctorType; 
 
   /** Typdedefs to order eigen values. 
    * OrderByValue:      lambda_1 < lambda_2 < ....

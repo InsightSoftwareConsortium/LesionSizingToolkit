@@ -45,7 +45,7 @@ BinaryThresholdFeatureGenerator<NDimension>
 }
 
 
-/*
+/**
  * Destructor
  */
 template <unsigned int NDimension>
@@ -54,7 +54,7 @@ BinaryThresholdFeatureGenerator<NDimension>
 {
 }
 
-/*
+/**
  * PrintSelf
  */
 template <unsigned int NDimension>

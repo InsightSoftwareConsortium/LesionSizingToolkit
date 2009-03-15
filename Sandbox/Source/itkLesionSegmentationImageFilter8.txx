@@ -324,5 +324,5 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 }
 
 }//end of itk namespace
-#endif
 
+#endif

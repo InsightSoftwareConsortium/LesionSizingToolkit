@@ -50,10 +50,10 @@ public:
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Define pixel types. */
-  typedef typename TOutputImage::PixelType  OutputImagePixelType;
-  typedef typename InputImageType::SizeType SizeType;
-  typedef typename SizeType::SizeValueType SizeValueType;
-  typedef typename InputImageType::SpacingType SpacingType;
+  typedef typename TOutputImage::PixelType        OutputImagePixelType;
+  typedef typename InputImageType::SizeType       SizeType;
+  typedef typename SizeType::SizeValueType        SizeValueType;
+  typedef typename InputImageType::SpacingType    SpacingType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -116,4 +116,3 @@ private:
 #endif
   
 #endif
-
