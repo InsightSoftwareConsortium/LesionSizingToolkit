@@ -112,6 +112,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Gener
   }
 
   // Set the kernel size.
+  //  fix me this needs to be based on the variance of the gaussian filter
   unsigned long radius = 1;
 
   // get a copy of the input requested region (should equal the output
@@ -363,6 +364,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Hyste
 
   ListNodeType * node;
 
+  // fix me
   ImageRegionIterator<TOutputImage> oit(input, input->GetRequestedRegion());
 
   oit.GoToBegin();
@@ -399,6 +401,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Follo
   // gradients of the image. HysteresisThresholding of this image should give
   // the Canny output.
   typename OutputImageType::Pointer input = m_MultiplyImageFilter->GetOutput();
+  InputImageRegionType              inputRegion = input->GetRequestedRegion();
 
   IndexType      nIndex;
   IndexType      cIndex;
@@ -436,7 +439,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Follo
     {
       nIndex = oit.GetIndex(i);
       uit.SetIndex(nIndex);
-      if (InBounds(nIndex))
+      if (inputRegion.IsInside(nIndex))
       {
         if (oit.GetPixel(i) > m_LowerThreshold && uit.Value() != 1)
         {
@@ -452,23 +455,6 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Follo
   }
 }
 
-template <typename TInputImage, typename TOutputImage>
-bool
-CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::InBounds(IndexType index)
-{
-  typename InputImageType::ConstPointer input = this->GetInput();
-  typename InputImageType::SizeType     sz;
-  sz = (input->GetRequestedRegion()).GetSize();
-
-  for (unsigned int i = 0; i < ImageDimension; i++)
-  {
-    if (index[i] < 0 || index[i] >= static_cast<typename IndexType::IndexValueType>(sz[i]))
-    {
-      return false;
-    }
-  }
-  return true;
-}
 
 template <typename TInputImage, typename TOutputImage>
 void

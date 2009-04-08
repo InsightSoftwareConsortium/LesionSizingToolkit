@@ -134,7 +134,8 @@ public:
   itkNewMacro(Self);
 
   /** Typedef to describe the output image region type. */
-  using OutputImageRegionType = typename TOutputImage::RegionType;
+  typedef typename TOutputImage::RegionType OutputImageRegionType;
+  typedef typename TInputImage::RegionType  InputImageRegionType;
 
   /** Run-time type information (and related methods). */
   itkOverrideGetNameOfClassMacro(CannyEdgeDetectionRecursiveGaussianImageFilter);
@@ -241,10 +242,6 @@ private:
   /** Edge linking funciton */
   void
   FollowEdge(IndexType index);
-
-  /** Check if the index is in bounds or not */
-  bool
-  InBounds(IndexType index);
 
 
   /** Calculate the second derivative of the smoothed image, it writes the
