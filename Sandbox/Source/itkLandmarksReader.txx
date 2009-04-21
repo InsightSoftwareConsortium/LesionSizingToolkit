@@ -37,7 +37,7 @@ LandmarksReader<NDimension>
 
   typename SpatialObjectType::Pointer outputObject = SpatialObjectType::New();
 
-  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->ProcessObject::SetNthOutput( 0, outputObject );
 }
 
 
@@ -105,6 +105,8 @@ LandmarksReader<NDimension>
     dynamic_cast< SpatialObjectType * >(this->ProcessObject::GetOutput(0));
 
   outputObject->SetPoints( landmarkSpatialObject->GetPoints() );
+
+  delete sceneChildren;
 }
 
 /*
