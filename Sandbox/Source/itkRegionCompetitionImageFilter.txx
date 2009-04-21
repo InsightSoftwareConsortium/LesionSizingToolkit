@@ -46,6 +46,8 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
   this->m_SeedArray2 = NULL;
   this->m_SeedsNewValues = NULL;
 
+  this->m_CurrentPixelIndex.Fill( 0 );
+
   this->m_OutputImage = NULL;
   
   this->m_NumberOfLabels = 0;
