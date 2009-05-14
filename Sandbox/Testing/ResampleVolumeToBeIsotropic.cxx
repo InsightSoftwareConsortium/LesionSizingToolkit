@@ -35,7 +35,7 @@ int main( int argc, char * argv[] )
     {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  outputImageFile finalSpacing ";
-    std::cerr << " interpolatorType(0:BSpline 1:WindowedSinc)" << std::endl;
+    std::cerr << " interpolatorType(0:BSpline 1:WindowedSinc 2:Linear)" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -89,6 +89,10 @@ int main( int argc, char * argv[] )
 
   WindowedSincInterpolatorType::Pointer windowedSincInterpolator = WindowedSincInterpolatorType::New();
 
+  typedef itk::LinearInterpolateImageFunction< ImageType, double >  LinearInterpolatorType;
+
+  LinearInterpolatorType::Pointer linearInterpolator = LinearInterpolatorType::New();
+  
 
   switch( atoi( argv[4] ) )
     {
@@ -97,6 +101,9 @@ int main( int argc, char * argv[] )
       break;
     case 1:
       resampler->SetInterpolator( windowedSincInterpolator );
+      break;
+    case 2:
+      resampler->SetInterpolator( linearInterpolator );
       break;
     }
 

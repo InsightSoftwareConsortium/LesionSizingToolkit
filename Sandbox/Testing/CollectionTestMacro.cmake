@@ -289,6 +289,107 @@ IF ( COMPUTE_SEGMENTATIONS_OPTIONS_AROUND_SEED )
   SET(DATASET_ROI ${DATASET_ROI_SEED} )  
 ENDIF( COMPUTE_SEGMENTATIONS_OPTIONS_AROUND_SEED )
 
+# Resample to isotropic with different interpolation kernels
+ADD_TEST(RVTI_BSpline_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/ResampleVolumeToBeIsotropic
+  ${DATASET_ROI}
+  ${TEMP}/RVTI_Test${DATASET_OBJECT_ID}_BSpline_Isotropic.mha
+  0.2 # 0.2mm
+  0   # BSpline interpolation  
+  )
+ADD_TEST(RVTI_HWSinc_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/ResampleVolumeToBeIsotropic
+  ${DATASET_ROI}
+  ${TEMP}/RVTI_Test${DATASET_OBJECT_ID}_HWSinc_Isotropic.mha
+  0.2 # 0.2mm
+  1   # HammingWindowedSinc
+  )
+ADD_TEST(RVTI_Linear_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/ResampleVolumeToBeIsotropic
+  ${DATASET_ROI}
+  ${TEMP}/RVTI_Test${DATASET_OBJECT_ID}_Linear_Isotropic.mha
+  0.2 # 0.2mm
+  2   # Linear interpolation  
+  )
+
+ADD_TEST(CEFG_BSpline_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/itkCannyEdgesFeatureGeneratorTest1
+  ${TEMP}/RVTI_Test${DATASET_OBJECT_ID}_BSpline_Isotropic.mha
+  ${TEMP}/CEFG_Test${DATASET_OBJECT_ID}_BSpline_Isotropic_Sigma0.47.mha
+    .47 # Sigma
+  150.0 # Upper threshold
+   25.0 # Lower threshold
+  )
+ADD_TEST(CEFG_HWSinc_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/itkCannyEdgesFeatureGeneratorTest1
+  ${TEMP}/RVTI_Test${DATASET_OBJECT_ID}_HWSinc_Isotropic.mha
+  ${TEMP}/CEFG_Test${DATASET_OBJECT_ID}_HWSinc_Isotropic_Sigma0.47.mha
+    .47 # Sigma
+  150.0 # Upper threshold
+   75.0 # Lower threshold
+  )
+ADD_TEST(CEFG_Linear_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/itkCannyEdgesFeatureGeneratorTest1
+  ${TEMP}/RVTI_Test${DATASET_OBJECT_ID}_Linear_Isotropic.mha
+  ${TEMP}/CEFG_Test${DATASET_OBJECT_ID}_Linear_Isotropic_Sigma0.47.mha
+    .47 # Sigma
+  150.0 # Upper threshold
+   75.0 # Lower threshold
+  )
+
+ADD_TEST(LFG_BSpline_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/LaplacianRecursiveGaussianImageFilter
+  ${TEMP}/RVTI_Test${DATASET_OBJECT_ID}_BSpline_Isotropic.mha
+  ${TEMP}/LFG_Test${DATASET_OBJECT_ID}_BSpline_Isotropic_Sigma0.47.mha
+    .47 # Sigma
+  150.0 # Upper threshold
+   75.0 # Lower threshold
+  )
+ADD_TEST(LFG_HWSinc_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/LaplacianRecursiveGaussianImageFilter
+  ${TEMP}/RVTI_Test${DATASET_OBJECT_ID}_HWSinc_Isotropic.mha
+  ${TEMP}/LFG_Test${DATASET_OBJECT_ID}_HWSinc_Isotropic_Sigma0.47.mha
+    .47 # Sigma
+  150.0 # Upper threshold
+   75.0 # Lower threshold
+  )
+ADD_TEST(LFG_Linear_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/LaplacianRecursiveGaussianImageFilter
+  ${TEMP}/RVTI_Test${DATASET_OBJECT_ID}_Linear_Isotropic.mha
+  ${TEMP}/LFG_Test${DATASET_OBJECT_ID}_Linear_Isotropic_Sigma0.47.mha
+    0.47 # Sigma
+  150.0 # Upper threshold
+   75.0 # Lower threshold
+  )
+
+# Sigmoid Feature Generator
+ADD_TEST(SFG_BSpline_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/itkSigmoidFeatureGeneratorTest1
+  ${TEMP}/RVTI_Test${DATASET_OBJECT_ID}_BSpline_Isotropic.mha
+  ${TEMP}/SFG_BSpline_Test${DATASET_OBJECT_ID}.mha
+   100.0 # Alpha
+  -500.0 # Beta: Lung Threshold
+  )
+
+# Sato Vesselness Sigmoid Feature Generator
+ADD_TEST(SVSFG_BSpline_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/itkSatoVesselnessSigmoidFeatureGeneratorTest1
+  ${TEMP}/RVTI_Test${DATASET_OBJECT_ID}_BSpline_Isotropic.mha
+  ${TEMP}/SVSFG_BSpline_Test${DATASET_OBJECT_ID}.mha
+  1.0   # Sigma
+  0.1   # Vesselness Alpha1
+  2.0   # Vesselness Alpha2
+  -10.0 # Sigmoid Alpha
+  40.0  # Sigmoid Beta
+  )
+
+ADD_TEST(LWFG_BSpline_${DATASET_OBJECT_ID}
+  ${CXX_TEST_PATH}/itkLungWallFeatureGeneratorTest1
+  ${TEMP}/RVTI_Test${DATASET_OBJECT_ID}_BSpline_Isotropic.mha
+  ${TEMP}/LWFG_BSpline_Test${DATASET_OBJECT_ID}.mha
+  -400.0 # Lung Threshold
+  )
+
 
 ADD_TEST(CTRG_${DATASET_OBJECT_ID}
   ${CXX_TEST_PATH}/itkConnectedThresholdSegmentationModuleTest1
