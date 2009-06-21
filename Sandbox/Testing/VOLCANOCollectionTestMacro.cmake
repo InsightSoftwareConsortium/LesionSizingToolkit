@@ -43,7 +43,6 @@ macro( TEST_VOLCANO_DATASET
 
   SET(DATASET_ROI ${FILENAME_BASE}_ROI.mha )
   SET(REGION_RADIUS 25)  # in millimeters
-
   ADD_TEST(ROIS_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
     ${CXX_TEST_PATH}/ImageReadRegionOfInterestAroundSeedWrite
     ${FILENAME_BASE}.mha
@@ -51,7 +50,25 @@ macro( TEST_VOLCANO_DATASET
     ${SEEDS_FILE}
     ${REGION_RADIUS}
     )
-   
+
+  # Resample to isotropic with Bspline kernel
+  ADD_TEST(RVTI_BSpline_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
+    ${CXX_TEST_PATH}/ResampleVolumeToBeIsotropic
+    ${DATASET_ROI}
+    ${TEMP}/${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}_BSpline_Isotropic.mha
+    -minspacing # smallest spacing along any axis.
+    0   # BSpline interpolation  
+    )
+
+  # Segment
+  ADD_TEST(LSMT8e_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
+    ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest8b
+    ${SEEDS_FILE}
+    ${DATASET_ROI}
+    ${TEMP}/${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}_LSMT8e_Segmentation.mha
+    -200  # Threshold used for solid lesions
+    -ResampleThickSliceData     # Supersample to 0.2mm
+    )   
 
 endmacro( TEST_VOLCANO_DATASET )
 
