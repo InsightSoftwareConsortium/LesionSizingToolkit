@@ -42,7 +42,7 @@ macro( TEST_VOLCANO_DATASET
   SET( SEEDS_FILE ${TEST_DATA_ROOT}/Input/${CASE_NAME}_${STUDY_NAME}_Seeds.txt )
 
   SET(DATASET_ROI ${FILENAME_BASE}_ROI.mha )
-  SET(REGION_RADIUS 10)  # in millimeters
+  SET(REGION_RADIUS 25)  # in millimeters
 
   ADD_TEST(ROIS_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
     ${CXX_TEST_PATH}/ImageReadRegionOfInterestAroundSeedWrite
