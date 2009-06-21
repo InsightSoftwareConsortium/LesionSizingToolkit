@@ -137,6 +137,9 @@ int main( int argc, char ** argv )
   desiredRegion.Crop( inputImage->GetBufferedRegion() ); 
 
   filter->SetRegionOfInterest( desiredRegion );
+  std::cout << "Desired region: " << desiredRegion << std::endl;
+  std::cout << "ImageLargestPossibleRegion: " << inputImage->GetLargestPossibleRegion() << std::endl;
+  std::cout << "Seed is at : " << seedPoint << " Index: " << centralIndex << std::endl;
 
   try 
     { 

@@ -14,4 +14,4 @@ ElementType = MET_FLOAT
 PointDim = x y z red green blue alpha
 NPoints = 1
 Points = 
-  348.956  344.531  11 1 0 0 1 
+  348.956  344.531  -150 1 0 0 1 

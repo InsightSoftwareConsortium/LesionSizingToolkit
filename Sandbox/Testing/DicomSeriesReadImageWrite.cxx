@@ -14,6 +14,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+// Some DICOM files have direction cosines embedded within them, however often
+// people have (incorrectly) ignored them and provided us seeds etc.
+// The "-IgnoreDirection" is to accomodate these mistakes.
+
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
@@ -31,7 +35,7 @@ int main( int argc, char* argv[] )
   if( argc < 3 )
     {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << " DicomDirectory  outputFileName  [seriesName]" 
+    std::cerr << argv[0] << " DicomDirectory  outputFileName  [seriesName] [-IgnoreDirection]" 
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -78,15 +82,7 @@ int main( int argc, char* argv[] )
   
 
     std::string seriesIdentifier;
-
-    if( argc > 3 ) // If no optional series identifier
-      {
-      seriesIdentifier = argv[3];
-      }
-    else
-      {
-      seriesIdentifier = seriesUID.begin()->c_str();
-      }
+    seriesIdentifier = seriesUID.begin()->c_str();
 
 
     std::cout << std::endl << std::endl;
@@ -122,12 +118,27 @@ int main( int argc, char* argv[] )
       return EXIT_FAILURE;
       }
 
+
+    ImageType::Pointer image = reader->GetOutput();
+    ImageType::DirectionType direction;
+    direction.SetIdentity();
+    image->DisconnectPipeline();
+
+    for (int i = 0; i < argc; i++)
+      {
+      if (strcmp( "-IgnoreDirection", argv[i] ) == 0)
+        {
+        image->SetDirection(direction);
+        }
+      }
+
+
     typedef itk::ImageFileWriter< ImageType > WriterType;
     WriterType::Pointer writer = WriterType::New();
     
     writer->SetFileName( argv[2] );
     writer->UseCompressionOn();
-    writer->SetInput( reader->GetOutput() );
+    writer->SetInput( image );
 
     std::cout  << "Writing the image as " << std::endl << std::endl;
     std::cout  << argv[2] << std::endl << std::endl;
