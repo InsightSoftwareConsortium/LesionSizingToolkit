@@ -8,10 +8,12 @@ INCLUDE(CollectionTestMacro.cmake)
 FIND_PATH(TEST_CORNELL_DATA_ROOT README.txt DOC "Directory with data from the Cornell ELCAP database")
 FIND_PATH(TEST_NIST_DATA_ROOT  LevineJResNIST2008b.pdf DOC "Directory with data from the NIST Phantom database")
 FIND_PATH(TEST_FDA_DATA_ROOT  phantom_diameter_measures.xls DOC "Directory with data from the FDA Phantom database")
+FIND_PATH(TEST_VOLCANO_DATA_ROOT SCseeds.csv DOC "Directory with data from for the MICCAI Volcano challenge. http://www.via.cornell.edu/challenge")
 
 OPTION(TEST_CORNELL_COLLECTION "Run tests in the collection of datasets from Cornell" OFF)
 OPTION(TEST_NIST_PHANTOM_COLLECTION "Run tests in the collection of phantom datasets from NIST" OFF)
 OPTION(TEST_FDA_PHANTOM_COLLECTION "Run tests in the collection of phantom datasets from FDA" OFF)
+OPTION(TEST_VOLCANO_DATA_COLLECTION "Run tests at MICCAI Volcano challenge. http://www.via.cornell.edu/challenge" OFF)
 
 
 ADD_EXECUTABLE(itkSystemInformationSandbox itkSystemInformation.cxx )
@@ -653,4 +655,10 @@ IF(TEST_FDA_PHANTOM_COLLECTION)
     INCLUDE(FDAPhantomCollectionTests.cmake)
   ENDIF(TEST_FDA_DATA_ROOT)
 ENDIF(TEST_FDA_PHANTOM_COLLECTION)
+
+IF(TEST_VOLCANO_DATA_COLLECTION)
+  IF(TEST_VOLCANO_DATA_ROOT)
+    INCLUDE(VOLCANOCollectionTests.cmake)
+  ENDIF(TEST_VOLCANO_DATA_ROOT)
+ENDIF(TEST_VOLCANO_DATA_COLLECTION)
 

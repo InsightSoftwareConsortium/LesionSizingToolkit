@@ -79,10 +79,10 @@ LesionSegmentationImageFilter8()
   m_VesselnessFeatureGenerator->SetAlpha1( 0.1 );
   m_VesselnessFeatureGenerator->SetAlpha2( 2.0 );
   m_VesselnessFeatureGenerator->SetSigmoidAlpha( -10.0 );
-  m_VesselnessFeatureGenerator->SetSigmoidBeta( 40.0 );
-  m_SigmoidFeatureGenerator->SetAlpha( 100.0 );
-  m_SigmoidFeatureGenerator->SetBeta( -500.0 );
-  m_CannyEdgesFeatureGenerator->SetSigma(1.0);
+  m_VesselnessFeatureGenerator->SetSigmoidBeta( 120.0 );
+  m_SigmoidFeatureGenerator->SetAlpha( 1.0 );
+  m_SigmoidFeatureGenerator->SetBeta( 80.0 );
+  m_CannyEdgesFeatureGenerator->SetSigma( 1.0 );
   m_CannyEdgesFeatureGenerator->SetUpperThreshold( 150.0 );
   m_CannyEdgesFeatureGenerator->SetLowerThreshold( 75.0 );
   m_FastMarchingStoppingTime = 5.0;
@@ -147,9 +147,9 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
   SpacingType outputSpacing = inputPtr->GetSpacing();
   for (int i = 0; i < ImageDimension; i++)
     {
-    if (outputSpacing[i]/minSpacing > m_AnisotropyThreshold && m_ResampleThickSliceData)
+    //if (outputSpacing[i]/minSpacing > m_AnisotropyThreshold && m_ResampleThickSliceData)
       {
-      outputSpacing[i] = minSpacing * m_AnisotropyThreshold;
+      outputSpacing[i] = 0.2; //minSpacing * m_AnisotropyThreshold;
       }
     }
 
@@ -324,5 +324,5 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 }
 
 }//end of itk namespace
-
 #endif
+
