@@ -112,9 +112,16 @@ int main( int argc, char * argv[] )
 
   const ImageType::SpacingType & inputSpacing = inputImage->GetSpacing();
 
+  double minSpacing = itk::NumericTraits< double >::max();
+  for (int i = 0; i < 3; i++)
+    {
+    minSpacing = (minSpacing > inputSpacing[i] ? inputSpacing[i] : minSpacing);
+    }
+  
   ImageType::SpacingType outputSpacing;
 
-  const double finalSpacing = atof( argv[3] );
+  const double finalSpacing = (strcmp( argv[3], "-minspacing" ) == 0) 
+                                        ? minSpacing : atof( argv[3] );
 
   outputSpacing[0] = finalSpacing;
   outputSpacing[1] = finalSpacing;
