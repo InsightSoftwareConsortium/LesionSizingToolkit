@@ -67,8 +67,19 @@ macro( TEST_VOLCANO_DATASET
     ${DATASET_ROI}
     ${TEMP}/${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}_LSMT8e_Segmentation.mha
     -200  # Threshold used for solid lesions
-    -ResampleThickSliceData     # Supersample to 0.2mm
+    -ResampleThickSliceData     # Supersample to isotropic
     )   
+
+  # Compute volume
+  ADD_TEST(LSMTVEB_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
+    ${CXX_TEST_PATH}/IsoSurfaceVolumeEstimation
+    ${TEMP}/${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}_LSMT8e_Segmentation.mha
+    -0.5 # half pixel shift for the voxelized canny edges.
+    "LSMT8e"
+    ${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
+    0 # Expected volume (unknown)
+    ${TEMP}/${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}_Volume.txt
+    )
 
 endmacro( TEST_VOLCANO_DATASET )
 
