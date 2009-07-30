@@ -26,7 +26,7 @@ int main( int argc, char * argv [] )
   if( argc < 3 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage featureImage outputImage " << std::endl;
+    std::cerr << argv[0] << " inputImage featureImage outputImage [advectionScaling] [curvatureScaling] [propagationScaling] [maxIterations]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -75,7 +75,31 @@ int main( int argc, char * argv [] )
 
   segmentationModule->SetInput( inputObject );
   segmentationModule->SetFeature( featureObject );
+   
+  if (argc > 4)
+    {
+    segmentationModule->SetAdvectionScaling( atof(argv[4]) );
+    std::cout << "Setting advection scaling to " << atof(argv[4]) << std::endl;
+    }
 
+  if (argc > 5)
+    {
+    segmentationModule->SetCurvatureScaling( atof(argv[5]) );
+    std::cout << "Setting curvature scaling to " << atof(argv[5]) << std::endl;
+    }
+
+  if (argc > 6)
+    {
+    segmentationModule->SetPropagationScaling( atof(argv[6]) );
+    std::cout << "Setting propagation scaling to " << atof(argv[6]) << std::endl;
+    }
+
+  if (argc > 7)
+    {
+    segmentationModule->SetMaximumNumberOfIterations( atof(argv[7]) );
+    std::cout << "Setting maximum iterations to " << atof(argv[7]) << std::endl;
+    }
+  
   segmentationModule->Update();
 
   typedef SegmentationModuleType::SpatialObjectType    SpatialObjectType;
