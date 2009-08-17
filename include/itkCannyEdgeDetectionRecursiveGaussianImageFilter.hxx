@@ -320,6 +320,8 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Gener
   m_GaussianFilter->SetSigmaArray(this->m_Sigma);
   m_GaussianFilter->SetNormalizeAcrossScale(true);
   m_GaussianFilter->SetInput(input);
+  // modify to force excution, due to grafting complications
+  m_GaussianFilter->Modified();
   m_GaussianFilter->Update();
 
   // 2. Calculate 2nd order directional derivative-------
@@ -329,6 +331,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Gener
   this->Compute2ndDerivative();
 
   this->Compute2ndDerivativePos();
+
 
   // 3. Non-maximum suppression----------
 
@@ -373,7 +376,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Hyste
   uit.GoToBegin();
   while (!uit.IsAtEnd())
   {
-    uit.Value() = 0;
+    uit.Value() = NumericTraits<OutputImagePixelType>::Zero;
     ++uit;
   }
 
@@ -415,8 +418,14 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Follo
   ImageRegionIteratorWithIndex<TOutputImage> uit(this->GetOutput(), this->GetOutput()->GetRequestedRegion());
 
   uit.SetIndex(index);
-  if (uit.Get() == 1)
+  if (uit.Get() == NumericTraits<OutputImagePixelType>::One)
   {
+    // we must remove the node if we are not going to follow it!
+
+    // Pop the front node from the list and read its index value.
+    node = m_NodeList->Front(); // get a pointer to the first node
+    m_NodeList->PopFront();     // unlink the front node
+    m_NodeStore->Return(node);  // return the memory for reuse
     return;
   }
 
@@ -441,14 +450,14 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Follo
       uit.SetIndex(nIndex);
       if (inputRegion.IsInside(nIndex))
       {
-        if (oit.GetPixel(i) > m_LowerThreshold && uit.Value() != 1)
+        if (oit.GetPixel(i) > m_LowerThreshold && uit.Value() != NumericTraits<OutputImagePixelType>::One)
         {
           node = m_NodeStore->Borrow(); // get a new node struct
           node->m_Value = nIndex;       // set its value
           m_NodeList->PushFront(node);  // add the new node to the list
 
           uit.SetIndex(nIndex);
-          uit.Value() = 1;
+          uit.Value() = NumericTraits<OutputImagePixelType>::One;
         }
       }
     }
