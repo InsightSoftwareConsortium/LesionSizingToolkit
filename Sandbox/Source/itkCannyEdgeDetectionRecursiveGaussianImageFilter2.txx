@@ -68,6 +68,15 @@ CannyEdgeDetectionRecursiveGaussianImageFilter()
       = std::slice( m_Center - m_Stride[i], 3, m_Stride[i]);
     }
    
+  // Allocate the derivative operator.
+  m_ComputeCannyEdge1stDerivativeOper.SetDirection(0);
+  m_ComputeCannyEdge1stDerivativeOper.SetOrder(1);
+  m_ComputeCannyEdge1stDerivativeOper.CreateDirectional();
+
+  m_ComputeCannyEdge2ndDerivativeOper.SetDirection(0);
+  m_ComputeCannyEdge2ndDerivativeOper.SetOrder(2);
+  m_ComputeCannyEdge2ndDerivativeOper.CreateDirectional();
+
   //Initialize the list
   m_NodeStore = ListNodeStorageType::New();
   m_NodeList = ListType::New();
@@ -131,8 +140,171 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
     // store what we tried to request (prior to trying to crop)
     inputPtr->SetRequestedRegion( inputRequestedRegion );
     
-    itkExceptionMacro("Requested region is (at least partially) outside the largest possible region.");
+    // build an exception
+    InvalidRequestedRegionError e(__FILE__, __LINE__);
+    OStringStream msg;
+    msg << this->GetNameOfClass()
+        << "::GenerateInputRequestedRegion()";
+    e.SetLocation(msg.str().c_str());
+    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+    e.SetDataObject(inputPtr);
+    throw e;
     }
+}
+
+template< class TInputImage, class TOutputImage >
+void
+CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
+::ThreadedCompute2ndDerivative(const OutputImageRegionType&
+                               outputRegionForThread, int threadId)
+{
+  ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
+
+  ImageRegionIterator<TOutputImage> it;
+
+  void *globalData = 0;
+
+  // Here input is the result from the gaussian filter
+  //      output is the update buffer.
+  typename  OutputImageType::Pointer input  = m_GaussianFilter->GetOutput();
+  typename  OutputImageType::Pointer output = this->GetOutput();
+
+  // set iterator radius
+  Size<ImageDimension> radius; radius.Fill(1);
+
+  // Find the data-set boundary "faces"
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::
+    FaceListType faceList;
+  NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage> bC;
+  faceList = bC(input, outputRegionForThread, radius);
+
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::
+    FaceListType::iterator fit;
+
+  // support progress methods/callbacks
+  ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels(), 100, 0.0f, 0.5f );
+  
+  // Process the non-boundady region and then each of the boundary faces.
+  // These are N-d regions which border the edge of the buffer.
+  for (fit=faceList.begin(); fit != faceList.end(); ++fit)
+    { 
+    NeighborhoodType bit(radius, input, *fit);
+      
+    it = ImageRegionIterator<OutputImageType>(output, *fit);
+    bit.OverrideBoundaryCondition(&nbc);
+    bit.GoToBegin();
+    
+    while ( ! bit.IsAtEnd() )
+      {
+      it.Value() = ComputeCannyEdge(bit, globalData);
+      ++bit;
+      ++it;
+      progress.CompletedPixel();
+      }
+      
+    }
+
+}
+
+template< class TInputImage, class TOutputImage >
+typename CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
+::OutputImagePixelType
+CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
+::ComputeCannyEdge(const NeighborhoodType &it,
+                   void * itkNotUsed(globalData) ) 
+{
+  unsigned int i, j;
+  NeighborhoodInnerProduct<OutputImageType> innerProduct;
+
+  OutputImagePixelType dx[ImageDimension];
+  OutputImagePixelType dxx[ImageDimension];
+  OutputImagePixelType dxy[ImageDimension*(ImageDimension-1)/2];
+  OutputImagePixelType deriv;
+  OutputImagePixelType gradMag;
+
+  //  double alpha = 0.01;
+
+  //Calculate 1st & 2nd order derivative
+  for(i = 0; i < ImageDimension; i++)
+    {
+    dx[i] = innerProduct(m_ComputeCannyEdgeSlice[i], it,
+                         m_ComputeCannyEdge1stDerivativeOper); 
+    dxx[i] = innerProduct(m_ComputeCannyEdgeSlice[i], it,
+                          m_ComputeCannyEdge2ndDerivativeOper);  
+    }
+
+  deriv = NumericTraits<OutputImagePixelType>::Zero;
+  int k = 0;
+
+  //Calculate the 2nd derivative
+  for(i = 0; i < ImageDimension-1; i++)
+    {
+    for(j = i+1; j < ImageDimension; j++)
+      {
+      dxy[k] = 0.25 * it.GetPixel(m_Center - m_Stride[i] - m_Stride[j])
+        - 0.25 * it.GetPixel(m_Center - m_Stride[i]+ m_Stride[j])
+        -0.25 * it.GetPixel(m_Center + m_Stride[i] - m_Stride[j])
+        +0.25 * it.GetPixel(m_Center + m_Stride[i] + m_Stride[j]);
+
+      deriv += 2.0 * dx[i]*dx[j]*dxy[k];
+      k++;
+      }
+    }
+  
+  gradMag = 0.0001; // alpha * alpha;
+  for (i = 0; i < ImageDimension; i++)
+    { 
+    deriv += dx[i] * dx[i] * dxx[i];
+    gradMag += dx[i] * dx[i];
+    }
+  
+  deriv = deriv/gradMag;
+
+  return deriv;  
+}
+
+// Calculate the second derivative
+template< class TInputImage, class TOutputImage >
+void
+CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
+::Compute2ndDerivative() 
+{
+  CannyThreadStruct str;
+  str.Filter = this;
+
+  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
+  this->GetMultiThreader()->SetSingleMethod(this->Compute2ndDerivativeThreaderCallback, &str);
+  
+  this->GetMultiThreader()->SingleMethodExecute();
+}
+
+template<class TInputImage, class TOutputImage>
+ITK_THREAD_RETURN_TYPE
+CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
+::Compute2ndDerivativeThreaderCallback( void * arg )
+{
+  CannyThreadStruct *str;
+  
+  int total, threadId, threadCount;
+  
+  threadId = ((MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
+  threadCount = ((MultiThreader::ThreadInfoStruct *)(arg))->NumberOfThreads;
+  
+  str = (CannyThreadStruct *)(((MultiThreader::ThreadInfoStruct *)(arg))->UserData);
+
+  // Execute the actual method with appropriate output region
+  // first find out how many pieces extent can be split into.
+  // Using the SplitRequestedRegion method from itk::ImageSource.
+  OutputImageRegionType splitRegion;
+  total = str->Filter->SplitRequestedRegion(threadId, threadCount,
+                                            splitRegion);
+
+  if (threadId < total)
+    {
+    str->Filter->ThreadedCompute2ndDerivative(splitRegion, threadId);
+    }
+
+  return ITK_THREAD_RETURN_VALUE;
 }
 
 template< class TInputImage, class TOutputImage >
@@ -163,13 +335,19 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   m_GaussianFilter->SetInput(input);
   m_GaussianFilter->Update();
 
-  //2. Calculate 2nd order directional derivative-------
   m_LaplacianFilter->SetSigma( this->m_Sigma );
   m_LaplacianFilter->SetNormalizeAcrossScale( true );
   m_LaplacianFilter->SetInput(input);
   m_LaplacianFilter->Update();
-  
 
+  //2. Calculate 2nd order directional derivative-------
+  // Calculate the 2nd order directional derivative of the smoothed image.
+  // The output of this filter will be used to store the directional
+  // derivative.
+  this->Compute2ndDerivative();
+
+  this->Compute2ndDerivativePos();
+  
   // 3. Non-maximum suppression----------
   
   // Calculate the zero crossings of the 2nd directional derivative and write 
@@ -316,6 +494,155 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
     }
   return true;
 
+}
+
+template< class TInputImage, class TOutputImage >
+void
+CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
+::ThreadedCompute2ndDerivativePos(const OutputImageRegionType& outputRegionForThread, int threadId)
+{
+
+  ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
+
+  ConstNeighborhoodIterator<TInputImage> bit;
+  ConstNeighborhoodIterator<TInputImage> bit1;
+
+  ImageRegionIterator<TOutputImage> it;
+
+  // Here input is the result from the gaussian filter
+  //      input1 is the 2nd derivative result
+  //      output is the gradient of 2nd derivative
+  typename OutputImageType::Pointer input1 = this->GetOutput();
+  typename OutputImageType::Pointer input = m_GaussianFilter->GetOutput();
+
+  typename  InputImageType::Pointer output  = m_UpdateBuffer1;
+  
+
+  // set iterator radius
+  Size<ImageDimension> radius; radius.Fill(1);
+
+  // Find the data-set boundary "faces"
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::
+    FaceListType faceList;
+  NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage> bC;
+  faceList = bC(input, outputRegionForThread, radius);
+
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::
+    FaceListType::iterator fit;
+
+  // support progress methods/callbacks
+  ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels(), 100, 0.5f, 0.5f);
+  
+  InputImagePixelType zero = NumericTraits<InputImagePixelType>::Zero;
+
+  OutputImagePixelType dx[ImageDimension]; 
+  OutputImagePixelType dx1[ImageDimension];
+
+  OutputImagePixelType directional[ImageDimension];
+  OutputImagePixelType derivPos;
+
+  OutputImagePixelType gradMag;
+
+  // Process the non-boundary region and then each of the boundary faces.
+  // These are N-d regions which border the edge of the buffer.
+
+  NeighborhoodInnerProduct<OutputImageType>  IP;
+
+  for (fit=faceList.begin(); fit != faceList.end(); ++fit)
+    {   
+    bit = ConstNeighborhoodIterator<InputImageType>(radius,
+                                                    input, *fit);
+    bit1 =ConstNeighborhoodIterator<InputImageType>(radius, 
+                                                    input1, *fit);
+    it = ImageRegionIterator<OutputImageType>(output, *fit);
+    bit.OverrideBoundaryCondition(&nbc);
+    bit.GoToBegin();
+    bit1.GoToBegin();
+    it.GoToBegin();
+
+    while ( ! bit.IsAtEnd()  )
+      {
+      
+      gradMag = 0.0001;
+      
+      for ( unsigned int i = 0; i < ImageDimension; i++)
+        {
+        dx[i] = IP(m_ComputeCannyEdgeSlice[i], bit,
+                   m_ComputeCannyEdge1stDerivativeOper);
+        gradMag += dx[i] * dx[i];
+        
+        dx1[i] = IP(m_ComputeCannyEdgeSlice[i], bit1,
+                    m_ComputeCannyEdge1stDerivativeOper);
+        }
+      
+      gradMag = vcl_sqrt((double)gradMag);
+      derivPos = zero;
+      for ( unsigned int i = 0; i < ImageDimension; i++)
+        {
+              
+        //First calculate the directional derivative
+
+        directional[i] = dx[i]/gradMag;
+                               
+        //calculate gradient of 2nd derivative
+              
+        derivPos += dx1[i] * directional[i];
+        }
+          
+      it.Value() = ((derivPos <= zero));
+      it.Value() = it.Get() * gradMag;
+      ++bit;
+      ++bit1;
+      ++it;
+      progress.CompletedPixel();
+      }
+      
+    }  
+}
+
+//Calculate the second derivative
+template< class TInputImage, class TOutputImage >
+void 
+CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
+::Compute2ndDerivativePos() 
+{
+  CannyThreadStruct str;
+  str.Filter = this;
+
+  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
+  this->GetMultiThreader()->SetSingleMethod(this->Compute2ndDerivativePosThreaderCallback, &str);
+  
+  this->GetMultiThreader()->SingleMethodExecute();
+}
+
+template<class TInputImage, class TOutputImage>
+ITK_THREAD_RETURN_TYPE
+CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
+::Compute2ndDerivativePosThreaderCallback( void * arg )
+{
+  CannyThreadStruct *str;
+  
+  int total, threadId, threadCount;
+  
+  threadId = ((MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
+  threadCount = ((MultiThreader::ThreadInfoStruct *)(arg))->NumberOfThreads;
+  
+  str = (CannyThreadStruct *)(((MultiThreader::ThreadInfoStruct *)(arg))->UserData);
+
+  // Execute the actual method with appropriate output region
+  // first find out how many pieces extent can be split into.
+  // Using the SplitRequestedRegion method from itk::ImageSource.
+
+  OutputImageRegionType splitRegion;
+  total = str->Filter->SplitRequestedRegion(threadId, threadCount,
+                                            splitRegion);
+  
+  if (threadId < total)
+    {
+    str->Filter->ThreadedCompute2ndDerivativePos( splitRegion, threadId);
+    }
+  
+  return ITK_THREAD_RETURN_VALUE;
 }
 
 template <class TInputImage, class TOutputImage>
