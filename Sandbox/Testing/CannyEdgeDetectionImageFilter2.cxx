@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    CannyEdgeDetectionImageFilter.cxx
+  Module:    CannyEdgeDetectionImageFilter2.cxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -26,7 +26,7 @@
 #include "itkImageFileWriter.h"
 #include "itkCastImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
-#include "itkCannyEdgeDetectionImageFilter.h"
+#include "itkCannyEdgeDetectionRecursiveGaussianImageFilter.h"
 
 
 int main(int argc, char* argv[])
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
   typedef itk::ImageFileWriter< OutputImageType >   WriterType;
 
   typedef itk::CastImageFilter< InputImageType, RealImageType> CastToRealFilterType;
-  typedef itk::CannyEdgeDetectionImageFilter<RealImageType, OutputImageType> CannyFilter;
+  typedef itk::CannyEdgeDetectionRecursiveGaussianImageFilter<RealImageType, OutputImageType> CannyFilter;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 
   cannyFilter->SetInput( toReal->GetOutput() );
 
-  cannyFilter->SetVariance( sigma * sigma );
+  cannyFilter->SetSigma( sigma );
   cannyFilter->SetUpperThreshold( upperThreshold );
   cannyFilter->SetLowerThreshold( lowerThreshold );
   cannyFilter->SetOutsideValue( 255 );

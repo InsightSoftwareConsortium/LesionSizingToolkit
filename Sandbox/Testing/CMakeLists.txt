@@ -28,8 +28,14 @@ TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite ITKIO)
 ADD_EXECUTABLE(ImageReadRegionOfInterestAroundSeedWrite ImageReadRegionOfInterestAroundSeedWrite.cxx )
 TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestAroundSeedWrite ITKIO)
 
-ADD_EXECUTABLE(CannyEdgeDetectionImageFilter CannyEdgeDetectionImageFilter.cxx )
-TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter ITKIO)
+ADD_EXECUTABLE(CannyEdgeDetectionImageFilter1 CannyEdgeDetectionImageFilter1.cxx )
+TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter1 ITKIO)
+
+ADD_EXECUTABLE(CannyEdgeDetectionImageFilter2 CannyEdgeDetectionImageFilter2.cxx )
+TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter2 ITKIO)
+
+ADD_EXECUTABLE(CannyEdgeDetectionImageFilter3 CannyEdgeDetectionImageFilter3.cxx )
+TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter3 ITKIO)
 
 ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter LaplacianRecursiveGaussianImageFilter.cxx )
 TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter ITKIO)
@@ -125,7 +131,7 @@ ADD_EXECUTABLE(itkVectorZeroCrossingImageFilterTest1 itkVectorZeroCrossingImageF
 TARGET_LINK_LIBRARIES(itkVectorZeroCrossingImageFilterTest1 LesionSizingSandbox)
 
 ADD_TEST(itkVectorFiniteDifferenceImageFilterTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceImageFilterTest1 )
-ADD_TEST(itkVectorFiniteDifferenceFunctionTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceFunctionTest1 )
+#ADD_TEST(itkVectorFiniteDifferenceFunctionTest1 ${CXX_TEST_PATH}/itkVectorFiniteDifferenceFunctionTest1 )
 ADD_TEST(itkVectorSegmentationLevelSetFunctionTest1 ${CXX_TEST_PATH}/itkVectorSegmentationLevelSetFunctionTest1 )
 ADD_TEST(itkVectorLevelSetFunctionTest1 ${CXX_TEST_PATH}/itkVectorLevelSetFunctionTest1 )
 ADD_TEST(itkVectorLevelSetFunctionTest2 ${CXX_TEST_PATH}/itkVectorLevelSetFunctionTest2 )
@@ -401,7 +407,7 @@ ADD_TEST(LandmarkSpatialObjectWriterTest1
 
 
 ADD_TEST(CannyEdgeDetectionImageFilterTest1
-  ${CXX_TEST_PATH}/CannyEdgeDetectionImageFilter
+  ${CXX_TEST_PATH}/CannyEdgeDetectionImageFilter1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/CannyEdgeDetectionImageFilterTest1_1.mha
   0.7 # Sigma
@@ -409,6 +415,27 @@ ADD_TEST(CannyEdgeDetectionImageFilterTest1
   75  # Lower hysteresis threshold
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest1_1.mha
   )
+
+ADD_TEST(CannyEdgeDetectionImageFilterTest2
+  ${CXX_TEST_PATH}/CannyEdgeDetectionImageFilter2
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/CannyEdgeDetectionImageFilterTest2_1.mha
+  0.7 # Sigma
+  150 # Upper hysteresis threshold
+  75  # Lower hysteresis threshold
+  ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest2_1.mha
+  )
+
+ADD_TEST(CannyEdgeDetectionImageFilterTest3
+  ${CXX_TEST_PATH}/CannyEdgeDetectionImageFilter3
+  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
+  ${TEMP}/CannyEdgeDetectionImageFilterTest3_1.mha
+  0.7 # Sigma
+  150 # Upper hysteresis threshold
+  75  # Lower hysteresis threshold
+  ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest3_1.mha
+  )
+
 
 ADD_TEST(itkCannyEdgesDistanceFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkCannyEdgesDistanceFeatureGeneratorTest1
