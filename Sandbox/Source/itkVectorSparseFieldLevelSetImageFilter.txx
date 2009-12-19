@@ -566,12 +566,12 @@ void
 VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::InitializeStatusImage()
 {
-  MeasurementVectorTraits::SetLength( m_ValueZero, this->m_NumberOfPhases );
-  MeasurementVectorTraits::SetLength( m_ValueOne, this->m_NumberOfPhases );
-  MeasurementVectorTraits::SetLength( m_StatusNull, this->m_NumberOfPhases );
-  MeasurementVectorTraits::SetLength( m_StatusChanging, this->m_NumberOfPhases );
-  MeasurementVectorTraits::SetLength( m_StatusActiveChangingUp, this->m_NumberOfPhases );
-  MeasurementVectorTraits::SetLength( m_StatusActiveChangingDown, this->m_NumberOfPhases );
+  Statistics::MeasurementVectorTraits::SetLength( m_ValueZero, this->m_NumberOfPhases );
+  Statistics::MeasurementVectorTraits::SetLength( m_ValueOne, this->m_NumberOfPhases );
+  Statistics::MeasurementVectorTraits::SetLength( m_StatusNull, this->m_NumberOfPhases );
+  Statistics::MeasurementVectorTraits::SetLength( m_StatusChanging, this->m_NumberOfPhases );
+  Statistics::MeasurementVectorTraits::SetLength( m_StatusActiveChangingUp, this->m_NumberOfPhases );
+  Statistics::MeasurementVectorTraits::SetLength( m_StatusActiveChangingDown, this->m_NumberOfPhases );
   this->m_ValueZero.Fill( NumericTraits< ScalarValueType >::Zero );
   this->m_ValueOne.Fill( NumericTraits< ScalarValueType >::OneValue() );
   this->m_StatusNull.Fill( this->m_StatusNullValue );
@@ -766,7 +766,8 @@ VectorSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
   itr.GoToBegin();
 
-  const unsigned int numberOfPhases = MeasurementVectorTraits::GetLength( itr.Get() );
+  const unsigned int numberOfPhases = 
+    Statistics::MeasurementVectorTraits::GetLength( itr.Get() );
 
   for( unsigned int phase = 0; phase < numberOfPhases; phase++ )
     {

@@ -90,7 +90,8 @@ VectorShiftScaleImageFilter<TInputImage, TOutputImage>
   // support progress methods/callbacks
   ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  const unsigned int numberOfComponents = MeasurementVectorTraits::GetLength( it.Get() );
+  const unsigned int numberOfComponents = 
+    Statistics::MeasurementVectorTraits::GetLength( it.Get() );
 
   // shift and scale the input pixels
   while (!it.IsAtEnd())

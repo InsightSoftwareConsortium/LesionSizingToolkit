@@ -65,7 +65,7 @@ VectorFiniteDifferenceImageFilter<TInputImage, TOutputImage>
     const OutputImageType * outputImage = this->GetOutput();
     OutputImageIteratorType otr( outputImage, outputImage->GetBufferedRegion() );
     otr.GoToBegin();
-    this->m_NumberOfComponents = MeasurementVectorTraits::GetLength( otr.Get() );
+    this->m_NumberOfComponents = Statistics::MeasurementVectorTraits::GetLength( otr.Get() );
     std::cout << "NUMBER OF COMPONENTS = " << this->m_NumberOfComponents << std::endl;
 
     // Set the coefficients for the deriviatives on each of the finite

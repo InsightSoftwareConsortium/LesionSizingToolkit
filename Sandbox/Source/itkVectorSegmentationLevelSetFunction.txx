@@ -73,7 +73,8 @@ void VectorSegmentationLevelSetFunction<TImageType, TFeatureImageType>
   FeatureIterator ftr( m_FeatureImage, m_FeatureImage->GetBufferedRegion() );
   ftr.GoToBegin();
 
-  const unsigned int numberOfComponents = MeasurementVectorTraits::GetLength( ftr.Get() );
+  const unsigned int numberOfComponents = 
+    Statistics::MeasurementVectorTraits::GetLength( ftr.Get() );
 
   this->m_AdvectionImage.resize( numberOfComponents );
 
