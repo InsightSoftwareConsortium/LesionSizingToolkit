@@ -95,6 +95,7 @@ int main(int argc, char* argv[])
   cannyFilter->SetOutsideValue( 255 );
 
   writer->SetInput( cannyFilter->GetOutput() );
+  writer->UseCompressionOn();
 
   try 
     {
