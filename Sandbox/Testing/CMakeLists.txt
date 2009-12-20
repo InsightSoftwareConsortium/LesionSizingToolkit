@@ -1,7 +1,15 @@
 
 SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 SET(TEST_DATA_ROOT ${LesionSizingKitSandbox_SOURCE_DIR}/../Data)
+SET(TEST_DATA_INPUT ${TEST_DATA_ROOT}/Input)
+SET(TEST_DATA_BASELINE ${TEST_DATA_ROOT}/Baseline)
 SET(TEMP ${LesionSizingKitSandbox_BINARY_DIR}/Testing/Temporary)
+
+FIND_FILE(IMAGE_COMPARE_COMMAND
+  ImageCompare
+  PATHS ${ITK_DIR}/bin
+  DOC "ITK Executable for comparing images"
+  )
 
 INCLUDE(CollectionTestMacro.cmake)
 
@@ -436,6 +444,20 @@ ADD_TEST(CannyEdgeDetectionImageFilterTest3
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest3_1.mha
   )
 
+IF( IMAGE_COMPARE_COMMAND )
+  ADD_TEST(CannyRegressionTest1 ${IMAGE_COMPARE_COMMAND}
+    ${TEMP}/CannyEdgeDetectionImageFilterTest1_1.mha
+    ${TEST_DATA_BASELINE}/CannyEdgeDetectionImageFilterTest1_1.mha
+    )
+  ADD_TEST(CannyRegressionTest2 ${IMAGE_COMPARE_COMMAND}
+    ${TEMP}/CannyEdgeDetectionImageFilterTest2_1.mha
+    ${TEST_DATA_BASELINE}/CannyEdgeDetectionImageFilterTest2_1.mha
+    )
+  ADD_TEST(CannyRegressionTest3 ${IMAGE_COMPARE_COMMAND}
+    ${TEMP}/CannyEdgeDetectionImageFilterTest3_1.mha
+    ${TEST_DATA_BASELINE}/CannyEdgeDetectionImageFilterTest3_1.mha
+    )
+ENDIF( IMAGE_COMPARE_COMMAND )
 
 ADD_TEST(itkCannyEdgesDistanceFeatureGeneratorTest1 
   ${CXX_TEST_PATH}/itkCannyEdgesDistanceFeatureGeneratorTest1
