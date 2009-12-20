@@ -27,6 +27,9 @@ OPTION(TEST_VOLCANO_DATA_COLLECTION "Run tests at MICCAI Volcano challenge. http
 ADD_EXECUTABLE(itkSystemInformationSandbox itkSystemInformation.cxx )
 TARGET_LINK_LIBRARIES(itkSystemInformationSandbox LesionSizingSandbox)
 
+ADD_EXECUTABLE(ImageReadWrite ImageReadWrite.cxx )
+TARGET_LINK_LIBRARIES(ImageReadWrite LesionSizingSandbox)
+
 ADD_EXECUTABLE(DicomSeriesReadImageWrite DicomSeriesReadImageWrite.cxx )
 TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite ITKIO)
 
