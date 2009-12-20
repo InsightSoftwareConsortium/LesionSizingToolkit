@@ -462,8 +462,8 @@ ADD_TEST(CannyEdgeDetectionImageFilterTest5
   ${TEST_DATA_ROOT}/Synthetic/SphereLesion.mha
   ${TEMP}/CannyEdgeDetectionImageFilterTest5_1.mha
   0.7 # Sigma
-  30  # Upper hysteresis threshold
-  15  # Lower hysteresis threshold
+  10  # Upper hysteresis threshold
+   5  # Lower hysteresis threshold
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest5_1.mha
   )
 
@@ -472,8 +472,8 @@ ADD_TEST(CannyEdgeDetectionImageFilterTest6
   ${TEST_DATA_ROOT}/Synthetic/SphereLesion.mha
   ${TEMP}/CannyEdgeDetectionImageFilterTest6_1.mha
   0.7 # Sigma
-  30  # Upper hysteresis threshold
-  15  # Lower hysteresis threshold
+  10  # Upper hysteresis threshold
+   5  # Lower hysteresis threshold
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest6_1.mha
   )
 
