@@ -447,7 +447,39 @@ ADD_TEST(CannyEdgeDetectionImageFilterTest3
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest3_1.mha
   )
 
+ADD_TEST(CannyEdgeDetectionImageFilterTest4
+  ${CXX_TEST_PATH}/CannyEdgeDetectionImageFilter1
+  ${TEST_DATA_ROOT}/Synthetic/SphereLesion.mha
+  ${TEMP}/CannyEdgeDetectionImageFilterTest4_1.mha
+  0.7 # Sigma
+  30  # Upper hysteresis threshold
+  15  # Lower hysteresis threshold
+  ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest4_1.mha
+  )
+
+ADD_TEST(CannyEdgeDetectionImageFilterTest5
+  ${CXX_TEST_PATH}/CannyEdgeDetectionImageFilter2
+  ${TEST_DATA_ROOT}/Synthetic/SphereLesion.mha
+  ${TEMP}/CannyEdgeDetectionImageFilterTest5_1.mha
+  0.7 # Sigma
+  30  # Upper hysteresis threshold
+  15  # Lower hysteresis threshold
+  ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest5_1.mha
+  )
+
+ADD_TEST(CannyEdgeDetectionImageFilterTest6
+  ${CXX_TEST_PATH}/CannyEdgeDetectionImageFilter3
+  ${TEST_DATA_ROOT}/Synthetic/SphereLesion.mha
+  ${TEMP}/CannyEdgeDetectionImageFilterTest6_1.mha
+  0.7 # Sigma
+  30  # Upper hysteresis threshold
+  15  # Lower hysteresis threshold
+  ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest6_1.mha
+  )
+
+
 IF( IMAGE_COMPARE_COMMAND )
+
   ADD_TEST(CannyRegressionTest1 ${IMAGE_COMPARE_COMMAND}
     ${TEMP}/CannyEdgeDetectionImageFilterTest1_1.mha
     ${TEST_DATA_BASELINE}/CannyEdgeDetectionImageFilterTest1_1.mha
@@ -460,6 +492,19 @@ IF( IMAGE_COMPARE_COMMAND )
     ${TEMP}/CannyEdgeDetectionImageFilterTest3_1.mha
     ${TEST_DATA_BASELINE}/CannyEdgeDetectionImageFilterTest3_1.mha
     )
+  ADD_TEST(CannyRegressionTest4 ${IMAGE_COMPARE_COMMAND}
+    ${TEMP}/CannyEdgeDetectionImageFilterTest4_1.mha
+    ${TEST_DATA_BASELINE}/CannyEdgeDetectionImageFilterTest4_1.mha
+    )
+  ADD_TEST(CannyRegressionTest5 ${IMAGE_COMPARE_COMMAND}
+    ${TEMP}/CannyEdgeDetectionImageFilterTest5_1.mha
+    ${TEST_DATA_BASELINE}/CannyEdgeDetectionImageFilterTest5_1.mha
+    )
+  ADD_TEST(CannyRegressionTest6 ${IMAGE_COMPARE_COMMAND}
+    ${TEMP}/CannyEdgeDetectionImageFilterTest6_1.mha
+    ${TEST_DATA_BASELINE}/CannyEdgeDetectionImageFilterTest6_1.mha
+    )
+
 ENDIF( IMAGE_COMPARE_COMMAND )
 
 ADD_TEST(itkCannyEdgesDistanceFeatureGeneratorTest1 
