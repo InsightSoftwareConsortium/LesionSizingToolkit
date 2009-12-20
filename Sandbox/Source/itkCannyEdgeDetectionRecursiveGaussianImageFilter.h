@@ -172,7 +172,7 @@ public:
   itkSetMacro(OutsideValue, OutputImagePixelType);
   itkGetMacro(OutsideValue, OutputImagePixelType);
   
-  OutputImageType * GetNonMaximumSuppressionImage()
+  OutputImageType * GetNonMaximumSuppressionImage() const
     {
     return this->m_MultiplyImageFilter->GetOutput();
     }
