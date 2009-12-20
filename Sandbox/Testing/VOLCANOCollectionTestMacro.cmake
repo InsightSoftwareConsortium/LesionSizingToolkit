@@ -70,6 +70,7 @@ macro( TEST_VOLCANO_DATASET
     -ResampleThickSliceData     # Supersample to isotropic
     )   
 
+IF( LSTK_SANDBOX_USE_VTK )
   # Compute volume
   ADD_TEST(LSMTVEB_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
     ${CXX_TEST_PATH}/IsoSurfaceVolumeEstimation
@@ -80,6 +81,7 @@ macro( TEST_VOLCANO_DATASET
     0 # Expected volume (unknown)
     ${TEMP}/${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}_Volume.txt
     )
+ENDIF( LSTK_SANDBOX_USE_VTK )
 
 endmacro( TEST_VOLCANO_DATASET )
 
