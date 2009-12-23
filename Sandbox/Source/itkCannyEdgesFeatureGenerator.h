@@ -21,7 +21,7 @@
 #include "itkImage.h"
 #include "itkImageSpatialObject.h"
 #include "itkCastImageFilter.h"
-#include "itkCannyEdgeDetectionRecursiveGaussianImageFilter2.h"
+#include "itkCannyEdgeDetectionRecursiveGaussianImageFilter.h"
 #include "itkIntensityWindowingImageFilter.h"
 
 namespace itk
