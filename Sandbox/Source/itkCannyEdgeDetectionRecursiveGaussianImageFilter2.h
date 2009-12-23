@@ -238,6 +238,63 @@ private:
   /** Check if the index is in bounds or not */
   bool InBounds(IndexType index);
   
+
+  /** Calculate the second derivative of the smoothed image, it writes the 
+   *  result to m_UpdateBuffer using the ThreadedCompute2ndDerivative() method
+   *  and multithreading mechanism.   */
+  void Compute2ndDerivative();
+
+  /**
+   * Split the input into "num" pieces, returning region "i" as
+   * "splitRegion". This method is called "num" times to return non-overlapping
+   * regions. The method returns the number of pieces that the input
+   * can be split into by the routine. i.e. return value is less than or equal
+   * to "num".
+   * \sa ImageSource
+   */
+  //  virtual
+  //  int SplitUpdateContainer(int i, int num, ThreadRegionType& splitRegion);
+
+  /** Does the actual work of calculating of the 2nd derivative over a region 
+   *  supplied by the multithreading mechanism.  
+   *
+   *  \sa Compute2ndDerivative
+   *  \sa Compute2ndDerivativeThreaderCallBack   */ 
+  void ThreadedCompute2ndDerivative(const OutputImageRegionType&
+                                    outputRegionForThread, int threadId);
+
+  /** This callback method uses ImageSource::SplitRequestedRegion to acquire an 
+   * output region that it passes to ThreadedCompute2ndDerivative for
+   * processing.  */
+  static ITK_THREAD_RETURN_TYPE
+  Compute2ndDerivativeThreaderCallback( void * arg );
+
+  /** This methos is used to calculate the 2nd derivative for 
+   * non-boundary pixels. It is called by the ThreadedCompute2ndDerivative 
+   * method. */  
+  OutputImagePixelType ComputeCannyEdge(const NeighborhoodType &it,
+                                        void *globalData );
+
+  /** Calculate the gradient of the second derivative of the smoothed image, 
+   *  it writes the result to m_UpdateBuffer1 using the 
+   *  ThreadedCompute2ndDerivativePos() method and multithreading mechanism.
+   */
+  void Compute2ndDerivativePos();
+
+  /** Does the actual work of calculating of the 2nd derivative over a region 
+   *  supplied by the multithreading mechanism.  
+   *
+   *  \sa Compute2ndDerivativePos
+   *  \sa Compute3ndDerivativePosThreaderCallBack   */ 
+  void ThreadedCompute2ndDerivativePos(const OutputImageRegionType&
+                                       outputRegionForThread, int threadId);
+
+  /**This callback method uses ImageSource::SplitRequestedRegion to acquire an
+   * output region that it passes to ThreadedCompute2ndDerivative for
+   * processing.   */
+  static ITK_THREAD_RETURN_TYPE
+  Compute2ndDerivativePosThreaderCallback( void *arg );
+
   /** The variance of the Gaussian Filter used in this filter */
   double m_Sigma;
 
@@ -269,6 +326,13 @@ private:
    *  derivative.  */
   typename MultiplyImageFilterType::Pointer m_MultiplyImageFilter;
   
+  /** Function objects that are used in the inner loops of derivatiVex
+      calculations. */
+  DerivativeOperator<OutputImagePixelType,itkGetStaticConstMacro(ImageDimension)>
+  m_ComputeCannyEdge1stDerivativeOper;
+  DerivativeOperator<OutputImagePixelType,itkGetStaticConstMacro(ImageDimension)>
+  m_ComputeCannyEdge2ndDerivativeOper;
+
   std::slice  m_ComputeCannyEdgeSlice[ImageDimension];
 
   unsigned long m_Stride[ImageDimension];
