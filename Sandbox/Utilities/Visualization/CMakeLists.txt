@@ -1,7 +1,5 @@
 PROJECT(Visualization)
 
-IF( LSTK_SANDBOX_USE_VTK)
-
 # Find VTK.
 FIND_PACKAGE(VTK REQUIRED)
 INCLUDE(${VTK_USE_FILE})
@@ -22,13 +20,9 @@ ADD_EXECUTABLE(ViewImageSlicesAndSegmentationContours
   )
 TARGET_LINK_LIBRARIES(ViewImageSlicesAndSegmentationContours ${ITK_VTK_LIBRARIES})
 
-ADD_EXECUTABLE(AntiAliasBinaryImageFilter AntiAliasBinaryImageFilter.cxx )
-TARGET_LINK_LIBRARIES(AntiAliasBinaryImageFilter ${ITK_VTK_LIBRARIES})
-
 ADD_EXECUTABLE(SurfaceExtraction SurfaceExtraction.cxx )
 TARGET_LINK_LIBRARIES(SurfaceExtraction ${ITK_VTK_LIBRARIES})
 
 ADD_EXECUTABLE(IsoSurfaceVolumeEstimation IsoSurfaceVolumeEstimation.cxx )
 TARGET_LINK_LIBRARIES(IsoSurfaceVolumeEstimation ${ITK_VTK_LIBRARIES})
 
-ENDIF( LSTK_SANDBOX_USE_VTK)

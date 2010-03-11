@@ -31,7 +31,7 @@
 #include "itkSpatialObject.h"
 #include "itkSpatialObjectReader.h"
 #include "itkLandmarkSpatialObject.h"
-
+#include "itksys/SystemTools.hxx"
 #define VTK_CREATE(type, name) \
   vtkSmartPointer<type> name = vtkSmartPointer<type>::New()
 
@@ -53,74 +53,84 @@ int main(int argc, char * argv [] )
     }
   
 
-  typedef itk::SpatialObjectReader< 3, unsigned short > SpatialObjectReaderType;
-
-  SpatialObjectReaderType::Pointer landmarkPointsReader = SpatialObjectReaderType::New();
-
-  landmarkPointsReader->SetFileName( argv[2] );
-  landmarkPointsReader->Update();
-
-  SpatialObjectReaderType::ScenePointer scene = landmarkPointsReader->GetScene();
-
-  if( !scene )
-    {
-    std::cerr << "No Scene : [FAILED]" << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  std::cout << "Number of object in the scene:" << scene->GetNumberOfObjects(1) << std::endl;
-
-  typedef SpatialObjectReaderType::SceneType::ObjectListType     ObjectListType;
-
-  ObjectListType * sceneChildren = scene->GetObjects(999999);
-
-  ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
-
-  /** Type of the input set of seed points. They are stored in a Landmark Spatial Object. */
-  typedef itk::LandmarkSpatialObject< 3 >  InputSpatialObjectType;
-
-  const InputSpatialObjectType * landmarkSpatialObject = NULL;
-
-  while( spatialObjectItr != sceneChildren->end() ) 
-    {
-    std::string objectName = (*spatialObjectItr)->GetTypeName();
-    if( objectName == "LandmarkSpatialObject" )
-      {
-      landmarkSpatialObject = 
-        dynamic_cast< const InputSpatialObjectType * >( spatialObjectItr->GetPointer() );
-      }
-    spatialObjectItr++;
-    }
- 
-  typedef InputSpatialObjectType::PointListType            PointListType;
-  typedef InputSpatialObjectType::SpatialObjectPointType   SpatialObjectPointType;
-  typedef SpatialObjectPointType::PointType                PointType;
-
-
-  const PointListType & points = landmarkSpatialObject->GetPoints();
-
-  // Grab the first point in the list of seed points
-  PointType point = points[0].GetPosition();
-
-  std::cout << "Seed point = " << point << std::endl;
-
-  double seedPoint[3];
-
-  seedPoint[0] = point[0];
-  seedPoint[1] = point[1];
-  seedPoint[2] = point[2];
-
   typedef vtkSmartPointer< vtkContourVisualizationModule >  vtkContourVisualizationModulePointer;
   typedef std::vector< vtkContourVisualizationModulePointer >    ContoursContainer;
 
   ContoursContainer  contourModules;
 
   VTK_CREATE( vtkMetaImageReader, imageReader );
-
   imageReader->SetFileName( argv[1] );
   imageReader->Update();
-  
   vtkImageData * inputImage = imageReader->GetOutput();
+  
+
+  // If a landmark file is specified use that as the point to plass the slice 
+  // around, else use the center.
+
+  double seedPoint[3];
+  
+  if (itksys::SystemTools::FileExists(argv[2]))
+    {
+    typedef itk::SpatialObjectReader< 3, unsigned short > SpatialObjectReaderType;
+
+    SpatialObjectReaderType::Pointer landmarkPointsReader = SpatialObjectReaderType::New();
+
+    landmarkPointsReader->SetFileName( argv[2] );
+    landmarkPointsReader->Update();
+
+    SpatialObjectReaderType::ScenePointer scene = landmarkPointsReader->GetScene();
+
+    if( !scene )
+      {
+      std::cerr << "No Scene : [FAILED]" << std::endl;
+      return EXIT_FAILURE;
+      }
+
+    std::cout << "Number of object in the scene:" << scene->GetNumberOfObjects(1) << std::endl;
+
+    typedef SpatialObjectReaderType::SceneType::ObjectListType     ObjectListType;
+
+    ObjectListType * sceneChildren = scene->GetObjects(999999);
+
+    ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
+
+    /** Type of the input set of seed points. They are stored in a Landmark Spatial Object. */
+    typedef itk::LandmarkSpatialObject< 3 >  InputSpatialObjectType;
+
+    const InputSpatialObjectType * landmarkSpatialObject = NULL;
+
+    while( spatialObjectItr != sceneChildren->end() ) 
+      {
+      std::string objectName = (*spatialObjectItr)->GetTypeName();
+      if( objectName == "LandmarkSpatialObject" )
+        {
+        landmarkSpatialObject = 
+          dynamic_cast< const InputSpatialObjectType * >( spatialObjectItr->GetPointer() );
+        }
+      spatialObjectItr++;
+      }
+   
+    typedef InputSpatialObjectType::PointListType            PointListType;
+    typedef InputSpatialObjectType::SpatialObjectPointType   SpatialObjectPointType;
+    typedef SpatialObjectPointType::PointType                PointType;
+
+
+    const PointListType & points = landmarkSpatialObject->GetPoints();
+
+    // Grab the first point in the list of seed points
+    PointType point = points[0].GetPosition();
+
+    std::cout << "Seed point = " << point << std::endl;
+
+    seedPoint[0] = point[0];
+    seedPoint[1] = point[1];
+    seedPoint[2] = point[2];
+    }
+  else
+    {
+    inputImage->GetCenter( seedPoint );
+    }
+
 
   float isoValue = atof( argv[3] );
 

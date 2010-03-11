@@ -39,6 +39,7 @@
 #include "vtkImagePlaneWidget.h"
 #include "vtkCellPicker.h"
 #include "vtkPolyDataWriter.h"
+#include "vtkSTLWriter.h"
 #include "vtkSmartPointer.h"
 
 
@@ -112,7 +113,7 @@ int main(int argc, char * argv [] )
     std::cerr << "Missing parameters" << std::endl;
     std::cerr << "Usage: " << argv[0] << " imageFileName maskFileName";
     std::cerr << " [isocontourValue] [representation:0=surface/1=wireframe]";
-    std::cerr << " [outputSurface.vtk]"; 
+    std::cerr << " [outputSurface.stl]"; 
     std::cerr << std::endl;
     return 1;
     }
@@ -289,7 +290,7 @@ int main(int argc, char * argv [] )
 
     if( argc > 5 )
       {
-      VTK_CREATE(vtkPolyDataWriter , writer);
+      VTK_CREATE(vtkSTLWriter , writer);
       writer->SetFileName(argv[5]);
       writer->SetInput( contour->GetOutput() );
       writer->Write();
