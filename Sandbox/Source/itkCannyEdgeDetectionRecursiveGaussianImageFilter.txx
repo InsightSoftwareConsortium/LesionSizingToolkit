@@ -33,7 +33,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter()
 {
   unsigned int i;
 
-  m_Sigma = 1.0;
+  m_Sigma.Fill(1.0);
 
   m_OutsideValue = NumericTraits<OutputImagePixelType>::Zero;
   m_Threshold = NumericTraits<OutputImagePixelType>::Zero;
@@ -328,7 +328,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   this->AllocateUpdateBuffer();
 
   // 1.Apply the Gaussian Filter to the input image.-------
-  m_GaussianFilter->SetSigma( this->m_Sigma );
+  m_GaussianFilter->SetSigmaArray( this->m_Sigma );
   m_GaussianFilter->SetNormalizeAcrossScale( true );
   m_GaussianFilter->SetInput(input);
   m_GaussianFilter->Update();
@@ -637,6 +637,54 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
   
   return ITK_THREAD_RETURN_VALUE;
 }
+
+// Set value of Sigma (isotropic)
+
+template <typename TInputImage, typename TOutputImage>
+void 
+CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
+::SetSigma( ScalarRealType sigma )
+{
+  SigmaArrayType sigmas(sigma);
+  this->SetSigmaArray(sigmas);
+}
+
+
+// Set value of Sigma (an-isotropic)
+
+template <typename TInputImage, typename TOutputImage>
+void 
+CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
+::SetSigmaArray( const SigmaArrayType & sigma )
+{
+  if (this->m_Sigma != sigma)
+    {
+    this->m_Sigma = sigma;
+    this->Modified();
+    }
+}
+
+
+// Get the sigma array.
+template <typename TInputImage, typename TOutputImage>
+typename CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>::SigmaArrayType
+CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
+::GetSigmaArray() const
+{
+  return m_Sigma;
+}
+
+
+// Get the sigma scalar. If the sigma is anisotropic, we will just
+// return the sigma along the first dimension.
+template <typename TInputImage, typename TOutputImage>
+typename CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>::ScalarRealType
+CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
+::GetSigma() const
+{
+  return m_Sigma[0];
+}
+
 
 template <class TInputImage, class TOutputImage>
 void 

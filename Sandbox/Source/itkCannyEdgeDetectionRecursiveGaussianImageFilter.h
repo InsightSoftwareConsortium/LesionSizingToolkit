@@ -108,6 +108,11 @@ public:
   typedef typename TOutputImage::PixelType  OutputImagePixelType;
   typedef typename TInputImage::IndexType   IndexType;
 
+  typedef SmoothingRecursiveGaussianImageFilter<
+        InputImageType, OutputImageType> GaussianImageFilterType;
+  typedef typename GaussianImageFilterType::ScalarRealType ScalarRealType;
+  typedef typename GaussianImageFilterType::SigmaArrayType SigmaArrayType;
+  
   /** The default boundary condition is used unless overridden 
    *in the Evaluate() method. */
   typedef ZeroFluxNeumannBoundaryCondition<OutputImageType>
@@ -143,8 +148,10 @@ public:
   typedef FixedArray<double, itkGetStaticConstMacro(ImageDimension)> ArrayType;
 
   /** Smoothing parameters for the Gaussian filter. */
-  itkSetMacro(Sigma, double);
-  itkGetMacro(Sigma, double);
+  void SetSigmaArray( const SigmaArrayType & sigmas );
+  void SetSigma( ScalarRealType sigma );
+  SigmaArrayType GetSigmaArray() const;
+  ScalarRealType GetSigma() const;
   
   /* Set the Threshold value for detected edges. */
   void SetThreshold(const OutputImagePixelType th)
@@ -208,8 +215,6 @@ protected:
 
   void GenerateData();
 
-  typedef SmoothingRecursiveGaussianImageFilter<InputImageType, OutputImageType>
-                                                      GaussianImageFilterType;
   typedef MultiplyImageFilter< OutputImageType, 
               OutputImageType, OutputImageType>       MultiplyImageFilterType;
 
@@ -291,8 +296,8 @@ private:
   static ITK_THREAD_RETURN_TYPE
   Compute2ndDerivativePosThreaderCallback( void *arg );
 
-  /** The variance of the Gaussian Filter used in this filter */
-  double m_Sigma;
+  /** Standard deviation of the gaussian used for smoothing */
+  SigmaArrayType                        m_Sigma;
 
   /** The maximum error of the gaussian blurring kernel in each dimensional
    * direction.  */

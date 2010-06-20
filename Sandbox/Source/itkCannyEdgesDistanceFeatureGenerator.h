@@ -23,6 +23,8 @@
 #include "itkCastImageFilter.h"
 #include "itkCannyEdgeDetectionRecursiveGaussianImageFilter.h"
 #include "itkSignedMaurerDistanceMapImageFilter.h"
+#include "itkFixedArray.h"
+#include "itkNumericTraits.h"
 
 namespace itk
 {
@@ -82,6 +84,9 @@ public:
   typedef typename InputImageSpatialObjectType::Pointer     InputImageSpatialObjectPointer;
   typedef typename Superclass::SpatialObjectType            SpatialObjectType;
 
+  typedef typename NumericTraits<InputPixelType>::ScalarRealType ScalarRealType;
+  typedef FixedArray< ScalarRealType, itkGetStaticConstMacro(Dimension) > SigmaArrayType;
+
   /** Input data that will be used for generating the feature. */
   void SetInput( const SpatialObjectType * input );
   const SpatialObjectType * GetInput() const;
@@ -90,8 +95,15 @@ public:
    * SpatialObject. */
   const SpatialObjectType * GetFeature() const;
 
-  itkSetMacro( Sigma, double );
-  itkGetMacro( Sigma, double );
+  /** Set Sigma value. Sigma is measured in the units of image spacing. You 
+    may use the method SetSigma to set the same value across each axis or
+    use the method SetSigmaArray if you need different values along each
+    axis. */
+  void SetSigmaArray( const SigmaArrayType & sigmas );
+  void SetSigma( ScalarRealType sigma );
+  SigmaArrayType GetSigmaArray() const;
+  ScalarRealType GetSigma() const;
+
   itkSetMacro( UpperThreshold, double );
   itkGetMacro( UpperThreshold, double );
   itkSetMacro( LowerThreshold, double );
@@ -135,7 +147,9 @@ private:
 
   double                              m_UpperThreshold;
   double                              m_LowerThreshold;
-  double                              m_Sigma;
+
+  /** Standard deviation of the gaussian used for smoothing */
+  SigmaArrayType                        m_Sigma;
 };
 
 } // end namespace itk
