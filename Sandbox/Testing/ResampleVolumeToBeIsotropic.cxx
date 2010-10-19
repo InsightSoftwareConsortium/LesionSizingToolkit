@@ -81,7 +81,9 @@ int main( int argc, char * argv[] )
 
   BSplineInterpolatorType::Pointer bsplineInterpolator = BSplineInterpolatorType::New();
 
+#ifdef ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE
   bsplineInterpolator->UseImageDirectionOn();
+#endif
   bsplineInterpolator->SetSplineOrder( 3 );
 
 
