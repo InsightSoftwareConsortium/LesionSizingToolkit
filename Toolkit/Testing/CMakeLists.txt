@@ -4,7 +4,10 @@ SET(TEST_DATA_ROOT ${LesionSizingToolkit_SOURCE_DIR})
 SET(TEMP ${LesionSizingToolkit_BINARY_DIR}/Testing/Temporary)
 
 
-ADD_EXECUTABLE(itkSystemInformation itkSystemInformation.cxx )
-TARGET_LINK_LIBRARIES(itkSystemInformation ITKIO ITKNumerics)
+IF(("${ITK_VERSION_MAJOR}" GREATER 3) OR ("${ITK_VERSION_MAJOR}" EQUAL 3 AND "${ITK_VERSION_MINOR}" GREATER 6))
+  ADD_EXECUTABLE(itkSystemInformation itkSystemInformation.cxx )
+  TARGET_LINK_LIBRARIES(itkSystemInformation ITKIO ITKNumerics)
+  
+  ADD_TEST(itkSystemInformation ${CXX_TEST_PATH}/itkSystemInformation )
+ENDIF(("${ITK_VERSION_MAJOR}" GREATER 3) OR ("${ITK_VERSION_MAJOR}" EQUAL 3 AND "${ITK_VERSION_MINOR}" GREATER 6))
 
-ADD_TEST(itkSystemInformation ${CXX_TEST_PATH}/itkSystemInformation )
