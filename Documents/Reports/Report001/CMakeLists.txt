@@ -24,7 +24,7 @@ SET(REPORT_SRCS
 #
 #  Get the list of figures generated during testing
 #
-FILE(GLOB REPORT_GENERATED_FIGURES "${LesionSizingKitSandbox_BINARY_DIR}/Testing/Temporary/*.png")
+FILE(GLOB REPORT_GENERATED_FIGURES "${LesionSizingToolkit_BINARY_DIR}/Testing/Temporary/*.png")
 
 SET(PROJECT_REPORT_SOURCE_DIR "${PROJECT_SOURCE_DIR}")
 SET(PROJECT_REPORT_BINARY_DIR "${PROJECT_BINARY_DIR}")
@@ -37,9 +37,9 @@ SET(PROJECT_REPORT_BINARY_DIR "${PROJECT_BINARY_DIR}")
 FOREACH(SOURCE_FILE ${REPORT_SRCS})
    ADD_CUSTOM_COMMAND(
      OUTPUT   ${PROJECT_REPORT_BINARY_DIR}/${SOURCE_FILE}
-     DEPENDS  ${LesionSizingKitSandbox_SOURCE_DIR}/Documents/Latex/${SOURCE_FILE}
+     DEPENDS  ${LesionSizingToolkit_SOURCE_DIR}/Documents/Latex/${SOURCE_FILE}
      COMMAND ${CMAKE_COMMAND} -E copy_if_different 
-        ${LesionSizingKitSandbox_SOURCE_DIR}/Documents/Latex/${SOURCE_FILE}
+        ${LesionSizingToolkit_SOURCE_DIR}/Documents/Latex/${SOURCE_FILE}
         ${PROJECT_REPORT_BINARY_DIR}/${SOURCE_FILE}
     )
    SET(COPY_RESULTS ${COPY_RESULTS} ${PROJECT_REPORT_BINARY_DIR}/${SOURCE_FILE})

@@ -1,8 +1,8 @@
-SET(LesionSizingSandbox_SRCS
+SET(LesionSizingToolkit_SRCS
   itkNumericTraitsMatrixPixel.cxx
   )
 
-ADD_LIBRARY(LesionSizingSandbox ${LesionSizingSandbox_SRCS})
+ADD_LIBRARY(LesionSizingToolkit ${LesionSizingToolkit_SRCS})
 
-TARGET_LINK_LIBRARIES(LesionSizingSandbox ITKIO ITKNumerics ITKCommon)
+TARGET_LINK_LIBRARIES(LesionSizingToolkit ITKIO ITKNumerics ITKCommon)
 

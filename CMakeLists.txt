@@ -3,18 +3,18 @@ IF(COMMAND CMAKE_POLICY)
   CMAKE_POLICY(SET CMP0003 NEW)
 ENDIF(COMMAND CMAKE_POLICY)
 
-PROJECT(LesionSizingKitSandbox)
+PROJECT(LesionSizingToolkit)
 
 FIND_PACKAGE(ITK REQUIRED)
 INCLUDE(${ITK_USE_FILE})
 
-SET(EXECUTABLE_OUTPUT_PATH ${LesionSizingKitSandbox_BINARY_DIR}/bin CACHE INTERNAL "Where to put the executables") 
-SET(LIBRARY_OUTPUT_PATH ${LesionSizingKitSandbox_BINARY_DIR}/bin CACHE INTERNAL "Where to put the libraries") 
+SET(EXECUTABLE_OUTPUT_PATH ${LesionSizingToolkit_BINARY_DIR}/bin CACHE INTERNAL "Where to put the executables") 
+SET(LIBRARY_OUTPUT_PATH ${LesionSizingToolkit_BINARY_DIR}/bin CACHE INTERNAL "Where to put the libraries") 
 
 
 OPTION(ITK_USE_MULTI_PHASE_FRAMEWORK "Enable multi-phase level sets" ON)
 
-OPTION(LSTK_SANDBOX_BUILD_REPORTS "Build Lesion Sizing Toolkit Sandbox with LaTeX reports." OFF)
+OPTION(LSTK_SANDBOX_BUILD_REPORTS "Build Lesion Sizing Toolkit with LaTeX reports." OFF)
 
 OPTION(LSTK_SANDBOX_USE_VTK "Build visualization helper tools." OFF)
 
@@ -27,7 +27,7 @@ ENABLE_TESTING()
 INCLUDE(CTest)
 
 INCLUDE_DIRECTORIES(
-  ${LesionSizingKitSandbox_SOURCE_DIR}/Source
+  ${LesionSizingToolkit_SOURCE_DIR}/Source
   )
 
 ADD_SUBDIRECTORY(Source)
@@ -37,7 +37,7 @@ IF(BUILD_TESTING)
 ENDIF(BUILD_TESTING)
 ADD_SUBDIRECTORY(Examples)
 
-INCLUDE(${LesionSizingKitSandbox_SOURCE_DIR}/Utilities/KWStyle/KWStyle.cmake)
+INCLUDE(${LesionSizingToolkit_SOURCE_DIR}/Utilities/KWStyle/KWStyle.cmake)
 
 IF(LSTK_SANDBOX_BUILD_REPORTS)
   ADD_SUBDIRECTORY(Documents)
