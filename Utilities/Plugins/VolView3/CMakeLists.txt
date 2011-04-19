@@ -44,7 +44,7 @@ IF( ITK_BUILD_SHARED )
       set_source_files_properties(${PLUG}.cxx 
         PROPERTIES COMPILE_FLAGS "/bigobj")
     endif(WIN32_64BITS)
-    TARGET_LINK_LIBRARIES( ${PLUG} LesionSizingToolkit ITKIO ITKCommon ITKBasicFilters ITKAlgorithms ITKNumerics ITKSpatialObject )
+    TARGET_LINK_LIBRARIES( ${PLUG} ${LesionSizingToolkit_LIBRARIES} ITKIO ITKCommon ITKBasicFilters ITKAlgorithms ITKNumerics ITKSpatialObject )
   ENDFOREACH (PLUG)
 
   SET( ${PROJECT_NAME}_PLUGINS_INSTALL_FILES ${ITK_PLUGINS_INSTALL_FILES} CACHE INTERNAL 
