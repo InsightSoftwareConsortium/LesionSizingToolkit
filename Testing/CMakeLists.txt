@@ -5,11 +5,6 @@ SET(TEST_DATA_INPUT ${TEST_DATA_ROOT}/Input)
 SET(TEST_DATA_BASELINE ${TEST_DATA_ROOT}/Baseline)
 SET(TEMP ${LesionSizingToolkit_BINARY_DIR}/Testing/Temporary)
 
-FIND_FILE(IMAGE_COMPARE_COMMAND
-  ImageCompare
-  PATHS ${ITK_DIR}/bin
-  DOC "ITK Executable for comparing images"
-  )
 
 INCLUDE(CollectionTestMacro.cmake)
 
@@ -31,40 +26,40 @@ ADD_EXECUTABLE(ImageReadWrite ImageReadWrite.cxx )
 TARGET_LINK_LIBRARIES(ImageReadWrite ${LesionSizingToolkit_LIBRARIES})
 
 ADD_EXECUTABLE(DicomSeriesReadImageWrite DicomSeriesReadImageWrite.cxx )
-TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite ITKIO)
+TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(ImageReadRegionOfInterestWrite ImageReadRegionOfInterestWrite.cxx )
-TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite ITKIO)
+TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(ImageReadRegionOfInterestAroundSeedWrite ImageReadRegionOfInterestAroundSeedWrite.cxx )
-TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestAroundSeedWrite ITKIO)
+TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestAroundSeedWrite ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(CannyEdgeDetectionImageFilter1 CannyEdgeDetectionImageFilter1.cxx )
-TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter1 ITKIO)
+TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter1 ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(CannyEdgeDetectionImageFilter2 CannyEdgeDetectionImageFilter2.cxx )
-TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter2 ITKIO)
+TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter2 ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(CannyEdgeDetectionImageFilter3 CannyEdgeDetectionImageFilter3.cxx )
-TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter3 ITKIO)
+TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter3 ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter LaplacianRecursiveGaussianImageFilter.cxx )
-TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter ITKIO)
+TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(itkIsotropicResamplerTest1 itkIsotropicResamplerTest1.cxx )
-TARGET_LINK_LIBRARIES(itkIsotropicResamplerTest1 ITKIO)
+TARGET_LINK_LIBRARIES(itkIsotropicResamplerTest1 ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(ResampleVolumeToBeIsotropic ResampleVolumeToBeIsotropic.cxx )
-TARGET_LINK_LIBRARIES(ResampleVolumeToBeIsotropic ITKIO)
+TARGET_LINK_LIBRARIES(ResampleVolumeToBeIsotropic ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(GradientMagnitudeImageFilter GradientMagnitudeImageFilter.cxx )
-TARGET_LINK_LIBRARIES(GradientMagnitudeImageFilter ITKIO)
+TARGET_LINK_LIBRARIES(GradientMagnitudeImageFilter ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(GradientMagnitudeRecursiveGaussianImageFilter GradientMagnitudeRecursiveGaussianImageFilter.cxx )
-TARGET_LINK_LIBRARIES(GradientMagnitudeRecursiveGaussianImageFilter ITKIO)
+TARGET_LINK_LIBRARIES(GradientMagnitudeRecursiveGaussianImageFilter ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(LandmarkSpatialObjectWriterTest LandmarkSpatialObjectWriterTest.cxx )
-TARGET_LINK_LIBRARIES(LandmarkSpatialObjectWriterTest ITKIO)
+TARGET_LINK_LIBRARIES(LandmarkSpatialObjectWriterTest ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(itkFeatureGeneratorTest1 itkFeatureGeneratorTest1.cxx )
 TARGET_LINK_LIBRARIES(itkFeatureGeneratorTest1 ${LesionSizingToolkit_LIBRARIES})

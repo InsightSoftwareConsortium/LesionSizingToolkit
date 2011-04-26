@@ -23,7 +23,7 @@
 #endif
 
 
-#include "itkOrientedImage.h"
+#include "itkImage.h"
 #include "itkGDCMImageIO.h"
 #include "itkGDCMSeriesFileNames.h"
 #include "itkImageSeriesReader.h"
@@ -43,7 +43,7 @@ int main( int argc, char* argv[] )
   typedef signed short    PixelType;
   const unsigned int      Dimension = 3;
 
-  typedef itk::OrientedImage< PixelType, Dimension >         ImageType;
+  typedef itk::Image< PixelType, Dimension >         ImageType;
 
   typedef itk::ImageSeriesReader< ImageType >        ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
