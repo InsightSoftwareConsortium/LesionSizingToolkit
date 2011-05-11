@@ -75,38 +75,7 @@ OPTION(TEST_NIST_PHANTOM_COLLECTION "Run tests in the collection of phantom data
 OPTION(TEST_FDA_PHANTOM_COLLECTION "Run tests in the collection of phantom datasets from FDA" OFF)
 OPTION(TEST_VOLCANO_DATA_COLLECTION "Run tests at MICCAI Volcano challenge. http://www.via.cornell.edu/challenge" OFF)
 
-add_executable(CannyEdgeDetectionImageFilter1  CannyEdgeDetectionImageFilter1.cxx )
-target_link_libraries(CannyEdgeDetectionImageFilter1 ${ITK-LesionSizingToolkit_LIBRARIES})
 
-add_executable(CannyEdgeDetectionImageFilter2  CannyEdgeDetectionImageFilter2.cxx )
-target_link_libraries(CannyEdgeDetectionImageFilter2 ${ITK-LesionSizingToolkit_LIBRARIES})
-
-add_executable(CannyEdgeDetectionImageFilter3  CannyEdgeDetectionImageFilter3.cxx )
-target_link_libraries(CannyEdgeDetectionImageFilter3 ${ITK-LesionSizingToolkit_LIBRARIES})
-
-add_executable(DicomSeriesReadImageWrite DicomSeriesReadImageWrite.cxx)
-target_link_libraries(DicomSeriesReadImageWrite ${ITK-LesionSizingToolkit_LIBRARIES})
-
-add_executable(GradientMagnitudeImageFilter GradientMagnitudeImageFilter.cxx)
-target_link_libraries(GradientMagnitudeImageFilter ${ITK-LesionSizingToolkit_LIBRARIES})
-
-add_executable(GradientMagnitudeRecursiveGaussianImageFilter GradientMagnitudeRecursiveGaussianImageFilter.cxx)
-target_link_libraries(GradientMagnitudeRecursiveGaussianImageFilter ${ITK-LesionSizingToolkit_LIBRARIES})
-
-add_executable(ImageReadRegionOfInterestAroundSeedWrite ImageReadRegionOfInterestAroundSeedWrite.cxx)
-target_link_libraries(ImageReadRegionOfInterestAroundSeedWrite  ${ITK-LesionSizingToolkit_LIBRARIES})
-
-add_executable(ImageReadRegionOfInterestWrite ImageReadRegionOfInterestWrite.cxx)
-target_link_libraries(ImageReadRegionOfInterestWrite ${ITK-LesionSizingToolkit_LIBRARIES})
-
-add_executable(ImageReadWrite ImageReadWrite.cxx)
-target_link_libraries(ImageReadWrite ${ITK-LesionSizingToolkit_LIBRARIES})
-
-add_executable(LaplacianRecursiveGaussianImageFilter LaplacianRecursiveGaussianImageFilter.cxx)
-target_link_libraries(LaplacianRecursiveGaussianImageFilter ${ITK-LesionSizingToolkit_LIBRARIES})
-
-add_executable(ResampleVolumeToBeIsotropic ResampleVolumeToBeIsotropic.cxx)
-target_link_libraries(ResampleVolumeToBeIsotropic ${ITK-LesionSizingToolkit_LIBRARIES})
 
 itk_add_test(NAME itkLesionSegmentationMethodTest1 COMMAND ITK-LesionSizingToolkitTestDriver itkLesionSegmentationMethodTest1)
 itk_add_test(NAME itkLesionSegmentationMethodTest2 COMMAND ITK-LesionSizingToolkitTestDriver itkLesionSegmentationMethodTest2)
@@ -186,9 +155,9 @@ itk_add_test(NAME itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   90.0
  )
 
-itk_add_test(NAME GradientMagnitudeImageFilterTest1
+itk_add_test(NAME itkGradientMagnitudeImageFilterTest1
   COMMAND ${ITK_TEST_DRIVER}
-  $<TARGET_FILE:GradientMagnitudeImageFilter>
+  $<TARGET_FILE:itkGradientMagnitudeImageFilter>
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/GradientMagnitudeImageFilterTest1_1.mha
   0.7 # Sigma
@@ -228,11 +197,11 @@ itk_add_test(NAME LandmarkSpatialObjectWriterTest1
   ${TEMP}/LandmarkSpatialObjectWriterTest1_1.txt
  )
 
-itk_add_test(NAME CannyEdgeDetectionImageFilterTest1
+itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest1
   COMMAND ${ITK_TEST_DRIVER}
 --compare  ${TEST_DATA_ROOT}/Baseline/CannyEdgeDetectionImageFilterTest1_1.mha
            ${TEMP}/CannyEdgeDetectionImageFilterTest1_1.mha
-  $<TARGET_FILE:CannyEdgeDetectionImageFilter1>
+  $<TARGET_FILE:itkCannyEdgeDetectionImageFilter1>
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/CannyEdgeDetectionImageFilterTest1_1.mha
   0.7 # Sigma
@@ -241,11 +210,11 @@ itk_add_test(NAME CannyEdgeDetectionImageFilterTest1
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest1_1.mha
  )
 
-itk_add_test(NAME CannyEdgeDetectionImageFilterTest2
+itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest2
   COMMAND ${ITK_TEST_DRIVER}
 --compare ${TEMP}/CannyEdgeDetectionImageFilterTest2_1.mha
           ${TEST_DATA_ROOT}/Baseline/CannyEdgeDetectionImageFilterTest2_1.mha
-  $<TARGET_FILE:CannyEdgeDetectionImageFilter2>
+  $<TARGET_FILE:itkCannyEdgeDetectionImageFilter2>
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/CannyEdgeDetectionImageFilterTest2_1.mha
   0.7 # Sigma
@@ -254,11 +223,11 @@ itk_add_test(NAME CannyEdgeDetectionImageFilterTest2
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest2_1.mha
  )
 
-itk_add_test(NAME CannyEdgeDetectionImageFilterTest3
+itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest3
   COMMAND ${ITK_TEST_DRIVER}
 --compare ${TEMP}/CannyEdgeDetectionImageFilterTest3_1.mha
           ${TEST_DATA_ROOT}/Baseline/CannyEdgeDetectionImageFilterTest3_1.mha
-  $<TARGET_FILE:CannyEdgeDetectionImageFilter3>
+  $<TARGET_FILE:itkCannyEdgeDetectionImageFilter3>
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/CannyEdgeDetectionImageFilterTest3_1.mha
   0.7 # Sigma
@@ -267,11 +236,11 @@ itk_add_test(NAME CannyEdgeDetectionImageFilterTest3
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest3_1.mha
  )
 
-itk_add_test(NAME CannyEdgeDetectionImageFilterTest4
+itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest4
   COMMAND ${ITK_TEST_DRIVER}
 --compare ${TEMP}/CannyEdgeDetectionImageFilterTest4_1.mha
           ${TEST_DATA_ROOT}/Baseline/CannyEdgeDetectionImageFilterTest4_1.mha
-  $<TARGET_FILE:CannyEdgeDetectionImageFilter1>
+  $<TARGET_FILE:itkCannyEdgeDetectionImageFilter1>
   ${TEST_DATA_ROOT}/Synthetic/SphereLesion.mha
   ${TEMP}/CannyEdgeDetectionImageFilterTest4_1.mha
   0.7 # Sigma
@@ -280,11 +249,11 @@ itk_add_test(NAME CannyEdgeDetectionImageFilterTest4
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest4_1.mha
  )
 
-itk_add_test(NAME CannyEdgeDetectionImageFilterTest5
+itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest5
   COMMAND ${ITK_TEST_DRIVER}
 --compare ${TEMP}/CannyEdgeDetectionImageFilterTest5_1.mha
           ${TEST_DATA_ROOT}/Baseline/CannyEdgeDetectionImageFilterTest5_1.mha
-  $<TARGET_FILE:CannyEdgeDetectionImageFilter2>
+  $<TARGET_FILE:itkCannyEdgeDetectionImageFilter2>
   ${TEST_DATA_ROOT}/Synthetic/SphereLesion.mha
   ${TEMP}/CannyEdgeDetectionImageFilterTest5_1.mha
   0.7 # Sigma
@@ -293,11 +262,11 @@ itk_add_test(NAME CannyEdgeDetectionImageFilterTest5
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest5_1.mha
  )
 
-itk_add_test(NAME CannyEdgeDetectionImageFilterTest6
+itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest6
   COMMAND ${ITK_TEST_DRIVER}
 --compare ${TEMP}/CannyEdgeDetectionImageFilterTest6_1.mha
           ${TEST_DATA_ROOT}/Baseline/CannyEdgeDetectionImageFilterTest6_1.mha
-  $<TARGET_FILE:CannyEdgeDetectionImageFilter3>
+  $<TARGET_FILE:itkCannyEdgeDetectionImageFilter3>
   ${TEST_DATA_ROOT}/Synthetic/SphereLesion.mha
   ${TEMP}/CannyEdgeDetectionImageFilterTest6_1.mha
   0.7 # Sigma
