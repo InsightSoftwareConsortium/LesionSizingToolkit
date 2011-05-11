@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,7 +26,7 @@
 
 namespace itk
 {
-  
+
 template <class TInputImage, class TOutputImage>
 LesionSegmentationImageFilter8<TInputImage, TOutputImage>::
 LesionSegmentationImageFilter8()
@@ -46,19 +46,19 @@ LesionSegmentationImageFilter8()
   m_CommandObserver    = CommandType::New();
   m_CommandObserver->SetCallbackFunction(
     this, &Self::ProgressUpdate );
-  m_LungWallFeatureGenerator->AddObserver( 
+  m_LungWallFeatureGenerator->AddObserver(
       itk::ProgressEvent(), m_CommandObserver );
-  m_SigmoidFeatureGenerator->AddObserver( 
+  m_SigmoidFeatureGenerator->AddObserver(
       itk::ProgressEvent(), m_CommandObserver );
-  m_VesselnessFeatureGenerator->AddObserver( 
+  m_VesselnessFeatureGenerator->AddObserver(
       itk::ProgressEvent(), m_CommandObserver );
-  m_CannyEdgesFeatureGenerator->AddObserver( 
+  m_CannyEdgesFeatureGenerator->AddObserver(
       itk::ProgressEvent(), m_CommandObserver );
-  m_SegmentationModule->AddObserver( 
+  m_SegmentationModule->AddObserver(
       itk::ProgressEvent(), m_CommandObserver );
-  m_CropFilter->AddObserver( 
+  m_CropFilter->AddObserver(
       itk::ProgressEvent(), m_CommandObserver );
-  m_IsotropicResampler->AddObserver( 
+  m_IsotropicResampler->AddObserver(
       itk::ProgressEvent(), m_CommandObserver );
 
   // Connect pipeline
@@ -86,7 +86,7 @@ LesionSegmentationImageFilter8()
   m_CannyEdgesFeatureGenerator->SetUpperThreshold( 150.0 );
   m_CannyEdgesFeatureGenerator->SetLowerThreshold( 75.0 );
   m_FastMarchingStoppingTime = 5.0;
-  m_FastMarchingDistanceFromSeeds = 0.5;  
+  m_FastMarchingDistanceFromSeeds = 0.5;
   m_SigmoidBeta = -500.0;
   m_StatusMessage = "";
   m_SegmentationModule->SetCurvatureScaling(1.0);
@@ -96,10 +96,11 @@ LesionSegmentationImageFilter8()
   m_SegmentationModule->SetMaximumNumberOfIterations(300);
   m_ResampleThickSliceData = true;
   m_AnisotropyThreshold = 1.0;
+  m_UserSpecifiedSigmas = false;
 }
- 
+
 template <class TInputImage, class TOutputImage>
-void 
+void
 LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 ::GenerateInputRequestedRegion() throw(InvalidRequestedRegionError)
 {
@@ -108,18 +109,27 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 
   if ( !this->GetInput() )
     {
-    typename InputImageType::Pointer inputPtr  = 
+    typename InputImageType::Pointer inputPtr  =
       const_cast< TInputImage *>( this->GetInput() );
 
     // Request the entire input image
-    inputPtr->SetRequestedRegion(inputPtr->GetLargestPossibleRegion());  
+    inputPtr->SetRequestedRegion(inputPtr->GetLargestPossibleRegion());
     }
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 LesionSegmentationImageFilter8<TInputImage,TOutputImage>
-::GenerateOutputInformation() 
+::SetSigma( SigmaArrayType s )
+{
+  this->m_UserSpecifiedSigmas = true;
+  m_CannyEdgesFeatureGenerator->SetSigmaArray(s);
+}
+
+template <class TInputImage, class TOutputImage>
+void
+LesionSegmentationImageFilter8<TInputImage,TOutputImage>
+::GenerateOutputInformation()
 {
   // get pointers to the input and output
   typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
@@ -134,12 +144,12 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 
   m_CropFilter->SetInput(inputPtr);
   m_CropFilter->SetRegionOfInterest(m_RegionOfInterest);
-  
+
   // Compute the spacing after isotropic resampling.
   double minSpacing = NumericTraits< double >::max();
   for (int i = 0; i < ImageDimension; i++)
     {
-    minSpacing = (minSpacing > inputPtr->GetSpacing()[i] ? 
+    minSpacing = (minSpacing > inputPtr->GetSpacing()[i] ?
                   inputPtr->GetSpacing()[i] : minSpacing);
     }
 
@@ -154,7 +164,7 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
     }
 
   if (m_ResampleThickSliceData)
-    {  
+    {
     m_IsotropicResampler->SetInput( m_CropFilter->GetOutput() );
     m_IsotropicResampler->SetOutputSpacing( outputSpacing );
     m_IsotropicResampler->GenerateOutputInformation();
@@ -166,7 +176,7 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
     }
 }
 
-  
+
 template< class TInputImage, class TOutputImage >
 void
 LesionSegmentationImageFilter8< TInputImage, TOutputImage >
@@ -179,7 +189,7 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   // Allocate the output
   this->GetOutput()->SetBufferedRegion( this->GetOutput()->GetRequestedRegion() );
   this->GetOutput()->Allocate();
- 
+
   // Get the input image
   typename InputImageType::ConstPointer  input  = this->GetInput();
 
@@ -190,30 +200,33 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   if (m_ResampleThickSliceData)
     {
     m_IsotropicResampler->Update();
-    inputImage = this->m_IsotropicResampler->GetOutput(); 
+    inputImage = this->m_IsotropicResampler->GetOutput();
     }
-  else 
+  else
     {
     inputImage = m_CropFilter->GetOutput();
     }
 
-  // Convert the output of resampling (or cropping based on 
+  // Convert the output of resampling (or cropping based on
   // m_ResampleThickSliceData) to a spatial object that can be fed into
   // the lesion segmentation method
 
   inputImage->DisconnectPipeline();
   m_InputSpatialObject->SetImage(inputImage);
-  
-  // Sigma for the canny is the max spacing of the original input (before 
+
+  // Sigma for the canny is the max spacing of the original input (before
   // resampling)
 
-  double maxSpacing = NumericTraits< double >::min();  
-  for (int i = 0; i < ImageDimension; i++)
+  if (m_UserSpecifiedSigmas == false)
     {
-    maxSpacing = (maxSpacing < input->GetSpacing()[i] ? 
-                    input->GetSpacing()[i] : maxSpacing);
+    double maxSpacing = NumericTraits< double >::min();
+    for (int i = 0; i < ImageDimension; i++)
+      {
+      maxSpacing = (maxSpacing < input->GetSpacing()[i] ?
+                      input->GetSpacing()[i] : maxSpacing);
+      }
+    m_CannyEdgesFeatureGenerator->SetSigma( maxSpacing );
     }
-  m_CannyEdgesFeatureGenerator->SetSigma( maxSpacing );
 
   // Seeds
 
@@ -221,16 +234,16 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
     SeedSpatialObjectType::New();
   seedSpatialObject->SetPoints(m_Seeds);
   m_LesionSegmentationMethod->SetInitialSegmentation(seedSpatialObject);
-  
+
   // Do the actual segmentation.
   m_LesionSegmentationMethod->Update();
-  
+
   // Graft the output.
-  typename SpatialObjectType::Pointer segmentation = 
+  typename SpatialObjectType::Pointer segmentation =
     const_cast< SpatialObjectType * >(m_SegmentationModule->GetOutput());
-  typename OutputSpatialObjectType::Pointer outputObject = 
+  typename OutputSpatialObjectType::Pointer outputObject =
     dynamic_cast< OutputSpatialObjectType * >( segmentation.GetPointer() );
-  typename OutputImageType::Pointer outputImage = 
+  typename OutputImageType::Pointer outputImage =
     const_cast< OutputImageType * >(outputObject->GetImage());
   outputImage->DisconnectPipeline();
   this->GraftOutput(outputImage);
@@ -247,11 +260,11 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
 
 template <class TInputImage, class TOutputImage>
 void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
-::ProgressUpdate( Object * caller, 
+::ProgressUpdate( Object * caller,
                   const EventObject & e )
 {
   if( typeid( itk::ProgressEvent ) == typeid( e ) )
-    {  
+    {
     if (dynamic_cast< CropFilterType * >(caller))
       {
       this->m_StatusMessage = "Cropping data..";
@@ -263,7 +276,7 @@ void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
       this->m_StatusMessage = "Isotropic resampling of data using BSpline interpolation..";
       this->UpdateProgress( m_IsotropicResampler->GetProgress() );
       }
-    
+
     else if (dynamic_cast< LungWallGeneratorType * >(caller))
       {
       // Given its iterative nature.. a cranky heuristic here.
@@ -316,7 +329,7 @@ void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {

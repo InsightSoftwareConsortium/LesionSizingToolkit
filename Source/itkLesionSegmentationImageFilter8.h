@@ -80,6 +80,9 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
 
+  typedef CannyEdgesFeatureGenerator< ImageDimension > CannyEdgesFeatureGeneratorType;
+  typedef typename CannyEdgesFeatureGeneratorType::SigmaArrayType SigmaArrayType;
+
   virtual void GenerateInputRequestedRegion()
             throw(InvalidRequestedRegionError);
 
@@ -139,6 +142,9 @@ public:
     return m_StatusMessage.length() ? m_StatusMessage.c_str() : NULL;
     }
 
+  /* Manually specify sigma. This defaults to the max spacing in the dataset */
+  virtual void SetSigma( SigmaArrayType sigmas );
+
   /** Override the superclass implementation so as to set the flag on all the
    * filters within our lesion segmentation pipeline */
   virtual void SetAbortGenerateData( const bool );
@@ -156,7 +162,6 @@ protected:
   typedef SatoVesselnessSigmoidFeatureGenerator< ImageDimension >   VesselnessGeneratorType;
   typedef LungWallFeatureGenerator< ImageDimension >                LungWallGeneratorType;
   typedef SigmoidFeatureGenerator< ImageDimension >                 SigmoidFeatureGeneratorType;
-  typedef CannyEdgesFeatureGenerator< ImageDimension >              CannyEdgesFeatureGeneratorType;
   typedef MinimumFeatureAggregator< ImageDimension >                FeatureAggregatorType;
   typedef FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule< ImageDimension > SegmentationModuleType;
   typedef RegionOfInterestImageFilter< InputImageType, InputImageType > CropFilterType;
@@ -192,6 +197,7 @@ private:
   typename InputImageSpatialObjectType::Pointer       m_InputSpatialObject;
   bool                                                m_ResampleThickSliceData;
   double                                              m_AnisotropyThreshold;
+  bool                                                m_UserSpecifiedSigmas;
 };
 
 } //end of namespace itk
