@@ -213,7 +213,7 @@ int ViewImageAndSegmentationSurface(
   xImagePlaneWidget->SetPicker(picker);
   xImagePlaneWidget->RestrictPlaneToVolumeOn();
   xImagePlaneWidget->SetKeyPressActivationValue('x');
-  xImagePlaneWidget->GetPlaneProperty()->SetColor(0, 1, 0);
+  xImagePlaneWidget->GetPlaneProperty()->SetColor(1, 0, 0);
   xImagePlaneWidget->SetTexturePlaneProperty(ipwProp);
   xImagePlaneWidget->SetResliceInterpolateToNearestNeighbour();
 
@@ -269,7 +269,7 @@ int ViewImageAndSegmentationSurface(
   property->SetAmbient(0.1);
   property->SetDiffuse(0.1);
   property->SetSpecular(0.5);
-  property->SetColor(1.0,0.0,0.0);
+  property->SetColor(0,1,0);
   property->SetLineWidth(2.0);
   property->SetRepresentationToSurface();
 
