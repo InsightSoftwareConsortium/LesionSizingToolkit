@@ -1,5 +1,20 @@
 /*=========================================================================
 
+  Program:   Lesion Sizing Toolkit
+  Module:    itkLesionSegmentationMethodTest1.cxx
+
+  Copyright (c) Kitware Inc.
+  All rights reserved.
+  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+
+/*=========================================================================
+
   Program:   Insight Segmentation & Registration Toolkit
   Module:    itkVEDTest.cxx
   Language:  C++
@@ -13,11 +28,6 @@
 #pragma warning (disable: 4786)
 #endif
 
-#ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
-#endif
-
-
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkVesselEnhancingDiffusion3DImageFilter.h"
@@ -26,7 +36,7 @@
 
 #include <iostream>
 
-int itkVEDTest(int argc, char ** argv)
+int itkVEDTest(int argc, char * argv [] )
 {
   if (argc < 3)
     {
@@ -35,20 +45,20 @@ int itkVEDTest(int argc, char ** argv)
     return EXIT_FAILURE;
     }
 
-	typedef itk::VesselEnhancingDiffusion3DImageFilter<short> VT;
-	typedef VT::ImageType                                     IT;
-	typedef itk::ImageFileReader<IT>                          RT; 		
-	typedef itk::ImageFileWriter<IT>                          WT; 
+  typedef itk::VesselEnhancingDiffusion3DImageFilter<short> VT;
+  typedef VT::ImageType                                     IT;
+  typedef itk::ImageFileReader<IT>                          RT;
+  typedef itk::ImageFileWriter<IT>                          WT;
 
-	RT::Pointer r = RT::New();
-	r->SetFileName(argv[1]);
+  RT::Pointer r = RT::New();
+  r->SetFileName(argv[1]);
   r->Update();
 
   IT::SpacingType spacing = r->GetOutput()->GetSpacing();
   double minSpacing = itk::NumericTraits< double >::max();
   for (unsigned int i = 0; i < IT::ImageDimension; i++)
     {
-    if (minSpacing > spacing[i]) 
+    if (minSpacing > spacing[i])
       {
       minSpacing = spacing[i];
       }
@@ -61,17 +71,16 @@ int itkVEDTest(int argc, char ** argv)
   scales[2] = 2.5833 * minSpacing;
   scales[3] = 4.15   * minSpacing;
   scales[4] = 6.66   * minSpacing;
-  
-	VT::Pointer v = VT::New();
-	v->SetInput(r->GetOutput());
+
+  VT::Pointer v = VT::New();
+  v->SetInput(r->GetOutput());
   v->SetDefaultPars();
   v->Update();
 
-	WT::Pointer w = WT::New();
-	w->SetInput(v->GetOutput());
-	w->SetFileName(argv[2]);
-	w->Update();
+  WT::Pointer w = WT::New();
+  w->SetInput(v->GetOutput());
+  w->SetFileName(argv[2]);
+  w->Update();
 
-	return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
-
