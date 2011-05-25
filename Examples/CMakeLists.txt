@@ -1,13 +1,14 @@
 #
 # Insert examples here.
 #
-IF (LSTK_USE_VTK)
+option (LSTK_USE_VTK "Build visualization helper tools." OFF)
 
+IF (LSTK_USE_VTK)
   FIND_PACKAGE(VTK REQUIRED)
   INCLUDE(${VTK_USE_FILE})
 
   SET(ITK_VTK_LSTK_LIBRARIES
-   ${LesionSizingToolkit_LIBRARIES}
+   ${ITK-LesionSizingToolkit_LIBRARIES}
    vtkRendering vtkIO vtkWidgets vtkHybrid )
 
  ADD_EXECUTABLE( LesionSegmentation
