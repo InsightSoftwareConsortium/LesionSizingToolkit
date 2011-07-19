@@ -1,5 +1,5 @@
 itk_module_test()
-set(ITK-LesionSizingToolkitTests
+set(ITKLesionSizingToolkitTests
 itkBinaryThresholdFeatureGeneratorTest1.cxx
 itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1.cxx
 itkCannyEdgesDistanceFeatureGeneratorTest1.cxx
@@ -59,9 +59,9 @@ LandmarkSpatialObjectWriterTest.cxx
 
 set(ITK_TEST_DRIVER itkTestDriver)
 
-CreateTestDriver(ITK-LesionSizingToolkit "${ITK-LesionSizingToolkit-Test_LIBRARIES}" "${ITK-LesionSizingToolkitTests}")
+CreateTestDriver(ITKLesionSizingToolkit "${ITKLesionSizingToolkit-Test_LIBRARIES}" "${ITKLesionSizingToolkitTests}")
 
-set(TEST_DATA_ROOT "${ITK-LesionSizingToolkit_SOURCE_DIR}/Data")
+set(TEST_DATA_ROOT "${ITKLesionSizingToolkit_SOURCE_DIR}/Data")
 set(TEMP ${ITK_TEST_OUTPUT_DIR})
 
 INCLUDE(CollectionTestMacro.cmake)
@@ -77,11 +77,11 @@ OPTION(TEST_VOLCANO_DATA_COLLECTION "Run tests at MICCAI Volcano challenge. http
 
 
 
-itk_add_test(NAME itkLesionSegmentationMethodTest1 COMMAND ITK-LesionSizingToolkitTestDriver itkLesionSegmentationMethodTest1)
-itk_add_test(NAME itkLesionSegmentationMethodTest2 COMMAND ITK-LesionSizingToolkitTestDriver itkLesionSegmentationMethodTest2)
+itk_add_test(NAME itkLesionSegmentationMethodTest1 COMMAND ITKLesionSizingToolkitTestDriver itkLesionSegmentationMethodTest1)
+itk_add_test(NAME itkLesionSegmentationMethodTest2 COMMAND ITKLesionSizingToolkitTestDriver itkLesionSegmentationMethodTest2)
 
 itk_add_test(NAME itkLesionSegmentationMethodTest3
-  COMMAND ITK-LesionSizingToolkitTestDriver itkLesionSegmentationMethodTest3
+  COMMAND ITKLesionSizingToolkitTestDriver itkLesionSegmentationMethodTest3
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/LesionSegmentationMethodTest3_1.mha
@@ -89,30 +89,30 @@ itk_add_test(NAME itkLesionSegmentationMethodTest3
   1.0
  )
 
-itk_add_test(NAME itkFeatureGeneratorTest1 COMMAND ITK-LesionSizingToolkitTestDriver itkFeatureGeneratorTest1)
-itk_add_test(NAME itkSegmentationModuleTest1 COMMAND ITK-LesionSizingToolkitTestDriver itkSegmentationModuleTest1)
-itk_add_test(NAME itkRegionGrowingSegmentationModuleTest1 COMMAND ITK-LesionSizingToolkitTestDriver itkRegionGrowingSegmentationModuleTest1)
-itk_add_test(NAME itkSinglePhaseLevelSetSegmentationModuleTest1 COMMAND ITK-LesionSizingToolkitTestDriver itkSinglePhaseLevelSetSegmentationModuleTest1)
+itk_add_test(NAME itkFeatureGeneratorTest1 COMMAND ITKLesionSizingToolkitTestDriver itkFeatureGeneratorTest1)
+itk_add_test(NAME itkSegmentationModuleTest1 COMMAND ITKLesionSizingToolkitTestDriver itkSegmentationModuleTest1)
+itk_add_test(NAME itkRegionGrowingSegmentationModuleTest1 COMMAND ITKLesionSizingToolkitTestDriver itkRegionGrowingSegmentationModuleTest1)
+itk_add_test(NAME itkSinglePhaseLevelSetSegmentationModuleTest1 COMMAND ITKLesionSizingToolkitTestDriver itkSinglePhaseLevelSetSegmentationModuleTest1)
 
-itk_add_test(NAME itkRegionCompetitionImageFilterTest1 COMMAND ITK-LesionSizingToolkitTestDriver itkRegionCompetitionImageFilterTest1)
+itk_add_test(NAME itkRegionCompetitionImageFilterTest1 COMMAND ITKLesionSizingToolkitTestDriver itkRegionCompetitionImageFilterTest1)
 
-itk_add_test(NAME itkSegmentationVolumeEstimatorTest1 COMMAND ITK-LesionSizingToolkitTestDriver itkSegmentationVolumeEstimatorTest1)
+itk_add_test(NAME itkSegmentationVolumeEstimatorTest1 COMMAND ITKLesionSizingToolkitTestDriver itkSegmentationVolumeEstimatorTest1)
 
-itk_add_test(NAME itkGrayscaleImageSegmentationVolumeEstimatorTest1 COMMAND ITK-LesionSizingToolkitTestDriver itkGrayscaleImageSegmentationVolumeEstimatorTest1)
+itk_add_test(NAME itkGrayscaleImageSegmentationVolumeEstimatorTest1 COMMAND ITKLesionSizingToolkitTestDriver itkGrayscaleImageSegmentationVolumeEstimatorTest1)
 
 itk_add_test(NAME itkIsotropicResamplerTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkIsotropicResamplerTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkIsotropicResamplerTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/IsotropicResamplerTest1.mha
  )
 
 itk_add_test(NAME itkLandmarksReaderTest1
-   COMMAND ITK-LesionSizingToolkitTestDriver itkLandmarksReaderTest1
+   COMMAND ITKLesionSizingToolkitTestDriver itkLandmarksReaderTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
  )
 
 itk_add_test(NAME itkVotingBinaryHoleFillFloodingImageFilterTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkVotingBinaryHoleFillFloodingImageFilterTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkVotingBinaryHoleFillFloodingImageFilterTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/VotingBinaryHoleFillFloodingImageFilterTest1_1.mha
   -400  # threshold value
@@ -122,7 +122,7 @@ itk_add_test(NAME itkVotingBinaryHoleFillFloodingImageFilterTest1
  )
 
 itk_add_test(NAME itkConnectedThresholdSegmentationModuleTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkConnectedThresholdSegmentationModuleTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkConnectedThresholdSegmentationModuleTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/ConnectedThresholdSegmentationModuleTest1_1.mha
@@ -131,7 +131,7 @@ itk_add_test(NAME itkConnectedThresholdSegmentationModuleTest1
  )
 
 itk_add_test(NAME itkConfidenceConnectedSegmentationModuleTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkConfidenceConnectedSegmentationModuleTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkConfidenceConnectedSegmentationModuleTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mha
@@ -139,7 +139,7 @@ itk_add_test(NAME itkConfidenceConnectedSegmentationModuleTest1
  )
 
 itk_add_test(NAME itkFastMarchingSegmentationModuleTest1-PartSolidLesion1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkFastMarchingSegmentationModuleTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkFastMarchingSegmentationModuleTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/FastMarchingSegmentationModuleTest1-PartSolidLesion1_1.mha
@@ -147,7 +147,7 @@ itk_add_test(NAME itkFastMarchingSegmentationModuleTest1-PartSolidLesion1
  )
 
 itk_add_test(NAME itkGradientMagnitudeSigmoidFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkGradientMagnitudeSigmoidFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mha
   0.7
@@ -164,7 +164,7 @@ itk_add_test(NAME itkGradientMagnitudeImageFilterTest1
  )
 
 itk_add_test(NAME itkSigmoidFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkSigmoidFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkSigmoidFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/SigmoidFeatureGeneratorTest1_1.mha
   1.0
@@ -172,28 +172,28 @@ itk_add_test(NAME itkSigmoidFeatureGeneratorTest1
  )
 
 itk_add_test(NAME itkBinaryThresholdFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkBinaryThresholdFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkBinaryThresholdFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/BinaryThresholdGeneratorTest1_1.mha
   -700.0
  )
 
 itk_add_test(NAME itkLungWallFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkLungWallFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkLungWallFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/LungWallFeatureGeneratorTest1_1.mha
   -400.0
  )
 
 itk_add_test(NAME itkMorphologicalOpenningFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkMorphologicalOpenningFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkMorphologicalOpenningFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/MorphologicalOpenningFeatureGeneratorTest1_1.mha
   -400.0
  )
 
 itk_add_test(NAME LandmarkSpatialObjectWriterTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver LandmarkSpatialObjectWriterTest
+  COMMAND ITKLesionSizingToolkitTestDriver LandmarkSpatialObjectWriterTest
   ${TEMP}/LandmarkSpatialObjectWriterTest1_1.txt
  )
 
@@ -279,7 +279,7 @@ itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest6
 
 
 itk_add_test(NAME itkCannyEdgesDistanceFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkCannyEdgesDistanceFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkCannyEdgesDistanceFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/CannyEdgesDistanceFeatureGeneratorTest1_1.mha
   0.7 # Sigma
@@ -288,7 +288,7 @@ itk_add_test(NAME itkCannyEdgesDistanceFeatureGeneratorTest1
  )
 
 itk_add_test(NAME itkCannyEdgesFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkCannyEdgesFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkCannyEdgesFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/CannyEdgesFeatureGeneratorTest1_1.mha
   0.7 # Sigma
@@ -297,7 +297,7 @@ itk_add_test(NAME itkCannyEdgesFeatureGeneratorTest1
  )
 
 itk_add_test(NAME itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/CannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1_1.mha
   0.7 # Sigma
@@ -306,7 +306,7 @@ itk_add_test(NAME itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1
  )
 
 itk_add_test(NAME itkSatoVesselnessFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkSatoVesselnessFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkSatoVesselnessFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/SatoVesselnessFeatureGeneratorTest1_1.mha
   1.0  # Sigma
@@ -315,7 +315,7 @@ itk_add_test(NAME itkSatoVesselnessFeatureGeneratorTest1
  )
 
 itk_add_test(NAME itkSatoVesselnessSigmoidFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkSatoVesselnessSigmoidFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkSatoVesselnessSigmoidFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/SatoVesselnessSigmoidFeatureGeneratorTest1_1.mha
   1.0   # Sigma
@@ -326,7 +326,7 @@ itk_add_test(NAME itkSatoVesselnessSigmoidFeatureGeneratorTest1
  )
 
 itk_add_test(NAME itkSatoLocalStructureFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkSatoLocalStructureFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkSatoLocalStructureFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/SatoLocalStructureFeatureGeneratorTest1_1.mha
   1.0
@@ -335,7 +335,7 @@ itk_add_test(NAME itkSatoLocalStructureFeatureGeneratorTest1
  )
 
 itk_add_test(NAME itkLocalStructureImageFilterTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkLocalStructureImageFilterTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkLocalStructureImageFilterTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/LocalStructureImageFilterTest1_1.mha
   1.0
@@ -344,7 +344,7 @@ itk_add_test(NAME itkLocalStructureImageFilterTest1
  )
 
 itk_add_test(NAME itkDescoteauxSheetnessImageFilterTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkDescoteauxSheetnessImageFilterTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkDescoteauxSheetnessImageFilterTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/DescoteauxSheetnesImageFilterTest1_1.mha
   1      # Search for Bright sheets
@@ -355,7 +355,7 @@ itk_add_test(NAME itkDescoteauxSheetnessImageFilterTest1
  )
 
 itk_add_test(NAME itkDescoteauxSheetnessImageFilterTest2
-  COMMAND ITK-LesionSizingToolkitTestDriver itkDescoteauxSheetnessImageFilterTest2
+  COMMAND ITKLesionSizingToolkitTestDriver itkDescoteauxSheetnessImageFilterTest2
   ${TEMP}/DescoteauxSheetnesImageFilterTest2_1.mha
   1      # Search for Bright sheets
   1.0    # Sigma
@@ -365,7 +365,7 @@ itk_add_test(NAME itkDescoteauxSheetnessImageFilterTest2
  )
 
 itk_add_test(NAME itkDescoteauxSheetnessFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkDescoteauxSheetnessFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkDescoteauxSheetnessFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/DescoteauxSheetnessFeatureGeneratorTest1_1.mha
   1      # Search for Bright sheets
@@ -376,7 +376,7 @@ itk_add_test(NAME itkDescoteauxSheetnessFeatureGeneratorTest1
  )
 
 itk_add_test(NAME itkFrangiTubularnessFeatureGeneratorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkFrangiTubularnessFeatureGeneratorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkFrangiTubularnessFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/FrangiTubularnessFeatureGeneratorTest1_1.mha
   1.0
@@ -385,7 +385,7 @@ itk_add_test(NAME itkFrangiTubularnessFeatureGeneratorTest1
  )
 
 itk_add_test(NAME itkGeodesicActiveContourLevelSetSegmentationModuleTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkGeodesicActiveContourLevelSetSegmentationModuleTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkGeodesicActiveContourLevelSetSegmentationModuleTest1
   ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mha
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mha
   ${TEMP}/GeodesicActiveContourLevelSetSegmentationModuleTest1_1.mha
@@ -396,7 +396,7 @@ SET_TESTS_PROPERTIES( itkGeodesicActiveContourLevelSetSegmentationModuleTest1
   PROPERTIES DEPENDS itkConfidenceConnectedSegmentationModuleTest1)
 
 itk_add_test(NAME itkShapeDetectionLevelSetSegmentationModuleTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkShapeDetectionLevelSetSegmentationModuleTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkShapeDetectionLevelSetSegmentationModuleTest1
   ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mha
   ${TEMP}/GradientMagnitudeSigmoidFeatureGeneratorTest1_1.mha
   ${TEMP}/ShapeDetectionLevelSetSegmentationModuleTest1_1.mha
@@ -409,7 +409,7 @@ SET_TESTS_PROPERTIES( itkShapeDetectionLevelSetSegmentationModuleTest1
   PROPERTIES DEPENDS itkConfidenceConnectedSegmentationModuleTest1)
 
 itk_add_test(NAME itkShapeDetectionLevelSetSegmentationModuleTest2
-  COMMAND ITK-LesionSizingToolkitTestDriver itkShapeDetectionLevelSetSegmentationModuleTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkShapeDetectionLevelSetSegmentationModuleTest1
   ${TEMP}/ConfidenceConnectedSegmentationModuleTest1_1.mha
   ${TEMP}/CannyEdgesDistanceFeatureGeneratorTest1_1.mha
   ${TEMP}/ShapeDetectionLevelSetSegmentationModuleTest2_1.mha
@@ -424,7 +424,7 @@ SET_TESTS_PROPERTIES( itkShapeDetectionLevelSetSegmentationModuleTest2
 IF(TEST_CORNELL_DATA_ROOT)
 
 itk_add_test(NAME itkFeatureAggregatorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkFeatureAggregatorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkFeatureAggregatorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/FeatureAggregatorTest1_1.mha
@@ -433,19 +433,19 @@ itk_add_test(NAME itkFeatureAggregatorTest1
  )
 
 itk_add_test(NAME itkMinimumFeatureAggregatorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkMinimumFeatureAggregatorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkMinimumFeatureAggregatorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/MinimumFeatureAggregatorTest1_1.mha
  )
 
 itk_add_test(NAME itkMinimumFeatureAggregatorTest2
-  COMMAND ITK-LesionSizingToolkitTestDriver itkMinimumFeatureAggregatorTest2
+  COMMAND ITKLesionSizingToolkitTestDriver itkMinimumFeatureAggregatorTest2
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/MinimumFeatureAggregatorTest2_1.mha
  )
 
 itk_add_test(NAME itkMaximumFeatureAggregatorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkMaximumFeatureAggregatorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkMaximumFeatureAggregatorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/MaximumFeatureAggregatorTest1_1.mha
@@ -454,7 +454,7 @@ itk_add_test(NAME itkMaximumFeatureAggregatorTest1
  )
 
 itk_add_test(NAME itkMaximumFeatureAggregatorTest2
-  COMMAND ITK-LesionSizingToolkitTestDriver itkMaximumFeatureAggregatorTest2
+  COMMAND ITKLesionSizingToolkitTestDriver itkMaximumFeatureAggregatorTest2
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/MaximumFeatureAggregatorTest2_1.mha
@@ -463,7 +463,7 @@ itk_add_test(NAME itkMaximumFeatureAggregatorTest2
  )
 
 itk_add_test(NAME itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/DescoteauxSheetnessFeatureGeneratorMultiScaleTest1_1.mha
   1      # Search for Bright sheets
@@ -475,7 +475,7 @@ itk_add_test(NAME itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1
  )
 
 itk_add_test(NAME itkSatoVesselnessFeatureGeneratorMultiScaleTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkSatoVesselnessFeatureGeneratorMultiScaleTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkSatoVesselnessFeatureGeneratorMultiScaleTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/SatoVesselnessFeatureGeneratorMultiScaleTest1_1.mha
   1.0  # First Sigma
@@ -484,7 +484,7 @@ itk_add_test(NAME itkSatoVesselnessFeatureGeneratorMultiScaleTest1
  )
 
 itk_add_test(NAME itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/SatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1_1.mha
   1.0  # First Sigma
@@ -495,7 +495,7 @@ itk_add_test(NAME itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1
  )
 
 itk_add_test(NAME itkWeightedSumFeatureAggregatorTest1
-  COMMAND ITK-LesionSizingToolkitTestDriver itkWeightedSumFeatureAggregatorTest1
+  COMMAND ITKLesionSizingToolkitTestDriver itkWeightedSumFeatureAggregatorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCroppedSeeds1.txt
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
   ${TEMP}/WeightedSumFeatureAggregatorTest1_1.mha

@@ -1,4 +1,4 @@
-project(ITK-LesionSizingToolkit)
+project(ITKLesionSizingToolkit)
 itk_module_impl()
 
 add_subdirectory(Examples)

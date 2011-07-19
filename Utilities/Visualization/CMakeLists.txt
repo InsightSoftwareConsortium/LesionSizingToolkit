@@ -5,7 +5,7 @@ FIND_PACKAGE(VTK REQUIRED)
 INCLUDE(${VTK_USE_FILE})
 
 SET(ITK_VTK_LIBRARIES
- ${ITK-LesionSizingToolkit_LIBRARIES}
+ ${ITKLesionSizingToolkit_LIBRARIES}
  vtkRendering vtkIO vtkWidgets vtkHybrid
 )
 
