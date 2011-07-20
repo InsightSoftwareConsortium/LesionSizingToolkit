@@ -84,9 +84,13 @@ public:
  * \todo Edge-linking will be added when an itk connected component labeling
  * algorithm is available.
  *
+ *
+ * \ingroup ITKLesionSizingToolkit
+ *
  * \sa SmoothingRecursiveGaussianImageFilter
  * \sa ZeroCrossingImageFilter
  * \sa ThresholdImageFilter */
+
 template<class TInputImage, class TOutputImage>
 class ITK_EXPORT CannyEdgeDetectionRecursiveGaussianImageFilter
   : public ImageToImageFilter<TInputImage, TOutputImage>

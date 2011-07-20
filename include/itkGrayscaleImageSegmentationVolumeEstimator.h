@@ -37,6 +37,7 @@ namespace itk
  * The pixels size is, of course, taken into account.
  *
  * \ingroup SpatialObjectFilters
+ * \ingroup ITKLesionSizingToolkit
  */
 template <unsigned int NDimension>
 class ITK_EXPORT GrayscaleImageSegmentationVolumeEstimator :

@@ -35,6 +35,7 @@ namespace itk
  *  In: MICCAI.  (2005) 9–16
  *
  * \ingroup IntensityImageFilters  Multithreaded
+ * \ingroup ITKLesionSizingToolkit
  */
 namespace Function {  
   

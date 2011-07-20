@@ -38,6 +38,7 @@ namespace itk
  * SpatialObjects are used as inputs and outputs of this class.
  *
  * \ingroup SpatialObjectFilters
+ * \ingroup ITKLesionSizingToolkit
  */
 template <unsigned int NDimension>
 class ITK_EXPORT SatoVesselnessFeatureGenerator : public FeatureGenerator<NDimension>

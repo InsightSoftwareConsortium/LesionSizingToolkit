@@ -35,6 +35,7 @@ namespace itk
  * will compete for pixels against other labels.
  *
  * \ingroup RegionGrowingSegmentation 
+ * \ingroup ITKLesionSizingToolkit
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT RegionCompetitionImageFilter:
