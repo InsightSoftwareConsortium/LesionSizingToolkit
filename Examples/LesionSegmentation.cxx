@@ -4,7 +4,9 @@
 #include "itkImageFileWriter.h"
 #include "LesionSegmentationCLI.h"
 #include "itkGDCMImageIO.h"
+#include "itkGDCMImageIOFactory.h"
 #include "itkGDCMSeriesFileNames.h"
+#include "itkMetaImageIOFactory.h"
 #include "itkImageSeriesReader.h"
 #include "itkLesionSegmentationCommandLineProgressReporter.h"
 #include "itkEventObject.h"
@@ -304,6 +306,10 @@ int ViewImageAndSegmentationSurface(
 // --------------------------------------------------------------------------
 int main( int argc, char * argv[] )
 {
+  //register DICOM and META IO factories
+  itk::ObjectFactoryBase::RegisterFactory(itk::GDCMImageIOFactory::New());
+  itk::ObjectFactoryBase::RegisterFactory(itk::MetaImageIOFactory::New());
+
   LesionSegmentationCLI args( argc, argv );
 
   typedef itk::ImageFileReader< InputImageType > InputReaderType;
