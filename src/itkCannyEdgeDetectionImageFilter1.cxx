@@ -96,7 +96,6 @@ int main(int argc, char* argv[])
   cannyFilter->SetVariance( sigma * sigma );
   cannyFilter->SetUpperThreshold( upperThreshold );
   cannyFilter->SetLowerThreshold( lowerThreshold );
-  cannyFilter->SetOutsideValue( 255 );
 
   writer->SetInput( cannyFilter->GetOutput() );
   writer->UseCompressionOn();
