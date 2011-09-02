@@ -17,7 +17,7 @@ itk_module(ITKLesionSizingToolkit
    ITKIOGDCM
    ITKIOMeta
    ITKVTK
-   ITKTestKernel
+   ITKTestKernel #to handle IO in src
    DESCRIPTION
      "${DOCUMENTATION}"
 )

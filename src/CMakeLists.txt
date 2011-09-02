@@ -1,3 +1,4 @@
+include_directories("${ITKLesionSizingToolkit_SOURCE_DIR}/src")  # to include itkIncludeRequiredIOFactories.h
 add_executable(itkCannyEdgeDetectionImageFilter1  itkCannyEdgeDetectionImageFilter1.cxx )
 target_link_libraries(itkCannyEdgeDetectionImageFilter1 ${ITKLesionSizingToolkit_LIBRARIES})
 
