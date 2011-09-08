@@ -18,6 +18,7 @@
 #include "vtkSmartPointer.h"
 #include "vtkSTLWriter.h"
 #include "vtkRenderer.h"
+#include "vtkCamera.h"
 #include "vtkRenderWindow.h"
 #include "vtkRenderWindowInteractor.h"
 #include "vtkActor.h"
@@ -29,15 +30,13 @@
 #include "vtkCellPicker.h"
 #include "vtkPolyDataNormals.h"
 #include "vtkInteractorStyleTrackballCamera.h"
+#include "vtkOutlineSource.h"
 #include "vtkCommand.h"
+#include "vtkWindowToImageFilter.h"
+#include "vtkPNGWriter.h"
 
 #define VTK_CREATE(type, name) \
   vtkSmartPointer<type> name = vtkSmartPointer<type>::New()
-
-typedef short PixelType;
-const unsigned int ImageDimension = 3;
-typedef itk::Image< PixelType, ImageDimension > InputImageType;
-typedef itk::Image< float, ImageDimension > RealImageType;
 
 
 // --------------------------------------------------------------------------
@@ -172,7 +171,8 @@ InputImageType::Pointer GetImage( std::string dir, bool ignoreDirection )
 
 // --------------------------------------------------------------------------
 int ViewImageAndSegmentationSurface(
-    InputImageType::Pointer image, vtkPolyData *pd, LesionSegmentationCLI &args )
+    InputImageType::Pointer image, vtkPolyData *pd,
+    double *roi, LesionSegmentationCLI &args )
 {
 
   std::cout << "Setting up visualization..." << std::endl;
@@ -185,6 +185,8 @@ int ViewImageAndSegmentationSurface(
   VTK_CREATE( vtkRenderer, renderer );
   VTK_CREATE( vtkRenderWindow, renWin );
   VTK_CREATE( vtkRenderWindowInteractor, iren );
+
+  renderer->GetActiveCamera()->ParallelProjectionOn();
 
   renWin->SetSize(600, 600);
   renWin->AddRenderer(renderer);
@@ -202,55 +204,31 @@ int ViewImageAndSegmentationSurface(
 
   // Create 3 orthogonal view using the ImagePlaneWidget
   //
-  VTK_CREATE(vtkImagePlaneWidget , xImagePlaneWidget);
-  VTK_CREATE(vtkImagePlaneWidget , yImagePlaneWidget);
-  VTK_CREATE(vtkImagePlaneWidget , zImagePlaneWidget);
+  vtkSmartPointer< vtkImagePlaneWidget > imagePlaneWidget[3];
+  for (unsigned int i = 0; i < 3; i++)
+    {
+    imagePlaneWidget[i] = vtkSmartPointer< vtkImagePlaneWidget >::New();
 
-  // The 3 image plane widgets are used to probe the dataset.
-  //
-  xImagePlaneWidget->DisplayTextOn();
-  xImagePlaneWidget->SetInput(itk2vtko->GetOutput());
-  xImagePlaneWidget->SetPlaneOrientationToXAxes();
-  xImagePlaneWidget->SetSlicePosition(pd->GetCenter()[0]);
-  xImagePlaneWidget->SetPicker(picker);
-  xImagePlaneWidget->RestrictPlaneToVolumeOn();
-  xImagePlaneWidget->SetKeyPressActivationValue('x');
-  xImagePlaneWidget->GetPlaneProperty()->SetColor(1, 0, 0);
-  xImagePlaneWidget->SetTexturePlaneProperty(ipwProp);
-  xImagePlaneWidget->SetResliceInterpolateToNearestNeighbour();
+    imagePlaneWidget[i]->DisplayTextOn();
+    imagePlaneWidget[i]->SetInput(itk2vtko->GetOutput());
+    imagePlaneWidget[i]->SetPlaneOrientation(i);
+    imagePlaneWidget[i]->SetSlicePosition(pd->GetCenter()[i]);
+    imagePlaneWidget[i]->SetPicker(picker);
+    imagePlaneWidget[i]->RestrictPlaneToVolumeOn();
+    double color[3] = {0,0,0};
+    color[i] = 1;
+    imagePlaneWidget[i]->GetPlaneProperty()->SetColor(color);
+    imagePlaneWidget[i]->SetTexturePlaneProperty(ipwProp);
+    imagePlaneWidget[i]->SetResliceInterpolateToLinear();
+    imagePlaneWidget[i]->SetWindowLevel(1700,-500);
+    imagePlaneWidget[i]->SetInteractor( iren );
+    imagePlaneWidget[i]->On();
+    }
 
-  yImagePlaneWidget->DisplayTextOn();
-  yImagePlaneWidget->SetInput(itk2vtko->GetOutput());
-  yImagePlaneWidget->SetPlaneOrientationToYAxes();
-  yImagePlaneWidget->SetSlicePosition(pd->GetCenter()[1]);
-  yImagePlaneWidget->SetPicker(picker);
-  yImagePlaneWidget->RestrictPlaneToVolumeOn();
-  yImagePlaneWidget->SetKeyPressActivationValue('y');
-  yImagePlaneWidget->GetPlaneProperty()->SetColor(1, 1, 0);
-  yImagePlaneWidget->SetTexturePlaneProperty(ipwProp);
-  yImagePlaneWidget->SetLookupTable(xImagePlaneWidget->GetLookupTable());
-
-  zImagePlaneWidget->DisplayTextOn();
-  zImagePlaneWidget->SetInput(itk2vtko->GetOutput());
-  zImagePlaneWidget->SetPlaneOrientationToZAxes();
-  zImagePlaneWidget->SetSlicePosition(pd->GetCenter()[2]);
-  zImagePlaneWidget->SetPicker(picker);
-  zImagePlaneWidget->SetKeyPressActivationValue('z');
-  zImagePlaneWidget->GetPlaneProperty()->SetColor(0, 0, 1);
-  zImagePlaneWidget->SetTexturePlaneProperty(ipwProp);
-  zImagePlaneWidget->SetLookupTable(xImagePlaneWidget->GetLookupTable());
-  xImagePlaneWidget->SetWindowLevel(1500,-650);
-  yImagePlaneWidget->SetWindowLevel(1500,-650);
-  zImagePlaneWidget->SetWindowLevel(1500,-650);
-
-  xImagePlaneWidget->SetInteractor( iren );
-  xImagePlaneWidget->On();
-
-  yImagePlaneWidget->SetInteractor( iren );
-  yImagePlaneWidget->On();
-
-  zImagePlaneWidget->SetInteractor( iren );
-  zImagePlaneWidget->On();
+  imagePlaneWidget[0]->SetKeyPressActivationValue('x');
+  imagePlaneWidget[1]->SetKeyPressActivationValue('y');
+  imagePlaneWidget[2]->SetKeyPressActivationValue('z');
+  
 
   // Set the background to something grayish
   renderer->SetBackground(0.4392, 0.5020, 0.5647);
@@ -296,8 +274,73 @@ int ViewImageAndSegmentationSurface(
   iren->AddObserver(vtkCommand::UserEvent,switchVisibility);
   switchVisibility->Delete();
 
+  if (args.GetOptionWasSet("ShowBoundingBox"))
+    {
+    VTK_CREATE( vtkOutlineSource, outline );
+    outline->SetBounds(roi);
+    VTK_CREATE( vtkPolyDataMapper, outlineMapper );
+    outlineMapper->SetInput(outline->GetOutput());
+    VTK_CREATE( vtkActor, outlineActor );
+    outlineActor->SetMapper(outlineMapper);
+    outlineActor->GetProperty()->SetColor(0,1,0);
+    renderer->AddActor(outlineActor); 
+    }
+
   std::cout << "Bringing up visualization.." << std::endl;
-  iren->Start();
+
+  if (!args.GetValueAsString("Screenshot").empty())
+    {
+
+    double camPos[3][3] = { {1,0,0},{0,-1,0},{0,0,-1} };
+    double viewUp[3][3] = { {0,0,1},{0,0,1},{0,-1,0} };
+    
+    for (unsigned int i = 0; i < 3; i++)
+      {
+      std::ostringstream os;
+      os << args.GetValueAsString("Screenshot") 
+         << "_" << i << ".png" << std::ends;
+      
+      renderer->GetActiveCamera()->SetPosition(camPos[i]);
+      renderer->GetActiveCamera()->SetFocalPoint(0,0,0);
+      renderer->GetActiveCamera()->SetViewUp(viewUp[i]);
+
+      for (unsigned int j = 0; j < 3; j++)
+        {
+        imagePlaneWidget[j]->Off();
+        }
+      imagePlaneWidget[i]->On();
+      imagePlaneWidget[i]->SetSlicePosition(pd->GetCenter()[i]);
+      renderer->ResetCamera();
+      renderer->ResetCameraClippingRange();
+
+      // Reset the camera to the full size of the view for the screenshot
+      double parallelScale = 0, bounds[6], l2norm = 0;
+      itk2vtko->GetOutput()->GetBounds(bounds);
+      for (unsigned int k = 0; k < 3; k++)
+        {
+        if (k!=i)
+          {
+          l2norm += ((bounds[2*k+1]-bounds[2*k]) * (bounds[2*k+1]-bounds[2*k]));
+          parallelScale = std::max(parallelScale, bounds[2*k+1]-bounds[2*k]);
+          }
+        }
+      renderer->GetActiveCamera()->Zoom(sqrt(l2norm)/parallelScale);
+
+      renWin->Render();
+
+      VTK_CREATE( vtkWindowToImageFilter, w2f );
+      w2f->SetInput(renWin);
+
+      VTK_CREATE( vtkPNGWriter, screenshotWriter );
+      screenshotWriter->SetFileName(os.str().c_str());
+      screenshotWriter->SetInput(w2f->GetOutput());
+      screenshotWriter->Write();
+      }
+    }
+  else
+    {
+    iren->Start();
+    }
 
   return EXIT_SUCCESS;
 }
@@ -344,6 +387,9 @@ int main( int argc, char * argv[] )
     image = reader->GetOutput();
     }
 
+  // Set the image object on the args
+  args.SetImage( image );
+
 
   // Compute the ROI region
 
@@ -355,7 +401,7 @@ int main( int argc, char * argv[] )
   // convert bounds into region indices
   InputImageType::PointType p1, p2;
   InputImageType::IndexType pi1, pi2;
-  for (int i = 0; i < ImageDimension; i++)
+  for (unsigned int i = 0; i < ImageDimension; i++)
     {
     p1[i] = roi[2*i];
     p2[i] = roi[2*i+1];
@@ -365,7 +411,7 @@ int main( int argc, char * argv[] )
   image->TransformPhysicalPointToIndex(p2, pi2);
 
   InputImageType::SizeType roiSize;
-  for (int i = 0; i < ImageDimension; i++)
+  for (unsigned int i = 0; i < ImageDimension; i++)
     {
     roiSize[i] = pi2[i] - pi1[i];
     }
@@ -373,13 +419,15 @@ int main( int argc, char * argv[] )
   std::cout << "ROI region is " << roiRegion << std::endl;
   if (!roiRegion.Crop(image->GetBufferedRegion()))
     {
-    std::cerr << "ROI region has no overlap with the image region"
-              << std::endl;
+    std::cerr << "ROI region has no overlap with the image region of"
+              << image->GetBufferedRegion() << std::endl;
     return EXIT_FAILURE;
     }
 
-  std::cout << "ROI region cropped to image bounds is "
-            << roiRegion << std::endl;
+  std::cout << "ROI region is " << roiRegion <<  " : covers voxels = "
+    << roiRegion.GetNumberOfPixels() << " : " <<
+    image->GetSpacing()[0]*image->GetSpacing()[1]*image->GetSpacing()[2]*roiRegion.GetNumberOfPixels()
+   << " mm^3" << std::endl;
 
 
   // Write ROI if requested
@@ -470,7 +518,7 @@ int main( int argc, char * argv[] )
   mp->SetInput(mc->GetOutput());
   const double volume = mp->GetVolume();
 
-  std::cout << "Volume of segmentation (mm^3) = " << volume << std::endl;
+  std::cout << "Volume of segmentation mm^3 = " << volume << std::endl;
 
   if( args.GetOptionWasSet("OutputMesh"))
     {
@@ -483,7 +531,7 @@ int main( int argc, char * argv[] )
   if (args.GetOptionWasSet("Visualize"))
     {
     return ViewImageAndSegmentationSurface(
-             image, mc->GetOutput(), args);
+             image, mc->GetOutput(), roi, args);
     }
 
 
