@@ -106,7 +106,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkFastMarchingAndShapeDetectionLevelSetSegmentationModule.txx"
+# include "itkFastMarchingAndShapeDetectionLevelSetSegmentationModule.hxx"
 #endif
 
 #endif

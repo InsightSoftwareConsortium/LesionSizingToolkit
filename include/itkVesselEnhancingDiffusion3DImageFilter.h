@@ -188,7 +188,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkVesselEnhancingDiffusion3DImageFilter.txx"
+#include "itkVesselEnhancingDiffusion3DImageFilter.hxx"
 #endif
 
 #endif

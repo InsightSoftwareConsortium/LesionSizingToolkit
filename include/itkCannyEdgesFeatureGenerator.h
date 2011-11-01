@@ -154,7 +154,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkCannyEdgesFeatureGenerator.txx"
+# include "itkCannyEdgesFeatureGenerator.hxx"
 #endif
 
 #endif

@@ -96,7 +96,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkSegmentationModule.txx"
+# include "itkSegmentationModule.hxx"
 #endif
 
 #endif

@@ -80,7 +80,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkMaximumFeatureAggregator.txx"
+# include "itkMaximumFeatureAggregator.hxx"
 #endif
 
 #endif

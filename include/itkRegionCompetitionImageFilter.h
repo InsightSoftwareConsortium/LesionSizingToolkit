@@ -192,7 +192,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkRegionCompetitionImageFilter.txx"
+#include "itkRegionCompetitionImageFilter.hxx"
 #endif
 
 #endif

@@ -85,7 +85,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkConnectedThresholdSegmentationModule.txx"
+# include "itkConnectedThresholdSegmentationModule.hxx"
 #endif
 
 #endif

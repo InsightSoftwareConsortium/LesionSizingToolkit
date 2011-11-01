@@ -92,7 +92,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkSegmentationVolumeEstimator.txx"
+# include "itkSegmentationVolumeEstimator.hxx"
 #endif
 
 #endif

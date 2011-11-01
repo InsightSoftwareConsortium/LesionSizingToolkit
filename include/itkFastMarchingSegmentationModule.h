@@ -105,7 +105,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkFastMarchingSegmentationModule.txx"
+# include "itkFastMarchingSegmentationModule.hxx"
 #endif
 
 #endif

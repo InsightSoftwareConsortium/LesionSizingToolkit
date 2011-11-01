@@ -83,7 +83,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkConfidenceConnectedSegmentationModule.txx"
+# include "itkConfidenceConnectedSegmentationModule.hxx"
 #endif
 
 #endif

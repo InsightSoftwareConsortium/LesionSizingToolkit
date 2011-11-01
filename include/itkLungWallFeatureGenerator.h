@@ -116,7 +116,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkLungWallFeatureGenerator.txx"
+# include "itkLungWallFeatureGenerator.hxx"
 #endif
 
 #endif

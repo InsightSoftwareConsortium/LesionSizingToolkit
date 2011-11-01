@@ -91,7 +91,7 @@ public:
    * execution model.  The original documentation of this method is
    * below. \sa ProcessObject::GenerateOutputInformaton() */
   virtual void GenerateOutputInformation( void );
-  
+
 protected:
   IsotropicResamplerImageFilter();
   void PrintSelf(std::ostream& os, Indent indent) const;
@@ -114,7 +114,7 @@ private:
 } //end of namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkIsotropicResamplerImageFilter.txx"
+#include "itkIsotropicResamplerImageFilter.hxx"
 #endif
-  
+
 #endif

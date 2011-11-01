@@ -204,7 +204,7 @@ private:
 } //end of namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkLesionSegmentationImageFilter8.txx"
+#include "itkLesionSegmentationImageFilter8.hxx"
 #endif
 
 #endif

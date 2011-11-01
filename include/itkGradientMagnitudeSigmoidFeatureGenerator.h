@@ -126,7 +126,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkGradientMagnitudeSigmoidFeatureGenerator.txx"
+# include "itkGradientMagnitudeSigmoidFeatureGenerator.hxx"
 #endif
 
 #endif

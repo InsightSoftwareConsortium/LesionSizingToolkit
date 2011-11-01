@@ -355,7 +355,7 @@ private:
 } //end of namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkCannyEdgeDetectionRecursiveGaussianImageFilter2.txx"
+#include "itkCannyEdgeDetectionRecursiveGaussianImageFilter2.hxx"
 #endif
   
 #endif

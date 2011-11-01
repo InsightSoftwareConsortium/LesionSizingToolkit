@@ -115,7 +115,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkFeatureAggregator.txx"
+# include "itkFeatureAggregator.hxx"
 #endif
 
 #endif

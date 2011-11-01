@@ -307,7 +307,7 @@ private:
 
   /** Upper threshold value for identifying edges. */
   OutputImagePixelType m_UpperThreshold;  //should be float here?
-  
+
   /** Lower threshold value for identifying edges. */
   OutputImagePixelType m_LowerThreshold; //should be float here?
 
@@ -322,11 +322,11 @@ private:
 
   /** Gaussian filter to smooth the input image  */
   typename GaussianImageFilterType::Pointer m_GaussianFilter;
-  
+
   /** Multiply image filter to multiply with the zero crossings of the second
    *  derivative.  */
   typename MultiplyImageFilterType::Pointer m_MultiplyImageFilter;
-  
+
   /** Function objects that are used in the inner loops of derivatiVex
       calculations. */
   DerivativeOperator<OutputImagePixelType,itkGetStaticConstMacro(ImageDimension)>
@@ -347,7 +347,7 @@ private:
 } //end of namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkCannyEdgeDetectionRecursiveGaussianImageFilter.txx"
+#include "itkCannyEdgeDetectionRecursiveGaussianImageFilter.hxx"
 #endif
-  
+
 #endif

@@ -143,7 +143,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkLesionSegmentationMethod.txx"
+# include "itkLesionSegmentationMethod.hxx"
 #endif
 
 #endif
