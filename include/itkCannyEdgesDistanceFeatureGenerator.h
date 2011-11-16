@@ -89,6 +89,7 @@ public:
   typedef FixedArray< ScalarRealType, itkGetStaticConstMacro(Dimension) > SigmaArrayType;
 
   /** Input data that will be used for generating the feature. */
+  using ProcessObject::SetInput;
   void SetInput( const SpatialObjectType * input );
   const SpatialObjectType * GetInput() const;
 
