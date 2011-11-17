@@ -23,7 +23,7 @@
 #include "itkSatoLocalStructureFeatureGenerator.h"
 #include "itkSatoVesselnessFeatureGenerator.h"
 
-int itkLesionSegmentationMethodTest2( int argc, char * argv [] )
+int itkLesionSegmentationMethodTest2( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
   const unsigned int Dimension = 3;
 

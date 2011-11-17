@@ -50,7 +50,6 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
   this->Superclass::GenerateOutputInformation();
 
   // get pointers to the input and output
-  typedef typename OutputImageType::Pointer       OutputImagePointer;
   OutputImagePointer outputPtr = this->GetOutput();
   if ( !outputPtr )
     {

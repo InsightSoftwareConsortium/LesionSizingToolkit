@@ -135,8 +135,6 @@ GrayscaleImageSegmentationVolumeEstimator<NDimension>
     volumeEstimation = pixelVolume * sumOfIntensities / intensityRange;
     }
 
-  typedef typename Superclass::RealObjectType   RealObjectType;
-
   RealObjectType * outputCarrier =
     static_cast<RealObjectType*>(this->ProcessObject::GetOutput(0));
  

@@ -60,6 +60,7 @@ public:
 
   /** Set the input SpatialObject representing the segmentation whose volume
    * will be estimated */
+  using ProcessObject::SetInput;
   void SetInput( const SpatialObjectType * inputSpatialObject );
 
   /** Type of DataObjects used for scalar outputs */

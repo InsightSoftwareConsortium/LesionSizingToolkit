@@ -22,7 +22,7 @@
 #include "itkSpatialObjectWriter.h"
 #include "itkSpatialObjectReader.h"
 
-int LandmarkSpatialObjectWriterTest( int argc, char * argv [] )
+int LandmarkSpatialObjectWriterTest( int itkNotUsed(argc), char * argv [] )
 {
   const unsigned int Dimension = 3;
 

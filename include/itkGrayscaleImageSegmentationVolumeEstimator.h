@@ -49,6 +49,7 @@ public:
   typedef SegmentationVolumeEstimator<NDimension>     Superclass;
   typedef SmartPointer<Self>                          Pointer;
   typedef SmartPointer<const Self>                    ConstPointer;
+  typedef typename Superclass::RealObjectType         RealObjectType;
 
   /** Method for constructing new instances of this class. */
   itkNewMacro( Self );

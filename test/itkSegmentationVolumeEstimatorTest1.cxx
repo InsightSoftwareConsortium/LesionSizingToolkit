@@ -38,7 +38,7 @@ public:
 }
 
 
-int itkSegmentationVolumeEstimatorTest1( int argc, char * argv [] )
+int itkSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
   const unsigned int Dimension = 3;
 

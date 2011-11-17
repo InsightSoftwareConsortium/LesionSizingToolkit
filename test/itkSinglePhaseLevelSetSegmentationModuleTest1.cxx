@@ -19,7 +19,7 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageMaskSpatialObject.h"
 
-int itkSinglePhaseLevelSetSegmentationModuleTest1( int argc, char * argv [] )
+int itkSinglePhaseLevelSetSegmentationModuleTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
   const unsigned int Dimension = 3;
 

@@ -18,7 +18,7 @@
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
 
-int itkFeatureGeneratorTest1( int argc, char * argv [] )
+int itkFeatureGeneratorTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
   const unsigned int Dimension = 3;
 

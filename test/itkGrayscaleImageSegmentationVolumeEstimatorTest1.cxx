@@ -20,7 +20,7 @@
 #include "itkImageFileWriter.h"
 
 
-int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int argc, char * argv [] )
+int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
   const unsigned int Dimension = 3;
 

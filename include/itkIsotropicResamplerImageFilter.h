@@ -46,6 +46,7 @@ public:
   /** Image typedef support   */
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
+  typedef typename OutputImageType::Pointer   OutputImagePointer;
       
   /** SmartPointer typedef support  */
   typedef SmartPointer<Self>        Pointer;

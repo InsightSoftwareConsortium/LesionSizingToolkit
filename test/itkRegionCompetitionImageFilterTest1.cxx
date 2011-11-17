@@ -21,7 +21,7 @@
 #include "itkImage.h"
 
 
-int itkRegionCompetitionImageFilterTest1( int argc, char * argv [] )
+int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
   const unsigned int Dimension = 3;
   typedef signed short    InputPixelType;
