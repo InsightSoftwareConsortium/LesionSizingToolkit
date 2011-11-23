@@ -34,7 +34,7 @@ template <class TInputImage, class TOutputImage>
 RegionCompetitionImageFilter<TInputImage, TOutputImage>
 ::RegionCompetitionImageFilter()
 {
-  this->SetNumberOfRequiredInputs( 2 );
+  this->SetNumberOfRequiredInputs( 1 );
 
   this->m_MaximumNumberOfIterations = 10;
   this->m_CurrentIterationNumber = 0;
@@ -51,6 +51,7 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
   this->m_OutputImage = NULL;
   
   this->m_NumberOfLabels = 0;
+ this->m_inputLabelsImage = NULL;
 }
 
 /**
@@ -100,8 +101,7 @@ void
 RegionCompetitionImageFilter<TInputImage, TOutputImage>
 ::SetInputLabels( const TOutputImage * inputLabeledImage )
 {
-  // Process object is not const-correct so the const casting is required.
-  this->SetNthInput(1, const_cast<OutputImageType *>( inputLabeledImage ));
+  m_inputLabelsImage = inputLabeledImage ;
 }
 
 
@@ -166,17 +166,10 @@ void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::ComputeNumberOfInputLabels()
 {
-  const OutputImageType * inputLabelsImage = 
-    dynamic_cast< const OutputImageType * >( this->ProcessObject::GetInput(1) );
 
-  std::cout << "GetInput(1) = " << this->GetInput(1) << std::endl;
-  std::cout << "inputLabelsImage " << inputLabelsImage << std::endl;
-  std::cout << "GetInput(1).Print() = " << std::endl;
-  this->GetInput(1)->Print( std::cout );
+  typedef itk::ImageRegionConstIterator< TOutputImage >  IteratorType;
 
-  typedef itk::ImageRegionConstIterator< OutputImageType >  IteratorType;
-
-  IteratorType  itr( inputLabelsImage, inputLabelsImage->GetBufferedRegion() );
+  IteratorType  itr( m_inputLabelsImage,m_inputLabelsImage->GetBufferedRegion() );
 
   itr.GoToBegin();
 
@@ -218,29 +211,22 @@ void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::FindAllPixelsInTheBoundaryAndAddThemAsSeeds()
 {
-  const OutputImageType * inputLabelsImage = 
-    dynamic_cast< const OutputImageType * >( this->ProcessObject::GetInput(1) );
 
-  std::cout << "GetInput(1) = " << this->GetInput(1) << std::endl;
-  std::cout << "inputLabelsImage " << inputLabelsImage << std::endl;
-  std::cout << "GetInput(1).Print() = " << std::endl;
-  this->GetInput(1)->Print( std::cout );
+  OutputImageRegionType region = m_inputLabelsImage->GetRequestedRegion();
 
-  OutputImageRegionType region =  inputLabelsImage->GetRequestedRegion();
-
-  ConstNeighborhoodIterator< OutputImageType >   bit;
-  ImageRegionIterator< OutputImageType >        itr;
+  ConstNeighborhoodIterator< TOutputImage >   bit;
+  ImageRegionIterator< TOutputImage >        itr;
   ImageRegionIterator< SeedMaskImageType >      mtr;
   
   InputSizeType radius;
   radius.Fill( 1 );
 
   // Find the data-set boundary "faces"
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<OutputImageType>::FaceListType faceList;
-  NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<OutputImageType> bC;
-  faceList = bC(inputLabelsImage, region, radius);
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TOutputImage>::FaceListType faceList;
+  NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TOutputImage> bC;
+  faceList = bC(m_inputLabelsImage, region, radius);
 
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<OutputImageType>::FaceListType::iterator fit;
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TOutputImage>::FaceListType::iterator fit;
 
 
   // Process only the internal face
@@ -263,8 +249,8 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
     ++exIt;
     }
 
-  bit = ConstNeighborhoodIterator<OutputImageType>( radius, inputLabelsImage, this->m_InternalRegion );
-  itr  = ImageRegionIterator<OutputImageType>(    this->m_OutputImage, this->m_InternalRegion );
+  bit = ConstNeighborhoodIterator<TOutputImage>( radius, m_inputLabelsImage, this->m_InternalRegion );
+  itr  = ImageRegionIterator<TOutputImage>(    this->m_OutputImage, this->m_InternalRegion );
   mtr  = ImageRegionIterator<SeedMaskImageType>(  this->m_SeedsMask,   this->m_InternalRegion );
 
   bit.GoToBegin();

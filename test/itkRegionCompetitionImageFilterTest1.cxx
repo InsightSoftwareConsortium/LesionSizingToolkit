@@ -1,5 +1,5 @@
 /*=========================================================================
-
+const 
   Program:   Lesion Sizing Toolkit
   Module:    itkRegionCompetitionImageFilterTest1.cxx
 
@@ -26,7 +26,7 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   const unsigned int Dimension = 3;
   typedef signed short    InputPixelType;
   typedef unsigned char   BinaryPixelType;
-  typedef unsigned long   LabelPixelType;
+  typedef unsigned short   LabelPixelType;
 
   typedef itk::Image< InputPixelType,  Dimension >      InputImageType;
   typedef itk::Image< BinaryPixelType, Dimension >      BinaryImageType;
@@ -152,15 +152,14 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
 
 
   thresholderFilter->SetInput( inputImage );
-  componentsFilter->SetInput( thresholderFilter->GetOutput() );
-  relabelerFilter->SetInput( componentsFilter->GetOutput() );
-  competitionFilter->SetInput( inputImage );
-  competitionFilter->SetInputLabels( relabelerFilter->GetOutput() );
-
   thresholderFilter->SetUpperThreshold( 2000 );
   thresholderFilter->SetLowerThreshold(  400 );
+  thresholderFilter->Update();
+  componentsFilter->SetInput( thresholderFilter->GetOutput() );
+  relabelerFilter->SetInput( componentsFilter->GetOutput() );
 
-
+  relabelerFilter->Update();
+  LabelImageType * labelImagePt =  relabelerFilter->GetOutput();
   // Just for debugging, save input image of labels
   typedef itk::ImageFileWriter< LabelImageType >   LabelWriterType;
   LabelWriterType::Pointer labelWriter = LabelWriterType::New();
@@ -168,6 +167,9 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   labelWriter->SetFileName("labeledImage.mha");
   labelWriter->Update();
 
+  competitionFilter->SetInput( inputImage );
+  competitionFilter->SetInputLabels( labelImagePt);
+  competitionFilter->Update();
 
   // Write the output image
   labelWriter->SetInput( competitionFilter->GetOutput() );
