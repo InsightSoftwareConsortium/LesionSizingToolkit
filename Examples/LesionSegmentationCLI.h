@@ -19,15 +19,14 @@
 #include <string>
 #include <iostream>
 
-typedef short PixelType;
-const unsigned int ImageDimension = 3;
-typedef itk::Image< PixelType, ImageDimension > InputImageType;
-typedef itk::Image< float, ImageDimension > RealImageType;
-
 class LesionSegmentationCLI : public MetaCommand
 {
-
 public:
+  typedef short PixelType;
+  const static unsigned int ImageDimension = 3;
+  typedef itk::Image< PixelType, ImageDimension > InputImageType;
+  typedef itk::Image< float, ImageDimension > RealImageType;
+
   typedef itk::LandmarkSpatialObject< 3 >    SeedSpatialObjectType;
   typedef SeedSpatialObjectType::PointListType   PointListType;
 

@@ -1,14 +1,10 @@
-#include "LesionSegmentationCLI.h"
-#include "itkLesionSegmentationImageFilter8.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "LesionSegmentationCLI.h"
 #include "itkGDCMImageIO.h"
 #include "itkGDCMImageIOFactory.h"
 #include "itkGDCMSeriesFileNames.h"
 #include "itkMetaImageIOFactory.h"
 #include "itkImageSeriesReader.h"
-#include "itkLesionSegmentationCommandLineProgressReporter.h"
 #include "itkEventObject.h"
 #include "itkImageToVTKImageFilter.h"
 #include "vtkMassProperties.h"
@@ -35,9 +31,14 @@
 #include "vtkWindowToImageFilter.h"
 #include "vtkPNGWriter.h"
 
+// This needs to come after the other includes to prevent the global definitions
+// of PixelType to be shadowed by other declarations.
+#include "itkLesionSegmentationImageFilter8.h"
+#include "itkLesionSegmentationCommandLineProgressReporter.h"
+#include "LesionSegmentationCLI.h"
+
 #define VTK_CREATE(type, name) \
   vtkSmartPointer<type> name = vtkSmartPointer<type>::New()
-
 
 // --------------------------------------------------------------------------
 class SwitchVisibilityCallback : public vtkCommand
@@ -68,10 +69,10 @@ protected:
 
 
 // --------------------------------------------------------------------------
-InputImageType::Pointer GetImage( std::string dir, bool ignoreDirection )
+LesionSegmentationCLI::InputImageType::Pointer GetImage( std::string dir, bool ignoreDirection )
 {
-  const unsigned int Dimension = ImageDimension;
-  typedef itk::Image< PixelType, Dimension >         ImageType;
+  const unsigned int Dimension = LesionSegmentationCLI::ImageDimension;
+  typedef itk::Image< LesionSegmentationCLI::PixelType, Dimension >         ImageType;
 
   typedef itk::ImageSeriesReader< ImageType >        ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
@@ -171,12 +172,12 @@ InputImageType::Pointer GetImage( std::string dir, bool ignoreDirection )
 
 // --------------------------------------------------------------------------
 int ViewImageAndSegmentationSurface(
-    InputImageType::Pointer image, vtkPolyData *pd,
+    LesionSegmentationCLI::InputImageType::Pointer image, vtkPolyData *pd,
     double *roi, LesionSegmentationCLI &args )
 {
 
   std::cout << "Setting up visualization..." << std::endl;
-  typedef itk::ImageToVTKImageFilter< InputImageType > RealITKToVTKFilterType;
+  typedef itk::ImageToVTKImageFilter< LesionSegmentationCLI::InputImageType > RealITKToVTKFilterType;
   RealITKToVTKFilterType::Pointer itk2vtko = RealITKToVTKFilterType::New();
   itk2vtko->SetInput( image );
   itk2vtko->Update();
@@ -355,10 +356,13 @@ int main( int argc, char * argv[] )
 
   LesionSegmentationCLI args( argc, argv );
 
+  typedef LesionSegmentationCLI::InputImageType InputImageType;
+  typedef LesionSegmentationCLI::RealImageType  RealImageType;
+  const unsigned int ImageDimension = LesionSegmentationCLI::ImageDimension;
+
   typedef itk::ImageFileReader< InputImageType > InputReaderType;
   typedef itk::ImageFileWriter< RealImageType > OutputWriterType;
-  typedef itk::LesionSegmentationImageFilter8<
-          InputImageType, RealImageType > SegmentationFilterType;
+  typedef itk::LesionSegmentationImageFilter8< InputImageType, RealImageType > SegmentationFilterType;
 
 
   // Read the volume
