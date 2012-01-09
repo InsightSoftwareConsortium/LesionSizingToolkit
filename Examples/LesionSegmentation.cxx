@@ -394,8 +394,6 @@ int main( int argc, char * argv[] )
   // Compute the ROI region
 
   double *roi = args.GetROI();
-  InputImageType::PointType origin = image->GetOrigin();
-  InputImageType::SpacingType spacing = image->GetSpacing();
   InputImageType::RegionType region = image->GetLargestPossibleRegion();
 
   // convert bounds into region indices
