@@ -39,7 +39,6 @@ LesionSegmentationCommandLineProgressReporter::~LesionSegmentationCommandLinePro
 void LesionSegmentationCommandLineProgressReporter
 ::Execute( Object *caller, const EventObject &event)
 {
-  const Object *c = caller;
   this->ExecuteInternal( caller, event );
 }
 
