@@ -16,8 +16,10 @@ itk_module(ITKLesionSizingToolkit
    ITKMathematicalMorphology
    ITKIOGDCM
    ITKIOMeta
-   ITKVTK
+   ITKVtkGlue
    ITKTestKernel #to handle IO in src
    DESCRIPTION
      "${DOCUMENTATION}"
 )
+
+# Module ITKVtkGlue added for itkImageToVTKImageFilter.h
