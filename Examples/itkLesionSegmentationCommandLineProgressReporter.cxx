@@ -73,7 +73,7 @@ void LesionSegmentationCommandLineProgressReporter
         }
       if (report)
         {
-        printf("%s - Progress %d\%",this->ProgressString.c_str(),this->ProgressValue);
+        printf("%s - Progress %d%s",this->ProgressString.c_str(),this->ProgressValue,"%");
         printf("\r");
         fflush(stdout);
         }
