@@ -26,9 +26,6 @@
 namespace itk
 {
 
-/**
- * Constructor
- */
 template <unsigned int NDimension>
 IsotropicResampler<NDimension>
 ::IsotropicResampler()
@@ -43,10 +40,6 @@ IsotropicResampler<NDimension>
   this->m_OutputSpacing = 0.2;  // 0.2 mm
 }
 
-
-/*
- * Destructor
- */
 template <unsigned int NDimension>
 IsotropicResampler<NDimension>
 ::~IsotropicResampler()
@@ -70,10 +63,6 @@ IsotropicResampler<NDimension>
   return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
 }
 
-
-/*
- * PrintSelf
- */
 template <unsigned int NDimension>
 void
 IsotropicResampler<NDimension>
@@ -82,10 +71,6 @@ IsotropicResampler<NDimension>
   Superclass::PrintSelf( os, indent );
 }
 
-
-/*
- * Generate Data
- */
 template <unsigned int NDimension>
 void
 IsotropicResampler<NDimension>
@@ -150,8 +135,6 @@ IsotropicResampler<NDimension>
   typedef typename InputImageType::SizeType   SizeType;
 
   SizeType inputSize = inputImage->GetLargestPossibleRegion().GetSize();
-  
-  typedef typename SizeType::SizeValueType SizeValueType;
 
   const double dx = inputSize[0] * inputSpacing[0] / outputSpacing[0];
   const double dy = inputSize[1] * inputSpacing[1] / outputSpacing[1];
@@ -167,7 +150,7 @@ IsotropicResampler<NDimension>
 
   resampler->SetInput( inputImage );
 
-  progress->RegisterInternalFilter( resampler, 1.0 );  
+  progress->RegisterInternalFilter( resampler, 1.0 );
 
   resampler->Update();
 
