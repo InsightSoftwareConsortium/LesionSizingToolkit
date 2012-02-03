@@ -13,7 +13,11 @@
 #include <vtksys/SystemTools.hxx>
 #include <fstream>
 #include <sys/types.h>
-#include <dirent.h>
+#if !defined(_MSC_VER)
+  #include <dirent.h> // exists only on POSIX type compilers
+#else
+  #include "dirent_win.h" // exists only on POSIX type compilers
+#endif
 #include <errno.h>
 #include <vector>
 #include <string>
