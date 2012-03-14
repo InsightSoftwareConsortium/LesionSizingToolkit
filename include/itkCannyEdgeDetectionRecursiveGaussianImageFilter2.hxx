@@ -556,8 +556,10 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
     {   
     bit = ConstNeighborhoodIterator<InputImageType>(radius,
                                                     input, *fit);
+    //bit1 =ConstNeighborhoodIterator<InputImageType>(radius, 
+    //                                                input1, *fit);
     bit1 =ConstNeighborhoodIterator<InputImageType>(radius, 
-                                                    input1, *fit);
+                                                    m_LaplacianFilter->GetOutput(), *fit);
     it = ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
