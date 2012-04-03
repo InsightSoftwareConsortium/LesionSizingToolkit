@@ -40,10 +40,14 @@ vtkContourVisualizationModule::vtkContourVisualizationModule()
 
   this->ResliceFilter->SetOutputDimensionality(3);
   this->ResliceFilter->SetInterpolationModeToLinear();
-
+#if VTK_MAJOR_VERSION <= 5
   this->ContourFilter->SetInput( this->ResliceFilter->GetOutput() );
-
   this->PolyDataMapper->SetInput( this->ContourFilter->GetOutput() );
+#else
+  this->ContourFilter->SetInputData( this->ResliceFilter->GetOutput() );
+  this->PolyDataMapper->SetInputData( this->ContourFilter->GetOutput() );
+#endif
+
   this->PolyDataMapper->ScalarVisibilityOff();
   this->PolyDataMapper->SetResolveCoincidentTopologyToPolygonOffset();
 
@@ -99,7 +103,11 @@ vtkContourVisualizationModule::~vtkContourVisualizationModule()
 void vtkContourVisualizationModule::SetSegmentation( vtkImageData * input )
 {
   // Draw contours around the segmented regions
+#if VTK_MAJOR_VERSION <= 5
   this->ResliceFilter->SetInput( input );
+#else
+  this->ResliceFilter->SetInputData( input );
+#endif
 }
 
 void vtkContourVisualizationModule::SetAutoIsoValue()

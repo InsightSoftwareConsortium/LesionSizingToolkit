@@ -52,19 +52,27 @@ int main(int argc, char * argv [] )
   float isoValue = atof( argv[2] );
 
   VTK_CREATE( vtkContourFilter, contourFilter );
-  contourFilter->SetValue( 0, isoValue ); 
-  contourFilter->SetInput( imageReader->GetOutput() );
-
   VTK_CREATE( vtkCleanPolyData, cleanPolyData );
-  cleanPolyData->SetInput( contourFilter->GetOutput() );
-
   VTK_CREATE( vtkTriangleFilter, triangleFilter );
+  contourFilter->SetValue( 0, isoValue ); 
+#if VTK_MAJOR_VERSION <= 5
+  contourFilter->SetInput( imageReader->GetOutput() );
+  cleanPolyData->SetInput( contourFilter->GetOutput() );
   triangleFilter->SetInput( cleanPolyData->GetOutput() );
+#else
+  contourFilter->SetInputData( imageReader->GetOutput() );
+  cleanPolyData->SetInputData( contourFilter->GetOutput() );
+  triangleFilter->SetInputData( cleanPolyData->GetOutput() );
+#endif
   triangleFilter->PassVertsOff();
   triangleFilter->PassLinesOff();
 
   VTK_CREATE( vtkMassProperties, massProperties );
+#if VTK_MAJOR_VERSION <= 5
   massProperties->SetInput( triangleFilter->GetOutput() );
+#else
+  massProperties->SetInputData( triangleFilter->GetOutput() );
+#endif
   double volume = massProperties->GetVolume();
 
   std::cout << "Volume = " << volume << " mm3" << std::endl;

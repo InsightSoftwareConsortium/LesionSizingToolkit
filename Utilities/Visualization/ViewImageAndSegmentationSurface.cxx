@@ -196,7 +196,11 @@ int main(int argc, char * argv [] )
     // The 3 image plane widgets are used to probe the dataset.
     //
     xImagePlaneWidget->DisplayTextOn();
+#if VTK_MAJOR_VERSION <= 5
     xImagePlaneWidget->SetInput(vtkImporter1->GetOutput());
+#else
+    xImagePlaneWidget->SetInputData(vtkImporter1->GetOutput());
+#endif
     xImagePlaneWidget->SetPlaneOrientationToXAxes();
     xImagePlaneWidget->SetSliceIndex(0);
     xImagePlaneWidget->SetPicker(picker);
@@ -207,7 +211,11 @@ int main(int argc, char * argv [] )
     xImagePlaneWidget->SetResliceInterpolateToNearestNeighbour();
 
     yImagePlaneWidget->DisplayTextOn();
+#if VTK_MAJOR_VERSION <= 5
     yImagePlaneWidget->SetInput(vtkImporter1->GetOutput());
+#else
+    yImagePlaneWidget->SetInputData(vtkImporter1->GetOutput());
+#endif
     yImagePlaneWidget->SetPlaneOrientationToYAxes();
     yImagePlaneWidget->SetSliceIndex(0);
     yImagePlaneWidget->SetPicker(picker);
@@ -218,7 +226,11 @@ int main(int argc, char * argv [] )
     yImagePlaneWidget->SetLookupTable(xImagePlaneWidget->GetLookupTable());
 
     zImagePlaneWidget->DisplayTextOn();
+#if VTK_MAJOR_VERSION <= 5
     zImagePlaneWidget->SetInput(vtkImporter1->GetOutput());
+#else
+    zImagePlaneWidget->SetInputData(vtkImporter1->GetOutput());
+#endif
     zImagePlaneWidget->SetPlaneOrientationToZAxes();
     zImagePlaneWidget->SetSliceIndex(0);
     zImagePlaneWidget->SetPicker(picker);
@@ -243,8 +255,11 @@ int main(int argc, char * argv [] )
 
     // Draw contours around the segmented regions
     VTK_CREATE(vtkContourFilter , contour);
+#if VTK_MAJOR_VERSION <= 5
     contour->SetInput( vtkImporter2->GetOutput() );
-
+#else
+    contour->SetInputData( vtkImporter2->GetOutput() );
+#endif
     MaskPixelType contourValue = 0.0;
 
     if( argc > 3 )
@@ -259,7 +274,12 @@ int main(int argc, char * argv [] )
     VTK_CREATE(vtkActor          , polyActor );
 
     polyActor->SetMapper( polyMapper );
+#if VTK_MAJOR_VERSION <= 5
     polyMapper->SetInput( contour->GetOutput() );
+#else
+    polyMapper->SetInputData( contour->GetOutput() );
+#endif
+
 
     VTK_CREATE(vtkProperty , property);
     property->SetAmbient(0.1);
@@ -292,7 +312,13 @@ int main(int argc, char * argv [] )
       {
       VTK_CREATE(vtkSTLWriter , writer);
       writer->SetFileName(argv[5]);
+
+#if VTK_MAJOR_VERSION <= 5
       writer->SetInput( contour->GetOutput() );
+#else
+      writer->SetInputData( contour->GetOutput() );
+#endif
+
       writer->Write();
       }
 

@@ -211,7 +211,13 @@ int ViewImageAndSegmentationSurface(
     imagePlaneWidget[i] = vtkSmartPointer< vtkImagePlaneWidget >::New();
 
     imagePlaneWidget[i]->DisplayTextOn();
+#if VTK_MAJOR_VERSION <= 5
     imagePlaneWidget[i]->SetInput(itk2vtko->GetOutput());
+#else
+    imagePlaneWidget[i]->SetInputData(itk2vtko->GetOutput());
+#endif
+
+
     imagePlaneWidget[i]->SetPlaneOrientation(i);
     imagePlaneWidget[i]->SetSlicePosition(pd->GetCenter()[i]);
     imagePlaneWidget[i]->SetPicker(picker);
@@ -239,12 +245,20 @@ int ViewImageAndSegmentationSurface(
 
   std::cout << "Computing surface normals for shading.." << std::endl;
   VTK_CREATE( vtkPolyDataNormals, normals );
+#if VTK_MAJOR_VERSION <=5
   normals->SetInput(pd);
+#else
+  normals->SetInputData(pd);
+#endif
   normals->SetFeatureAngle(60.0);
   normals->Update();
 
   polyActor->SetMapper( polyMapper );
+#if VTK_MAJOR_VERSION <=5
   polyMapper->SetInput( normals->GetOutput() );
+#else
+  polyMapper->SetInputData( normals->GetOutput() );
+#endif
 
   VTK_CREATE(vtkProperty , property);
   property->SetAmbient(0.1);
@@ -280,7 +294,11 @@ int ViewImageAndSegmentationSurface(
     VTK_CREATE( vtkOutlineSource, outline );
     outline->SetBounds(roi);
     VTK_CREATE( vtkPolyDataMapper, outlineMapper );
+#if VTK_MAJOR_VERSION <= 5
     outlineMapper->SetInput(outline->GetOutput());
+#else
+    outlineMapper->SetInputData(outline->GetOutput());
+#endif
     VTK_CREATE( vtkActor, outlineActor );
     outlineActor->SetMapper(outlineMapper);
     outlineActor->GetProperty()->SetColor(0,1,0);
@@ -334,7 +352,12 @@ int ViewImageAndSegmentationSurface(
 
       VTK_CREATE( vtkPNGWriter, screenshotWriter );
       screenshotWriter->SetFileName(os.str().c_str());
+
+#if VTK_MAJOR_VERSION <= 5
       screenshotWriter->SetInput(w2f->GetOutput());
+#else
+      screenshotWriter->SetInputData(w2f->GetOutput());
+#endif
       screenshotWriter->Write();
       }
     }
@@ -504,7 +527,12 @@ int main( int argc, char * argv[] )
   std::cout << "Generating an isosurface of the zero-level set (iso-value of -0.5)" << std::endl;
   vtkSmartPointer< vtkMarchingCubes > mc =
     vtkSmartPointer< vtkMarchingCubes >::New();
+#if VTK_MAJOR_VERSION <=5
   mc->SetInput(itk2vtko->GetOutput());
+#else
+  mc->SetInputData(itk2vtko->GetOutput());
+#endif
+
   mc->SetValue(0,-0.5);
   mc->Update();
 
@@ -517,7 +545,11 @@ int main( int argc, char * argv[] )
   std::cout << "Computing volume of mesh using discretized divergence" << std::endl;
   vtkSmartPointer< vtkMassProperties > mp =
     vtkSmartPointer< vtkMassProperties >::New();
+#if VTK_MAJOR_VERSION <=5
   mp->SetInput(mc->GetOutput());
+#else
+  mp->SetInputData(mc->GetOutput());
+#endif
   const double volume = mp->GetVolume();
 
   std::cout << "Volume of segmentation mm^3 = " << volume << std::endl;
@@ -526,7 +558,11 @@ int main( int argc, char * argv[] )
     {
     VTK_CREATE(vtkSTLWriter, writer);
     writer->SetFileName(args.GetValueAsString("OutputMesh").c_str());
+#if VTK_MAJOR_VERSION <=5
     writer->SetInput( mc->GetOutput() );
+#else
+    writer->SetInputData( mc->GetOutput() );
+#endif
     writer->Write();
     }
 

@@ -181,7 +181,11 @@ int main(int argc, char * argv [] )
 
   imageViewer->SetSlice( sliceNumber );
 
+#if VTK_MAJOR_VERSION <= 5
   imageViewer->SetInput( imageReader->GetOutput() );
+#else
+  imageViewer->SetInputData( imageReader->GetOutput() );
+#endif
 
   renderer->AddActor( imageViewer->GetImageActor() );
 
@@ -228,7 +232,6 @@ int main(int argc, char * argv [] )
     {
     VTK_CREATE( vtkWindowToImageFilter, windowToImageFilter );
     VTK_CREATE( vtkPNGWriter, screenShotWriter );
-
     windowToImageFilter->SetInput( renderWindow );
     windowToImageFilter->Update();
 
@@ -236,13 +239,21 @@ int main(int argc, char * argv [] )
 
     std::cout << "Screen shot file name = " << screenShotFileName << std::endl;
 
+#if VTK_MAJOR_VERSION <= 5
     screenShotWriter->SetInput( windowToImageFilter->GetOutput() );
+#else
+    screenShotWriter->SetInputData( windowToImageFilter->GetOutput() );
+#endif
     screenShotWriter->SetFileName( screenShotFileName.c_str() );
     
     renderWindow->Render();
     screenShotWriter->Write();
 
+#if VTK_MAJOR_VERSION <= 5
     screenShotWriter->SetInput( NULL );
+#else
+    screenShotWriter->SetInputData( NULL );
+#endif
     windowToImageFilter->SetInput( NULL );
     }
   else

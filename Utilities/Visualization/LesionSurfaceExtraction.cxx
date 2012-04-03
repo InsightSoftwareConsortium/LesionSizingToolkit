@@ -48,8 +48,13 @@ int main(int argc, char * argv [] )
 
   VTK_CREATE( vtkContourFilter, contourFilter );
 
-  contourFilter->SetValue( 0, isoValue ); 
-  contourFilter->SetInput( imageReader->GetOutput() );
+  contourFilter->SetValue( 0, isoValue );
+#if VTK_MAJOR_VERSION <= 5
+    contourFilter->SetInput(imageReader->GetOutput());
+#else
+    contourFilter->SetInputData(imageReader->GetOutput());
+#endif
+
 
 
   std::string surfaceFileNameExtension = 
@@ -58,7 +63,11 @@ int main(int argc, char * argv [] )
   if( surfaceFileNameExtension == ".vtk" )
     {
     VTK_CREATE( vtkPolyDataWriter, polyDataWriter );
-    polyDataWriter->SetInput( contourFilter->GetOutput() );
+#if VTK_MAJOR_VERSION <= 5
+    polyDataWriter->SetInput(contourFilter->GetOutput() );
+#else
+    polyDataWriter->SetInputData(contourFilter->GetOutput());
+#endif
     polyDataWriter->SetFileName( argv[3] );
     polyDataWriter->Update();
     }
@@ -66,7 +75,11 @@ int main(int argc, char * argv [] )
   if( surfaceFileNameExtension == ".stl" )
     {
     VTK_CREATE( vtkSTLWriter, stlWriter );
+#if VTK_MAJOR_VERSION <= 5
     stlWriter->SetInput( contourFilter->GetOutput() );
+#else
+    stlWriter->SetInputData( contourFilter->GetOutput() );
+#endif
     stlWriter->SetFileName( argv[3] );
     stlWriter->Update();
     }
