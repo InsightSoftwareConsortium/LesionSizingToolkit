@@ -426,6 +426,7 @@ int main( int argc, char * argv[] )
   // convert bounds into region indices
   InputImageType::PointType p1, p2;
   InputImageType::IndexType pi1, pi2;
+  InputImageType::IndexType startIndex;
   for (unsigned int i = 0; i < ImageDimension; i++)
     {
     p1[i] = roi[2*i];
@@ -438,9 +439,10 @@ int main( int argc, char * argv[] )
   InputImageType::SizeType roiSize;
   for (unsigned int i = 0; i < ImageDimension; i++)
     {
-    roiSize[i] = pi2[i] - pi1[i];
+    roiSize[i] = fabs(pi2[i] - pi1[i]);
+    startIndex[i] = (pi1[i]<pi2[i])?pi1[i]:pi2[i];
     }
-  InputImageType::RegionType roiRegion( pi1, roiSize );
+  InputImageType::RegionType roiRegion( startIndex, roiSize );
   std::cout << "ROI region is " << roiRegion << std::endl;
   if (!roiRegion.Crop(image->GetBufferedRegion()))
     {

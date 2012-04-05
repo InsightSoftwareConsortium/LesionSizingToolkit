@@ -77,6 +77,8 @@ public:
     {
     if (this->GetOptionWasSet("ROI"))
       {
+     // Default to be physical units
+     //TO DO: deal with ROI input in pixel units
       std::list< std::string > bounds = this->GetValueAsList("ROI");
       std::list< std::string >::const_iterator fit = bounds.begin();
       for (unsigned int i = 0; fit != bounds.end(); ++fit, ++i)
@@ -126,6 +128,7 @@ public:
 
       if (this->GetOptionWasSet("SeedUnitsInPixels"))
         {
+        
         // Convert seeds from pixel units to physical units
         IndexType index = {{
           static_cast< IndexValueType >(sx),
