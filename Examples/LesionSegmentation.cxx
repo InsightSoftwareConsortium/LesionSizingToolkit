@@ -30,6 +30,7 @@
 #include "vtkCommand.h"
 #include "vtkWindowToImageFilter.h"
 #include "vtkPNGWriter.h"
+#include "itkOrientImageFilter.h"
 
 // This needs to come after the other includes to prevent the global definitions
 // of PixelType to be shadowed by other declarations.
@@ -177,9 +178,27 @@ int ViewImageAndSegmentationSurface(
 {
 
   std::cout << "Setting up visualization..." << std::endl;
+
+  //To make sure the tumor polydata aligns with the image volume,
+  // reorient image so that the direction matrix is an identity matrix.
+  typedef LesionSegmentationCLI::InputImageType InputImageType;
+  const unsigned int ImageDimension = LesionSegmentationCLI::ImageDimension;
+
+  typedef itk::ImageFileReader< InputImageType > InputReaderType;
+  itk::OrientImageFilter<InputImageType,InputImageType>::Pointer orienter =
+  itk::OrientImageFilter<InputImageType,InputImageType>::New();
+  orienter->UseImageDirectionOn();
+  InputImageType::DirectionType direction;
+  direction.SetIdentity();
+  orienter->SetDesiredCoordinateDirection (direction);
+  orienter->SetInput(image);
+  orienter->Update();
+  InputImageType::Pointer orientedImage = orienter->GetOutput();
+
+
   typedef itk::ImageToVTKImageFilter< LesionSegmentationCLI::InputImageType > RealITKToVTKFilterType;
   RealITKToVTKFilterType::Pointer itk2vtko = RealITKToVTKFilterType::New();
-  itk2vtko->SetInput( image );
+  itk2vtko->SetInput( orientedImage );
   itk2vtko->Update();
 
   // display the results.
