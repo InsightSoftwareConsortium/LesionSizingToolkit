@@ -179,26 +179,12 @@ int ViewImageAndSegmentationSurface(
 
   std::cout << "Setting up visualization..." << std::endl;
 
-  //To make sure the tumor polydata aligns with the image volume,
-  // reorient image so that the direction matrix is an identity matrix.
+
   typedef LesionSegmentationCLI::InputImageType InputImageType;
-  const unsigned int ImageDimension = LesionSegmentationCLI::ImageDimension;
-
-  typedef itk::ImageFileReader< InputImageType > InputReaderType;
-  itk::OrientImageFilter<InputImageType,InputImageType>::Pointer orienter =
-  itk::OrientImageFilter<InputImageType,InputImageType>::New();
-  orienter->UseImageDirectionOn();
-  InputImageType::DirectionType direction;
-  direction.SetIdentity();
-  orienter->SetDesiredCoordinateDirection (direction);
-  orienter->SetInput(image);
-  orienter->Update();
-  InputImageType::Pointer orientedImage = orienter->GetOutput();
-
 
   typedef itk::ImageToVTKImageFilter< LesionSegmentationCLI::InputImageType > RealITKToVTKFilterType;
   RealITKToVTKFilterType::Pointer itk2vtko = RealITKToVTKFilterType::New();
-  itk2vtko->SetInput( orientedImage );
+  itk2vtko->SetInput( image);
   itk2vtko->Update();
 
   // display the results.
@@ -370,13 +356,10 @@ int ViewImageAndSegmentationSurface(
       w2f->SetInput(renWin);
 
       VTK_CREATE( vtkPNGWriter, screenshotWriter );
-      screenshotWriter->SetFileName(os.str().c_str());
 
-#if VTK_MAJOR_VERSION <= 5
-      screenshotWriter->SetInput(w2f->GetOutput());
-#else
-      screenshotWriter->SetInputData(w2f->GetOutput());
-#endif
+      screenshotWriter->SetFileName(os.str().c_str());
+      std::cout << "Screenshot saved to " <<os.str().c_str()<< std::endl;
+      screenshotWriter->SetInputConnection(w2f->GetOutputPort());
       screenshotWriter->Write();
       }
     }
@@ -432,6 +415,21 @@ int main( int argc, char * argv[] )
     reader->Update();
     image = reader->GetOutput();
     }
+
+
+  //To make sure the tumor polydata aligns with the image volume during
+  //vtk rendering in ViewImageAndSegmentationSurface(),
+  //reorient image so that the direction matrix is an identity matrix.
+  typedef itk::ImageFileReader< InputImageType > InputReaderType;
+  itk::OrientImageFilter<InputImageType,InputImageType>::Pointer orienter =
+  itk::OrientImageFilter<InputImageType,InputImageType>::New();
+  orienter->UseImageDirectionOn();
+  InputImageType::DirectionType direction;
+  direction.SetIdentity();
+  orienter->SetDesiredCoordinateDirection (direction);
+  orienter->SetInput(image);
+  orienter->Update();
+  image = orienter->GetOutput();
 
   // Set the image object on the args
   args.SetImage( image );
