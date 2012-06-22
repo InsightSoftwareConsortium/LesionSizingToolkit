@@ -164,7 +164,7 @@ public:
     itkLegacyReplaceBodyMacro(SetThreshold, 2.2, SetUpperThreshold);
     }
   
-  OutputImagePixelType GetThreshold(OutputImagePixelType th) 
+  OutputImagePixelType GetThreshold(OutputImagePixelType itkNotUsed(th))
     {
     itkLegacyReplaceBodyMacro(GetThreshold, 2.2, GetUpperThreshold);
     return this->m_Threshold; 
