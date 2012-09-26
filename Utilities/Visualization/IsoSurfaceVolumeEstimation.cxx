@@ -26,6 +26,7 @@
 #include "vtkCleanPolyData.h"
 #include "vtkTriangleFilter.h"
 #include "vnl/vnl_math.h"
+#include "vtkVersion.h"
 
 
 #define VTK_CREATE(type, name) \

@@ -33,7 +33,6 @@ class vtkContourVisualizationModule : public vtkObject
 {
 public:
   static vtkContourVisualizationModule* New();
-  vtkTypeRevisionMacro(vtkContourVisualizationModule,vtkObject);
 
   // Image that holds the segmentation represented as a grayscale map This
   // representation is similar to a level set. The object is defined by the

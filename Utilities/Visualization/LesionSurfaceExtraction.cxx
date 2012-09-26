@@ -22,6 +22,7 @@
 #include "vtkSTLWriter.h"
 #include "vtkSmartPointer.h"
 #include "vtksys/SystemTools.hxx"
+#include "vtkVersion.h"
 
 
 #define VTK_CREATE(type, name) \

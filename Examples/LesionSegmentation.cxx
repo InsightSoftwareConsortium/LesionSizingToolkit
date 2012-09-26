@@ -31,6 +31,7 @@
 #include "vtkWindowToImageFilter.h"
 #include "vtkPNGWriter.h"
 #include "itkOrientImageFilter.h"
+#include "vtkVersion.h"
 
 // This needs to come after the other includes to prevent the global definitions
 // of PixelType to be shadowed by other declarations.

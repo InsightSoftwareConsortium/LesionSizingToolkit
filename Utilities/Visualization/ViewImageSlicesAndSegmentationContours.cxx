@@ -27,11 +27,13 @@
 #include "vtkCamera.h"
 #include "vtkWindowToImageFilter.h"
 #include "vtkPNGWriter.h"
+#include "vtkVersion.h"
 
 #include "itkSpatialObject.h"
 #include "itkSpatialObjectReader.h"
 #include "itkLandmarkSpatialObject.h"
 #include "itksys/SystemTools.hxx"
+
 #define VTK_CREATE(type, name) \
   vtkSmartPointer<type> name = vtkSmartPointer<type>::New()
 

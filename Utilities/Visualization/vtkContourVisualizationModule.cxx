@@ -24,11 +24,10 @@
 #include "vtkRenderer.h"
 #include "vtkImageData.h"
 #include "vtkImageReslice.h"
+#include "vtkVersion.h"
 
 //----------------------------------------------------------------------------
 vtkStandardNewMacro( vtkContourVisualizationModule );
-vtkCxxRevisionMacro(vtkContourVisualizationModule, "1.2");
-
 
 vtkContourVisualizationModule::vtkContourVisualizationModule()
 {

@@ -41,6 +41,7 @@
 #include "vtkPolyDataWriter.h"
 #include "vtkSTLWriter.h"
 #include "vtkSmartPointer.h"
+#include "vtkVersion.h"
 
 
 #define VTK_CREATE(type, name) \
