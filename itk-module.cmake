@@ -5,7 +5,7 @@ range of applications. The Lesion Sizint Toolkit is build upon ITK and adds to
 it specific classes for computing image features that are then combined into a
 detection and measurement layer.")
 
-itk_module(ITKLesionSizingToolkit
+itk_module(LesionSizingToolkit
  DEPENDS
    ITKImageFeature
    ITKLevelSets
