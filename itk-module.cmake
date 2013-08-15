@@ -18,8 +18,9 @@ itk_module(ITKLesionSizingToolkit
    ITKIOMeta
    ITKVtkGlue
    ITKTestKernel #to handle IO in src
-   DESCRIPTION
-     "${DOCUMENTATION}"
+ EXCLUDE_FROM_ALL
+ DESCRIPTION
+   "${DOCUMENTATION}"
 )
 
 # Module ITKVtkGlue added for itkImageToVTKImageFilter.h
