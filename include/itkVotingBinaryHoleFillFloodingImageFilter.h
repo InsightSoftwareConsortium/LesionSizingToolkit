@@ -34,7 +34,7 @@ namespace itk
  * VotingBinaryIterativeHoleFillingImageFilter.
  *
  * \ingroup RegionGrowingSegmentation 
- * \ingroup ITKLesionSizingToolkit
+ * \ingroup LesionSizingToolkit
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT VotingBinaryHoleFillFloodingImageFilter:

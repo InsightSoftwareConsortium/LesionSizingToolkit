@@ -32,7 +32,7 @@ namespace itk
  * SpatialObjects are used as input of this class.
  *
  * \ingroup SpatialObjectFilters
- * \ingroup ITKLesionSizingToolkit
+ * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
 class ITK_EXPORT SegmentationVolumeEstimator : public ProcessObject

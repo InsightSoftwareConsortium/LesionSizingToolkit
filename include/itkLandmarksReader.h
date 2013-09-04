@@ -31,7 +31,7 @@ namespace itk
  * A LandmarkSpatialObject is produced as output.
  *
  * \ingroup SpatialObjectFilters
- * \ingroup ITKLesionSizingToolkit
+ * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
 class ITK_EXPORT LandmarksReader : public ProcessObject

@@ -31,8 +31,8 @@ namespace itk
  * This class resamples an image using BSplineInterpolator and produces
  * an isotropic image.
  *
- *\ingroup ITKLesionSizingToolkit
- * \ingroup ITKLesionSizingToolkit
+ *\ingroup LesionSizingToolkit
+ * \ingroup LesionSizingToolkit
  */
 template<class TInputImage, class TOutputImage>
 class IsotropicResamplerImageFilter

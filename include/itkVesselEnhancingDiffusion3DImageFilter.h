@@ -68,7 +68,7 @@ namespace itk
  *
  * email: r.manniesing@erasmusmc.nl
  *
- * \ingroup ITKLesionSizingToolkit
+ * \ingroup LesionSizingToolkit
 */
 template <class PixelType = short int, unsigned int NDimension = 3>
 class ITK_EXPORT VesselEnhancingDiffusion3DImageFilter :

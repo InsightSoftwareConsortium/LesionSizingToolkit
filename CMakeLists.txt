@@ -1,4 +1,4 @@
-project(ITKLesionSizingToolkit)
+project(LesionSizingToolkit)
 itk_module_impl()
 
 
@@ -23,7 +23,7 @@ IF (LSTK_USE_VTK)
   INCLUDE(${VTK_USE_FILE})
 
   SET(ITK_VTK_LSTK_LIBRARIES
-   ${ITKLesionSizingToolkit_LIBRARIES}
+   ${LesionSizingToolkit_LIBRARIES}
    ${myVTKLibraries}
    )
 

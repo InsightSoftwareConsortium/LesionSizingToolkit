@@ -30,7 +30,7 @@ namespace itk
  * Based on the "Tubularness" measure proposed by Frangi et al.
  * 
  * \ingroup IntensityImageFilters  Multithreaded
- * \ingroup ITKLesionSizingToolkit
+ * \ingroup LesionSizingToolkit
  */
 namespace Function {  
   

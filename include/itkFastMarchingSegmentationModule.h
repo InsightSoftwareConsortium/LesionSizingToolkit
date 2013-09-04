@@ -32,7 +32,7 @@ namespace itk
  * will get the zero set. 
  *
  * \ingroup SpatialObjectFilters
- * \ingroup ITKLesionSizingToolkit
+ * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
 class ITK_EXPORT FastMarchingSegmentationModule : public SinglePhaseLevelSetSegmentationModule<NDimension>

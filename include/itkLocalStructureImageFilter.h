@@ -42,7 +42,7 @@ namespace itk
  * Vol 6. No. 2. April-June 2000.
  *
  * \ingroup IntensityImageFilters  Multithreaded
- * \ingroup ITKLesionSizingToolkit
+ * \ingroup LesionSizingToolkit
  */
 namespace Function {
 

@@ -85,7 +85,7 @@ public:
  * algorithm is available.
  *
  *
- * \ingroup ITKLesionSizingToolkit
+ * \ingroup LesionSizingToolkit
  *
  * \sa SmoothingRecursiveGaussianImageFilter
  * \sa ZeroCrossingImageFilter

@@ -39,7 +39,7 @@ namespace itk
 {
 
 /** \class LesionSegmentationImageFilter8
- * \ingroup ITKLesionSizingToolkit
+ * \ingroup LesionSizingToolkit
  */
 template<class TInputImage, class TOutputImage>
 class LesionSegmentationImageFilter8

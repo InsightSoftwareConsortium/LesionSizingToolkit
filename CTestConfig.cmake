@@ -4,7 +4,7 @@
 ## # The following are required to uses Dart and the Cdash dashboard
 ##   ENABLE_TESTING()
 ##   INCLUDE(CTest)
-set(CTEST_PROJECT_NAME "ITKLesionSizing")
+set(CTEST_PROJECT_NAME "LesionSizing")
 set(CTEST_NIGHTLY_START_TIME "2:00:00 UTC")
 
 set(CTEST_DROP_METHOD "http")
