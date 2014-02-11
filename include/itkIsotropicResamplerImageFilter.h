@@ -84,7 +84,7 @@ public:
 
   /** Override the superclass implementation so as to set the flag on all the
    * filters within our lesion segmentation pipeline */
-  virtual void SetAbortGenerateData( bool );
+  virtual void SetAbortGenerateData( const bool );
 
   /** ResampleImageFilter produces an image which is a different size
    * than its input.  As such, it needs to provide an implementation

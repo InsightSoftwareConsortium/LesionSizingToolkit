@@ -148,7 +148,7 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
 
 template <class TInputImage, class TOutputImage>
 void IsotropicResamplerImageFilter< TInputImage,TOutputImage >
-::SetAbortGenerateData( bool abort )
+::SetAbortGenerateData( const bool abort )
 {
   this->Superclass::SetAbortGenerateData(abort);
   this->m_ResampleFilter->SetAbortGenerateData(abort);
