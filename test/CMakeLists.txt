@@ -225,19 +225,6 @@ itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest2
 
 itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest3
   COMMAND ${ITK_TEST_DRIVER}
---compare ${TEMP}/CannyEdgeDetectionImageFilterTest3_1.mha
-          ${TEST_DATA_ROOT}/Baseline/CannyEdgeDetectionImageFilterTest3_1.mha
-  $<TARGET_FILE:itkCannyEdgeDetectionImageFilter3>
-  ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/CannyEdgeDetectionImageFilterTest3_1.mha
-  0.7 # Sigma
-  150 # Upper hysteresis threshold
-  75  # Lower hysteresis threshold
-  ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest3_1.mha
- )
-
-itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest4
-  COMMAND ${ITK_TEST_DRIVER}
 --compare ${TEMP}/CannyEdgeDetectionImageFilterTest4_1.mha
           ${TEST_DATA_ROOT}/Baseline/CannyEdgeDetectionImageFilterTest4_1.mha
   $<TARGET_FILE:itkCannyEdgeDetectionImageFilter1>
@@ -249,7 +236,7 @@ itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest4
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest4_1.mha
  )
 
-itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest5
+itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest4
   COMMAND ${ITK_TEST_DRIVER}
 --compare ${TEMP}/CannyEdgeDetectionImageFilterTest5_1.mha
           ${TEST_DATA_ROOT}/Baseline/CannyEdgeDetectionImageFilterTest5_1.mha
@@ -261,21 +248,6 @@ itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest5
    5  # Lower hysteresis threshold
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest5_1.mha
  )
-
-itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest6
-  COMMAND ${ITK_TEST_DRIVER}
---compare ${TEMP}/CannyEdgeDetectionImageFilterTest6_1.mha
-          ${TEST_DATA_ROOT}/Baseline/CannyEdgeDetectionImageFilterTest6_1.mha
-  $<TARGET_FILE:itkCannyEdgeDetectionImageFilter3>
-  ${TEST_DATA_ROOT}/Synthetic/SphereLesion.mha
-  ${TEMP}/CannyEdgeDetectionImageFilterTest6_1.mha
-  0.7 # Sigma
-  10  # Upper hysteresis threshold
-   5  # Lower hysteresis threshold
-  ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest6_1.mha
- )
-
-
 
 
 itk_add_test(NAME itkCannyEdgesDistanceFeatureGeneratorTest1

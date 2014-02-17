@@ -5,9 +5,6 @@ target_link_libraries(itkCannyEdgeDetectionImageFilter1 ${LesionSizingToolkit_LI
 add_executable(itkCannyEdgeDetectionImageFilter2  itkCannyEdgeDetectionImageFilter2.cxx )
 target_link_libraries(itkCannyEdgeDetectionImageFilter2 ${LesionSizingToolkit_LIBRARIES})
 
-add_executable(itkCannyEdgeDetectionImageFilter3  itkCannyEdgeDetectionImageFilter3.cxx )
-target_link_libraries(itkCannyEdgeDetectionImageFilter3 ${LesionSizingToolkit_LIBRARIES})
-
 add_executable(itkDicomSeriesReadImageWrite itkDicomSeriesReadImageWrite.cxx)
 target_link_libraries(itkDicomSeriesReadImageWrite ${LesionSizingToolkit_LIBRARIES})
 
