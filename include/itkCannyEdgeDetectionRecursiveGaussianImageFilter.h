@@ -343,6 +343,8 @@ private:
 
   typename ListNodeStorageType::Pointer m_NodeStore;
   ListPointerType                       m_NodeList;
+
+  OutputImageType * m_OutputImage;
 };
 
 } // end of namespace itk

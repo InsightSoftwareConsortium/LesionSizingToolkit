@@ -78,6 +78,8 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,
   // Initialize the list
   m_NodeStore = ListNodeStorageType::New();
   m_NodeList = ListType::New();
+
+  m_OutputImage = nullptr;
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -163,7 +165,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Threa
   // Here input is the result from the gaussian filter
   //      output is the update buffer.
   typename OutputImageType::Pointer input = m_GaussianFilter->GetOutput();
-  typename OutputImageType::Pointer output = this->GetOutput();
+  typename OutputImageType::Pointer output = this->m_OutputImage;
 
   // set iterator radius
   Size<ImageDimension> radius;
@@ -299,11 +301,16 @@ template <typename TInputImage, typename TOutputImage>
 void
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GenerateData()
 {
-  // Allocate the output
-  this->GetOutput()->SetBufferedRegion(this->GetOutput()->GetRequestedRegion());
-  this->GetOutput()->Allocate();
+  // Use grafting of the input and output of this filter to isolate
+  // the mini-pipeline and other modifications from the pipeline.
+  typename InputImageType::Pointer input = InputImageType::New();
+  input->Graft(const_cast<InputImageType *>(this->GetInput()));
 
-  typename InputImageType::ConstPointer input = this->GetInput();
+  // Allocate the output, and graft
+  Superclass::AllocateOutputs();
+  typename OutputImageType::Pointer output = OutputImageType::New();
+  output->Graft(this->GetOutput());
+  this->m_OutputImage = output;
 
   typename ZeroCrossingImageFilter<TOutputImage, TOutputImage>::Pointer zeroCrossFilter =
     ZeroCrossingImageFilter<TOutputImage, TOutputImage>::New();
@@ -337,7 +344,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Gener
 
   // Calculate the zero crossings of the 2nd directional derivative and write
   // the result to output buffer.
-  zeroCrossFilter->SetInput(this->GetOutput());
+  zeroCrossFilter->SetInput(this->m_OutputImage);
   zeroCrossFilter->Update();
 
   // 4. Hysteresis Thresholding---------
@@ -353,6 +360,9 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Gener
 
   // Then do the double threshoulding upon the edge reponses
   this->HysteresisThresholding();
+
+  this->GraftOutput(output);
+  this->m_OutputImage = nullptr;
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -372,7 +382,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Hyste
 
   oit.GoToBegin();
 
-  ImageRegionIterator<TOutputImage> uit(this->GetOutput(), this->GetOutput()->GetRequestedRegion());
+  ImageRegionIterator<TOutputImage> uit(this->m_OutputImage, this->m_OutputImage->GetRequestedRegion());
   uit.GoToBegin();
   while (!uit.IsAtEnd())
   {
@@ -415,7 +425,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Follo
   radius.Fill(1);
 
   ConstNeighborhoodIterator<TOutputImage>    oit(radius, input, input->GetRequestedRegion());
-  ImageRegionIteratorWithIndex<TOutputImage> uit(this->GetOutput(), this->GetOutput()->GetRequestedRegion());
+  ImageRegionIteratorWithIndex<TOutputImage> uit(this->m_OutputImage, this->m_OutputImage->GetRequestedRegion());
 
   uit.SetIndex(index);
   if (uit.Get() == NumericTraits<OutputImagePixelType>::One)
@@ -482,7 +492,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Threa
   // Here input is the result from the gaussian filter
   //      input1 is the 2nd derivative result
   //      output is the gradient of 2nd derivative
-  typename OutputImageType::Pointer input1 = this->GetOutput();
+  typename OutputImageType::Pointer input1 = this->m_OutputImage;
   typename OutputImageType::Pointer input = m_GaussianFilter->GetOutput();
 
   typename InputImageType::Pointer output = m_UpdateBuffer1;
