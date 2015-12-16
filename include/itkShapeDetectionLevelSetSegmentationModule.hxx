@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkShapeDetectionLevelSetSegmentationModule_hxx
-#define __itkShapeDetectionLevelSetSegmentationModule_hxx
+#ifndef itkShapeDetectionLevelSetSegmentationModule_hxx
+#define itkShapeDetectionLevelSetSegmentationModule_hxx
 
 #include "itkShapeDetectionLevelSetSegmentationModule.h"
 #include "itkShapeDetectionLevelSetImageFilter.h"

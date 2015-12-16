@@ -16,8 +16,8 @@
  *
  *=========================================================================*/
 
-#ifndef __itkLesionSegmentationCommandLineProgressReporter_h
-#define __itkLesionSegmentatioCommandLineProgressReporter_h
+#ifndef itkLesionSegmentationCommandLineProgressReporter_h
+#define itkLesionSegmentatioCommandLineProgressReporter_h
 
 #include "itkLesionSegmentationImageFilter8.h"
 #include "itkCommand.h"

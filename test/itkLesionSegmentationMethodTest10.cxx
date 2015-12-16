@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkLesionSegmentationMethodTest10.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -14,7 +14,7 @@
 =========================================================================*/
 
 // The test runs a shape detection level set from user supplied seed points
-// and then runs the shape detection level set with the results from the 
+// and then runs the shape detection level set with the results from the
 // fast marching to get the final segmentation.
 
 #include "itkLesionSegmentationMethod.h"
@@ -62,7 +62,7 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[2] );
 
-  try 
+  try
     {
     inputImageReader->Update();
     }
@@ -76,7 +76,7 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
   typedef itk::LesionSegmentationMethod< Dimension >   MethodType;
 
   MethodType::Pointer  lesionSegmentationMethod = MethodType::New();
-  
+
   typedef itk::ImageMaskSpatialObject< Dimension > ImageMaskSpatialObjectType;
 
   ImageMaskSpatialObjectType::Pointer regionOfInterest = ImageMaskSpatialObjectType::New();
@@ -91,10 +91,10 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
 
   typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
- 
+
   typedef itk::CannyEdgesFeatureGenerator< Dimension >   CannyEdgesFeatureGeneratorType;
   CannyEdgesFeatureGeneratorType::Pointer  cannyEdgesGenerator = CannyEdgesFeatureGeneratorType::New();
- 
+
   typedef itk::MinimumFeatureAggregator< Dimension >   FeatureAggregatorType;
   FeatureAggregatorType::Pointer featureAggregator = FeatureAggregatorType::New();
 
@@ -113,16 +113,16 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
 
   inputImage->DisconnectPipeline();
 
-  typedef itk::IsotropicResampler< Dimension >   ResampleFilterType;
-  typedef ResampleFilterType::SpatialObjectType    SpatialObjectType;
+  typedef itk::IsotropicResampler< Dimension >  ResampleFilterType;
+  typedef ResampleFilterType::SpatialObjectType SpatialObjectType;
 
   ResampleFilterType::Pointer  resampler = ResampleFilterType::New();
- 
+
   inputObject->SetImage( inputImage );
 
   resampler->SetInput( inputObject );
 
-  try 
+  try
     {
     resampler->Update();
     }
@@ -155,7 +155,7 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
                         inputImage->GetSpacing()[2] };
   double maxSpacing = (spacing[0] > spacing[1] ? spacing[0] : spacing[1]);
   maxSpacing = (maxSpacing > spacing[2] ? maxSpacing : spacing[2]);
-  
+
   cannyEdgesGenerator->SetSigma( argc > 4 ? atof(argv[4]) : maxSpacing );
   cannyEdgesGenerator->SetUpperThreshold( argc > 5 ? atof(argv[5]) : 150.0 );
   cannyEdgesGenerator->SetLowerThreshold( argc > 6 ? atof(argv[6]) :  75.0 );
@@ -172,7 +172,7 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
   typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
-  
+
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName( argv[1] );
@@ -182,14 +182,14 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
 
   lesionSegmentationMethod->Update();
 
-  
+
   typedef SegmentationModuleType::SpatialObjectType           SpatialObjectType;
   typedef SegmentationModuleType::OutputSpatialObjectType     OutputSpatialObjectType;
   typedef SegmentationModuleType::OutputImageType             OutputImageType;
 
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
 
-  OutputSpatialObjectType::ConstPointer outputObject = 
+  OutputSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -202,7 +202,7 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
   writer->UseCompressionOn();
 
 
-  try 
+  try
     {
     writer->Update();
     }
@@ -213,12 +213,12 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
     }
 
 
-  // 
+  //
   // Exercise the exception on the number of feature generators
   //
   lesionSegmentationMethod->AddFeatureGenerator( lungWallGenerator );
 
-  try 
+  try
     {
     lesionSegmentationMethod->Update();
     std::cerr << "Failure to throw expected exception" << std::endl;

@@ -95,7 +95,6 @@ int itkFrangiTubularnessFeatureGeneratorTest1( int argc, char * argv [] )
     }
 
 
-
   try 
     {
     featureGenerator->Update();

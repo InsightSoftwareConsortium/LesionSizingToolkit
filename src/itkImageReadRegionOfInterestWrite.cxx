@@ -45,7 +45,6 @@ int main( int argc, char ** argv )
     }
 
 
-
   typedef signed short        InputPixelType;
   typedef signed short        OutputPixelType;
   const   unsigned int        Dimension = 3;

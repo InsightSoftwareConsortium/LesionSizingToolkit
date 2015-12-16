@@ -23,8 +23,8 @@ int itkRegionGrowingSegmentationModuleTest1( int itkNotUsed(argc), char * itkNot
 {
   const unsigned int Dimension = 3;
 
-  typedef itk::RegionGrowingSegmentationModule< Dimension >   SegmentationModuleType;
-  typedef SegmentationModuleType::SpatialObjectType    SpatialObjectType;
+  typedef itk::RegionGrowingSegmentationModule< Dimension > SegmentationModuleType;
+  typedef SegmentationModuleType::SpatialObjectType         SpatialObjectType;
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
   

@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkConfidenceConnectedSegmentationModule_h
-#define __itkConfidenceConnectedSegmentationModule_h
+#ifndef itkConfidenceConnectedSegmentationModule_h
+#define itkConfidenceConnectedSegmentationModule_h
 
 #include "itkRegionGrowingSegmentationModule.h"
 #include "itkConfidenceConnectedImageFilter.h"
@@ -33,7 +33,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_EXPORT ConfidenceConnectedSegmentationModule : 
+class ITK_EXPORT ConfidenceConnectedSegmentationModule :
   public RegionGrowingSegmentationModule<NDimension>
 {
 public:
@@ -77,7 +77,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   double        m_SigmaMultiplier;
-  
+
 };
 
 } // end namespace itk

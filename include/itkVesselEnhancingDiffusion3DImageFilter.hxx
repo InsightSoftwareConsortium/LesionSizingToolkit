@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVesselEnhancingDiffusion3DImageFilter_hxx
-#define __itkVesselEnhancingDiffusion3DImageFilter_hxx
+#ifndef itkVesselEnhancingDiffusion3DImageFilter_hxx
+#define itkVesselEnhancingDiffusion3DImageFilter_hxx
 
 #include "itkVesselEnhancingDiffusion3DImageFilter.h"
 

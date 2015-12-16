@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkSatoVesselnessSigmoidFeatureGeneratorTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -49,7 +49,7 @@ int itkSatoVesselnessSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try 
+  try
     {
     reader->Update();
     }
@@ -63,7 +63,7 @@ int itkSatoVesselnessSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
   typedef SatoVesselnessSigmoidFeatureGeneratorType::SpatialObjectType    SpatialObjectType;
 
   SatoVesselnessSigmoidFeatureGeneratorType::Pointer  featureGenerator = SatoVesselnessSigmoidFeatureGeneratorType::New();
-  
+
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -101,8 +101,7 @@ int itkSatoVesselnessSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
     }
 
 
-
-  try 
+  try
     {
     featureGenerator->Update();
     }
@@ -115,7 +114,7 @@ int itkSatoVesselnessSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
-  OutputImageSpatialObjectType::ConstPointer outputObject = 
+  OutputImageSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputImageSpatialObjectType * >( feature.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -127,7 +126,7 @@ int itkSatoVesselnessSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
   writer->UseCompressionOn();
 
 
-  try 
+  try
     {
     writer->Update();
     }
@@ -141,6 +140,6 @@ int itkSatoVesselnessSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 
   featureGenerator->Print( std::cout );
 
- 
+
   return EXIT_SUCCESS;
 }

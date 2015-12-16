@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkGrayscaleImageSegmentationVolumeEstimator_h
-#define __itkGrayscaleImageSegmentationVolumeEstimator_h
+#ifndef itkGrayscaleImageSegmentationVolumeEstimator_h
+#define itkGrayscaleImageSegmentationVolumeEstimator_h
 
 #include "itkSegmentationVolumeEstimator.h"
 

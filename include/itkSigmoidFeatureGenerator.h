@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSigmoidFeatureGenerator_h
-#define __itkSigmoidFeatureGenerator_h
+#ifndef itkSigmoidFeatureGenerator_h
+#define itkSigmoidFeatureGenerator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"

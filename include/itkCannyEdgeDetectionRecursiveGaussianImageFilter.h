@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkCannyEdgeDetectionRecursiveGaussianImageFilter_h
-#define __itkCannyEdgeDetectionRecursiveGaussianImageFilter_h
+#ifndef itkCannyEdgeDetectionRecursiveGaussianImageFilter_h
+#define itkCannyEdgeDetectionRecursiveGaussianImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"

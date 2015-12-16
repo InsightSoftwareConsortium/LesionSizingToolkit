@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkMinimumFeatureAggregator_h
-#define __itkMinimumFeatureAggregator_h
+#ifndef itkMinimumFeatureAggregator_h
+#define itkMinimumFeatureAggregator_h
 
 #include "itkFeatureAggregator.h"
 

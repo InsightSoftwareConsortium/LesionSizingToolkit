@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkLungWallFeatureGenerator_h
-#define __itkLungWallFeatureGenerator_h
+#ifndef itkLungWallFeatureGenerator_h
+#define itkLungWallFeatureGenerator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"

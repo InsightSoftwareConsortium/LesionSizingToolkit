@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkWeightedSumFeatureAggregator_hxx
-#define __itkWeightedSumFeatureAggregator_hxx
+#ifndef itkWeightedSumFeatureAggregator_hxx
+#define itkWeightedSumFeatureAggregator_hxx
 
 #include "itkWeightedSumFeatureAggregator.h"
 #include "itkImageSpatialObject.h"

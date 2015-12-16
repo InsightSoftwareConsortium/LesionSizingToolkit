@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFrangiTubularnessImageFilter_h
-#define __itkFrangiTubularnessImageFilter_h
+#ifndef itkFrangiTubularnessImageFilter_h
+#define itkFrangiTubularnessImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "vnl/vnl_math.h"

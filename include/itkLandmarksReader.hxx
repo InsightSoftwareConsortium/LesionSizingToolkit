@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkLandmarksReader_hxx
-#define __itkLandmarksReader_hxx
+#ifndef itkLandmarksReader_hxx
+#define itkLandmarksReader_hxx
 
 #include "itkLandmarksReader.h"
 #include "itkSpatialObjectReader.h"

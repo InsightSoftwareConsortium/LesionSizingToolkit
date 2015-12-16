@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSatoVesselnessFeatureGenerator_h
-#define __itkSatoVesselnessFeatureGenerator_h
+#ifndef itkSatoVesselnessFeatureGenerator_h
+#define itkSatoVesselnessFeatureGenerator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"

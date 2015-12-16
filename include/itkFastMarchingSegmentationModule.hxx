@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFastMarchingSegmentationModule_hxx
-#define __itkFastMarchingSegmentationModule_hxx
+#ifndef itkFastMarchingSegmentationModule_hxx
+#define itkFastMarchingSegmentationModule_hxx
 
 #include "itkFastMarchingSegmentationModule.h"
 #include "itkImageRegionIterator.h"

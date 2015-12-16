@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkMaximumFeatureAggregator_h
-#define __itkMaximumFeatureAggregator_h
+#ifndef itkMaximumFeatureAggregator_h
+#define itkMaximumFeatureAggregator_h
 
 #include "itkFeatureAggregator.h"
 

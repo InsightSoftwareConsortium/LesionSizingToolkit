@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkSegmentationVolumeEstimatorTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -26,10 +26,10 @@ class VolumeEstimatorSurrogate : public SegmentationVolumeEstimator<3>
 {
 public:
   /** Standard class typedefs. */
-  typedef VolumeEstimatorSurrogate   Self;
-  typedef ProcessObject                 Superclass;
-  typedef SmartPointer<Self>            Pointer;
-  typedef SmartPointer<const Self>      ConstPointer;
+  typedef VolumeEstimatorSurrogate Self;
+  typedef ProcessObject            Superclass;
+  typedef SmartPointer<Self>       Pointer;
+  typedef SmartPointer<const Self> ConstPointer;
 
   itkNewMacro( Self );
 
@@ -46,7 +46,7 @@ int itkSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed
   typedef VolumeEstimatorType::SpatialObjectType          SpatialObjectType;
 
   VolumeEstimatorType::Pointer  volumeEstimator = VolumeEstimatorType::New();
-  
+
   typedef itk::ImageSpatialObject< Dimension > ImageSpatialObjectType;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
@@ -68,6 +68,6 @@ int itkSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed
   volumeEstimator->Print( std::cout );
 
   std::cout << "Class name = " << volumeEstimator->GetNameOfClass() << std::endl;
-  
+
   return EXIT_SUCCESS;
 }

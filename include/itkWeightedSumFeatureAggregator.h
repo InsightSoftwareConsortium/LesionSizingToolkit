@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkWeightedSumFeatureAggregator_h
-#define __itkWeightedSumFeatureAggregator_h
+#ifndef itkWeightedSumFeatureAggregator_h
+#define itkWeightedSumFeatureAggregator_h
 
 #include "itkFeatureAggregator.h"
 

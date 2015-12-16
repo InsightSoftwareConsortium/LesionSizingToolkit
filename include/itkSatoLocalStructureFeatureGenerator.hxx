@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSatoLocalStructureFeatureGenerator_hxx
-#define __itkSatoLocalStructureFeatureGenerator_hxx
+#ifndef itkSatoLocalStructureFeatureGenerator_hxx
+#define itkSatoLocalStructureFeatureGenerator_hxx
 
 #include "itkSatoLocalStructureFeatureGenerator.h"
 

@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkDescoteauxSheetnessImageFilter_h
-#define __itkDescoteauxSheetnessImageFilter_h
+#ifndef itkDescoteauxSheetnessImageFilter_h
+#define itkDescoteauxSheetnessImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "vnl/vnl_math.h"

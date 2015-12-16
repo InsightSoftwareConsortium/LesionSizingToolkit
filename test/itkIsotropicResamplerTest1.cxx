@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkIsotropicResamplerTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -48,7 +48,7 @@ int itkIsotropicResamplerTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try 
+  try
     {
     reader->Update();
     }
@@ -58,11 +58,11 @@ int itkIsotropicResamplerTest1( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  typedef itk::IsotropicResampler< Dimension >   ResampleFilterType;
-  typedef ResampleFilterType::SpatialObjectType    SpatialObjectType;
+  typedef itk::IsotropicResampler< Dimension >  ResampleFilterType;
+  typedef ResampleFilterType::SpatialObjectType SpatialObjectType;
 
   ResampleFilterType::Pointer  resampler = ResampleFilterType::New();
-  
+
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -74,7 +74,7 @@ int itkIsotropicResamplerTest1( int argc, char * argv [] )
 
   resampler->SetInput( inputObject );
 
-  try 
+  try
     {
     resampler->Update();
     }
@@ -87,7 +87,7 @@ int itkIsotropicResamplerTest1( int argc, char * argv [] )
 
   SpatialObjectType::ConstPointer resampledImage = resampler->GetOutput();
 
-  OutputImageSpatialObjectType::ConstPointer outputObject = 
+  OutputImageSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputImageSpatialObjectType * >( resampledImage.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -99,7 +99,7 @@ int itkIsotropicResamplerTest1( int argc, char * argv [] )
   writer->UseCompressionOn();
 
 
-  try 
+  try
     {
     writer->Update();
     }
@@ -112,6 +112,6 @@ int itkIsotropicResamplerTest1( int argc, char * argv [] )
   std::cout << "Name Of Class = " << resampler->GetNameOfClass() << std::endl;
 
   resampler->Print( std::cout );
- 
+
   return EXIT_SUCCESS;
 }

@@ -22,8 +22,8 @@ int itkFeatureGeneratorTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
   const unsigned int Dimension = 3;
 
-  typedef itk::FeatureGenerator< Dimension >   FeatureGeneratorType;
-  typedef FeatureGeneratorType::SpatialObjectType    SpatialObjectType;
+  typedef itk::FeatureGenerator< Dimension >      FeatureGeneratorType;
+  typedef FeatureGeneratorType::SpatialObjectType SpatialObjectType;
 
   FeatureGeneratorType::Pointer  featureGenerator = FeatureGeneratorType::New();
   

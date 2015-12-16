@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFeatureAggregator_hxx
-#define __itkFeatureAggregator_hxx
+#ifndef itkFeatureAggregator_hxx
+#define itkFeatureAggregator_hxx
 
 #include "itkFeatureAggregator.h"
 #include "itkImageSpatialObject.h"

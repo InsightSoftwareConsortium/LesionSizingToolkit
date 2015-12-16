@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkCannyEdgesFeatureGenerator_hxx
-#define __itkCannyEdgesFeatureGenerator_hxx
+#ifndef itkCannyEdgesFeatureGenerator_hxx
+#define itkCannyEdgesFeatureGenerator_hxx
 
 #include "itkCannyEdgesFeatureGenerator.h"
 
@@ -36,7 +36,7 @@ CannyEdgesFeatureGenerator<NDimension>
   this->m_RescaleFilter     = RescaleFilterType::New();
   this->m_CannyFilter       = CannyEdgeFilterType::New();
 
-  typename OutputImageSpatialObjectType::Pointer 
+  typename OutputImageSpatialObjectType::Pointer
     outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
@@ -140,7 +140,7 @@ CannyEdgesFeatureGenerator<NDimension>
 // Set value of Sigma (isotropic)
 
 template <unsigned int NDimension>
-void 
+void
 CannyEdgesFeatureGenerator<NDimension>
 ::SetSigma( ScalarRealType sigma )
 {
@@ -152,7 +152,7 @@ CannyEdgesFeatureGenerator<NDimension>
 // Set value of Sigma (an-isotropic)
 
 template <unsigned int NDimension>
-void 
+void
 CannyEdgesFeatureGenerator<NDimension>
 ::SetSigmaArray( const SigmaArrayType & sigma )
 {

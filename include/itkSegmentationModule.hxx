@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSegmentationModule_hxx
-#define __itkSegmentationModule_hxx
+#ifndef itkSegmentationModule_hxx
+#define itkSegmentationModule_hxx
 
 #include "itkSegmentationModule.h"
 

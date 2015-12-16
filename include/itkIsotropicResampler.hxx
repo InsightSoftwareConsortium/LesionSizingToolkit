@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkIsotropicResampler_hxx
-#define __itkIsotropicResampler_hxx
+#ifndef itkIsotropicResampler_hxx
+#define itkIsotropicResampler_hxx
 
 #include "itkIsotropicResampler.h"
 #include "itkResampleImageFilter.h"

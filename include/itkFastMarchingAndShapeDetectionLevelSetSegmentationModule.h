@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFastMarchingAndShapeDetectionLevelSetSegmentationModule_h
-#define __itkFastMarchingAndShapeDetectionLevelSetSegmentationModule_h
+#ifndef itkFastMarchingAndShapeDetectionLevelSetSegmentationModule_h
+#define itkFastMarchingAndShapeDetectionLevelSetSegmentationModule_h
 
 #include "itkSinglePhaseLevelSetSegmentationModule.h"
 #include "itkFastMarchingSegmentationModule.h"

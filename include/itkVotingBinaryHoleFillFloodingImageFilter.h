@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVotingBinaryHoleFillFloodingImageFilter_h
-#define __itkVotingBinaryHoleFillFloodingImageFilter_h
+#ifndef itkVotingBinaryHoleFillFloodingImageFilter_h
+#define itkVotingBinaryHoleFillFloodingImageFilter_h
 
 #include "itkImage.h"
 #include "itkVotingBinaryImageFilter.h"

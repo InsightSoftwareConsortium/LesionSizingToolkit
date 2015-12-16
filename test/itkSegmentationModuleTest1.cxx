@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkSegmentationModuleTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -23,11 +23,11 @@ int itkSegmentationModuleTest1( int itkNotUsed(argc), char * itkNotUsed(argv) []
 {
   const unsigned int Dimension = 3;
 
-  typedef itk::SegmentationModule< Dimension >   SegmentationModuleType;
-  typedef SegmentationModuleType::SpatialObjectType    SpatialObjectType;
+  typedef itk::SegmentationModule< Dimension >      SegmentationModuleType;
+  typedef SegmentationModuleType::SpatialObjectType SpatialObjectType;
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-  
+
   typedef itk::ImageSpatialObject< Dimension > ImageSpatialObjectType;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
@@ -46,6 +46,6 @@ int itkSegmentationModuleTest1( int itkNotUsed(argc), char * itkNotUsed(argv) []
   segmentationModule->Print( std::cout );
 
   std::cout << "Class name = " << segmentationModule->GetNameOfClass() << std::endl;
-  
+
   return EXIT_SUCCESS;
 }

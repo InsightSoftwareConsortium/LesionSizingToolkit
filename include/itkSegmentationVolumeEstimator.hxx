@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSegmentationVolumeEstimator_hxx
-#define __itkSegmentationVolumeEstimator_hxx
+#ifndef itkSegmentationVolumeEstimator_hxx
+#define itkSegmentationVolumeEstimator_hxx
 
 #include "itkSegmentationVolumeEstimator.h"
 #include "itkImageSpatialObject.h"

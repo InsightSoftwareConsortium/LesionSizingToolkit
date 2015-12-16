@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFrangiTubularnessFeatureGenerator_h
-#define __itkFrangiTubularnessFeatureGenerator_h
+#ifndef itkFrangiTubularnessFeatureGenerator_h
+#define itkFrangiTubularnessFeatureGenerator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"

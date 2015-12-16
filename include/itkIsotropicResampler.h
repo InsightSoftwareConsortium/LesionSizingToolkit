@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkIsotropicResampler_h
-#define __itkIsotropicResampler_h
+#ifndef itkIsotropicResampler_h
+#define itkIsotropicResampler_h
 
 #include "itkImage.h"
 #include "itkImageSpatialObject.h"

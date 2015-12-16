@@ -1,9 +1,9 @@
 /*=========================================================================
-const 
+const
   Program:   Lesion Sizing Toolkit
   Module:    itkRegionCompetitionImageFilterTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -24,15 +24,16 @@ const
 int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
   const unsigned int Dimension = 3;
-  typedef signed short    InputPixelType;
-  typedef unsigned char   BinaryPixelType;
-  typedef unsigned short   LabelPixelType;
+
+  typedef signed short   InputPixelType;
+  typedef unsigned char  BinaryPixelType;
+  typedef unsigned short LabelPixelType;
 
   typedef itk::Image< InputPixelType,  Dimension >      InputImageType;
   typedef itk::Image< BinaryPixelType, Dimension >      BinaryImageType;
   typedef itk::Image< LabelPixelType,  Dimension >      LabelImageType;
 
-  typedef itk::BinaryThresholdImageFilter< 
+  typedef itk::BinaryThresholdImageFilter<
     InputImageType, BinaryImageType >  ThresholdFilterType;
 
   typedef itk::ConnectedComponentImageFilter<
@@ -41,7 +42,7 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   typedef itk::RelabelComponentImageFilter<
     LabelImageType, LabelImageType > RelabelFilterType;
 
-  typedef itk::RegionCompetitionImageFilter< 
+  typedef itk::RegionCompetitionImageFilter<
     InputImageType, LabelImageType >    CompetitionFilterType;
 
 
@@ -50,9 +51,9 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   ComponentsFilterType::Pointer componentsFilter = ComponentsFilterType::New();
 
   RelabelFilterType::Pointer relabelerFilter = RelabelFilterType::New();
-  
+
   CompetitionFilterType::Pointer competitionFilter = CompetitionFilterType::New();
- 
+
 
   //
   // Create an input image
@@ -114,7 +115,7 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   inputImage->TransformIndexToPhysicalPoint( index1, point1 );
   inputImage->TransformIndexToPhysicalPoint( index2, point2 );
 
- 
+
   typedef itk::ImageRegionIteratorWithIndex< InputImageType > IteratorType;
 
   IteratorType itr( inputImage, itkregion );

@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkMorphologicalOpenningFeatureGenerator_hxx
-#define __itkMorphologicalOpenningFeatureGenerator_hxx
+#ifndef itkMorphologicalOpenningFeatureGenerator_hxx
+#define itkMorphologicalOpenningFeatureGenerator_hxx
 
 #include "itkMorphologicalOpenningFeatureGenerator.h"
 #include "itkProgressAccumulator.h"

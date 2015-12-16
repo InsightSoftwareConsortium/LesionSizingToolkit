@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkCannyEdgesFeatureGenerator_h
-#define __itkCannyEdgesFeatureGenerator_h
+#ifndef itkCannyEdgesFeatureGenerator_h
+#define itkCannyEdgesFeatureGenerator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"
@@ -32,9 +32,9 @@ namespace itk
  * edges in the image.
  *
  * \par Overview
- * The class generates features that can be used as the speed term for 
+ * The class generates features that can be used as the speed term for
  * computing a canny level set. The class takes an input image
- *   
+ *
  *    Input -> CastToFloat -> CannyEdgeFilter -> InvertFilter
  *
  * The resulting feature is ideally used as the speed term for a level set
@@ -42,12 +42,12 @@ namespace itk
  * onto edges (which are extracted by the canny filter).
  *
  * There are two parameters to this feature generator.
- * (1) UpperThreshold/LowerThreshold: These set the thresholding values of 
- *     the Canny edge detection. The canny algorithm incorporates a 
+ * (1) UpperThreshold/LowerThreshold: These set the thresholding values of
+ *     the Canny edge detection. The canny algorithm incorporates a
  *     hysteresis thresholding which is applied to the gradient magnitude
  *     of the smoothed image to find edges.
  * (2) Sigma.  Controls the smoothing parameter of the Gaussian filtering
- *     done during Canny edge detection. The first step of canny edge 
+ *     done during Canny edge detection. The first step of canny edge
  *     detection is to smooth the input with a Gaussian filter. Second
  *     derivatives etc are computed on the smoothed image.
  *
@@ -85,7 +85,7 @@ public:
 
   typedef typename NumericTraits<InputPixelType>::ScalarRealType ScalarRealType;
   typedef FixedArray< ScalarRealType, itkGetStaticConstMacro(Dimension) > SigmaArrayType;
-  
+
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
   void SetInput( const SpatialObjectType * input );
@@ -95,7 +95,7 @@ public:
    * SpatialObject. */
   const SpatialObjectType * GetFeature() const;
 
-  /** Set Sigma value. Sigma is measured in the units of image spacing. You 
+  /** Set Sigma value. Sigma is measured in the units of image spacing. You
     may use the method SetSigma to set the same value across each axis or
     use the method SetSigmaArray if you need different values along each
     axis. */
@@ -103,7 +103,7 @@ public:
   void SetSigma( ScalarRealType sigma );
   SigmaArrayType GetSigmaArray() const;
   ScalarRealType GetSigma() const;
-  
+
   itkSetMacro( UpperThreshold, double );
   itkGetMacro( UpperThreshold, double );
   itkSetMacro( LowerThreshold, double );

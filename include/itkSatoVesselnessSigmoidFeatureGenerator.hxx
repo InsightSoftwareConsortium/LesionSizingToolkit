@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSatoVesselnessSigmoidFeatureGenerator_hxx
-#define __itkSatoVesselnessSigmoidFeatureGenerator_hxx
+#ifndef itkSatoVesselnessSigmoidFeatureGenerator_hxx
+#define itkSatoVesselnessSigmoidFeatureGenerator_hxx
 
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkProgressAccumulator.h"

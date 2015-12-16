@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkGradientMagnitudeSigmoidFeatureGenerator_h
-#define __itkGradientMagnitudeSigmoidFeatureGenerator_h
+#ifndef itkGradientMagnitudeSigmoidFeatureGenerator_h
+#define itkGradientMagnitudeSigmoidFeatureGenerator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"

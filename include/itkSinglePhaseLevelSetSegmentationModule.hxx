@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSinglePhaseLevelSetSegmentationModule_hxx
-#define __itkSinglePhaseLevelSetSegmentationModule_hxx
+#ifndef itkSinglePhaseLevelSetSegmentationModule_hxx
+#define itkSinglePhaseLevelSetSegmentationModule_hxx
 
 #include "itkSinglePhaseLevelSetSegmentationModule.h"
 #include "itkLandmarkSpatialObject.h"

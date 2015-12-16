@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSatoVesselnessSigmoidFeatureGenerator_h
-#define __itkSatoVesselnessSigmoidFeatureGenerator_h
+#ifndef itkSatoVesselnessSigmoidFeatureGenerator_h
+#define itkSatoVesselnessSigmoidFeatureGenerator_h
 
 #include "itkSatoVesselnessFeatureGenerator.h"
 #include "itkSigmoidImageFilter.h"

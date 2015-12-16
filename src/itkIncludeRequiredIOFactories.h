@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef __itkTestDriverIncludeRequiredIOFactories_h
-#define __itkTestDriverIncludeRequiredIOFactories_h
+#ifndef itkIncludeRequiredIOFactories_h
+#define itkIncludeRequiredIOFactories_h
 #include "itkGDCMImageIOFactory.h"
 #include "itkMetaImageIOFactory.h"
 #include "itkPNGImageIOFactory.h"

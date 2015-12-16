@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkLandmarksReader_h
-#define __itkLandmarksReader_h
+#ifndef itkLandmarksReader_h
+#define itkLandmarksReader_h
 
 #include "itkProcessObject.h"
 #include "itkImage.h"

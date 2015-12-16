@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkLesionSegmentationMethod_h
-#define __itkLesionSegmentationMethod_h
+#ifndef itkLesionSegmentationMethod_h
+#define itkLesionSegmentationMethod_h
 
 #include "itkProcessObject.h"
 #include "itkImage.h"

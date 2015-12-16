@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkCannyEdgesDistanceAdvectionFieldFeatureGenerator_hxx
-#define __itkCannyEdgesDistanceAdvectionFieldFeatureGenerator_hxx
+#ifndef itkCannyEdgesDistanceAdvectionFieldFeatureGenerator_hxx
+#define itkCannyEdgesDistanceAdvectionFieldFeatureGenerator_hxx
 
 #include "itkCannyEdgesDistanceAdvectionFieldFeatureGenerator.h"
 
@@ -38,7 +38,7 @@ CannyEdgesDistanceAdvectionFieldFeatureGenerator<NDimension>
   this->m_MultiplyFilter    = MultiplyFilterType::New();
   this->m_GradientFilter    = GradientFilterType::New();
 
-  typename OutputImageSpatialObjectType::Pointer 
+  typename OutputImageSpatialObjectType::Pointer
     outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
@@ -127,8 +127,8 @@ CannyEdgesDistanceAdvectionFieldFeatureGenerator<NDimension>
 
   m_MultiplyFilter->SetInput1(m_GradientFilter->GetOutput());
   m_MultiplyFilter->SetInput2(m_DistanceMapFilter->GetOutput());
-  m_MultiplyFilter->Update();  
-  
+  m_MultiplyFilter->Update();
+
   typename OutputImageType::Pointer outputImage = this->m_MultiplyFilter->GetOutput();
 
   outputImage->DisconnectPipeline();

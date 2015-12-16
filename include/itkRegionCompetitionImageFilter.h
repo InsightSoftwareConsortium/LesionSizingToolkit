@@ -9,13 +9,13 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkRegionCompetitionImageFilter_h
-#define __itkRegionCompetitionImageFilter_h
+#ifndef itkRegionCompetitionImageFilter_h
+#define itkRegionCompetitionImageFilter_h
 
 #include "itkImage.h"
 #include "itkImageToImageFilter.h"
@@ -25,20 +25,20 @@
 namespace itk
 {
 
-/** \class RegionCompetitionImageFilter 
+/** \class RegionCompetitionImageFilter
  *
  * \brief Perform front-propagation from different starting labeled regions.
- * 
+ *
  * The filter expects two inputs: One gray-scale image and a labeled image.
  * The labels will be used as initial regions from which the fronts will be
  * propagated until they collide with other labeled regions. Each labeled front
  * will compete for pixels against other labels.
  *
- * \ingroup RegionGrowingSegmentation 
+ * \ingroup RegionGrowingSegmentation
  * \ingroup LesionSizingToolkit
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT RegionCompetitionImageFilter:
+class RegionCompetitionImageFilter:
     public ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
@@ -54,21 +54,21 @@ public:
   /** Run-time type information (and related methods).  */
   itkTypeMacro(RegionCompetitionImageFilter, ImageToImageFilter);
 
-  typedef TInputImage             InputImageType;
-  typedef typename InputImageType::Pointer                InputImagePointer;
-  typedef typename InputImageType::ConstPointer           InputImageConstPointer;
-  typedef typename InputImageType::RegionType             InputImageRegionType; 
-  typedef typename InputImageType::SizeType               InputSizeType;
-  typedef typename InputImageType::PixelType              InputImagePixelType; 
-  typedef typename InputImageType::IndexType              IndexType;
-  typedef typename InputImageType::OffsetValueType        OffsetValueType;
-  
-  typedef TOutputImage            OutputImageType;
-  typedef typename OutputImageType::Pointer               OutputImagePointer;
-  typedef typename OutputImageType::RegionType            OutputImageRegionType; 
-  typedef typename OutputImageType::PixelType             OutputImagePixelType; 
-  
-  
+  typedef TInputImage                              InputImageType;
+  typedef typename InputImageType::Pointer         InputImagePointer;
+  typedef typename InputImageType::ConstPointer    InputImageConstPointer;
+  typedef typename InputImageType::RegionType      InputImageRegionType;
+  typedef typename InputImageType::SizeType        InputSizeType;
+  typedef typename InputImageType::PixelType       InputImagePixelType;
+  typedef typename InputImageType::IndexType       IndexType;
+  typedef typename InputImageType::OffsetValueType OffsetValueType;
+
+  typedef TOutputImage                         OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointer;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef typename OutputImageType::PixelType  OutputImagePixelType;
+
+
   /** Image dimension constants */
   itkStaticConstMacro(InputImageDimension,  unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
@@ -103,7 +103,7 @@ protected:
   ~RegionCompetitionImageFilter();
 
   void GenerateData();
-  
+
   void PrintSelf ( std::ostream& os, Indent indent ) const;
 
 private:
@@ -132,7 +132,7 @@ private:
   void ClearSecondSeedArray();
 
   bool TestForAvailabilityAtCurrentPixel() const;
- 
+
   void PutCurrentPixelNeighborsIntoSeedArray();
 
   void ComputeArrayOfNeighborhoodBufferOffsets();
@@ -148,7 +148,7 @@ private:
   SeedArrayType *                   m_SeedArray2;
 
   InputImageRegionType              m_InternalRegion;
-  
+
   typedef std::vector<OutputImagePixelType> SeedNewValuesArrayType;
 
   SeedNewValuesArrayType *          m_SeedsNewValues;
@@ -157,25 +157,25 @@ private:
   unsigned int                      m_MaximumNumberOfIterations;
   unsigned int                      m_NumberOfPixelsChangedInLastIteration;
   unsigned int                      m_TotalNumberOfPixelsChanged;
-  
+
   IndexType                         m_CurrentPixelIndex;
 
   //
   // Variables used for addressing the Neighbors.
   // This could be factorized into a helper class.
   //
-  OffsetValueType                   m_OffsetTable[ InputImageDimension + 1 ]; 
-  
+  OffsetValueType                   m_OffsetTable[ InputImageDimension + 1 ];
+
   typedef std::vector< OffsetValueType >   NeighborOffsetArrayType;
 
   NeighborOffsetArrayType           m_NeighborBufferOffset;
 
 
   //
-  // Helper cache variables 
+  // Helper cache variables
   //
   const InputImageType *            m_InputImage;
-  const OutputImageType*       m_inputLabelsImage; 
+  const OutputImageType*       m_inputLabelsImage;
   OutputImageType *                 m_OutputImage;
 
   typedef itk::Image< unsigned char, InputImageDimension >  SeedMaskImageType;

@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
   typedef itk::Image<OutputPixelType, Dimension>   OutputImageType;
 
   typedef itk::ImageFileReader< InputImageType >  ReaderType;
-  typedef itk::ImageFileWriter< OutputImageType >   WriterType;
+  typedef itk::ImageFileWriter< OutputImageType > WriterType;
 
   typedef itk::CastImageFilter< InputImageType, RealImageType> CastToRealFilterType;
   typedef itk::CannyEdgeDetectionRecursiveGaussianImageFilter<RealImageType, OutputImageType> CannyFilter;

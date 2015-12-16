@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule_h
-#define __itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule_h
+#ifndef itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule_h
+#define itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule_h
 
 #include "itkSinglePhaseLevelSetSegmentationModule.h"
 #include "itkFastMarchingSegmentationModule.h"

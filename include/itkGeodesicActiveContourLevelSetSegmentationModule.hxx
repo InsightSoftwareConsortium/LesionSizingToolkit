@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkGeodesicActiveContourLevelSetSegmentationModule_hxx
-#define __itkGeodesicActiveContourLevelSetSegmentationModule_hxx
+#ifndef itkGeodesicActiveContourLevelSetSegmentationModule_hxx
+#define itkGeodesicActiveContourLevelSetSegmentationModule_hxx
 
 #include "itkGeodesicActiveContourLevelSetSegmentationModule.h"
 #include "itkGeodesicActiveContourLevelSetImageFilter.h"

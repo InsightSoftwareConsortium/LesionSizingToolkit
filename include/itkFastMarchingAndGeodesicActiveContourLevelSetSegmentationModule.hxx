@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule_hxx
-#define __itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule_hxx
+#ifndef itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule_hxx
+#define itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule_hxx
 
 #include "itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule.h"
 #include "itkGeodesicActiveContourLevelSetImageFilter.h"

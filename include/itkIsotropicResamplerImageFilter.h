@@ -9,13 +9,13 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkIsotropicResamplerImageFilter_h
-#define __itkIsotropicResamplerImageFilter_h
+#ifndef itkIsotropicResamplerImageFilter_h
+#define itkIsotropicResamplerImageFilter_h
 
 #include "itkResampleImageFilter.h"
 #include "itkImage.h"
@@ -44,10 +44,10 @@ public:
   typedef ImageToImageFilter<TInputImage, TOutputImage> Superclass;
 
   /** Image typedef support   */
-  typedef TInputImage  InputImageType;
-  typedef TOutputImage OutputImageType;
+  typedef TInputImage                         InputImageType;
+  typedef TOutputImage                        OutputImageType;
   typedef typename OutputImageType::Pointer   OutputImagePointer;
-      
+
   /** SmartPointer typedef support  */
   typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;

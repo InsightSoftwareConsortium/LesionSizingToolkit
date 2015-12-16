@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkLesionSegmentationImageFilter8_h
-#define __itkLesionSegmentationImageFilter8_h
+#ifndef itkLesionSegmentationImageFilter8_h
+#define itkLesionSegmentationImageFilter8_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"

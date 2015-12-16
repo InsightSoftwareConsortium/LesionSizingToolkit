@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -55,7 +55,7 @@ int main( int argc, char * argv[] )
 
   reader->SetFileName( argv[1] );
 
-  try 
+  try
     {
     reader->Update();
     }
@@ -98,7 +98,7 @@ int main( int argc, char * argv[] )
   typedef itk::LinearInterpolateImageFunction< ImageType, double >  LinearInterpolatorType;
 
   LinearInterpolatorType::Pointer linearInterpolator = LinearInterpolatorType::New();
-  
+
 
   switch( atoi( argv[4] ) )
     {
@@ -123,10 +123,10 @@ int main( int argc, char * argv[] )
     {
     minSpacing = (minSpacing > inputSpacing[i] ? inputSpacing[i] : minSpacing);
     }
-  
+
   ImageType::SpacingType outputSpacing;
 
-  const double finalSpacing = (strcmp( argv[3], "-minspacing" ) == 0) 
+  const double finalSpacing = (strcmp( argv[3], "-minspacing" ) == 0)
                                         ? minSpacing : atof( argv[3] );
 
   outputSpacing[0] = finalSpacing;
@@ -140,7 +140,7 @@ int main( int argc, char * argv[] )
   resampler->SetOutputDirection( inputImage->GetDirection() );
 
   ImageType::SizeType   inputSize = inputImage->GetLargestPossibleRegion().GetSize();
-  
+
   typedef ImageType::SizeType::SizeValueType SizeValueType;
 
   const double dx = inputSize[0] * inputSpacing[0] / outputSpacing[0];
@@ -165,7 +165,7 @@ int main( int argc, char * argv[] )
   writer->SetInput( resampler->GetOutput() );
   writer->UseCompressionOn();
 
-  try 
+  try
     {
     writer->Update();
     }
@@ -177,4 +177,3 @@ int main( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-

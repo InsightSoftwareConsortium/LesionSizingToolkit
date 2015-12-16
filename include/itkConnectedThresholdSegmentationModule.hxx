@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkConnectedThresholdSegmentationModule_hxx
-#define __itkConnectedThresholdSegmentationModule_hxx
+#ifndef itkConnectedThresholdSegmentationModule_hxx
+#define itkConnectedThresholdSegmentationModule_hxx
 
 #include "itkConnectedThresholdSegmentationModule.h"
 #include "itkProgressAccumulator.h"

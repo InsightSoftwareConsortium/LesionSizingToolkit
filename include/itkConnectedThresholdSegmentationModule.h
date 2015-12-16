@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkConnectedThresholdSegmentationModule_h
-#define __itkConnectedThresholdSegmentationModule_h
+#ifndef itkConnectedThresholdSegmentationModule_h
+#define itkConnectedThresholdSegmentationModule_h
 
 #include "itkRegionGrowingSegmentationModule.h"
 #include "itkConnectedThresholdImageFilter.h"

@@ -1,0 +1,2 @@
+include/.*\.h InternalVariables Disable
+test/.*\.cxx Namespace Disable

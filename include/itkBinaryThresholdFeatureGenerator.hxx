@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkBinaryThresholdFeatureGenerator_hxx
-#define __itkBinaryThresholdFeatureGenerator_hxx
+#ifndef itkBinaryThresholdFeatureGenerator_hxx
+#define itkBinaryThresholdFeatureGenerator_hxx
 
 #include "itkBinaryThresholdFeatureGenerator.h"
 #include "itkProgressAccumulator.h"
@@ -23,9 +23,6 @@
 namespace itk
 {
 
-/**
- * Constructor
- */
 template <unsigned int NDimension>
 BinaryThresholdFeatureGenerator<NDimension>
 ::BinaryThresholdFeatureGenerator()
@@ -45,18 +42,13 @@ BinaryThresholdFeatureGenerator<NDimension>
 }
 
 
-/**
- * Destructor
- */
 template <unsigned int NDimension>
 BinaryThresholdFeatureGenerator<NDimension>
 ::~BinaryThresholdFeatureGenerator()
 {
 }
 
-/**
- * PrintSelf
- */
+
 template <unsigned int NDimension>
 void
 BinaryThresholdFeatureGenerator<NDimension>
@@ -66,9 +58,6 @@ BinaryThresholdFeatureGenerator<NDimension>
 }
 
 
-/*
- * Generate Data
- */
 template <unsigned int NDimension>
 void
 BinaryThresholdFeatureGenerator<NDimension>

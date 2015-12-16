@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkLocalStructureImageFilter_h
-#define __itkLocalStructureImageFilter_h
+#ifndef itkLocalStructureImageFilter_h
+#define itkLocalStructureImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "vnl/vnl_math.h"

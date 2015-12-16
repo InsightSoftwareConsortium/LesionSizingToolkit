@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkCannyEdgesDistanceFeatureGenerator_h
-#define __itkCannyEdgesDistanceFeatureGenerator_h
+#ifndef itkCannyEdgesDistanceFeatureGenerator_h
+#define itkCannyEdgesDistanceFeatureGenerator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"
@@ -30,13 +30,13 @@ namespace itk
 {
 
 /** \class CannyEdgesDistanceFeatureGenerator
- * \brief Generates a feature image by computing the distance map to the canny 
+ * \brief Generates a feature image by computing the distance map to the canny
  * edges in the image.
  *
  * \par Overview
- * The class generates features that can be used as the speed term for 
+ * The class generates features that can be used as the speed term for
  * computing a canny level set. The class takes an input image
- *   
+ *
  *    Input -> CastToFloat -> CannyEdgeFilter -> UnsignedDistanceMap
  *
  * The resulting feature is ideally used as the speed term for a level set
@@ -44,12 +44,12 @@ namespace itk
  * onto edges (which are extracted by the canny filter).
  *
  * There are two parameters to this feature generator.
- * (1) UpperThreshold/LowerThreshold: These set the thresholding values of 
- *     the Canny edge detection. The canny algorithm incorporates a 
+ * (1) UpperThreshold/LowerThreshold: These set the thresholding values of
+ *     the Canny edge detection. The canny algorithm incorporates a
  *     hysteresis thresholding which is applied to the gradient magnitude
  *     of the smoothed image to find edges.
  * (2) Variance.  Controls the smoothing paramter of the gaussian filtering
- *     done during Canny edge detection. The first step of canny edge 
+ *     done during Canny edge detection. The first step of canny edge
  *     detection is to smooth the input with a gaussian filter. Second
  *     derivatives etc are computed on the smoothed image.
  *
@@ -97,7 +97,7 @@ public:
    * SpatialObject. */
   const SpatialObjectType * GetFeature() const;
 
-  /** Set Sigma value. Sigma is measured in the units of image spacing. You 
+  /** Set Sigma value. Sigma is measured in the units of image spacing. You
     may use the method SetSigma to set the same value across each axis or
     use the method SetSigmaArray if you need different values along each
     axis. */

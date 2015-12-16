@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkSatoVesselnessFeatureGeneratorTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -48,7 +48,7 @@ int itkSatoVesselnessFeatureGeneratorTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try 
+  try
     {
     reader->Update();
     }
@@ -62,7 +62,7 @@ int itkSatoVesselnessFeatureGeneratorTest1( int argc, char * argv [] )
   typedef SatoVesselnessFeatureGeneratorType::SpatialObjectType    SpatialObjectType;
 
   SatoVesselnessFeatureGeneratorType::Pointer  featureGenerator = SatoVesselnessFeatureGeneratorType::New();
-  
+
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -90,8 +90,7 @@ int itkSatoVesselnessFeatureGeneratorTest1( int argc, char * argv [] )
     }
 
 
-
-  try 
+  try
     {
     featureGenerator->Update();
     }
@@ -104,7 +103,7 @@ int itkSatoVesselnessFeatureGeneratorTest1( int argc, char * argv [] )
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
-  OutputImageSpatialObjectType::ConstPointer outputObject = 
+  OutputImageSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputImageSpatialObjectType * >( feature.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -115,7 +114,7 @@ int itkSatoVesselnessFeatureGeneratorTest1( int argc, char * argv [] )
   writer->SetInput( outputImage );
 
 
-  try 
+  try
     {
     writer->Update();
     }
@@ -129,6 +128,6 @@ int itkSatoVesselnessFeatureGeneratorTest1( int argc, char * argv [] )
 
   featureGenerator->Print( std::cout );
 
- 
+
   return EXIT_SUCCESS;
 }

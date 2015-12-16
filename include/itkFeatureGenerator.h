@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFeatureGenerator_h
-#define __itkFeatureGenerator_h
+#ifndef itkFeatureGenerator_h
+#define itkFeatureGenerator_h
 
 #include "itkProcessObject.h"
 #include "itkImage.h"

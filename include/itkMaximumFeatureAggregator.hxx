@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkMaximumFeatureAggregator_hxx
-#define __itkMaximumFeatureAggregator_hxx
+#ifndef itkMaximumFeatureAggregator_hxx
+#define itkMaximumFeatureAggregator_hxx
 
 #include "itkMaximumFeatureAggregator.h"
 #include "itkImageSpatialObject.h"

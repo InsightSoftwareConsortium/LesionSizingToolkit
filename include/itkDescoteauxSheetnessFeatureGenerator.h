@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkDescoteauxSheetnessFeatureGenerator_h
-#define __itkDescoteauxSheetnessFeatureGenerator_h
+#ifndef itkDescoteauxSheetnessFeatureGenerator_h
+#define itkDescoteauxSheetnessFeatureGenerator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"

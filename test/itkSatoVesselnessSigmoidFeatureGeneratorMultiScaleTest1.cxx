@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -43,7 +43,7 @@ int itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1( int argc, char * ar
 
   inputImageReader->SetFileName( argv[1] );
 
-  try 
+  try
     {
     inputImageReader->Update();
     }
@@ -65,7 +65,7 @@ int itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1( int argc, char * ar
   FeatureGeneratorType::Pointer  featureGenerator2 = FeatureGeneratorType::New();
   FeatureGeneratorType::Pointer  featureGenerator3 = FeatureGeneratorType::New();
   FeatureGeneratorType::Pointer  featureGenerator4 = FeatureGeneratorType::New();
-  
+
   if( argc > 3 )
     {
     double smallestSigma = atof( argv[3] );
@@ -129,7 +129,7 @@ int itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1( int argc, char * ar
   featureAggregator->AddFeatureGenerator( featureGenerator3 );
   featureAggregator->AddFeatureGenerator( featureGenerator4 );
 
-  try 
+  try
     {
     featureAggregator->Update();
     }
@@ -138,13 +138,13 @@ int itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1( int argc, char * ar
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
     }
- 
+
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
   typedef AggregatorType::OutputImageSpatialObjectType  OutputImageSpatialObjectType;
   typedef AggregatorType::OutputImageType               OutputImageType;
 
-  OutputImageSpatialObjectType::ConstPointer outputObject = 
+  OutputImageSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputImageSpatialObjectType * >( finalFeature.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -156,7 +156,7 @@ int itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1( int argc, char * ar
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-  try 
+  try
     {
     writer->Update();
     }

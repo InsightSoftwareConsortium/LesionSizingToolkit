@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkRegionGrowingSegmentationModule_hxx
-#define __itkRegionGrowingSegmentationModule_hxx
+#ifndef itkRegionGrowingSegmentationModule_hxx
+#define itkRegionGrowingSegmentationModule_hxx
 
 #include "itkRegionGrowingSegmentationModule.h"
 #include "itkImageRegionIterator.h"

@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkBinaryThresholdFeatureGenerator_h
-#define __itkBinaryThresholdFeatureGenerator_h
+#ifndef itkBinaryThresholdFeatureGenerator_h
+#define itkBinaryThresholdFeatureGenerator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"
@@ -30,15 +30,15 @@ namespace itk
  * \brief Generates a feature image by thresholding the input intensities.
  *
  * The typical use of this class would be to generate the feature image needed
- * by a Level Set filter to internally compute its speed image. 
- * 
+ * by a Level Set filter to internally compute its speed image.
+ *
  * SpatialObjects are used as inputs and outputs of this class.
  *
  * \ingroup SpatialObjectFilters
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_EXPORT BinaryThresholdFeatureGenerator : public FeatureGenerator<NDimension>
+class BinaryThresholdFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
   /** Standard class typedefs. */

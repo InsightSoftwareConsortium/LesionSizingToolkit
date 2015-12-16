@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkConfidenceConnectedSegmentationModule_hxx
-#define __itkConfidenceConnectedSegmentationModule_hxx
+#ifndef itkConfidenceConnectedSegmentationModule_hxx
+#define itkConfidenceConnectedSegmentationModule_hxx
 
 #include "itkConfidenceConnectedSegmentationModule.h"
 #include "itkProgressAccumulator.h"
