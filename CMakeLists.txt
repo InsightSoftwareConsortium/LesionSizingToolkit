@@ -1,14 +1,18 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(LesionSizingToolkit)
 
+if(NOT ITK_SOURCE_DIR)
+  find_package(ITK REQUIRED)
+  include(${ITK_USE_FILE})
+  list(APPEND CMAKE_MODULE_PATH ${ITK_CMAKE_DIR})
+  include(ITKModuleExternal)
+else()
+  itk_module_impl()
+endif()
+
 option(LSTK_USE_VTK "Build visualization helper tools." OFF)
 if(LSTK_USE_VTK)
-  set(myVTKLibraries
-    vtkRenderingVolume
-    vtkIOImage
-    vtkInteractionWidgets)
-
-  find_package(VTK REQUIRED COMPONENTS ${myVTKLibraries})
+  find_package(VTK REQUIRED COMPONENTS vtkRenderingVolume vtkIOGeometry vtkIOLegacy vtkIOImage vtkInteractionWidgets vtkInteractionImage)
   set(VERSION_MIN "6.0.0")
   if(${VTK_VERSION} VERSION_LESS ${VERSION_MIN})
     message(ERROR " LSTK_USE_VTK requires VTK version ${VERSION_MIN} or newer but the current version is ${VTK_VERSION}")
@@ -17,16 +21,10 @@ if(LSTK_USE_VTK)
 
   set(ITK_VTK_LSTK_LIBRARIES
    ${LesionSizingToolkit_LIBRARIES}
-   ${myVTKLibraries}
+   ${VTK_LIBRARIES}
+   # ${ITK_LIBRARIES}
    )
+   message("ITK_VTK_LSTK_LIBRARIES: ${ITK_VTK_LSTK_LIBRARIES}")
   add_subdirectory(Examples)
   add_subdirectory(Utilities)
-endif()
-
-if(NOT ITK_SOURCE_DIR)
-  find_package(ITK REQUIRED)
-  list(APPEND CMAKE_MODULE_PATH ${ITK_CMAKE_DIR})
-  include(ITKModuleExternal)
-else()
-  itk_module_impl()
 endif()
