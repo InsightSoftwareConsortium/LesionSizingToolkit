@@ -19,12 +19,7 @@ if(LSTK_USE_VTK)
   endif()
   include(${VTK_USE_FILE})
 
-  set(ITK_VTK_LSTK_LIBRARIES
-   ${LesionSizingToolkit_LIBRARIES}
-   ${VTK_LIBRARIES}
-   # ${ITK_LIBRARIES}
-   )
-   message("ITK_VTK_LSTK_LIBRARIES: ${ITK_VTK_LSTK_LIBRARIES}")
+  set(ITK_VTK_LSTK_LIBRARIES ${LesionSizingToolkit_LIBRARIES} ${VTK_LIBRARIES})
   add_subdirectory(Examples)
   add_subdirectory(Utilities)
 endif()
