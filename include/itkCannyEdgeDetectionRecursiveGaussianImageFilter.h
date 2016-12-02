@@ -37,7 +37,7 @@ using MultiThreader = MultiThreaderBase;
 
 
 template <typename TValueType>
-class ListNode
+class ITK_TEMPLATE_EXPORT ListNode
 {
 public:
   TValueType m_Value;
