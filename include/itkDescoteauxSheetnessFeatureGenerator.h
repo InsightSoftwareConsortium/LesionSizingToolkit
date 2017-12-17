@@ -101,12 +101,12 @@ public:
 
 protected:
   DescoteauxSheetnessFeatureGenerator();
-  virtual ~DescoteauxSheetnessFeatureGenerator();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~DescoteauxSheetnessFeatureGenerator() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData () ITK_OVERRIDE;
 
 private:
   DescoteauxSheetnessFeatureGenerator(const Self&); //purposely not implemented

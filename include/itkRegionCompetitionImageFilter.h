@@ -100,11 +100,11 @@ public:
 
 protected:
   RegionCompetitionImageFilter();
-  ~RegionCompetitionImageFilter();
+  ~RegionCompetitionImageFilter() ITK_OVERRIDE;
 
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
-  void PrintSelf ( std::ostream& os, Indent indent ) const;
+  void PrintSelf ( std::ostream& os, Indent indent ) const ITK_OVERRIDE;
 
 private:
   RegionCompetitionImageFilter(const Self&); //purposely not implemented

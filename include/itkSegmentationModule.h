@@ -79,8 +79,8 @@ public:
 
 protected:
   SegmentationModule();
-  virtual ~SegmentationModule();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~SegmentationModule() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
 
   /* Derived classes MUST implement the "void  GenerateData ()" method */
 

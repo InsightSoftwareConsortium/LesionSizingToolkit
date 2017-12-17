@@ -233,7 +233,7 @@ public:
 
 protected:
   DescoteauxSheetnessImageFilter() {}
-  virtual ~DescoteauxSheetnessImageFilter() {}
+  ~DescoteauxSheetnessImageFilter() ITK_OVERRIDE {}
 
 private:
   DescoteauxSheetnessImageFilter(const Self&); //purposely not implemented

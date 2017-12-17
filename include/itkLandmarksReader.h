@@ -67,10 +67,10 @@ public:
 
 protected:
   LandmarksReader();
-  virtual ~LandmarksReader();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~LandmarksReader() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
 
-  void GenerateData();
+  void GenerateData() ITK_OVERRIDE;
 
 private:
   LandmarksReader(const Self&); //purposely not implemented

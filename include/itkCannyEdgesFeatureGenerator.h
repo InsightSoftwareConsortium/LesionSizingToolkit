@@ -111,12 +111,12 @@ public:
 
 protected:
   CannyEdgesFeatureGenerator();
-  virtual ~CannyEdgesFeatureGenerator();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~CannyEdgesFeatureGenerator() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData () ITK_OVERRIDE;
 
 private:
   CannyEdgesFeatureGenerator(const Self&); //purposely not implemented

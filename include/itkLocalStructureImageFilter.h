@@ -211,7 +211,7 @@ public:
 
 protected:
   LocalStructureImageFilter() {}
-  virtual ~LocalStructureImageFilter() {}
+  ~LocalStructureImageFilter() ITK_OVERRIDE {}
 
 private:
   LocalStructureImageFilter(const Self&); //purposely not implemented

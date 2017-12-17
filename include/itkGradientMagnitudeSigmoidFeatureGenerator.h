@@ -89,12 +89,12 @@ public:
 
 protected:
   GradientMagnitudeSigmoidFeatureGenerator();
-  virtual ~GradientMagnitudeSigmoidFeatureGenerator();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~GradientMagnitudeSigmoidFeatureGenerator() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData () ITK_OVERRIDE;
 
 private:
   GradientMagnitudeSigmoidFeatureGenerator(const Self&); //purposely not implemented

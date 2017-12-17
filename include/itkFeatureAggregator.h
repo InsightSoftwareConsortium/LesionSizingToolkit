@@ -76,16 +76,16 @@ public:
   void AddFeatureGenerator( FeatureGeneratorType * generator ); 
 
   /** Check all feature generators and return consolidate MTime */
-  virtual unsigned long GetMTime() const;
+  unsigned long GetMTime() const ITK_OVERRIDE;
 
 protected:
   FeatureAggregator();
-  virtual ~FeatureAggregator();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~FeatureAggregator() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData();
+  void  GenerateData() ITK_OVERRIDE;
 
   unsigned int GetNumberOfInputFeatures() const;
 

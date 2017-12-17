@@ -69,12 +69,12 @@ public:
 
 protected:
   GeodesicActiveContourLevelSetSegmentationModule();
-  virtual ~GeodesicActiveContourLevelSetSegmentationModule();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~GeodesicActiveContourLevelSetSegmentationModule() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData () ITK_OVERRIDE;
 
 private:
   GeodesicActiveContourLevelSetSegmentationModule(const Self&); //purposely not implemented

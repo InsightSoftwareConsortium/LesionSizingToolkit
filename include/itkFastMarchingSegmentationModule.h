@@ -83,12 +83,12 @@ public:
 
 protected:
   FastMarchingSegmentationModule();
-  virtual ~FastMarchingSegmentationModule();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~FastMarchingSegmentationModule() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData () ITK_OVERRIDE;
 
   /** Extract the input set of landmark points to be used as seeds. */
   const InputSpatialObjectType * GetInternalInputLandmarks() const;

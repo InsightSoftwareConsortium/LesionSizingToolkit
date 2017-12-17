@@ -71,12 +71,12 @@ public:
 
 protected:
   RegionGrowingSegmentationModule();
-  virtual ~RegionGrowingSegmentationModule();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~RegionGrowingSegmentationModule() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData () ITK_OVERRIDE;
 
   /** Set the output image as cargo of the output SpatialObject. */
   void PackOutputImageInOutputSpatialObject( OutputImageType * outputImage );

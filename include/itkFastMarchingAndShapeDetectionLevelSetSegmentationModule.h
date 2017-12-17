@@ -86,12 +86,12 @@ public:
 
 protected:
   FastMarchingAndShapeDetectionLevelSetSegmentationModule();
-  virtual ~FastMarchingAndShapeDetectionLevelSetSegmentationModule();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~FastMarchingAndShapeDetectionLevelSetSegmentationModule() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData () ITK_OVERRIDE;
 
   typedef  FastMarchingSegmentationModule< Dimension > FastMarchingModuleType;
   typename FastMarchingModuleType::Pointer m_FastMarchingModule;
