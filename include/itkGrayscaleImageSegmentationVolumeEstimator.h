@@ -73,13 +73,13 @@ public:
 
 protected:
   GrayscaleImageSegmentationVolumeEstimator();
-  ~GrayscaleImageSegmentationVolumeEstimator() ITK_OVERRIDE;
+  ~GrayscaleImageSegmentationVolumeEstimator() override;
 
-  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData() ITK_OVERRIDE;
+  void  GenerateData() override;
 
 private:
   GrayscaleImageSegmentationVolumeEstimator(const Self&); //purposely not implemented

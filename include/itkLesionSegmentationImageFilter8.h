@@ -85,7 +85,7 @@ public:
   typedef typename CannyEdgesFeatureGeneratorType::SigmaArrayType SigmaArrayType;
 
   void GenerateInputRequestedRegion()
-            throw(InvalidRequestedRegionError) ITK_OVERRIDE;
+            throw(InvalidRequestedRegionError) override;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -148,15 +148,15 @@ public:
 
   /** Override the superclass implementation so as to set the flag on all the
    * filters within our lesion segmentation pipeline */
-  void SetAbortGenerateData( const bool ) ITK_OVERRIDE;
+  void SetAbortGenerateData( const bool ) override;
 
 protected:
   LesionSegmentationImageFilter8();
   LesionSegmentationImageFilter8(const Self&) {}
-  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
+  void GenerateData() override;
 
   // Filters used by this class
   typedef LesionSegmentationMethod< ImageDimension >                LesionSegmentationMethodType;
@@ -176,7 +176,7 @@ protected:
 
 
 private:
-  ~LesionSegmentationImageFilter8() ITK_OVERRIDE{};
+  ~LesionSegmentationImageFilter8() override{};
 
   double                                m_SigmoidBeta;
   double                                m_FastMarchingStoppingTime;

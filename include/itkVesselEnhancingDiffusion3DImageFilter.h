@@ -137,9 +137,9 @@ public:
 
 protected:
   VesselEnhancingDiffusion3DImageFilter();
-  ~VesselEnhancingDiffusion3DImageFilter() ITK_OVERRIDE {};
-  void PrintSelf(std::ostream &os, Indent indent) const ITK_OVERRIDE;
-  void GenerateData() ITK_OVERRIDE;
+  ~VesselEnhancingDiffusion3DImageFilter() override {};
+  void PrintSelf(std::ostream &os, Indent indent) const override;
+  void GenerateData() override;
 
 private:
 

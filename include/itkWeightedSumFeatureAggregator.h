@@ -70,15 +70,15 @@ public:
 
 protected:
   WeightedSumFeatureAggregator();
-  ~WeightedSumFeatureAggregator() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
+  ~WeightedSumFeatureAggregator() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
 
 private:
   WeightedSumFeatureAggregator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  void ConsolidateFeatures() ITK_OVERRIDE;
+  void ConsolidateFeatures() override;
 
   typedef std::vector< double >     WeightsArrayType;
 

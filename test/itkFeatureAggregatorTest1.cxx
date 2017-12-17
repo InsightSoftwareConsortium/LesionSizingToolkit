@@ -49,8 +49,8 @@ public:
 
 protected:
   FeatureAggregatorSurrogate() {};
-  ~FeatureAggregatorSurrogate() ITK_OVERRIDE {};
-  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE 
+  ~FeatureAggregatorSurrogate() override {};
+  void PrintSelf(std::ostream& os, Indent indent) const override 
     {
     this->Superclass::PrintSelf( os, indent );
     }
@@ -65,7 +65,7 @@ private:
   typedef typename FeatureGeneratorArrayType::iterator          FeatureGeneratorIterator;
   typedef typename FeatureGeneratorArrayType::const_iterator    FeatureGeneratorConstIterator;
 
-  void ConsolidateFeatures() ITK_OVERRIDE
+  void ConsolidateFeatures() override
     {
     typedef float                                                   FeaturePixelType;
     typedef Image< FeaturePixelType, NDimension >                   FeatureImageType;

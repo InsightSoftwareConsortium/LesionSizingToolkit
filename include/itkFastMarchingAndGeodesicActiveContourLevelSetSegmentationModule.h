@@ -86,12 +86,12 @@ public:
 
 protected:
   FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule();
-  ~FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
+  ~FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () ITK_OVERRIDE;
+  void  GenerateData () override;
 
   typedef  FastMarchingSegmentationModule< Dimension > FastMarchingModuleType;
   typename FastMarchingModuleType::Pointer m_FastMarchingModule;

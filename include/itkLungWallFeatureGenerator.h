@@ -81,12 +81,12 @@ public:
 
 protected:
   LungWallFeatureGenerator();
-  ~LungWallFeatureGenerator() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
+  ~LungWallFeatureGenerator() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () ITK_OVERRIDE;
+  void  GenerateData () override;
 
 private:
   LungWallFeatureGenerator(const Self&); //purposely not implemented

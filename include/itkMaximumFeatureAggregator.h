@@ -65,15 +65,15 @@ public:
 
 protected:
   MaximumFeatureAggregator();
-  ~MaximumFeatureAggregator() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
+  ~MaximumFeatureAggregator() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
 
 private:
   MaximumFeatureAggregator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  void ConsolidateFeatures() ITK_OVERRIDE;
+  void ConsolidateFeatures() override;
 
 };
 

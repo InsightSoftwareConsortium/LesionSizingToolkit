@@ -241,7 +241,7 @@ public:
 
 protected:
   FrangiTubularnessImageFilter() {}
-  ~FrangiTubularnessImageFilter() ITK_OVERRIDE {}
+  ~FrangiTubularnessImageFilter() override {}
 
 private:
   FrangiTubularnessImageFilter(const Self&); //purposely not implemented

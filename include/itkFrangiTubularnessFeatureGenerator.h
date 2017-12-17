@@ -93,12 +93,12 @@ public:
 
 protected:
   FrangiTubularnessFeatureGenerator();
-  ~FrangiTubularnessFeatureGenerator() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
+  ~FrangiTubularnessFeatureGenerator() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () ITK_OVERRIDE;
+  void  GenerateData () override;
 
 private:
   FrangiTubularnessFeatureGenerator(const Self&); //purposely not implemented
