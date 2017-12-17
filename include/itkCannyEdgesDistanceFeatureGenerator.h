@@ -113,12 +113,12 @@ public:
 
 protected:
   CannyEdgesDistanceFeatureGenerator();
-  ~CannyEdgesDistanceFeatureGenerator() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE;
+  ~CannyEdgesDistanceFeatureGenerator() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () ITK_OVERRIDE;
+  void  GenerateData () override;
 
 private:
   CannyEdgesDistanceFeatureGenerator(const Self&); //purposely not implemented
