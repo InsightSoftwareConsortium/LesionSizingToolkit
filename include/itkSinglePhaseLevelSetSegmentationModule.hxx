@@ -44,7 +44,7 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
   this->m_AdvectionScaling = 1.0;
   this->m_CurvatureScaling = 75.0;
   this->m_PropagationScaling = 100.0;
-  this->m_ZeroSetInputImage = NULL;
+  this->m_ZeroSetInputImage = nullptr;
   this->m_InvertOutputIntensities = true;
 }
 
@@ -99,7 +99,7 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
     return this->m_ZeroSetInputImage;
     }
   
-  return NULL;
+  return nullptr;
 }
 
 

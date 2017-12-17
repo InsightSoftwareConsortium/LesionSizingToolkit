@@ -42,16 +42,16 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
   this->m_NumberOfPixelsChangedInLastIteration = 0;
   this->m_TotalNumberOfPixelsChanged = 0;
 
-  this->m_SeedArray1 = NULL;
-  this->m_SeedArray2 = NULL;
-  this->m_SeedsNewValues = NULL;
+  this->m_SeedArray1 = nullptr;
+  this->m_SeedArray2 = nullptr;
+  this->m_SeedsNewValues = nullptr;
 
   this->m_CurrentPixelIndex.Fill( 0 );
 
-  this->m_OutputImage = NULL;
+  this->m_OutputImage = nullptr;
 
   this->m_NumberOfLabels = 0;
- this->m_inputLabelsImage = NULL;
+ this->m_inputLabelsImage = nullptr;
 }
 
 /**
@@ -64,19 +64,19 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
   if( this->m_SeedArray1 )
     {
     delete [] this->m_SeedArray1;
-    this->m_SeedArray1 = NULL;
+    this->m_SeedArray1 = nullptr;
     }
 
   if( this->m_SeedArray2 )
     {
     delete [] this->m_SeedArray2;
-    this->m_SeedArray2 = NULL;
+    this->m_SeedArray2 = nullptr;
     }
 
   if( this->m_SeedsNewValues )
     {
     delete [] this->m_SeedsNewValues;
-    this->m_SeedsNewValues = NULL;
+    this->m_SeedsNewValues = nullptr;
     }
 }
 

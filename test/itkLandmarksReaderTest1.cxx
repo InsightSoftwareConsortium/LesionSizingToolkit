@@ -83,7 +83,7 @@ int itkLandmarksReaderTest1( int argc, char * argv [] )
   ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
 
 
-  const InputSpatialObjectType * landmarkSpatialObject2 = NULL;
+  const InputSpatialObjectType * landmarkSpatialObject2 = nullptr;
 
   while( spatialObjectItr != sceneChildren->end() ) 
     {
