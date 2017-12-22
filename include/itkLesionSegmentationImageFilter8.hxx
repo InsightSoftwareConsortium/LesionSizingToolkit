@@ -147,7 +147,7 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 
   // Compute the spacing after isotropic resampling.
   double minSpacing = NumericTraits< double >::max();
-  for (int i = 0; i < ImageDimension; i++)
+  for (unsigned int i = 0; i < ImageDimension; i++)
     {
     minSpacing = (minSpacing > inputPtr->GetSpacing()[i] ?
                   inputPtr->GetSpacing()[i] : minSpacing);
@@ -155,7 +155,7 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 
   // Try and reduce the anisotropy.
   SpacingType outputSpacing = inputPtr->GetSpacing();
-  for (int i = 0; i < ImageDimension; i++)
+  for (unsigned int i = 0; i < ImageDimension; i++)
     {
     if (outputSpacing[i]/minSpacing > m_AnisotropyThreshold && m_ResampleThickSliceData)
       {
@@ -220,7 +220,7 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   if (m_UserSpecifiedSigmas == false)
     {
     double maxSpacing = NumericTraits< double >::min();
-    for (int i = 0; i < ImageDimension; i++)
+    for (unsigned int i = 0; i < ImageDimension; i++)
       {
       maxSpacing = (maxSpacing < input->GetSpacing()[i] ?
                       input->GetSpacing()[i] : maxSpacing);
