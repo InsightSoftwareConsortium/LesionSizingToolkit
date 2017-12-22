@@ -34,7 +34,6 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest2( int argc, char * argv [] 
   typedef itk::GrayscaleImageSegmentationVolumeEstimator<Dimension>  VolumeEstimatorType;
   typedef VolumeEstimatorType::InputImageSpatialObjectType    InputSpatialObjectType;
   typedef VolumeEstimatorType::InputImageType                 InputImageType;
-  typedef VolumeEstimatorType::InputImageSpatialObjectType  InputImageSpatialObjectType;
   typedef itk::ImageFileReader< InputImageType > InputImageReaderType;
 
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
