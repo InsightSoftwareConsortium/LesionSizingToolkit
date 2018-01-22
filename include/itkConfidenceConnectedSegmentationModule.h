@@ -65,12 +65,12 @@ public:
 
 protected:
   ConfidenceConnectedSegmentationModule();
-  virtual ~ConfidenceConnectedSegmentationModule();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~ConfidenceConnectedSegmentationModule() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData () override;
 
 private:
   ConfidenceConnectedSegmentationModule(const Self&); //purposely not implemented

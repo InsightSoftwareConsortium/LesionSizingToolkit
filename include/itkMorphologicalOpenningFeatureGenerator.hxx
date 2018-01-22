@@ -77,7 +77,7 @@ MorphologicalOpenningFeatureGenerator<NDimension>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return nullptr;
     }
 
   return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));

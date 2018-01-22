@@ -26,10 +26,7 @@ int LandmarkSpatialObjectWriterTest( int itkNotUsed(argc), char * argv [] )
 {
   const unsigned int Dimension = 3;
 
-  typedef itk::LandmarkSpatialObject< Dimension >        InputSpatialObjectType;
-
   typedef itk::SpatialObjectWriter< Dimension, unsigned short >   WriterType;
-  typedef itk::SpatialObjectReader< Dimension, unsigned short >   ReaderType;
 
   typedef itk::LandmarkSpatialObject< Dimension >     LandmarkType;
   typedef LandmarkType::Pointer                       LandmarkPointer;

@@ -70,15 +70,15 @@ public:
 
 protected:
   WeightedSumFeatureAggregator();
-  virtual ~WeightedSumFeatureAggregator();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~WeightedSumFeatureAggregator() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
 
 private:
   WeightedSumFeatureAggregator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  void ConsolidateFeatures();
+  void ConsolidateFeatures() override;
 
   typedef std::vector< double >     WeightsArrayType;
 

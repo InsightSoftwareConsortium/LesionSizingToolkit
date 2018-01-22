@@ -65,15 +65,15 @@ public:
 
 protected:
   MinimumFeatureAggregator();
-  virtual ~MinimumFeatureAggregator();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~MinimumFeatureAggregator() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
 
 private:
   MinimumFeatureAggregator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  void ConsolidateFeatures();
+  void ConsolidateFeatures() override;
 
 };
 

@@ -71,12 +71,12 @@ public:
 
 protected:
   RegionGrowingSegmentationModule();
-  virtual ~RegionGrowingSegmentationModule();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~RegionGrowingSegmentationModule() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData () override;
 
   /** Set the output image as cargo of the output SpatialObject. */
   void PackOutputImageInOutputSpatialObject( OutputImageType * outputImage );

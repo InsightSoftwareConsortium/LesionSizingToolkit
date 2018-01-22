@@ -65,15 +65,15 @@ public:
 
 protected:
   MaximumFeatureAggregator();
-  virtual ~MaximumFeatureAggregator();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~MaximumFeatureAggregator() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
 
 private:
   MaximumFeatureAggregator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  void ConsolidateFeatures();
+  void ConsolidateFeatures() override;
 
 };
 

@@ -66,12 +66,12 @@ public:
 
 protected:
   ConnectedThresholdSegmentationModule();
-  virtual ~ConnectedThresholdSegmentationModule();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~ConnectedThresholdSegmentationModule() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData () override;
 
 private:
   ConnectedThresholdSegmentationModule(const Self&); //purposely not implemented

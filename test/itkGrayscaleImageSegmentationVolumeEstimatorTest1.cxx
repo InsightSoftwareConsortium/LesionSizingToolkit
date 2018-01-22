@@ -26,8 +26,6 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
 
   typedef itk::GrayscaleImageSegmentationVolumeEstimator<Dimension>  VolumeEstimatorType;
 
-  typedef VolumeEstimatorType::SpatialObjectType    SpatialObjectType;
-
   VolumeEstimatorType::Pointer  volumeEstimator = VolumeEstimatorType::New();
   
   typedef itk::ImageSpatialObject< Dimension > ImageSpatialObjectType;

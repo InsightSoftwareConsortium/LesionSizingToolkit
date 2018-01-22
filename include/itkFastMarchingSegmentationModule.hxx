@@ -97,8 +97,6 @@ FastMarchingSegmentationModule<NDimension>
   const InputSpatialObjectType * inputSeeds = this->GetInternalInputLandmarks();
   const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
 
-  typedef typename InputSpatialObjectType::SpatialObjectPointType   SpatialObjectPointType;
-  typedef typename SpatialObjectPointType::PointType                PointType;
   typedef typename InputSpatialObjectType::PointListType            PointListType;
   typedef typename FeatureImageType::IndexType                      IndexType;
   typedef typename FeatureImageType::IndexType                      IndexType;

@@ -99,12 +99,12 @@ public:
 
 protected:
   LesionSegmentationMethod();
-  virtual ~LesionSegmentationMethod();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~LesionSegmentationMethod() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData();
+  void  GenerateData() override;
 
 private:
   LesionSegmentationMethod(const Self&); //purposely not implemented

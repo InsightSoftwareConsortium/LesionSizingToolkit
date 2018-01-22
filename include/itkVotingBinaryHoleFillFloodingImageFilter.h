@@ -106,11 +106,11 @@ public:
 
 protected:
   VotingBinaryHoleFillFloodingImageFilter();
-  ~VotingBinaryHoleFillFloodingImageFilter();
+  ~VotingBinaryHoleFillFloodingImageFilter() override;
 
-  void GenerateData();
+  void GenerateData() override;
   
-  void PrintSelf ( std::ostream& os, Indent indent ) const;
+  void PrintSelf ( std::ostream& os, Indent indent ) const override;
 
 private:
   VotingBinaryHoleFillFloodingImageFilter(const Self&); //purposely not implemented

@@ -84,23 +84,23 @@ public:
 
   /** Override the superclass implementation so as to set the flag on all the
    * filters within our lesion segmentation pipeline */
-  virtual void SetAbortGenerateData( const bool );
+  void SetAbortGenerateData( const bool ) override;
 
   /** ResampleImageFilter produces an image which is a different size
    * than its input.  As such, it needs to provide an implementation
    * for GenerateOutputInformation() in order to inform the pipeline
    * execution model.  The original documentation of this method is
    * below. \sa ProcessObject::GenerateOutputInformaton() */
-  virtual void GenerateOutputInformation( void );
+  void GenerateOutputInformation( void ) override;
 
 protected:
   IsotropicResamplerImageFilter();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
-  void GenerateData();
+  void GenerateData() override;
 
 private:
-  virtual ~IsotropicResamplerImageFilter();
+  ~IsotropicResamplerImageFilter() override;
   IsotropicResamplerImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

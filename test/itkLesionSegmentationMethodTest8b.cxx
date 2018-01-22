@@ -51,7 +51,6 @@ int itkLesionSegmentationMethodTest8b( int argc, char * argv [] )
   typedef itk::ImageFileReader< InputImageType >    InputImageReaderType;
   typedef itk::LandmarksReader< Dimension >         LandmarksReaderType;
   typedef itk::LandmarkSpatialObject< Dimension >   SeedSpatialObjectType;
-  typedef SeedSpatialObjectType::PointListType      PointListType;
   typedef itk::ImageFileWriter< OutputImageType >   OutputWriterType;
 
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();

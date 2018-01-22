@@ -43,7 +43,6 @@ int itkSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed
   const unsigned int Dimension = 3;
 
   typedef itk::VolumeEstimatorSurrogate                   VolumeEstimatorType;
-  typedef VolumeEstimatorType::SpatialObjectType          SpatialObjectType;
 
   VolumeEstimatorType::Pointer  volumeEstimator = VolumeEstimatorType::New();
 

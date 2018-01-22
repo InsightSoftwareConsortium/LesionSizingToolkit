@@ -160,7 +160,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 
   ImageRegionIterator<TOutputImage> it;
 
-  void *globalData = 0;
+  void *globalData = nullptr;
 
   // Here input is the result from the gaussian filter
   //      output is the update buffer.

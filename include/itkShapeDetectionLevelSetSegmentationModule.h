@@ -69,12 +69,12 @@ public:
 
 protected:
   ShapeDetectionLevelSetSegmentationModule();
-  virtual ~ShapeDetectionLevelSetSegmentationModule();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~ShapeDetectionLevelSetSegmentationModule() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData () override;
 
 private:
   ShapeDetectionLevelSetSegmentationModule(const Self&); //purposely not implemented

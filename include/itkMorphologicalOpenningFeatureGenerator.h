@@ -84,12 +84,12 @@ public:
 
 protected:
   MorphologicalOpenningFeatureGenerator();
-  virtual ~MorphologicalOpenningFeatureGenerator();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~MorphologicalOpenningFeatureGenerator() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData ();
+  void  GenerateData () override;
 
 private:
   MorphologicalOpenningFeatureGenerator(const Self&); //purposely not implemented

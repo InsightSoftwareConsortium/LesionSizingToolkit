@@ -77,12 +77,12 @@ public:
 
 protected:
   SegmentationVolumeEstimator();
-  virtual ~SegmentationVolumeEstimator();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~SegmentationVolumeEstimator() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData();
+  void  GenerateData() override;
 
 private:
   SegmentationVolumeEstimator(const Self&); //purposely not implemented
