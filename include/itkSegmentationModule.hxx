@@ -58,8 +58,7 @@ SegmentationModule<NDimension>
 ::GetInput() const
 {
   // Process object is not const-correct so the const casting is required.
-  const SpatialObjectType * input =
-    dynamic_cast<const SpatialObjectType *>( this->ProcessObject::GetInput(0) );
+  const auto * input = dynamic_cast<const SpatialObjectType *>( this->ProcessObject::GetInput(0) );
   return input;
 }
 
@@ -80,8 +79,7 @@ SegmentationModule<NDimension>
 ::GetFeature() const
 {
   // Process object is not const-correct so the const casting is required.
-  const SpatialObjectType * feature =
-    dynamic_cast<const SpatialObjectType *>( this->ProcessObject::GetInput(1) );
+  const auto * feature = dynamic_cast<const SpatialObjectType *>( this->ProcessObject::GetInput(1) );
   return feature;
 }
 

@@ -85,8 +85,7 @@ const typename SinglePhaseLevelSetSegmentationModule<NDimension>::InputImageType
 SinglePhaseLevelSetSegmentationModule<NDimension>
 ::GetInternalInputImage() const
 {
-  const InputSpatialObjectType * inputObject =
-    dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
+  const auto * inputObject = dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
   if (inputObject)
     {
     const InputImageType * inputImage = inputObject->GetImage();
@@ -112,8 +111,7 @@ const typename SinglePhaseLevelSetSegmentationModule<NDimension>::FeatureImageTy
 SinglePhaseLevelSetSegmentationModule<NDimension>
 ::GetInternalFeatureImage() const
 {
-  const FeatureSpatialObjectType * featureObject =
-    dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
+  const auto * featureObject = dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
 
   const FeatureImageType * featureImage = featureObject->GetImage();
 
@@ -152,8 +150,7 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
 
   outputImage->DisconnectPipeline();
 
-  OutputSpatialObjectType * outputObject =
-    dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
 
   outputObject->SetImage( outputImage );
 }

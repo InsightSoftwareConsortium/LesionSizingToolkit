@@ -154,8 +154,7 @@ const typename FastMarchingSegmentationModule<NDimension>::InputSpatialObjectTyp
 FastMarchingSegmentationModule<NDimension>
 ::GetInternalInputLandmarks() const
 {
-  const InputSpatialObjectType * inputObject =
-    dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
+  const auto * inputObject = dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
 
   return inputObject;
 }

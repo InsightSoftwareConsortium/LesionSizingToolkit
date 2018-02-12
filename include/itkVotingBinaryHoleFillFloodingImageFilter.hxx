@@ -340,9 +340,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
   // From that buffer position, visit all other neighbor pixels 
   // and check if they are set to the foreground value.
   //
-  typedef typename NeighborOffsetArrayType::const_iterator   NeigborOffsetIterator;
-
-  NeigborOffsetIterator neighborItr = this->m_NeighborBufferOffset.begin();
+  auto neighborItr = this->m_NeighborBufferOffset.begin();
 
   const InputImagePixelType foregroundValue = this->GetForegroundValue();
 
@@ -475,7 +473,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
   const unsigned int neighborhoodSize = this->GetNeighborhoodSize();
 
   // Take the number of neighbors, discount the central pixel, and take half of them.
-  unsigned int threshold = static_cast<unsigned int>( (neighborhoodSize - 1 ) / 2.0 ); 
+  auto threshold = static_cast<unsigned int>( (neighborhoodSize - 1 ) / 2.0 ); 
 
   // add the majority threshold.
   threshold += this->GetMajorityThreshold();

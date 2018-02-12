@@ -83,8 +83,7 @@ const typename RegionGrowingSegmentationModule<NDimension>::InputSpatialObjectTy
 RegionGrowingSegmentationModule<NDimension>
 ::GetInternalInputLandmarks() const
 {
-  const InputSpatialObjectType * inputObject =
-    dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
+  const auto * inputObject = dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
 
   return inputObject;
 }
@@ -99,8 +98,7 @@ const typename RegionGrowingSegmentationModule<NDimension>::FeatureImageType *
 RegionGrowingSegmentationModule<NDimension>
 ::GetInternalFeatureImage() const
 {
-  const FeatureSpatialObjectType * featureObject =
-    dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
+  const auto * featureObject = dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
 
   const FeatureImageType * featureImage = featureObject->GetImage();
 
@@ -123,8 +121,7 @@ RegionGrowingSegmentationModule<NDimension>
 
   this->ConvertIntensitiesToCenteredRange( outputImage );
 
-  OutputSpatialObjectType * outputObject =
-    dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
 
   outputObject->SetImage( outputImage );
 }

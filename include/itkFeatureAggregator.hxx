@@ -100,8 +100,8 @@ FeatureAggregator<NDimension>
 
   os << indent << "Feature generators = ";
 
-  FeatureGeneratorConstIterator gitr = this->m_FeatureGenerators.begin();
-  FeatureGeneratorConstIterator gend = this->m_FeatureGenerators.end();
+  auto gitr = this->m_FeatureGenerators.begin();
+  auto gend = this->m_FeatureGenerators.end();
 
   while( gitr != gend )
     {
@@ -131,8 +131,8 @@ FeatureAggregator<NDimension>
 {
   // MTime is the max of mtime of all feature generators.
   unsigned long mtime = this->Superclass::GetMTime();
-  FeatureGeneratorConstIterator gitr = this->m_FeatureGenerators.begin();
-  FeatureGeneratorConstIterator gend = this->m_FeatureGenerators.end();
+  auto gitr = this->m_FeatureGenerators.begin();
+  auto gend = this->m_FeatureGenerators.end();
   while( gitr != gend )
     {
     const unsigned long t = (*gitr)->GetMTime();
@@ -155,8 +155,8 @@ void
 FeatureAggregator<NDimension>
 ::UpdateAllFeatureGenerators()
 {
-  FeatureGeneratorIterator gitr = this->m_FeatureGenerators.begin();
-  FeatureGeneratorIterator gend = this->m_FeatureGenerators.end();
+  auto gitr = this->m_FeatureGenerators.begin();
+  auto gend = this->m_FeatureGenerators.end();
 
   while( gitr != gend )
     {
