@@ -71,8 +71,7 @@ private:
     typedef Image< FeaturePixelType, NDimension >                   FeatureImageType;
     typedef ImageSpatialObject< NDimension, FeaturePixelType >      FeatureSpatialObjectType;
 
-    const FeatureSpatialObjectType * firstFeatureObject =
-      dynamic_cast< const FeatureSpatialObjectType * >( this->GetInputFeature(0) );
+    const auto * firstFeatureObject = dynamic_cast< const FeatureSpatialObjectType * >( this->GetInputFeature(0) );
 
     const FeatureImageType * firstFeatureImage = firstFeatureObject->GetImage();
 
@@ -87,8 +86,7 @@ private:
 
     for( unsigned int i = 0; i < numberOfFeatures; i++ )
       {
-      const FeatureSpatialObjectType * featureObject =
-        dynamic_cast< const FeatureSpatialObjectType * >( this->GetInputFeature(i) );
+      const auto * featureObject = dynamic_cast< const FeatureSpatialObjectType * >( this->GetInputFeature(i) );
 
       const FeatureImageType * featureImage = featureObject->GetImage();
 
@@ -112,8 +110,7 @@ private:
         }
       }
 
-    FeatureSpatialObjectType * outputObject =
-      dynamic_cast< FeatureSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+    auto * outputObject = dynamic_cast< FeatureSpatialObjectType * >(this->ProcessObject::GetOutput(0));
 
     outputObject->SetImage( consolidatedFeatureImage );
     }

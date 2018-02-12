@@ -88,8 +88,8 @@ LesionSegmentationMethod<NDimension>
 
   os << "Feature generators = ";
   
-  FeatureGeneratorConstIterator gitr = this->m_FeatureGenerators.begin();
-  FeatureGeneratorConstIterator gend = this->m_FeatureGenerators.end();
+  auto gitr = this->m_FeatureGenerators.begin();
+  auto gend = this->m_FeatureGenerators.end();
 
   while( gitr != gend )
     {
@@ -131,8 +131,8 @@ void
 LesionSegmentationMethod<NDimension>
 ::UpdateAllFeatureGenerators()
 {
-  FeatureGeneratorIterator gitr = this->m_FeatureGenerators.begin();
-  FeatureGeneratorIterator gend = this->m_FeatureGenerators.end();
+  auto gitr = this->m_FeatureGenerators.begin();
+  auto gend = this->m_FeatureGenerators.end();
 
   while( gitr != gend )
     {

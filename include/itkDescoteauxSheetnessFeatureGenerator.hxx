@@ -138,8 +138,7 @@ DescoteauxSheetnessFeatureGenerator<NDimension>
 
   outputImage->DisconnectPipeline();
 
-  OutputImageSpatialObjectType * outputObject =
-    dynamic_cast< OutputImageSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast< OutputImageSpatialObjectType * >(this->ProcessObject::GetOutput(0));
 
   outputObject->SetImage( outputImage );
 }

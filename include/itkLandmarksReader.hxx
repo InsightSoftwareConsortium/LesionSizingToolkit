@@ -85,7 +85,7 @@ LandmarksReader<NDimension>
     std::string objectName = (*spatialObjectItr)->GetTypeName();
     if( objectName == "LandmarkSpatialObject" )
       {
-      const SpatialObjectType * landmarkSpatialObjectRawPointer = 
+      const auto * landmarkSpatialObjectRawPointer = 
         dynamic_cast< const SpatialObjectType * >( spatialObjectItr->GetPointer() );
       landmarkSpatialObject =
         const_cast< SpatialObjectType * >( landmarkSpatialObjectRawPointer );
@@ -101,8 +101,7 @@ LandmarksReader<NDimension>
  
   landmarkSpatialObject->DisconnectPipeline();
 
-  SpatialObjectType * outputObject =
-    dynamic_cast< SpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast< SpatialObjectType * >(this->ProcessObject::GetOutput(0));
 
   outputObject->SetPoints( landmarkSpatialObject->GetPoints() );
 

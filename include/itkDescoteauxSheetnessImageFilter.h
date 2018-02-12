@@ -63,9 +63,9 @@ public:
     {
     double sheetness = 0.0;
 
-    double a1 = static_cast<double>( A[0] );
-    double a2 = static_cast<double>( A[1] );
-    double a3 = static_cast<double>( A[2] );
+    auto a1 = static_cast<double>( A[0] );
+    auto a2 = static_cast<double>( A[1] );
+    auto a3 = static_cast<double>( A[2] );
 
     double l1 = vnl_math_abs( a1 );
     double l2 = vnl_math_abs( a2 );
