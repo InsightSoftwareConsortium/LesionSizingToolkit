@@ -31,23 +31,23 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
 
   const unsigned int Dimension = 3;
 
-  typedef signed short    InputPixelType;
-  typedef float           OutputPixelType;
+  using InputPixelType = signed short;
+  using OutputPixelType = float;
 
-  typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
+  using InputImageType = itk::Image< InputPixelType,  Dimension >;
+  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
 
-  typedef itk::HessianRecursiveGaussianImageFilter< InputImageType >  HessianFilterType;
-  typedef HessianFilterType::OutputImageType                          HessianImageType;
-  typedef HessianImageType::PixelType                                 HessianPixelType;
+  using HessianFilterType = itk::HessianRecursiveGaussianImageFilter< InputImageType >;
+  using HessianImageType = HessianFilterType::OutputImageType;
+  using HessianPixelType = HessianImageType::PixelType;
 
-  typedef  itk::FixedArray< double, HessianPixelType::Dimension >     EigenValueArrayType;
-  typedef  itk::Image< EigenValueArrayType, Dimension >               EigenValueImageType;
+  using EigenValueArrayType = itk::FixedArray< double, HessianPixelType::Dimension >;
+  using EigenValueImageType = itk::Image< EigenValueArrayType, Dimension >;
 
-  typedef  itk::SymmetricEigenAnalysisImageFilter< 
-    HessianImageType, EigenValueImageType >     EigenAnalysisFilterType;
+  using EigenAnalysisFilterType = itk::SymmetricEigenAnalysisImageFilter< 
+    HessianImageType, EigenValueImageType >;
 
-  typedef itk::ImageFileWriter< OutputImageType >    WriterType;
+  using WriterType = itk::ImageFileWriter< OutputImageType >;
 
   HessianFilterType::Pointer hessian = HessianFilterType::New();
   EigenAnalysisFilterType::Pointer eigen = EigenAnalysisFilterType::New();
@@ -75,7 +75,7 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
   inputImage->Allocate();
 
 
-  typedef itk::ImageRegionIterator< InputImageType > IteratorType;
+  using IteratorType = itk::ImageRegionIterator< InputImageType >;
 
   InputImageType::SizeType  planeSize;
   planeSize = size;
@@ -112,7 +112,7 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
     }
 
 
-  typedef itk::DescoteauxSheetnessImageFilter< EigenValueImageType, OutputImageType >   FilterType;
+  using FilterType = itk::DescoteauxSheetnessImageFilter< EigenValueImageType, OutputImageType >;
 
   FilterType::Pointer sheetnessFilter = FilterType::New();
   
@@ -174,7 +174,7 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
   std::cout << "Output Image = " << std::endl;
   outputImage->Print( std::cout );
 
-  typedef itk::ImageRegionConstIterator< OutputImageType >  ConstIterator;
+  using ConstIterator = itk::ImageRegionConstIterator< OutputImageType >;
 
   ConstIterator citr( outputImage, outputImage->GetBufferedRegion() );
   IteratorType  iitr( inputImage, inputImage->GetBufferedRegion() );

@@ -96,16 +96,16 @@ IsotropicResampler<NDimension>
     }
 
 
-  typedef itk::ResampleImageFilter< InputImageType, InputImageType >  ResampleFilterType;
+  using ResampleFilterType = itk::ResampleImageFilter< InputImageType, InputImageType >;
 
   typename ResampleFilterType::Pointer resampler = ResampleFilterType::New();
 
-  typedef itk::IdentityTransform< double, Dimension >  TransformType;
+  using TransformType = itk::IdentityTransform< double, Dimension >;
 
   typename TransformType::Pointer transform = TransformType::New();
   transform->SetIdentity();
 
-  typedef itk::BSplineInterpolateImageFunction< InputImageType, double >  BSplineInterpolatorType;
+  using BSplineInterpolatorType = itk::BSplineInterpolateImageFunction< InputImageType, double >;
 
   typename BSplineInterpolatorType::Pointer bsplineInterpolator = BSplineInterpolatorType::New();
 
@@ -132,7 +132,7 @@ IsotropicResampler<NDimension>
   resampler->SetOutputOrigin( inputImage->GetOrigin() );
   resampler->SetOutputDirection( inputImage->GetDirection() );
 
-  typedef typename InputImageType::SizeType   SizeType;
+  using SizeType = typename InputImageType::SizeType;
 
   SizeType inputSize = inputImage->GetLargestPossibleRegion().GetSize();
 

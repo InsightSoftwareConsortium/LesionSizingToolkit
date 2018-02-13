@@ -27,11 +27,11 @@ int itkLesionSegmentationMethodTest2( int itkNotUsed(argc), char * itkNotUsed(ar
 {
   const unsigned int Dimension = 3;
 
-  typedef itk::LesionSegmentationMethod< Dimension >   MethodType;
+  using MethodType = itk::LesionSegmentationMethod< Dimension >;
 
   MethodType::Pointer  segmentationMethod = MethodType::New();
   
-  typedef itk::ImageMaskSpatialObject< Dimension > ImageMaskSpatialObjectType;
+  using ImageMaskSpatialObjectType = itk::ImageMaskSpatialObject< Dimension >;
 
   ImageMaskSpatialObjectType::Pointer regionOfInterest = ImageMaskSpatialObjectType::New();
 
@@ -41,19 +41,19 @@ int itkLesionSegmentationMethodTest2( int itkNotUsed(argc), char * itkNotUsed(ar
 
   segmentationMethod->SetInitialSegmentation( initialSegmentation );
 
-  typedef itk::FrangiTubularnessFeatureGenerator< Dimension > TubularnessGeneratorType;
+  using TubularnessGeneratorType = itk::FrangiTubularnessFeatureGenerator< Dimension >;
   TubularnessGeneratorType::Pointer tubularnessGenerator = TubularnessGeneratorType::New();
 
-  typedef itk::DescoteauxSheetnessFeatureGenerator< Dimension > SheetnessGeneratorType;
+  using SheetnessGeneratorType = itk::DescoteauxSheetnessFeatureGenerator< Dimension >;
   SheetnessGeneratorType::Pointer sheetnessGenerator = SheetnessGeneratorType::New();
 
-  typedef itk::SatoVesselnessFeatureGenerator< Dimension > VesselnessGeneratorType;
+  using VesselnessGeneratorType = itk::SatoVesselnessFeatureGenerator< Dimension >;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
 
-  typedef itk::SatoLocalStructureFeatureGenerator< Dimension > LocalStructureGeneratorType;
+  using LocalStructureGeneratorType = itk::SatoLocalStructureFeatureGenerator< Dimension >;
   LocalStructureGeneratorType::Pointer localStructureGenerator = LocalStructureGeneratorType::New();
 
-  typedef itk::GradientMagnitudeSigmoidFeatureGenerator< Dimension > GradientMagnitudeSigmoidGeneratorType;
+  using GradientMagnitudeSigmoidGeneratorType = itk::GradientMagnitudeSigmoidFeatureGenerator< Dimension >;
   GradientMagnitudeSigmoidGeneratorType::Pointer gradientMagnitudeSigmoidGenerator =
     GradientMagnitudeSigmoidGeneratorType::New();
 

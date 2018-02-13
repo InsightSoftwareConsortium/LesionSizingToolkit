@@ -42,11 +42,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT GradientMagnitudeSigmoidFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef GradientMagnitudeSigmoidFeatureGenerator          Self;
-  typedef FeatureGenerator<NDimension>                      Superclass;
-  typedef SmartPointer<Self>                                Pointer;
-  typedef SmartPointer<const Self>                          ConstPointer;
+  /** Standard class type alias. */
+  using Self = GradientMagnitudeSigmoidFeatureGenerator;
+  using Superclass = FeatureGenerator<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -55,15 +55,15 @@ public:
   itkTypeMacro(GradientMagnitudeSigmoidFeatureGenerator, FeatureGenerator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
-  typedef signed short                                      InputPixelType;
-  typedef Image< InputPixelType, Dimension >                InputImageType;
-  typedef ImageSpatialObject< NDimension, InputPixelType >  InputImageSpatialObjectType;
-  typedef typename InputImageSpatialObjectType::Pointer     InputImageSpatialObjectPointer;
-  typedef typename Superclass::SpatialObjectType            SpatialObjectType;
+  using InputPixelType = signed short;
+  using InputImageType = Image< InputPixelType, Dimension >;
+  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
+  using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
@@ -100,21 +100,21 @@ private:
   GradientMagnitudeSigmoidFeatureGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typedef float                                       InternalPixelType;
-  typedef Image< InternalPixelType, Dimension >       InternalImageType;
+  using InternalPixelType = float;
+  using InternalImageType = Image< InternalPixelType, Dimension >;
 
-  typedef InternalPixelType                           OutputPixelType;
-  typedef InternalImageType                           OutputImageType;
+  using OutputPixelType = InternalPixelType;
+  using OutputImageType = InternalImageType;
 
-  typedef ImageSpatialObject< NDimension, OutputPixelType >  OutputImageSpatialObjectType;
+  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
 
-  typedef GradientMagnitudeRecursiveGaussianImageFilter<
-    InputImageType, InternalImageType >               GradientFilterType;
-  typedef typename GradientFilterType::Pointer        GradientFilterPointer;
+  using GradientFilterType = GradientMagnitudeRecursiveGaussianImageFilter<
+    InputImageType, InternalImageType >;
+  using GradientFilterPointer = typename GradientFilterType::Pointer;
 
-  typedef SigmoidImageFilter<
-    InternalImageType, OutputImageType >              SigmoidFilterType;
-  typedef typename SigmoidFilterType::Pointer         SigmoidFilterPointer;
+  using SigmoidFilterType = SigmoidImageFilter<
+    InternalImageType, OutputImageType >;
+  using SigmoidFilterPointer = typename SigmoidFilterType::Pointer;
 
   GradientFilterPointer           m_GradientFilter;
   SigmoidFilterPointer            m_SigmoidFilter;

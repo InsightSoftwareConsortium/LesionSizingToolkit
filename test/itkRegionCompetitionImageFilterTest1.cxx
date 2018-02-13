@@ -25,25 +25,25 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
 {
   const unsigned int Dimension = 3;
 
-  typedef signed short   InputPixelType;
-  typedef unsigned char  BinaryPixelType;
-  typedef unsigned short LabelPixelType;
+  using InputPixelType = signed short;
+  using BinaryPixelType = unsigned char;
+  using LabelPixelType = unsigned short;
 
-  typedef itk::Image< InputPixelType,  Dimension >      InputImageType;
-  typedef itk::Image< BinaryPixelType, Dimension >      BinaryImageType;
-  typedef itk::Image< LabelPixelType,  Dimension >      LabelImageType;
+  using InputImageType = itk::Image< InputPixelType,  Dimension >;
+  using BinaryImageType = itk::Image< BinaryPixelType, Dimension >;
+  using LabelImageType = itk::Image< LabelPixelType,  Dimension >;
 
-  typedef itk::BinaryThresholdImageFilter<
-    InputImageType, BinaryImageType >  ThresholdFilterType;
+  using ThresholdFilterType = itk::BinaryThresholdImageFilter<
+    InputImageType, BinaryImageType >;
 
-  typedef itk::ConnectedComponentImageFilter<
-    BinaryImageType, LabelImageType > ComponentsFilterType;
+  using ComponentsFilterType = itk::ConnectedComponentImageFilter<
+    BinaryImageType, LabelImageType >;
 
-  typedef itk::RelabelComponentImageFilter<
-    LabelImageType, LabelImageType > RelabelFilterType;
+  using RelabelFilterType = itk::RelabelComponentImageFilter<
+    LabelImageType, LabelImageType >;
 
-  typedef itk::RegionCompetitionImageFilter<
-    InputImageType, LabelImageType >    CompetitionFilterType;
+  using CompetitionFilterType = itk::RegionCompetitionImageFilter<
+    InputImageType, LabelImageType >;
 
 
   ThresholdFilterType::Pointer thresholderFilter = ThresholdFilterType::New();
@@ -116,7 +116,7 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   inputImage->TransformIndexToPhysicalPoint( index2, point2 );
 
 
-  typedef itk::ImageRegionIteratorWithIndex< InputImageType > IteratorType;
+  using IteratorType = itk::ImageRegionIteratorWithIndex< InputImageType >;
 
   IteratorType itr( inputImage, itkregion );
 
@@ -145,7 +145,7 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
 
 
   // Just for debugging, save input image
-  typedef itk::ImageFileWriter< InputImageType >   WriterType;
+  using WriterType = itk::ImageFileWriter< InputImageType >;
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput( inputImage );
   writer->SetFileName("inputCompetitionImage.mha");
@@ -162,7 +162,7 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   relabelerFilter->Update();
   LabelImageType * labelImagePt =  relabelerFilter->GetOutput();
   // Just for debugging, save input image of labels
-  typedef itk::ImageFileWriter< LabelImageType >   LabelWriterType;
+  using LabelWriterType = itk::ImageFileWriter< LabelImageType >;
   LabelWriterType::Pointer labelWriter = LabelWriterType::New();
   labelWriter->SetInput( relabelerFilter->GetOutput() );
   labelWriter->SetFileName("labeledImage.mha");

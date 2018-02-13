@@ -41,11 +41,11 @@ template <unsigned int NDimension>
 class BinaryThresholdFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef BinaryThresholdFeatureGenerator  Self;
-  typedef FeatureGenerator<NDimension>     Superclass;
-  typedef SmartPointer<Self>               Pointer;
-  typedef SmartPointer<const Self>         ConstPointer;
+  /** Standard class type alias. */
+  using Self = BinaryThresholdFeatureGenerator;
+  using Superclass = FeatureGenerator<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -54,15 +54,15 @@ public:
   itkTypeMacro(BinaryThresholdFeatureGenerator, FeatureGenerator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
-  typedef signed short                                      InputPixelType;
-  typedef Image< InputPixelType, Dimension >                InputImageType;
-  typedef ImageSpatialObject< NDimension, InputPixelType >  InputImageSpatialObjectType;
-  typedef typename InputImageSpatialObjectType::Pointer     InputImageSpatialObjectPointer;
-  typedef typename Superclass::SpatialObjectType            SpatialObjectType;
+  using InputPixelType = signed short;
+  using InputImageType = Image< InputPixelType, Dimension >;
+  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
+  using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Value to be used to threshold the image. */
   itkSetMacro( Threshold, double );
@@ -81,14 +81,14 @@ private:
   BinaryThresholdFeatureGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typedef float                                       OutputPixelType;
-  typedef Image< OutputPixelType, Dimension >         OutputImageType;
+  using OutputPixelType = float;
+  using OutputImageType = Image< OutputPixelType, Dimension >;
 
-  typedef ImageSpatialObject< NDimension, OutputPixelType >  OutputImageSpatialObjectType;
+  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
 
-  typedef BinaryThresholdImageFilter<
-    InputImageType, OutputImageType >                   BinaryThresholdFilterType;
-  typedef typename BinaryThresholdFilterType::Pointer   BinaryThresholdFilterPointer;
+  using BinaryThresholdFilterType = BinaryThresholdImageFilter<
+    InputImageType, OutputImageType >;
+  using BinaryThresholdFilterPointer = typename BinaryThresholdFilterType::Pointer;
 
   BinaryThresholdFilterPointer    m_BinaryThresholdFilter;
 

@@ -40,11 +40,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT FeatureGenerator : public ProcessObject
 {
 public:
-  /** Standard class typedefs. */
-  typedef FeatureGenerator              Self;
-  typedef ProcessObject                 Superclass;
-  typedef SmartPointer<Self>            Pointer;
-  typedef SmartPointer<const Self>      ConstPointer;
+  /** Standard class type alias. */
+  using Self = FeatureGenerator;
+  using Superclass = ProcessObject;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -53,12 +53,12 @@ public:
   itkTypeMacro(FeatureGenerator, ProcessObject);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef SpatialObject< NDimension >           SpatialObjectType;
-  typedef typename SpatialObjectType::Pointer   SpatialObjectPointer;
+  using SpatialObjectType = SpatialObject< NDimension >;
+  using SpatialObjectPointer = typename SpatialObjectType::Pointer;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;

@@ -135,7 +135,7 @@ void
 RegionGrowingSegmentationModule<NDimension>
 ::ConvertIntensitiesToCenteredRange( OutputImageType * image )
 {
-  typedef ImageRegionIterator< OutputImageType > IteratorType;
+  using IteratorType = ImageRegionIterator< OutputImageType >;
 
   IteratorType itr( image, image->GetBufferedRegion() );
   

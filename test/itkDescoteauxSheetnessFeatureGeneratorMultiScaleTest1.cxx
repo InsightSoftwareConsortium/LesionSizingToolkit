@@ -32,11 +32,11 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
 
 
   const unsigned int Dimension = 3;
-  typedef signed short   InputPixelType;
+  using InputPixelType = signed short;
 
-  typedef itk::Image< InputPixelType, Dimension > InputImageType;
+  using InputImageType = itk::Image< InputPixelType, Dimension >;
 
-  typedef itk::ImageFileReader< InputImageType > InputImageReaderType;
+  using InputImageReaderType = itk::ImageFileReader< InputImageType >;
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
 
   inputImageReader->SetFileName( argv[1] );
@@ -52,7 +52,7 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
     }
 
 
-  typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
   InputImageType::Pointer inputImage = inputImageReader->GetOutput();
@@ -62,14 +62,14 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
   inputObject->SetImage( inputImage );
 
 
-  typedef itk::MaximumFeatureAggregator< Dimension >   AggregatorType;
+  using AggregatorType = itk::MaximumFeatureAggregator< Dimension >;
 
   AggregatorType::Pointer  featureAggregator = AggregatorType::New();
 
-  typedef itk::DescoteauxSheetnessFeatureGenerator< Dimension >         DescoteauxSheetnessFeatureGeneratorType;
-  typedef DescoteauxSheetnessFeatureGeneratorType::SpatialObjectType    SpatialObjectType;
-  typedef DescoteauxSheetnessFeatureGeneratorType::Pointer              FeatureGeneratorPointer;
-  typedef std::vector< FeatureGeneratorPointer >                        FeatureGeneratorArray;
+  using DescoteauxSheetnessFeatureGeneratorType = itk::DescoteauxSheetnessFeatureGenerator< Dimension >;
+  using SpatialObjectType = DescoteauxSheetnessFeatureGeneratorType::SpatialObjectType;
+  using FeatureGeneratorPointer = DescoteauxSheetnessFeatureGeneratorType::Pointer;
+  using FeatureGeneratorArray = std::vector< FeatureGeneratorPointer >;
 
   FeatureGeneratorArray  featureGeneratorArray;
 
@@ -119,15 +119,15 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
  
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
-  typedef AggregatorType::OutputImageSpatialObjectType  OutputImageSpatialObjectType;
-  typedef AggregatorType::OutputImageType               OutputImageType;
+  using OutputImageSpatialObjectType = AggregatorType::OutputImageSpatialObjectType;
+  using OutputImageType = AggregatorType::OutputImageType;
 
   OutputImageSpatialObjectType::ConstPointer outputObject = 
     dynamic_cast< const OutputImageSpatialObjectType * >( finalFeature.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
-  typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
+  using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
   OutputWriterType::Pointer writer = OutputWriterType::New();
 
   writer->SetFileName( argv[2] );

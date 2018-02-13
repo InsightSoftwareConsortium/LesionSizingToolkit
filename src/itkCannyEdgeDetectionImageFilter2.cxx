@@ -64,20 +64,20 @@ int main(int argc, char* argv[])
     lowerThreshold = atof( argv[5] );
     }
 
-  typedef signed short     InputPixelType;
-  typedef float            RealPixelType;
-  typedef float            OutputPixelType;
+  using InputPixelType = signed short;
+  using RealPixelType = float;
+  using OutputPixelType = float;
   const   unsigned int     Dimension = 3;
 
-  typedef itk::Image<InputPixelType, Dimension>    InputImageType;
-  typedef itk::Image<RealPixelType, Dimension>     RealImageType;
-  typedef itk::Image<OutputPixelType, Dimension>   OutputImageType;
+  using InputImageType = itk::Image<InputPixelType, Dimension>;
+  using RealImageType = itk::Image<RealPixelType, Dimension>;
+  using OutputImageType = itk::Image<OutputPixelType, Dimension>;
 
-  typedef itk::ImageFileReader< InputImageType >  ReaderType;
-  typedef itk::ImageFileWriter< OutputImageType > WriterType;
+  using ReaderType = itk::ImageFileReader< InputImageType >;
+  using WriterType = itk::ImageFileWriter< OutputImageType >;
 
-  typedef itk::CastImageFilter< InputImageType, RealImageType> CastToRealFilterType;
-  typedef itk::CannyEdgeDetectionRecursiveGaussianImageFilter<RealImageType, OutputImageType> CannyFilter;
+  using CastToRealFilterType = itk::CastImageFilter< InputImageType, RealImageType>;
+  using CannyFilter = itk::CannyEdgeDetectionRecursiveGaussianImageFilter<RealImageType, OutputImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();

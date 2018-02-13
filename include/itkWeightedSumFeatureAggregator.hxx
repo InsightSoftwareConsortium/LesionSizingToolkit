@@ -73,9 +73,9 @@ void
 WeightedSumFeatureAggregator<NDimension>
 ::ConsolidateFeatures()
 {
-  typedef float                                                   FeaturePixelType;
-  typedef Image< FeaturePixelType, NDimension >                   FeatureImageType;
-  typedef ImageSpatialObject< NDimension, FeaturePixelType >      FeatureSpatialObjectType;
+  using FeaturePixelType = float;
+  using FeatureImageType = Image< FeaturePixelType, NDimension >;
+  using FeatureSpatialObjectType = ImageSpatialObject< NDimension, FeaturePixelType >;
 
   const auto * firstFeatureObject = dynamic_cast< const FeatureSpatialObjectType * >( this->GetInputFeature(0) );
 
@@ -111,8 +111,8 @@ WeightedSumFeatureAggregator<NDimension>
 
     const FeatureImageType * featureImage = featureObject->GetImage();
 
-    typedef ImageRegionIterator< FeatureImageType >          FeatureIterator;
-    typedef ImageRegionConstIterator< FeatureImageType >     FeatureConstIterator;
+    using FeatureIterator = ImageRegionIterator< FeatureImageType >;
+    using FeatureConstIterator = ImageRegionConstIterator< FeatureImageType >;
 
     FeatureIterator       dstitr( consolidatedFeatureImage, consolidatedFeatureImage->GetBufferedRegion() );
     FeatureConstIterator  srcitr( featureImage, featureImage->GetBufferedRegion() );

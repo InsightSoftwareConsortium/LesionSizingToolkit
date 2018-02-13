@@ -67,11 +67,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT CannyEdgesDistanceAdvectionFieldFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef CannyEdgesDistanceAdvectionFieldFeatureGenerator                Self;
-  typedef FeatureGenerator<NDimension>                      Superclass;
-  typedef SmartPointer<Self>                                Pointer;
-  typedef SmartPointer<const Self>                          ConstPointer;
+  /** Standard class type alias. */
+  using Self = CannyEdgesDistanceAdvectionFieldFeatureGenerator;
+  using Superclass = FeatureGenerator<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -80,15 +80,15 @@ public:
   itkTypeMacro(CannyEdgesDistanceAdvectionFieldFeatureGenerator, FeatureGenerator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
-  typedef signed short                                      InputPixelType;
-  typedef Image< InputPixelType, Dimension >                InputImageType;
-  typedef ImageSpatialObject< NDimension, InputPixelType >  InputImageSpatialObjectType;
-  typedef typename InputImageSpatialObjectType::Pointer     InputImageSpatialObjectPointer;
-  typedef typename Superclass::SpatialObjectType            SpatialObjectType;
+  using InputPixelType = signed short;
+  using InputImageType = Image< InputPixelType, Dimension >;
+  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
+  using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
@@ -119,33 +119,33 @@ private:
   CannyEdgesDistanceAdvectionFieldFeatureGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typedef float                                       InternalPixelType;
-  typedef Image< InternalPixelType, Dimension >       InternalImageType;
+  using InternalPixelType = float;
+  using InternalImageType = Image< InternalPixelType, Dimension >;
 
-  typedef CastImageFilter<
-    InputImageType, InternalImageType >               CastFilterType;
-  typedef typename CastFilterType::Pointer            CastFilterPointer;
-  typedef CannyEdgeDetectionRecursiveGaussianImageFilter<
-    InternalImageType, InternalImageType >            CannyEdgeFilterType;
-  typedef typename CannyEdgeFilterType::Pointer       CannyEdgeFilterPointer;
+  using CastFilterType = CastImageFilter<
+    InputImageType, InternalImageType >;
+  using CastFilterPointer = typename CastFilterType::Pointer;
+  using CannyEdgeFilterType = CannyEdgeDetectionRecursiveGaussianImageFilter<
+    InternalImageType, InternalImageType >;
+  using CannyEdgeFilterPointer = typename CannyEdgeFilterType::Pointer;
 
-  typedef SignedMaurerDistanceMapImageFilter<
-    InternalImageType, InternalImageType >            DistanceMapFilterType;
-  typedef typename DistanceMapFilterType::Pointer     DistanceMapFilterPointer;
+  using DistanceMapFilterType = SignedMaurerDistanceMapImageFilter<
+    InternalImageType, InternalImageType >;
+  using DistanceMapFilterPointer = typename DistanceMapFilterType::Pointer;
 
-  typedef GradientImageFilter< InternalImageType,
-          InternalPixelType, InternalPixelType >              GradientFilterType;
-  typedef typename GradientFilterType::Pointer                GradientFilterPointer;
-  typedef typename GradientFilterType::OutputImageType        CovariantVectorImageType;
+  using GradientFilterType = GradientImageFilter< InternalImageType,
+          InternalPixelType, InternalPixelType >;
+  using GradientFilterPointer = typename GradientFilterType::Pointer;
+  using CovariantVectorImageType = typename GradientFilterType::OutputImageType;
 
-  typedef typename CovariantVectorImageType::PixelType        OutputPixelType;
-  typedef ImageSpatialObject< NDimension, OutputPixelType >   OutputImageSpatialObjectType;
-  typedef Image< OutputPixelType, Dimension >                 OutputImageType;
+  using OutputPixelType = typename CovariantVectorImageType::PixelType;
+  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputImageType = Image< OutputPixelType, Dimension >;
 
-  typedef MultiplyImageFilter<
+  using MultiplyFilterType = MultiplyImageFilter<
     CovariantVectorImageType, InternalImageType,
-                     CovariantVectorImageType >       MultiplyFilterType;
-  typedef typename MultiplyFilterType::Pointer        MultiplyFilterPointer;
+                     CovariantVectorImageType >;
+  using MultiplyFilterPointer = typename MultiplyFilterType::Pointer;
 
   CastFilterPointer                                   m_CastFilter;
   DistanceMapFilterPointer                            m_DistanceMapFilter;

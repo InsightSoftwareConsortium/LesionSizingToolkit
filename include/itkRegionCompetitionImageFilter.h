@@ -42,11 +42,11 @@ class RegionCompetitionImageFilter:
     public ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
-  /** Standard class typedefs. */
-  typedef RegionCompetitionImageFilter                    Self;
-  typedef ImageToImageFilter<TInputImage,TOutputImage>    Superclass;
-  typedef SmartPointer<Self>                              Pointer;
-  typedef SmartPointer<const Self>                        ConstPointer;
+  /** Standard class type alias. */
+  using Self = RegionCompetitionImageFilter;
+  using Superclass = ImageToImageFilter<TInputImage,TOutputImage>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -54,24 +54,24 @@ public:
   /** Run-time type information (and related methods).  */
   itkTypeMacro(RegionCompetitionImageFilter, ImageToImageFilter);
 
-  typedef TInputImage                              InputImageType;
-  typedef typename InputImageType::Pointer         InputImagePointer;
-  typedef typename InputImageType::ConstPointer    InputImageConstPointer;
-  typedef typename InputImageType::RegionType      InputImageRegionType;
-  typedef typename InputImageType::SizeType        InputSizeType;
-  typedef typename InputImageType::PixelType       InputImagePixelType;
-  typedef typename InputImageType::IndexType       IndexType;
-  typedef typename InputImageType::OffsetValueType OffsetValueType;
+  using InputImageType = TInputImage;
+  using InputImagePointer = typename InputImageType::Pointer;
+  using InputImageConstPointer = typename InputImageType::ConstPointer;
+  using InputImageRegionType = typename InputImageType::RegionType;
+  using InputSizeType = typename InputImageType::SizeType;
+  using InputImagePixelType = typename InputImageType::PixelType;
+  using IndexType = typename InputImageType::IndexType;
+  using OffsetValueType = typename InputImageType::OffsetValueType;
 
-  typedef TOutputImage                         OutputImageType;
-  typedef typename OutputImageType::Pointer    OutputImagePointer;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::PixelType  OutputImagePixelType;
+  using OutputImageType = TOutputImage;
+  using OutputImagePointer = typename OutputImageType::Pointer;
+  using OutputImageRegionType = typename OutputImageType::RegionType;
+  using OutputImagePixelType = typename OutputImageType::PixelType;
 
 
   /** Image dimension constants */
-  itkStaticConstMacro(InputImageDimension,  unsigned int, TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  static constexpr unsigned int InputImageDimension = TInputImage::ImageDimension;
+  static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
   /** Set/Get the maximum number of iterations that will be applied to the
    * propagating front */
@@ -142,14 +142,14 @@ private:
   itkSetMacro( CurrentPixelIndex, IndexType );
   itkGetConstReferenceMacro( CurrentPixelIndex, IndexType );
 
-  typedef std::vector<IndexType>    SeedArrayType;
+  using SeedArrayType = std::vector<IndexType>;
 
   SeedArrayType *                   m_SeedArray1;
   SeedArrayType *                   m_SeedArray2;
 
   InputImageRegionType              m_InternalRegion;
 
-  typedef std::vector<OutputImagePixelType> SeedNewValuesArrayType;
+  using SeedNewValuesArrayType = std::vector<OutputImagePixelType>;
 
   SeedNewValuesArrayType *          m_SeedsNewValues;
 
@@ -166,7 +166,7 @@ private:
   //
   OffsetValueType                   m_OffsetTable[ InputImageDimension + 1 ];
 
-  typedef std::vector< OffsetValueType >   NeighborOffsetArrayType;
+  using NeighborOffsetArrayType = std::vector< OffsetValueType >;
 
   NeighborOffsetArrayType           m_NeighborBufferOffset;
 
@@ -178,12 +178,12 @@ private:
   const OutputImageType*       m_inputLabelsImage;
   OutputImageType *                 m_OutputImage;
 
-  typedef itk::Image< unsigned char, InputImageDimension >  SeedMaskImageType;
-  typedef typename SeedMaskImageType::Pointer               SeedMaskImagePointer;
+  using SeedMaskImageType = itk::Image< unsigned char, InputImageDimension >;
+  using SeedMaskImagePointer = typename SeedMaskImageType::Pointer;
 
   SeedMaskImagePointer              m_SeedsMask;
 
-  typedef itk::Neighborhood< InputImagePixelType, InputImageDimension >  NeighborhoodType;
+  using NeighborhoodType = itk::Neighborhood< InputImagePixelType, InputImageDimension >;
 
   NeighborhoodType                  m_Neighborhood;
 

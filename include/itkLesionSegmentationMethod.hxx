@@ -37,8 +37,8 @@ LesionSegmentationMethod<NDimension>
 {
   this->SetNumberOfRequiredOutputs( 1 );  // for the Transform
 
-  typedef float                                                 OutputPixelType;
-  typedef ImageSpatialObject< NDimension, OutputPixelType >     OutputSpatialObjectType;
+  using OutputPixelType = float;
+  using OutputSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
 
   typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
 

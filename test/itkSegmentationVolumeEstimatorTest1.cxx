@@ -25,11 +25,11 @@ namespace itk
 class VolumeEstimatorSurrogate : public SegmentationVolumeEstimator<3>
 {
 public:
-  /** Standard class typedefs. */
-  typedef VolumeEstimatorSurrogate Self;
-  typedef ProcessObject            Superclass;
-  typedef SmartPointer<Self>       Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  /** Standard class type alias. */
+  using Self = VolumeEstimatorSurrogate;
+  using Superclass = ProcessObject;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro( Self );
 
@@ -42,11 +42,11 @@ int itkSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed
 {
   const unsigned int Dimension = 3;
 
-  typedef itk::VolumeEstimatorSurrogate                   VolumeEstimatorType;
+  using VolumeEstimatorType = itk::VolumeEstimatorSurrogate;
 
   VolumeEstimatorType::Pointer  volumeEstimator = VolumeEstimatorType::New();
 
-  typedef itk::ImageSpatialObject< Dimension > ImageSpatialObjectType;
+  using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
 

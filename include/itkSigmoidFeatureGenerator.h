@@ -43,11 +43,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT SigmoidFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef SigmoidFeatureGenerator          Self;
-  typedef FeatureGenerator<NDimension>     Superclass;
-  typedef SmartPointer<Self>               Pointer;
-  typedef SmartPointer<const Self>         ConstPointer;
+  /** Standard class type alias. */
+  using Self = SigmoidFeatureGenerator;
+  using Superclass = FeatureGenerator<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -56,15 +56,15 @@ public:
   itkTypeMacro(SigmoidFeatureGenerator, FeatureGenerator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
-  typedef signed short                                      InputPixelType;
-  typedef Image< InputPixelType, Dimension >                InputImageType;
-  typedef ImageSpatialObject< NDimension, InputPixelType >  InputImageSpatialObjectType;
-  typedef typename InputImageSpatialObjectType::Pointer     InputImageSpatialObjectPointer;
-  typedef typename Superclass::SpatialObjectType            SpatialObjectType;
+  using InputPixelType = signed short;
+  using InputImageType = Image< InputPixelType, Dimension >;
+  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
+  using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
@@ -96,14 +96,14 @@ private:
   SigmoidFeatureGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typedef float                                       OutputPixelType;
-  typedef Image< OutputPixelType, Dimension >         OutputImageType;
+  using OutputPixelType = float;
+  using OutputImageType = Image< OutputPixelType, Dimension >;
 
-  typedef ImageSpatialObject< NDimension, OutputPixelType >  OutputImageSpatialObjectType;
+  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
 
-  typedef SigmoidImageFilter<
-    InputImageType, OutputImageType >                 SigmoidFilterType;
-  typedef typename SigmoidFilterType::Pointer         SigmoidFilterPointer;
+  using SigmoidFilterType = SigmoidImageFilter<
+    InputImageType, OutputImageType >;
+  using SigmoidFilterPointer = typename SigmoidFilterType::Pointer;
 
   SigmoidFilterPointer            m_SigmoidFilter;
 

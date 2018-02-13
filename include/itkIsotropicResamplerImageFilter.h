@@ -39,24 +39,24 @@ class IsotropicResamplerImageFilter
   : public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
-  /** Standard "Self" & Superclass typedef.  */
-  typedef IsotropicResamplerImageFilter                 Self;
-  typedef ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  /** Standard "Self" & Superclass type alias.  */
+  using Self = IsotropicResamplerImageFilter;
+  using Superclass = ImageToImageFilter<TInputImage, TOutputImage>;
 
-  /** Image typedef support   */
-  typedef TInputImage                         InputImageType;
-  typedef TOutputImage                        OutputImageType;
-  typedef typename OutputImageType::Pointer   OutputImagePointer;
+  /** Image type alias support   */
+  using InputImageType = TInputImage;
+  using OutputImageType = TOutputImage;
+  using OutputImagePointer = typename OutputImageType::Pointer;
 
-  /** SmartPointer typedef support  */
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  /** SmartPointer type alias support  */
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Define pixel types. */
-  typedef typename TOutputImage::PixelType        OutputImagePixelType;
-  typedef typename InputImageType::SizeType       SizeType;
-  typedef typename SizeType::SizeValueType        SizeValueType;
-  typedef typename InputImageType::SpacingType    SpacingType;
+  using OutputImagePixelType = typename TOutputImage::PixelType;
+  using SizeType = typename InputImageType::SizeType;
+  using SizeValueType = typename SizeType::SizeValueType;
+  using SpacingType = typename InputImageType::SpacingType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -65,11 +65,9 @@ public:
   itkTypeMacro(IsotropicResamplerImageFilter, ImageToImageFilter);
 
   /** ImageDimension constant    */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
 
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
   itkSetMacro( OutputSpacing, SpacingType );
   itkGetMacro( OutputSpacing, SpacingType );
@@ -105,8 +103,8 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   SpacingType m_OutputSpacing;
-  typedef ResampleImageFilter< TInputImage, TOutputImage > ResampleFilterType;
-  typedef typename ResampleFilterType::Pointer             ResampleFilterPointer;
+  using ResampleFilterType = ResampleImageFilter< TInputImage, TOutputImage >;
+  using ResampleFilterPointer = typename ResampleFilterType::Pointer;
 
   ResampleFilterPointer     m_ResampleFilter;
   OutputImagePixelType      m_DefaultPixelValue;

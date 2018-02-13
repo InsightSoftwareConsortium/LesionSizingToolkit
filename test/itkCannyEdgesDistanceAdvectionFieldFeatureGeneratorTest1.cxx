@@ -34,17 +34,17 @@ int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * a
     }
 
   const unsigned int Dimension = 3;
-  typedef signed short                  InputPixelType;
-  typedef itk::CovariantVector< float > OutputPixelType;
+  using InputPixelType = signed short;
+  using OutputPixelType = itk::CovariantVector< float >;
 
-  typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
+  using InputImageType = itk::Image< InputPixelType,  Dimension >;
+  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
 
-  typedef itk::ImageFileReader< InputImageType >     ReaderType;
-  typedef itk::ImageFileWriter< OutputImageType >    WriterType;
+  using ReaderType = itk::ImageFileReader< InputImageType >;
+  using WriterType = itk::ImageFileWriter< OutputImageType >;
 
-  typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
-  typedef itk::ImageSpatialObject< Dimension, OutputPixelType > OutputImageSpatialObjectType;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
+  using OutputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, OutputPixelType >;
 
   ReaderType::Pointer reader = ReaderType::New();
 
@@ -60,8 +60,8 @@ int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * a
     return EXIT_FAILURE;
     }
 
-  typedef itk::CannyEdgesDistanceAdvectionFieldFeatureGenerator< Dimension >   CannyEdgesDistanceAdvectionFieldFeatureGeneratorType;
-  typedef CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::SpatialObjectType    SpatialObjectType;
+  using CannyEdgesDistanceAdvectionFieldFeatureGeneratorType = itk::CannyEdgesDistanceAdvectionFieldFeatureGenerator< Dimension >;
+  using SpatialObjectType = CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::SpatialObjectType;
 
   CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::Pointer  featureGenerator = CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::New();
   

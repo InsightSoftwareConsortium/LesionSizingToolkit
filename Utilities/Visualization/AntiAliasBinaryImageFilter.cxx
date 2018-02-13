@@ -49,15 +49,15 @@ int main(int argc, char* argv[])
     }
 
 
-  typedef float            PixelType;
+  using PixelType = float;
   const   unsigned int     Dimension = 3;
 
-  typedef itk::Image< PixelType, Dimension >     ImageType;
+  using ImageType = itk::Image< PixelType, Dimension >;
 
-  typedef itk::ImageFileReader< ImageType >  ReaderType;
-  typedef itk::ImageFileWriter< ImageType >  WriterType;
+  using ReaderType = itk::ImageFileReader< ImageType >;
+  using WriterType = itk::ImageFileWriter< ImageType >;
 
-  typedef itk::AntiAliasBinaryImageFilter< ImageType, ImageType> AntiAliasFilterType;
+  using AntiAliasFilterType = itk::AntiAliasBinaryImageFilter< ImageType, ImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();

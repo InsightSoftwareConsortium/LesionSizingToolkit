@@ -65,8 +65,8 @@ void
 ShapeDetectionLevelSetSegmentationModule<NDimension>
 ::GenerateData()
 {
-  typedef ShapeDetectionLevelSetImageFilter<
-    InputImageType, FeatureImageType, OutputPixelType > FilterType;
+  using FilterType = ShapeDetectionLevelSetImageFilter<
+    InputImageType, FeatureImageType, OutputPixelType >;
 
   typename FilterType::Pointer filter = FilterType::New();
 

@@ -39,11 +39,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT SatoVesselnessSigmoidFeatureGenerator : public SatoVesselnessFeatureGenerator<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef SatoVesselnessSigmoidFeatureGenerator         Self;
-  typedef SatoVesselnessFeatureGenerator<NDimension>    Superclass;
-  typedef SmartPointer<Self>                            Pointer;
-  typedef SmartPointer<const Self>                      ConstPointer;
+  /** Standard class type alias. */
+  using Self = SatoVesselnessSigmoidFeatureGenerator;
+  using Superclass = SatoVesselnessFeatureGenerator<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -52,7 +52,7 @@ public:
   itkTypeMacro(SatoVesselnessSigmoidFeatureGenerator, SatoVesselnessFeatureGenerator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Alpha value to be used in the Sigmoid transformation. It should be a
    * negative number if the feature is going to be used to exclude vessels, and
@@ -79,15 +79,15 @@ private:
   SatoVesselnessSigmoidFeatureGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typedef float                                       InternalPixelType;
-  typedef Image< InternalPixelType, Dimension >       InternalImageType;
+  using InternalPixelType = float;
+  using InternalImageType = Image< InternalPixelType, Dimension >;
 
-  typedef InternalPixelType                           OutputPixelType;
-  typedef InternalImageType                           OutputImageType;
+  using OutputPixelType = InternalPixelType;
+  using OutputImageType = InternalImageType;
 
-  typedef ImageSpatialObject< NDimension, OutputPixelType >  OutputImageSpatialObjectType;
+  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
 
-  typedef SigmoidImageFilter< InternalImageType, InternalImageType > SigmoidFilterType;
+  using SigmoidFilterType = SigmoidImageFilter< InternalImageType, InternalImageType >;
 
   typename SigmoidFilterType::Pointer                 m_SigmoidFilter;
 

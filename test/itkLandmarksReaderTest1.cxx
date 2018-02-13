@@ -30,12 +30,12 @@ int itkLandmarksReaderTest1( int argc, char * argv [] )
 
   const unsigned int Dimension = 3;
 
-  typedef itk::LandmarkSpatialObject< Dimension >    InputSpatialObjectType;
+  using InputSpatialObjectType = itk::LandmarkSpatialObject< Dimension >;
 
   //
   //  Reading the landmarks file with the itkLandmarksReader.
   //
-  typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
+  using LandmarksReaderType = itk::LandmarksReader< Dimension >;
   
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
@@ -59,7 +59,7 @@ int itkLandmarksReaderTest1( int argc, char * argv [] )
   //
   // Reading the landmarks file by using direct ITK classes
   //
-  typedef itk::SpatialObjectReader< 3, unsigned short > SpatialObjectReaderType;
+  using SpatialObjectReaderType = itk::SpatialObjectReader< 3, unsigned short >;
 
   SpatialObjectReaderType::Pointer landmarkPointsReader = SpatialObjectReaderType::New();
 
@@ -76,7 +76,7 @@ int itkLandmarksReaderTest1( int argc, char * argv [] )
 
   std::cout << "Number of object in the scene:" << scene->GetNumberOfObjects(1) << std::endl;
 
-  typedef SpatialObjectReaderType::SceneType::ObjectListType     ObjectListType;
+  using ObjectListType = SpatialObjectReaderType::SceneType::ObjectListType;
 
   ObjectListType * sceneChildren = scene->GetObjects(999999);
 
@@ -96,7 +96,7 @@ int itkLandmarksReaderTest1( int argc, char * argv [] )
     spatialObjectItr++;
     }
  
-  typedef InputSpatialObjectType::PointListType    PointListType;
+  using PointListType = InputSpatialObjectType::PointListType;
 
   const unsigned int numberOfPoints1 = landmarkSpatialObject1->GetNumberOfPoints();
   const unsigned int numberOfPoints2 = landmarkSpatialObject2->GetNumberOfPoints();

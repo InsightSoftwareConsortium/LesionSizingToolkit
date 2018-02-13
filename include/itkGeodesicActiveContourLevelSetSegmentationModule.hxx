@@ -66,8 +66,8 @@ void
 GeodesicActiveContourLevelSetSegmentationModule<NDimension>
 ::GenerateData()
 {
-  typedef GeodesicActiveContourLevelSetImageFilter<
-    InputImageType, FeatureImageType, OutputPixelType > FilterType;
+  using FilterType = GeodesicActiveContourLevelSetImageFilter<
+    InputImageType, FeatureImageType, OutputPixelType >;
 
   typename FilterType::Pointer filter = FilterType::New();
 

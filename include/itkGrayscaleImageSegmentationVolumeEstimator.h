@@ -44,12 +44,12 @@ class ITK_EXPORT GrayscaleImageSegmentationVolumeEstimator :
  public SegmentationVolumeEstimator<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef GrayscaleImageSegmentationVolumeEstimator   Self;
-  typedef SegmentationVolumeEstimator<NDimension>     Superclass;
-  typedef SmartPointer<Self>                          Pointer;
-  typedef SmartPointer<const Self>                    ConstPointer;
-  typedef typename Superclass::RealObjectType         RealObjectType;
+  /** Standard class type alias. */
+  using Self = GrayscaleImageSegmentationVolumeEstimator;
+  using Superclass = SegmentationVolumeEstimator<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
+  using RealObjectType = typename Superclass::RealObjectType;
 
   /** Method for constructing new instances of this class. */
   itkNewMacro( Self );
@@ -58,18 +58,18 @@ public:
   itkTypeMacro(GrayscaleImageSegmentationVolumeEstimator, SegmentationVolumeEstimator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef typename Superclass::SpatialObjectType          SpatialObjectType;
-  typedef typename Superclass::SpatialObjectPointer       SpatialObjectPointer;
-  typedef typename Superclass::SpatialObjectConstPointer  SpatialObjectConstPointer;
+  using SpatialObjectType = typename Superclass::SpatialObjectType;
+  using SpatialObjectPointer = typename Superclass::SpatialObjectPointer;
+  using SpatialObjectConstPointer = typename Superclass::SpatialObjectConstPointer;
 
   /** Required type of the input */
-  typedef float                                               InputPixelType;
-  typedef ImageSpatialObject< NDimension, InputPixelType >    InputImageSpatialObjectType;
-  typedef Image< InputPixelType, NDimension >                 InputImageType;
+  using InputPixelType = float;
+  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageType = Image< InputPixelType, NDimension >;
 
 protected:
   GrayscaleImageSegmentationVolumeEstimator();

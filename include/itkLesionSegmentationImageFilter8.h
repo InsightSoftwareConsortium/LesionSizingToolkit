@@ -46,43 +46,41 @@ class LesionSegmentationImageFilter8
   : public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
-  /** Standard "Self" & Superclass typedef.  */
-  typedef LesionSegmentationImageFilter8                    Self;
-  typedef ImageToImageFilter<TInputImage, TOutputImage>     Superclass;
+  /** Standard "Self" & Superclass type alias.  */
+  using Self = LesionSegmentationImageFilter8;
+  using Superclass = ImageToImageFilter<TInputImage, TOutputImage>;
 
-  /** Image typedef support   */
-  typedef TInputImage  InputImageType;
-  typedef TOutputImage OutputImageType;
+  /** Image type alias support   */
+  using InputImageType = TInputImage;
+  using OutputImageType = TOutputImage;
 
-  /** SmartPointer typedef support  */
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  /** SmartPointer type alias support  */
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Define pixel types. */
-  typedef typename TInputImage::PixelType         InputImagePixelType;
-  typedef typename TOutputImage::PixelType        OutputImagePixelType;
-  typedef typename TInputImage::IndexType         IndexType;
-  typedef typename InputImageType::SpacingType    SpacingType;
+  using InputImagePixelType = typename TInputImage::PixelType;
+  using OutputImagePixelType = typename TOutputImage::PixelType;
+  using IndexType = typename TInputImage::IndexType;
+  using SpacingType = typename InputImageType::SpacingType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Typedef to describe the output image region type. */
-  typedef typename TOutputImage::RegionType OutputImageRegionType;
-  typedef typename TOutputImage::RegionType RegionType;
+  using OutputImageRegionType = typename TOutputImage::RegionType;
+  using RegionType = typename TOutputImage::RegionType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(LesionSegmentationImageFilter8, ImageToImageFilter);
 
   /** ImageDimension constant    */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
 
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
-  typedef CannyEdgesFeatureGenerator< ImageDimension > CannyEdgesFeatureGeneratorType;
-  typedef typename CannyEdgesFeatureGeneratorType::SigmaArrayType SigmaArrayType;
+  using CannyEdgesFeatureGeneratorType = CannyEdgesFeatureGenerator< ImageDimension >;
+  using SigmaArrayType = typename CannyEdgesFeatureGeneratorType::SigmaArrayType;
 
   void GenerateInputRequestedRegion()
             throw(InvalidRequestedRegionError) override;
@@ -128,8 +126,8 @@ public:
   virtual void SetUseVesselEnhancingDiffusion( bool );
   itkBooleanMacro( UseVesselEnhancingDiffusion );
 
-  typedef itk::LandmarkSpatialObject< ImageDimension >    SeedSpatialObjectType;
-  typedef typename SeedSpatialObjectType::PointListType   PointListType;
+  using SeedSpatialObjectType = itk::LandmarkSpatialObject< ImageDimension >;
+  using PointListType = typename SeedSpatialObjectType::PointListType;
 
   void SetSeeds( PointListType p ) { this->m_Seeds = p; }
   PointListType GetSeeds() { return m_Seeds; }
@@ -159,20 +157,20 @@ protected:
   void GenerateData() override;
 
   // Filters used by this class
-  typedef LesionSegmentationMethod< ImageDimension >                LesionSegmentationMethodType;
-  typedef SatoVesselnessSigmoidFeatureGenerator< ImageDimension >   VesselnessGeneratorType;
-  typedef LungWallFeatureGenerator< ImageDimension >                LungWallGeneratorType;
-  typedef SigmoidFeatureGenerator< ImageDimension >                 SigmoidFeatureGeneratorType;
-  typedef MinimumFeatureAggregator< ImageDimension >                FeatureAggregatorType;
-  typedef FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule< ImageDimension > SegmentationModuleType;
-  typedef RegionOfInterestImageFilter< InputImageType, InputImageType > CropFilterType;
-  typedef typename SegmentationModuleType::SpatialObjectType        SpatialObjectType;
-  typedef typename SegmentationModuleType::OutputSpatialObjectType  OutputSpatialObjectType;
-  typedef ImageSpatialObject< ImageDimension, InputImagePixelType > InputImageSpatialObjectType;
-  typedef IsotropicResamplerImageFilter< InputImageType, InputImageType > IsotropicResamplerType;
-  typedef typename RegionType::SizeType                             SizeType;
-  typedef typename SizeType::SizeValueType                          SizeValueType;
-  typedef MemberCommand< Self >                                     CommandType;
+  using LesionSegmentationMethodType = LesionSegmentationMethod< ImageDimension >;
+  using VesselnessGeneratorType = SatoVesselnessSigmoidFeatureGenerator< ImageDimension >;
+  using LungWallGeneratorType = LungWallFeatureGenerator< ImageDimension >;
+  using SigmoidFeatureGeneratorType = SigmoidFeatureGenerator< ImageDimension >;
+  using FeatureAggregatorType = MinimumFeatureAggregator< ImageDimension >;
+  using SegmentationModuleType = FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule< ImageDimension >;
+  using CropFilterType = RegionOfInterestImageFilter< InputImageType, InputImageType >;
+  using SpatialObjectType = typename SegmentationModuleType::SpatialObjectType;
+  using OutputSpatialObjectType = typename SegmentationModuleType::OutputSpatialObjectType;
+  using InputImageSpatialObjectType = ImageSpatialObject< ImageDimension, InputImagePixelType >;
+  using IsotropicResamplerType = IsotropicResamplerImageFilter< InputImageType, InputImageType >;
+  using SizeType = typename RegionType::SizeType;
+  using SizeValueType = typename SizeType::SizeValueType;
+  using CommandType = MemberCommand< Self >;
 
 
 private:

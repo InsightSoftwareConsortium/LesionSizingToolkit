@@ -38,11 +38,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT SegmentationVolumeEstimator : public ProcessObject
 {
 public:
-  /** Standard class typedefs. */
-  typedef SegmentationVolumeEstimator   Self;
-  typedef ProcessObject                 Superclass;
-  typedef SmartPointer<Self>            Pointer;
-  typedef SmartPointer<const Self>      ConstPointer;
+  /** Standard class type alias. */
+  using Self = SegmentationVolumeEstimator;
+  using Superclass = ProcessObject;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** This is an abstract class, therefore it doesn't need the itkNewMacro() */
 
@@ -50,13 +50,13 @@ public:
   itkTypeMacro(SegmentationVolumeEstimator, FeatureGenerator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef SpatialObject< NDimension >                 SpatialObjectType;
-  typedef typename SpatialObjectType::Pointer         SpatialObjectPointer;
-  typedef typename SpatialObjectType::ConstPointer    SpatialObjectConstPointer;
+  using SpatialObjectType = SpatialObject< NDimension >;
+  using SpatialObjectPointer = typename SpatialObjectType::Pointer;
+  using SpatialObjectConstPointer = typename SpatialObjectType::ConstPointer;
 
   /** Set the input SpatialObject representing the segmentation whose volume
    * will be estimated */
@@ -64,8 +64,8 @@ public:
   void SetInput( const SpatialObjectType * inputSpatialObject );
 
   /** Type of DataObjects used for scalar outputs */
-  typedef double                                      RealType;
-  typedef SimpleDataObjectDecorator< RealType >       RealObjectType;
+  using RealType = double;
+  using RealObjectType = SimpleDataObjectDecorator< RealType >;
 
   /** Return the computed Volume. The volume units will be relative to the
  * spacing units used by the input spatial object. For example, if the input

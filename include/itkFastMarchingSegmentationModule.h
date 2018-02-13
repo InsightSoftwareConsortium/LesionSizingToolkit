@@ -38,11 +38,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT FastMarchingSegmentationModule : public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef FastMarchingSegmentationModule                        Self;
-  typedef SinglePhaseLevelSetSegmentationModule<NDimension>     Superclass;
-  typedef SmartPointer<Self>                                    Pointer;
-  typedef SmartPointer<const Self>                              ConstPointer;
+  /** Standard class type alias. */
+  using Self = FastMarchingSegmentationModule;
+  using Superclass = SinglePhaseLevelSetSegmentationModule<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -51,25 +51,25 @@ public:
   itkTypeMacro(FastMarchingSegmentationModule, SinglePhaseLevelSetSegmentationModule);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef typename Superclass::SpatialObjectType         SpatialObjectType;
-  typedef typename Superclass::SpatialObjectPointer      SpatialObjectPointer;
+  using SpatialObjectType = typename Superclass::SpatialObjectType;
+  using SpatialObjectPointer = typename Superclass::SpatialObjectPointer;
 
   /** Types of the input feature image and the output image */
-  typedef float                                         OutputPixelType;
-  typedef float                                         FeaturePixelType;
-  typedef Image< FeaturePixelType, NDimension >         FeatureImageType;
-  typedef Image< OutputPixelType, NDimension >          OutputImageType;
+  using OutputPixelType = float;
+  using FeaturePixelType = float;
+  using FeatureImageType = Image< FeaturePixelType, NDimension >;
+  using OutputImageType = Image< OutputPixelType, NDimension >;
 
   /** Types of the Spatial objects used for the input feature image and the output image. */
-  typedef ImageSpatialObject< NDimension, FeaturePixelType >   FeatureSpatialObjectType;
-  typedef ImageSpatialObject< NDimension, OutputPixelType >    OutputSpatialObjectType;
+  using FeatureSpatialObjectType = ImageSpatialObject< NDimension, FeaturePixelType >;
+  using OutputSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
 
   /** Type of the input set of seed points. They are stored in a Landmark Spatial Object. */
-  typedef LandmarkSpatialObject< NDimension >                  InputSpatialObjectType;
+  using InputSpatialObjectType = LandmarkSpatialObject< NDimension >;
 
   /** Set the Fast Marching algorithm Stopping Value. The Fast Marching
    * algorithm is terminated when the value of the smallest trial point

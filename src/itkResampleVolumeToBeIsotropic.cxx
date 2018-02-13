@@ -44,12 +44,12 @@ int main( int argc, char * argv[] )
     }
 
 
-  typedef   signed short    PixelType;
+  using PixelType = signed short;
   const     unsigned int    Dimension = 3;
 
-  typedef itk::Image< PixelType, Dimension >       ImageType;
+  using ImageType = itk::Image< PixelType, Dimension >;
 
-  typedef itk::ImageFileReader< ImageType  >       ReaderType;
+  using ReaderType = itk::ImageFileReader< ImageType  >;
 
   ReaderType::Pointer reader = ReaderType::New();
 
@@ -69,11 +69,11 @@ int main( int argc, char * argv[] )
 
   ImageType::ConstPointer inputImage = reader->GetOutput();
 
-  typedef itk::ResampleImageFilter< ImageType, ImageType >  ResampleFilterType;
+  using ResampleFilterType = itk::ResampleImageFilter< ImageType, ImageType >;
 
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
 
-  typedef itk::IdentityTransform< double, Dimension >  TransformType;
+  using TransformType = itk::IdentityTransform< double, Dimension >;
 
   TransformType::Pointer transform = TransformType::New();
   transform->SetIdentity();
@@ -81,7 +81,7 @@ int main( int argc, char * argv[] )
   resampler->SetTransform( transform );
 
 
-  typedef itk::BSplineInterpolateImageFunction< ImageType, double >  BSplineInterpolatorType;
+  using BSplineInterpolatorType = itk::BSplineInterpolateImageFunction< ImageType, double >;
 
   BSplineInterpolatorType::Pointer bsplineInterpolator = BSplineInterpolatorType::New();
 
@@ -91,11 +91,11 @@ int main( int argc, char * argv[] )
   bsplineInterpolator->SetSplineOrder( 3 );
 
 
-  typedef itk::WindowedSincInterpolateImageFunction< ImageType, 3 >  WindowedSincInterpolatorType;
+  using WindowedSincInterpolatorType = itk::WindowedSincInterpolateImageFunction< ImageType, 3 >;
 
   WindowedSincInterpolatorType::Pointer windowedSincInterpolator = WindowedSincInterpolatorType::New();
 
-  typedef itk::LinearInterpolateImageFunction< ImageType, double >  LinearInterpolatorType;
+  using LinearInterpolatorType = itk::LinearInterpolateImageFunction< ImageType, double >;
 
   LinearInterpolatorType::Pointer linearInterpolator = LinearInterpolatorType::New();
 
@@ -141,7 +141,7 @@ int main( int argc, char * argv[] )
 
   ImageType::SizeType   inputSize = inputImage->GetLargestPossibleRegion().GetSize();
 
-  typedef ImageType::SizeType::SizeValueType SizeValueType;
+  using SizeValueType = ImageType::SizeType::SizeValueType;
 
   const double dx = inputSize[0] * inputSpacing[0] / outputSpacing[0];
   const double dy = inputSize[1] * inputSpacing[1] / outputSpacing[1];
@@ -157,7 +157,7 @@ int main( int argc, char * argv[] )
 
   resampler->SetInput( inputImage );
 
-  typedef itk::ImageFileWriter< ImageType >  WriterType;
+  using WriterType = itk::ImageFileWriter< ImageType >;
 
   WriterType::Pointer writer = WriterType::New();
 

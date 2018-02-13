@@ -32,24 +32,24 @@ int itkLocalStructureImageFilterTest1( int argc, char * argv [] )
 
   const unsigned int Dimension = 3;
 
-  typedef signed short    InputPixelType;
-  typedef float           OutputPixelType;
+  using InputPixelType = signed short;
+  using OutputPixelType = float;
 
-  typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
+  using InputImageType = itk::Image< InputPixelType,  Dimension >;
+  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
 
-  typedef itk::HessianRecursiveGaussianImageFilter< InputImageType >  HessianFilterType;
-  typedef HessianFilterType::OutputImageType                          HessianImageType;
-  typedef HessianImageType::PixelType                                 HessianPixelType;
+  using HessianFilterType = itk::HessianRecursiveGaussianImageFilter< InputImageType >;
+  using HessianImageType = HessianFilterType::OutputImageType;
+  using HessianPixelType = HessianImageType::PixelType;
 
-  typedef  itk::FixedArray< double, HessianPixelType::Dimension >     EigenValueArrayType;
-  typedef  itk::Image< EigenValueArrayType, Dimension >               EigenValueImageType;
+  using EigenValueArrayType = itk::FixedArray< double, HessianPixelType::Dimension >;
+  using EigenValueImageType = itk::Image< EigenValueArrayType, Dimension >;
 
-  typedef  itk::SymmetricEigenAnalysisImageFilter< 
-    HessianImageType, EigenValueImageType >     EigenAnalysisFilterType;
+  using EigenAnalysisFilterType = itk::SymmetricEigenAnalysisImageFilter< 
+    HessianImageType, EigenValueImageType >;
 
-  typedef itk::ImageFileReader< InputImageType >     ReaderType;
-  typedef itk::ImageFileWriter< OutputImageType >    WriterType;
+  using ReaderType = itk::ImageFileReader< InputImageType >;
+  using WriterType = itk::ImageFileWriter< OutputImageType >;
 
   HessianFilterType::Pointer hessian = HessianFilterType::New();
   EigenAnalysisFilterType::Pointer eigen = EigenAnalysisFilterType::New();
@@ -57,7 +57,7 @@ int itkLocalStructureImageFilterTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  typedef itk::LocalStructureImageFilter< EigenValueImageType, OutputImageType >   LocalStructureFilterType;
+  using LocalStructureFilterType = itk::LocalStructureImageFilter< EigenValueImageType, OutputImageType >;
 
   LocalStructureFilterType::Pointer localStructure = LocalStructureFilterType::New();
   

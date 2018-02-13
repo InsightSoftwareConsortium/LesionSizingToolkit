@@ -45,10 +45,10 @@ int itkVEDTest(int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  typedef itk::VesselEnhancingDiffusion3DImageFilter<short> VT;
-  typedef VT::ImageType                                     IT;
-  typedef itk::ImageFileReader<IT>                          RT;
-  typedef itk::ImageFileWriter<IT>                          WT;
+  using VT = itk::VesselEnhancingDiffusion3DImageFilter<short>;
+  using IT = VT::ImageType;
+  using RT = itk::ImageFileReader<IT>;
+  using WT = itk::ImageFileWriter<IT>;
 
   RT::Pointer r = RT::New();
   r->SetFileName(argv[1]);

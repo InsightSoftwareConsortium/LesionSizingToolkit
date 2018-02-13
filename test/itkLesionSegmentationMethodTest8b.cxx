@@ -42,16 +42,16 @@ int itkLesionSegmentationMethodTest8b( int argc, char * argv [] )
     }
 
   const unsigned int Dimension = 3;
-  typedef signed short                              InputPixelType;
-  typedef float                                     OutputPixelType;
-  typedef itk::Image< InputPixelType,  Dimension >  InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >  OutputImageType;
-  typedef itk::LesionSegmentationImageFilter8< 
-          InputImageType, OutputImageType >         SegmentationMethodType;
-  typedef itk::ImageFileReader< InputImageType >    InputImageReaderType;
-  typedef itk::LandmarksReader< Dimension >         LandmarksReaderType;
-  typedef itk::LandmarkSpatialObject< Dimension >   SeedSpatialObjectType;
-  typedef itk::ImageFileWriter< OutputImageType >   OutputWriterType;
+  using InputPixelType = signed short;
+  using OutputPixelType = float;
+  using InputImageType = itk::Image< InputPixelType,  Dimension >;
+  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
+  using SegmentationMethodType = itk::LesionSegmentationImageFilter8< 
+          InputImageType, OutputImageType >;
+  using InputImageReaderType = itk::ImageFileReader< InputImageType >;
+  using LandmarksReaderType = itk::LandmarksReader< Dimension >;
+  using SeedSpatialObjectType = itk::LandmarkSpatialObject< Dimension >;
+  using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
 
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
   inputImageReader->SetFileName( argv[2] );

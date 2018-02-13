@@ -35,16 +35,16 @@ int itkVotingBinaryHoleFillFloodingImageFilterTest1( int argc, char * argv[] )
     }
 
 
-  typedef signed short   InputPixelType;
-  typedef unsigned char  OutputPixelType;
+  using InputPixelType = signed short;
+  using OutputPixelType = unsigned char;
 
   const unsigned int Dimension = 3;
 
-  typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
+  using InputImageType = itk::Image< InputPixelType,  Dimension >;
+  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
 
-  typedef itk::ImageFileReader< InputImageType >   ReaderType;
-  typedef itk::ImageFileWriter< OutputImageType >  WriterType;
+  using ReaderType = itk::ImageFileReader< InputImageType >;
+  using WriterType = itk::ImageFileWriter< OutputImageType >;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -52,8 +52,8 @@ int itkVotingBinaryHoleFillFloodingImageFilterTest1( int argc, char * argv[] )
   reader->SetFileName( argv[1] );
   writer->SetFileName( argv[2] );
 
-  typedef itk::BinaryThresholdImageFilter< 
-    InputImageType, OutputImageType > ThresholderType;
+  using ThresholderType = itk::BinaryThresholdImageFilter< 
+    InputImageType, OutputImageType >;
 
   ThresholderType::Pointer thresholder = ThresholderType::New();
 
@@ -63,8 +63,8 @@ int itkVotingBinaryHoleFillFloodingImageFilterTest1( int argc, char * argv[] )
   thresholder->SetOutsideValue(  0 );
   thresholder->SetInsideValue( 255 );
  
-  typedef itk::VotingBinaryHoleFillFloodingImageFilter< 
-    OutputImageType, OutputImageType >  FilterType;
+  using FilterType = itk::VotingBinaryHoleFillFloodingImageFilter< 
+    OutputImageType, OutputImageType >;
 
   FilterType::Pointer filter = FilterType::New();
 

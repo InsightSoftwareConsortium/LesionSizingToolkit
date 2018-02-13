@@ -27,11 +27,11 @@ namespace itk
 class MinimumFeatureAggregatorDerived : public MinimumFeatureAggregator<3>
 {
 public:
-  /** Standard class typedefs. */
-  typedef MinimumFeatureAggregatorDerived     Self;
-  typedef MinimumFeatureAggregator<3>         Superclass;
-  typedef SmartPointer<Self>                  Pointer;
-  typedef SmartPointer<const Self>            ConstPointer;
+  /** Standard class type alias. */
+  using Self = MinimumFeatureAggregatorDerived;
+  using Superclass = MinimumFeatureAggregator<3>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -39,7 +39,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(MinimumFeatureAggregatorDerived, MinimumFeatureAggregator);
 
-  typedef  Superclass::InputFeatureType    InputFeatureType;
+  using InputFeatureType = Superclass::InputFeatureType;
 
   //
   // Need to make it public, to make testing possible.
@@ -64,11 +64,11 @@ int itkMinimumFeatureAggregatorTest2( int argc, char * argv [] )
 
 
   const unsigned int Dimension = 3;
-  typedef signed short   InputPixelType;
+  using InputPixelType = signed short;
 
-  typedef itk::Image< InputPixelType, Dimension > InputImageType;
+  using InputImageType = itk::Image< InputPixelType, Dimension >;
 
-  typedef itk::ImageFileReader< InputImageType > InputImageReaderType;
+  using InputImageReaderType = itk::ImageFileReader< InputImageType >;
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
 
   inputImageReader->SetFileName( argv[1] );
@@ -84,17 +84,17 @@ int itkMinimumFeatureAggregatorTest2( int argc, char * argv [] )
     }
 
 
-  typedef itk::MinimumFeatureAggregatorDerived  AggregatorType;
+  using AggregatorType = itk::MinimumFeatureAggregatorDerived;
 
   AggregatorType::Pointer  featureAggregator = AggregatorType::New();
   
-  typedef itk::SatoVesselnessSigmoidFeatureGenerator< Dimension > VesselnessGeneratorType;
+  using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator< Dimension >;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
 
-  typedef itk::LungWallFeatureGenerator< Dimension > LungWallGeneratorType;
+  using LungWallGeneratorType = itk::LungWallFeatureGenerator< Dimension >;
   LungWallGeneratorType::Pointer lungWallGenerator = LungWallGeneratorType::New();
 
-  typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
+  using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator< Dimension >;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
  
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
@@ -102,9 +102,9 @@ int itkMinimumFeatureAggregatorTest2( int argc, char * argv [] )
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
 
 
-  typedef AggregatorType::SpatialObjectType    SpatialObjectType;
+  using SpatialObjectType = AggregatorType::SpatialObjectType;
 
-  typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
   InputImageType::Pointer inputImage = inputImageReader->GetOutput();
@@ -131,14 +131,14 @@ int itkMinimumFeatureAggregatorTest2( int argc, char * argv [] )
 
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
-  typedef AggregatorType::OutputImageSpatialObjectType       OutputImageSpatialObjectType;
+  using OutputImageSpatialObjectType = AggregatorType::OutputImageSpatialObjectType;
   OutputImageSpatialObjectType::ConstPointer outputObject = 
     dynamic_cast< const OutputImageSpatialObjectType * >( finalFeature.GetPointer() );
 
-  typedef AggregatorType::OutputImageType       OutputImageType;
+  using OutputImageType = AggregatorType::OutputImageType;
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
-  typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
+  using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
   OutputWriterType::Pointer writer = OutputWriterType::New();
 
   writer->SetFileName( argv[2] );

@@ -77,14 +77,14 @@ class ITK_EXPORT VesselEnhancingDiffusion3DImageFilter :
 {
 
 public:
-  typedef float                                           Precision;
-  typedef Image<PixelType, NDimension>                    ImageType;
-  typedef Image<Precision,NDimension>                     PrecisionImageType;
+  using Precision = float;
+  using ImageType = Image<PixelType, NDimension>;
+  using PrecisionImageType = Image<Precision,NDimension>;
 
-  typedef VesselEnhancingDiffusion3DImageFilter           Self;
-  typedef ImageToImageFilter<ImageType,ImageType>         Superclass;
-  typedef SmartPointer<Self>                              Pointer;
-  typedef SmartPointer<const Self>                        ConstPointer;
+  using Self = VesselEnhancingDiffusion3DImageFilter;
+  using Superclass = ImageToImageFilter<ImageType,ImageType>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
   itkTypeMacro(VesselEnhancingDiffusion3DImageFilter, ImageToImageFilter);

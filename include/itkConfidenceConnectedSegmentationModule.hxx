@@ -65,8 +65,8 @@ void
 ConfidenceConnectedSegmentationModule<NDimension>
 ::GenerateData()
 {
-  typedef ConfidenceConnectedImageFilter<
-    FeatureImageType, OutputImageType >           FilterType;
+  using FilterType = ConfidenceConnectedImageFilter<
+    FeatureImageType, OutputImageType >;
 
   typename FilterType::Pointer filter = FilterType::New();
 
@@ -78,8 +78,8 @@ ConfidenceConnectedSegmentationModule<NDimension>
  
   const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
 
-  typedef typename InputSpatialObjectType::PointListType            PointListType;
-  typedef typename FeatureImageType::IndexType                      IndexType;
+  using PointListType = typename InputSpatialObjectType::PointListType;
+  using IndexType = typename FeatureImageType::IndexType;
 
   const PointListType & points = inputSeeds->GetPoints();
 

@@ -167,7 +167,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::ComputeNumberOfInputLabels()
 {
 
-  typedef itk::ImageRegionConstIterator< TOutputImage >  IteratorType;
+  using IteratorType = itk::ImageRegionConstIterator< TOutputImage >;
 
   IteratorType  itr( m_inputLabelsImage,m_inputLabelsImage->GetBufferedRegion() );
 
@@ -235,7 +235,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
   this->m_InternalRegion = *fit;
 
   // Mark all the pixels in the boundary of the seed image as visited
-  typedef itk::ImageRegionExclusionIteratorWithIndex< SeedMaskImageType > ExclusionIteratorType;
+  using ExclusionIteratorType = itk::ImageRegionExclusionIteratorWithIndex< SeedMaskImageType >;
 
   ExclusionIteratorType exIt( this->m_SeedsMask, region );
 
@@ -311,7 +311,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 {
   for( unsigned int lb = 0; lb < this->m_NumberOfLabels; lb++ )
     {
-    typedef typename SeedArrayType::const_iterator   SeedIterator;
+    using SeedIterator = typename SeedArrayType::const_iterator;
 
     SeedIterator seedItr = this->m_SeedArray1[lb].begin();
 
@@ -368,11 +368,11 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
     //
     //  Paste new values into the output image
     //
-    typedef typename SeedArrayType::const_iterator   SeedIterator;
+    using SeedIterator = typename SeedArrayType::const_iterator;
 
     SeedIterator seedItr = this->m_SeedArray1[lb].begin();
 
-    typedef typename SeedNewValuesArrayType::const_iterator   SeedsNewValuesIterator;
+    using SeedsNewValuesIterator = typename SeedNewValuesArrayType::const_iterator;
 
     SeedsNewValuesIterator newValueItr = this->m_SeedsNewValues[lb].begin();
 
@@ -439,9 +439,9 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
   // Visit the offset of each neighbor in Index as well as buffer space
   // and if they are backgroundValue then insert them as new seeds
   //
-  typedef typename NeighborhoodType::OffsetType    NeighborOffsetType;
+  using NeighborOffsetType = typename NeighborhoodType::OffsetType;
 
-  typedef typename NeighborOffsetArrayType::const_iterator   NeigborOffsetIterator;
+  using NeigborOffsetIterator = typename NeighborOffsetArrayType::const_iterator;
 
   NeigborOffsetIterator neighborItr = this->m_NeighborBufferOffset.begin();
 
@@ -496,7 +496,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
   // Visit the offset of each neighbor in Index space and convert it to linear
   // buffer offsets that can be used for pixel access
   //
-  typedef typename NeighborhoodType::OffsetType    NeighborOffsetType;
+  using NeighborOffsetType = typename NeighborhoodType::OffsetType;
 
   for( unsigned int i = 0; i < neighborhoodSize; i++ )
     {

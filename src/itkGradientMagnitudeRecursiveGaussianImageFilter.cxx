@@ -39,20 +39,20 @@ int main( int argc, char * argv[] )
     }
 
 
-  typedef    float    InputPixelType;
-  typedef    float    OutputPixelType;
+  using InputPixelType = float;
+  using OutputPixelType = float;
 
   const unsigned Dimension = 3;
 
-  typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
+  using InputImageType = itk::Image< InputPixelType,  Dimension >;
+  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
 
 
-  typedef itk::ImageFileReader< InputImageType >  ReaderType;
+  using ReaderType = itk::ImageFileReader< InputImageType >;
 
 
-  typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<
-                        InputImageType, OutputImageType >  FilterType;
+  using FilterType = itk::GradientMagnitudeRecursiveGaussianImageFilter<
+                        InputImageType, OutputImageType >;
 
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -68,7 +68,7 @@ int main( int argc, char * argv[] )
 
   filter->Update();
 
-  typedef itk::ImageFileWriter< OutputImageType >  WriterType;
+  using WriterType = itk::ImageFileWriter< OutputImageType >;
 
   WriterType::Pointer writer = WriterType::New();
 

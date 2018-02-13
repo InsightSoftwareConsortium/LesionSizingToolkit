@@ -80,9 +80,9 @@ GrayscaleImageSegmentationVolumeEstimator<NDimension>
   double minimumIntensity = NumericTraits< double >::max();
   double maximumIntensity = NumericTraits< double >::NonpositiveMin();
 
-  typedef ImageRegionConstIterator< InputImageType >  IteratorType;
+  using IteratorType = ImageRegionConstIterator< InputImageType >;
 
-  typedef typename InputImageType::RegionType   ImageRegionType;
+  using ImageRegionType = typename InputImageType::RegionType;
 
   const ImageRegionType region = inputImage->GetBufferedRegion();
 
@@ -112,7 +112,7 @@ GrayscaleImageSegmentationVolumeEstimator<NDimension>
 
   sumOfIntensities -= numberOfPixels * minimumIntensity;
 
-  typedef typename InputImageType::SpacingType  SpacingType;
+  using SpacingType = typename InputImageType::SpacingType;
 
   const SpacingType spacing = inputImage->GetSpacing();
 

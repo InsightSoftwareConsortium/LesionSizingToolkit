@@ -33,17 +33,17 @@ int itkGeodesicActiveContourLevelSetSegmentationModuleTest1( int argc, char * ar
 
   const unsigned int Dimension = 3;
 
-  typedef itk::GeodesicActiveContourLevelSetSegmentationModule< Dimension >   SegmentationModuleType;
+  using SegmentationModuleType = itk::GeodesicActiveContourLevelSetSegmentationModule< Dimension >;
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
   
-  typedef SegmentationModuleType::InputImageType       InputImageType;
-  typedef SegmentationModuleType::FeatureImageType     FeatureImageType;
-  typedef SegmentationModuleType::OutputImageType      OutputImageType;
+  using InputImageType = SegmentationModuleType::InputImageType;
+  using FeatureImageType = SegmentationModuleType::FeatureImageType;
+  using OutputImageType = SegmentationModuleType::OutputImageType;
 
-  typedef itk::ImageFileReader< InputImageType >       InputReaderType;
-  typedef itk::ImageFileReader< FeatureImageType >     FeatureReaderType;
-  typedef itk::ImageFileWriter< OutputImageType >      WriterType;
+  using InputReaderType = itk::ImageFileReader< InputImageType >;
+  using FeatureReaderType = itk::ImageFileReader< FeatureImageType >;
+  using WriterType = itk::ImageFileWriter< OutputImageType >;
 
   InputReaderType::Pointer inputReader = InputReaderType::New();
   FeatureReaderType::Pointer featureReader = FeatureReaderType::New();
@@ -63,9 +63,9 @@ int itkGeodesicActiveContourLevelSetSegmentationModuleTest1( int argc, char * ar
     }
 
 
-  typedef SegmentationModuleType::InputSpatialObjectType          InputSpatialObjectType;
-  typedef SegmentationModuleType::FeatureSpatialObjectType        FeatureSpatialObjectType;
-  typedef SegmentationModuleType::OutputSpatialObjectType         OutputSpatialObjectType;
+  using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
+  using FeatureSpatialObjectType = SegmentationModuleType::FeatureSpatialObjectType;
+  using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
 
   InputSpatialObjectType::Pointer inputObject = InputSpatialObjectType::New();
   FeatureSpatialObjectType::Pointer featureObject = FeatureSpatialObjectType::New();
@@ -102,7 +102,7 @@ int itkGeodesicActiveContourLevelSetSegmentationModuleTest1( int argc, char * ar
   
   segmentationModule->Update();
 
-  typedef SegmentationModuleType::SpatialObjectType    SpatialObjectType;
+  using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
 
   OutputSpatialObjectType::ConstPointer outputObject = 

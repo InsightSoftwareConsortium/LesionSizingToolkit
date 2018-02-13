@@ -39,11 +39,11 @@ class ITK_EXPORT FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule 
   public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule                Self;
-  typedef SinglePhaseLevelSetSegmentationModule<NDimension>       Superclass;
-  typedef SmartPointer<Self>                                      Pointer;
-  typedef SmartPointer<const Self>                                ConstPointer;
+  /** Standard class type alias. */
+  using Self = FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule;
+  using Superclass = SinglePhaseLevelSetSegmentationModule<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -52,23 +52,23 @@ public:
   itkTypeMacro(FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule, SinglePhaseLevelSetSegmentationModule);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef typename Superclass::SpatialObjectType         SpatialObjectType;
-  typedef typename Superclass::SpatialObjectPointer      SpatialObjectPointer;
+  using SpatialObjectType = typename Superclass::SpatialObjectType;
+  using SpatialObjectPointer = typename Superclass::SpatialObjectPointer;
 
   /** Types of images and spatial objects inherited from the superclass. */
-  typedef typename Superclass::OutputPixelType           OutputPixelType;
-  typedef typename Superclass::InputImageType            InputImageType;
-  typedef typename Superclass::FeatureImageType          FeatureImageType;
-  typedef typename Superclass::OutputImageType           OutputImageType;
-  typedef typename Superclass::FeatureSpatialObjectType  FeatureSpatialObjectType;
-  typedef typename Superclass::OutputSpatialObjectType   OutputSpatialObjectType;
+  using OutputPixelType = typename Superclass::OutputPixelType;
+  using InputImageType = typename Superclass::InputImageType;
+  using FeatureImageType = typename Superclass::FeatureImageType;
+  using OutputImageType = typename Superclass::OutputImageType;
+  using FeatureSpatialObjectType = typename Superclass::FeatureSpatialObjectType;
+  using OutputSpatialObjectType = typename Superclass::OutputSpatialObjectType;
 
   /** Type of the input set of seed points. They are stored in a Landmark Spatial Object. */
-  typedef LandmarkSpatialObject< NDimension >                  InputSpatialObjectType;
+  using InputSpatialObjectType = LandmarkSpatialObject< NDimension >;
 
   /** Set the Fast Marching algorithm Stopping Value. The Fast Marching
    * algorithm is terminated when the value of the smallest trial point
@@ -93,9 +93,9 @@ protected:
    * the segmentation. */
   void  GenerateData () override;
 
-  typedef  FastMarchingSegmentationModule< Dimension > FastMarchingModuleType;
+  using FastMarchingModuleType = FastMarchingSegmentationModule< Dimension >;
   typename FastMarchingModuleType::Pointer m_FastMarchingModule;
-  typedef  GeodesicActiveContourLevelSetSegmentationModule< Dimension > GeodesicActiveContourLevelSetModuleType;
+  using GeodesicActiveContourLevelSetModuleType = GeodesicActiveContourLevelSetSegmentationModule< Dimension >;
   typename GeodesicActiveContourLevelSetModuleType::Pointer m_GeodesicActiveContourLevelSetModule;
 
 private:

@@ -79,7 +79,7 @@ void
 FastMarchingSegmentationModule<NDimension>
 ::GenerateData()
 {
-  typedef FastMarchingImageFilter< FeatureImageType, OutputImageType >      FilterType;
+  using FilterType = FastMarchingImageFilter< FeatureImageType, OutputImageType >;
   
   typename FilterType::Pointer filter = FilterType::New();
 
@@ -97,11 +97,11 @@ FastMarchingSegmentationModule<NDimension>
   const InputSpatialObjectType * inputSeeds = this->GetInternalInputLandmarks();
   const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
 
-  typedef typename InputSpatialObjectType::PointListType            PointListType;
-  typedef typename FeatureImageType::IndexType                      IndexType;
-  typedef typename FeatureImageType::IndexType                      IndexType;
-  typedef typename FilterType::NodeContainer                        NodeContainer;
-  typedef typename FilterType::NodeType                             NodeType;
+  using PointListType = typename InputSpatialObjectType::PointListType;
+  using IndexType = typename FeatureImageType::IndexType;
+  using IndexType = typename FeatureImageType::IndexType;
+  using NodeContainer = typename FilterType::NodeContainer;
+  using NodeType = typename FilterType::NodeType;
 
   typename NodeContainer::Pointer trialPoints = NodeContainer::New();
   
@@ -130,7 +130,7 @@ FastMarchingSegmentationModule<NDimension>
 
   // Rescale the values to make the output intensity fit in the expected
   // range of [-4:4]
-  typedef itk::IntensityWindowingImageFilter<  OutputImageType, OutputImageType > WindowingFilterType;
+  using WindowingFilterType = itk::IntensityWindowingImageFilter<  OutputImageType, OutputImageType >;
   typename WindowingFilterType::Pointer windowing = WindowingFilterType::New();
   windowing->SetInput( filter->GetOutput() );
   windowing->SetWindowMinimum( -this->m_DistanceFromSeeds );

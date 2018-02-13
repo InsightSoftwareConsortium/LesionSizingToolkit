@@ -23,11 +23,11 @@ int itkLesionSegmentationMethodTest1( int itkNotUsed(argc), char * itkNotUsed(ar
 {
   const unsigned int Dimension = 3;
 
-  typedef itk::LesionSegmentationMethod< Dimension >   MethodType;
+  using MethodType = itk::LesionSegmentationMethod< Dimension >;
 
   MethodType::Pointer  segmentationMethod = MethodType::New();
   
-  typedef itk::ImageMaskSpatialObject< Dimension > ImageMaskSpatialObjectType;
+  using ImageMaskSpatialObjectType = itk::ImageMaskSpatialObject< Dimension >;
 
   ImageMaskSpatialObjectType::Pointer regionOfInterest = ImageMaskSpatialObjectType::New();
 
@@ -55,7 +55,7 @@ int itkLesionSegmentationMethodTest1( int itkNotUsed(argc), char * itkNotUsed(ar
     return EXIT_FAILURE;
     }
 
-  typedef itk::FeatureGenerator< Dimension > FeatureGeneratorType;
+  using FeatureGeneratorType = itk::FeatureGenerator< Dimension >;
 
   FeatureGeneratorType::Pointer featureGenerator = FeatureGeneratorType::New();
 
