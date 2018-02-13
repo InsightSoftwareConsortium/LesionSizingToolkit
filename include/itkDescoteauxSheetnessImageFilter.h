@@ -178,15 +178,15 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
                                        typename TOutputImage::PixelType>   >
 {
 public:
-  /** Standard class typedefs. */
-  typedef DescoteauxSheetnessImageFilter    Self;
-  typedef UnaryFunctorImageFilter<
+  /** Standard class type alias. */
+  using Self = DescoteauxSheetnessImageFilter;
+  using Superclass = UnaryFunctorImageFilter<
     TInputImage,TOutputImage, 
     Function::Sheetness< 
       typename TInputImage::PixelType, 
-      typename TOutputImage::PixelType> >   Superclass;
-  typedef SmartPointer<Self>                Pointer;
-  typedef SmartPointer<const Self>          ConstPointer;
+      typename TOutputImage::PixelType> >;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -223,7 +223,7 @@ public:
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
-  typedef typename TInputImage::PixelType InputPixelType;
+  using InputPixelType = typename TInputImage::PixelType;
   itkConceptMacro(BracketOperatorsCheck,
     (Concept::BracketOperator< InputPixelType, unsigned int, double >));
   itkConceptMacro(DoubleConvertibleToOutputCheck,

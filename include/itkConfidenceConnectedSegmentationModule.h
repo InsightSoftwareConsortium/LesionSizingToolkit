@@ -37,11 +37,11 @@ class ITK_EXPORT ConfidenceConnectedSegmentationModule :
   public RegionGrowingSegmentationModule<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef ConfidenceConnectedSegmentationModule             Self;
-  typedef RegionGrowingSegmentationModule<NDimension>       Superclass;
-  typedef SmartPointer<Self>                                Pointer;
-  typedef SmartPointer<const Self>                          ConstPointer;
+  /** Standard class type alias. */
+  using Self = ConfidenceConnectedSegmentationModule;
+  using Superclass = RegionGrowingSegmentationModule<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -54,9 +54,9 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef typename Superclass::FeatureImageType         FeatureImageType;
-  typedef typename Superclass::OutputImageType          OutputImageType;
-  typedef typename Superclass::InputSpatialObjectType   InputSpatialObjectType;
+  using FeatureImageType = typename Superclass::FeatureImageType;
+  using OutputImageType = typename Superclass::OutputImageType;
+  using InputSpatialObjectType = typename Superclass::InputSpatialObjectType;
 
   /** Factor that will be applied to the standard deviation in order to compute
    * the intensity range from which pixel will be included in the region. */

@@ -132,11 +132,11 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
 
   if( this->m_InvertOutputIntensities )
     {
-    typedef MinimumMaximumImageCalculator< OutputImageType > CalculatorType;
+    using CalculatorType = MinimumMaximumImageCalculator< OutputImageType >;
     typename CalculatorType::Pointer calculator = CalculatorType::New();
     calculator->SetImage( outputImage );
     calculator->Compute();
-    typedef IntensityWindowingImageFilter< OutputImageType, OutputImageType > RescaleFilterType;
+    using RescaleFilterType = IntensityWindowingImageFilter< OutputImageType, OutputImageType >;
     typename RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
     rescaler->SetInput( outputImage );
     rescaler->SetWindowMinimum( calculator->GetMinimum() );

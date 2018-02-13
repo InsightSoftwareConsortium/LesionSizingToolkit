@@ -37,18 +37,18 @@ int main( int argc, char * argv[] )
     return EXIT_FAILURE;
     }
 
-  typedef    float    InputPixelType;
-  typedef    float    OutputPixelType;
+  using InputPixelType = float;
+  using OutputPixelType = float;
 
   const unsigned int Dimension = 3;
 
-  typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
+  using InputImageType = itk::Image< InputPixelType,  Dimension >;
+  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
 
-  typedef itk::ImageFileReader< InputImageType >  ReaderType;
+  using ReaderType = itk::ImageFileReader< InputImageType >;
 
-  typedef itk::LaplacianRecursiveGaussianImageFilter<
-                        InputImageType, OutputImageType >  FilterType;
+  using FilterType = itk::LaplacianRecursiveGaussianImageFilter<
+                        InputImageType, OutputImageType >;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
@@ -74,7 +74,7 @@ int main( int argc, char * argv[] )
     return EXIT_FAILURE;
     } 
 
-  typedef itk::ImageFileWriter< OutputImageType >  WriterType;
+  using WriterType = itk::ImageFileWriter< OutputImageType >;
 
   WriterType::Pointer writer = WriterType::New();
 

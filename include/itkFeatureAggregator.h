@@ -40,11 +40,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT FeatureAggregator : public FeatureGenerator<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef FeatureAggregator             Self;
-  typedef FeatureGenerator<NDimension>  Superclass;
-  typedef SmartPointer<Self>            Pointer;
-  typedef SmartPointer<const Self>      ConstPointer;
+  /** Standard class type alias. */
+  using Self = FeatureAggregator;
+  using Superclass = FeatureGenerator<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** This is an abstract class, therefore it doesn't need the itkNewMacro() */
 
@@ -56,18 +56,18 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef SpatialObject< NDimension >                 SpatialObjectType;
-  typedef typename SpatialObjectType::Pointer         SpatialObjectPointer;
-  typedef typename SpatialObjectType::ConstPointer    SpatialObjectConstPointer;
+  using SpatialObjectType = SpatialObject< NDimension >;
+  using SpatialObjectPointer = typename SpatialObjectType::Pointer;
+  using SpatialObjectConstPointer = typename SpatialObjectType::ConstPointer;
 
   /** Type of the image and specific SpatialObject produced as output */
-  typedef float                                                 OutputPixelType;
-  typedef Image< OutputPixelType, NDimension >                  OutputImageType;
-  typedef ImageSpatialObject< NDimension, OutputPixelType >     OutputImageSpatialObjectType;
+  using OutputPixelType = float;
+  using OutputImageType = Image< OutputPixelType, NDimension >;
+  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
 
   /** Type of the class that will generate input features in the form of
    * spatial objects. */
-  typedef FeatureGenerator< Dimension >         FeatureGeneratorType;
+  using FeatureGeneratorType = FeatureGenerator< Dimension >;
 
   /**
    * Method for adding a feature generator that will compute the Nth feature to
@@ -89,7 +89,7 @@ protected:
 
   unsigned int GetNumberOfInputFeatures() const;
 
-  typedef typename FeatureGeneratorType::SpatialObjectType      InputFeatureType;
+  using InputFeatureType = typename FeatureGeneratorType::SpatialObjectType;
 
   const InputFeatureType * GetInputFeature( unsigned int featureId ) const;
 
@@ -99,10 +99,10 @@ private:
   FeatureAggregator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typedef typename FeatureGeneratorType::Pointer                FeatureGeneratorPointer;
-  typedef std::vector< FeatureGeneratorPointer >                FeatureGeneratorArrayType;
-  typedef typename FeatureGeneratorArrayType::iterator          FeatureGeneratorIterator;
-  typedef typename FeatureGeneratorArrayType::const_iterator    FeatureGeneratorConstIterator;
+  using FeatureGeneratorPointer = typename FeatureGeneratorType::Pointer;
+  using FeatureGeneratorArrayType = std::vector< FeatureGeneratorPointer >;
+  using FeatureGeneratorIterator = typename FeatureGeneratorArrayType::iterator;
+  using FeatureGeneratorConstIterator = typename FeatureGeneratorArrayType::const_iterator;
 
   FeatureGeneratorArrayType                 m_FeatureGenerators;
 

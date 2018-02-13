@@ -31,11 +31,11 @@ template< unsigned int NDimension>
 class FeatureAggregatorSurrogate : public FeatureAggregator< NDimension >
 {
 public:
-  /** Standard class typedefs. */
-  typedef FeatureAggregatorSurrogate        Self;
-  typedef FeatureAggregator<NDimension>     Superclass;
-  typedef SmartPointer<Self>                Pointer;
-  typedef SmartPointer<const Self>          ConstPointer;
+  /** Standard class type alias. */
+  using Self = FeatureAggregatorSurrogate;
+  using Superclass = FeatureAggregator<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -59,17 +59,17 @@ private:
   FeatureAggregatorSurrogate(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typedef typename Superclass::FeatureGeneratorType             FeatureGeneratorType;
-  typedef typename FeatureGeneratorType::Pointer                FeatureGeneratorPointer;
-  typedef std::vector< FeatureGeneratorPointer >                FeatureGeneratorArrayType;
-  typedef typename FeatureGeneratorArrayType::iterator          FeatureGeneratorIterator;
-  typedef typename FeatureGeneratorArrayType::const_iterator    FeatureGeneratorConstIterator;
+  using FeatureGeneratorType = typename Superclass::FeatureGeneratorType;
+  using FeatureGeneratorPointer = typename FeatureGeneratorType::Pointer;
+  using FeatureGeneratorArrayType = std::vector< FeatureGeneratorPointer >;
+  using FeatureGeneratorIterator = typename FeatureGeneratorArrayType::iterator;
+  using FeatureGeneratorConstIterator = typename FeatureGeneratorArrayType::const_iterator;
 
   void ConsolidateFeatures() override
     {
-    typedef float                                                   FeaturePixelType;
-    typedef Image< FeaturePixelType, NDimension >                   FeatureImageType;
-    typedef ImageSpatialObject< NDimension, FeaturePixelType >      FeatureSpatialObjectType;
+    using FeaturePixelType = float;
+    using FeatureImageType = Image< FeaturePixelType, NDimension >;
+    using FeatureSpatialObjectType = ImageSpatialObject< NDimension, FeaturePixelType >;
 
     const auto * firstFeatureObject = dynamic_cast< const FeatureSpatialObjectType * >( this->GetInputFeature(0) );
 
@@ -90,8 +90,8 @@ private:
 
       const FeatureImageType * featureImage = featureObject->GetImage();
 
-      typedef ImageRegionIterator< FeatureImageType >          FeatureIterator;
-      typedef ImageRegionConstIterator< FeatureImageType >     FeatureConstIterator;
+      using FeatureIterator = ImageRegionIterator< FeatureImageType >;
+      using FeatureConstIterator = ImageRegionConstIterator< FeatureImageType >;
 
       FeatureIterator       dstitr( consolidatedFeatureImage, consolidatedFeatureImage->GetBufferedRegion() );
       FeatureConstIterator  srcitr( featureImage, featureImage->GetBufferedRegion() );
@@ -133,11 +133,11 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
 
 
   const unsigned int Dimension = 3;
-  typedef signed short   InputPixelType;
+  using InputPixelType = signed short;
 
-  typedef itk::Image< InputPixelType, Dimension > InputImageType;
+  using InputImageType = itk::Image< InputPixelType, Dimension >;
 
-  typedef itk::ImageFileReader< InputImageType > InputImageReaderType;
+  using InputImageReaderType = itk::ImageFileReader< InputImageType >;
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
 
   inputImageReader->SetFileName( argv[2] );
@@ -153,17 +153,17 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
     }
 
 
-  typedef itk::FeatureAggregatorSurrogate< Dimension >   AggregatorType;
+  using AggregatorType = itk::FeatureAggregatorSurrogate< Dimension >;
 
   AggregatorType::Pointer  featureAggregator = AggregatorType::New();
   
-  typedef itk::SatoVesselnessSigmoidFeatureGenerator< Dimension > VesselnessGeneratorType;
+  using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator< Dimension >;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
 
-  typedef itk::LungWallFeatureGenerator< Dimension > LungWallGeneratorType;
+  using LungWallGeneratorType = itk::LungWallFeatureGenerator< Dimension >;
   LungWallGeneratorType::Pointer lungWallGenerator = LungWallGeneratorType::New();
 
-  typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
+  using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator< Dimension >;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
  
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
@@ -171,9 +171,9 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
 
 
-  typedef AggregatorType::SpatialObjectType    SpatialObjectType;
+  using SpatialObjectType = AggregatorType::SpatialObjectType;
 
-  typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
   InputImageType::Pointer inputImage = inputImageReader->GetOutput();
@@ -195,7 +195,7 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
   sigmoidGenerator->SetAlpha(  1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
  
-  typedef itk::ConnectedThresholdSegmentationModule< Dimension >   SegmentationModuleType;
+  using SegmentationModuleType = itk::ConnectedThresholdSegmentationModule< Dimension >;
   
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
 
@@ -219,9 +219,9 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
   featureAggregator->Update();
 
   
-  typedef SegmentationModuleType::SpatialObjectType           SpatialObjectType;
-  typedef SegmentationModuleType::OutputSpatialObjectType     OutputSpatialObjectType;
-  typedef SegmentationModuleType::OutputImageType             OutputImageType;
+  using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
+  using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
+  using OutputImageType = SegmentationModuleType::OutputImageType;
 
   SpatialObjectType::ConstPointer segmentation = featureAggregator->GetFeature();
 
@@ -230,7 +230,7 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
-  typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
+  using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
   OutputWriterType::Pointer writer = OutputWriterType::New();
 
   writer->SetFileName( argv[3] );

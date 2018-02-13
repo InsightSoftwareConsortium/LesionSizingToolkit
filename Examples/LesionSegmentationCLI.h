@@ -26,13 +26,13 @@
 class LesionSegmentationCLI : public MetaCommand
 {
 public:
-  typedef short PixelType;
+  using PixelType = short;
   const static unsigned int ImageDimension = 3;
-  typedef itk::Image< PixelType, ImageDimension > InputImageType;
-  typedef itk::Image< float, ImageDimension > RealImageType;
+  using InputImageType = itk::Image< PixelType, ImageDimension >;
+  using RealImageType = itk::Image< float, ImageDimension >;
 
-  typedef itk::LandmarkSpatialObject< 3 >    SeedSpatialObjectType;
-  typedef SeedSpatialObjectType::PointListType   PointListType;
+  using SeedSpatialObjectType = itk::LandmarkSpatialObject< 3 >;
+  using PointListType = SeedSpatialObjectType::PointListType;
 
   LesionSegmentationCLI( int argc, char *argv[] ) : MetaCommand()
   {
@@ -233,8 +233,8 @@ public:
     this->m_Image = image;
     }
 
-  typedef InputImageType::IndexType IndexType;
-  typedef IndexType::IndexValueType IndexValueType;
+  using IndexType = InputImageType::IndexType;
+  using IndexValueType = IndexType::IndexValueType;
 
 protected:
 
@@ -274,7 +274,7 @@ protected:
 
   double GetZPositionFromFile( std::string file, std::string &sopInstanceUID )
     {
-    typedef itk::ImageFileReader< InputImageType > ReaderType;
+    using ReaderType = itk::ImageFileReader< InputImageType >;
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName( file );
     reader->Update();

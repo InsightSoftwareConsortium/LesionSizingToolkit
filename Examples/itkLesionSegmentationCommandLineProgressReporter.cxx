@@ -54,8 +54,8 @@ void LesionSegmentationCommandLineProgressReporter
 ::ExecuteInternal(const Object *caller, const EventObject &event)
 {
   bool report = false;
-  typedef LesionSegmentationImageFilter8<
-        Image< short, 3 >, Image< float, 3 > > FilterType;
+  using FilterType = LesionSegmentationImageFilter8<
+        Image< short, 3 >, Image< float, 3 > >;
   if (const FilterType * filter
        = dynamic_cast< const FilterType *>(caller))
     {

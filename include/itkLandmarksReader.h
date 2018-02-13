@@ -37,11 +37,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT LandmarksReader : public ProcessObject
 {
 public:
-  /** Standard class typedefs. */
-  typedef LandmarksReader              Self;
-  typedef ProcessObject                Superclass;
-  typedef SmartPointer<Self>           Pointer;
-  typedef SmartPointer<const Self>     ConstPointer;
+  /** Standard class type alias. */
+  using Self = LandmarksReader;
+  using Superclass = ProcessObject;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -54,8 +54,8 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef LandmarkSpatialObject< NDimension >   SpatialObjectType;
-  typedef typename SpatialObjectType::Pointer   SpatialObjectPointer;
+  using SpatialObjectType = LandmarkSpatialObject< NDimension >;
+  using SpatialObjectPointer = typename SpatialObjectType::Pointer;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
@@ -77,10 +77,10 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 
-  typedef SpatialObjectReader< NDimension, unsigned short >   SpatialObjectReaderType;
-  typedef typename SpatialObjectReaderType::Pointer           SpatialObjectReaderPointer;
-  typedef typename SpatialObjectReaderType::SceneType         SceneType;
-  typedef typename SceneType::ObjectListType                  ObjectListType;
+  using SpatialObjectReaderType = SpatialObjectReader< NDimension, unsigned short >;
+  using SpatialObjectReaderPointer = typename SpatialObjectReaderType::Pointer;
+  using SceneType = typename SpatialObjectReaderType::SceneType;
+  using ObjectListType = typename SceneType::ObjectListType;
 
   std::string                     m_FileName;
   SpatialObjectReaderPointer      m_SpatialObjectReader;

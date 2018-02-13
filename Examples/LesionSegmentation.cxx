@@ -74,17 +74,17 @@ protected:
 LesionSegmentationCLI::InputImageType::Pointer GetImage( std::string dir, bool ignoreDirection )
 {
   const unsigned int Dimension = LesionSegmentationCLI::ImageDimension;
-  typedef itk::Image< LesionSegmentationCLI::PixelType, Dimension >         ImageType;
+  using ImageType = itk::Image< LesionSegmentationCLI::PixelType, Dimension >;
 
-  typedef itk::ImageSeriesReader< ImageType >        ReaderType;
+  using ReaderType = itk::ImageSeriesReader< ImageType >;
   ReaderType::Pointer reader = ReaderType::New();
 
-  typedef itk::GDCMImageIO       ImageIOType;
+  using ImageIOType = itk::GDCMImageIO;
   ImageIOType::Pointer dicomIO = ImageIOType::New();
 
   reader->SetImageIO( dicomIO );
 
-  typedef itk::GDCMSeriesFileNames NamesGeneratorType;
+  using NamesGeneratorType = itk::GDCMSeriesFileNames;
   NamesGeneratorType::Pointer nameGenerator = NamesGeneratorType::New();
 
   nameGenerator->SetUseSeriesDetails( true );
@@ -98,7 +98,7 @@ LesionSegmentationCLI::InputImageType::Pointer GetImage( std::string dir, bool i
     std::cout << "Contains the following DICOM Series: ";
     std::cout << std::endl << std::endl;
 
-    typedef std::vector< std::string >    SeriesIdContainer;
+    using SeriesIdContainer = std::vector< std::string >;
 
     const SeriesIdContainer & seriesUID = nameGenerator->GetSeriesUIDs();
 
@@ -121,7 +121,7 @@ LesionSegmentationCLI::InputImageType::Pointer GetImage( std::string dir, bool i
     std::cout << std::endl << std::endl;
 
 
-    typedef std::vector< std::string >   FileNamesContainer;
+    using FileNamesContainer = std::vector< std::string >;
     FileNamesContainer fileNames;
 
     fileNames = nameGenerator->GetFileNames( seriesIdentifier );
@@ -181,9 +181,9 @@ int ViewImageAndSegmentationSurface(
   std::cout << "Setting up visualization..." << std::endl;
 
 
-  typedef LesionSegmentationCLI::InputImageType InputImageType;
+  using InputImageType = LesionSegmentationCLI::InputImageType;
 
-  typedef itk::ImageToVTKImageFilter< LesionSegmentationCLI::InputImageType > RealITKToVTKFilterType;
+  using RealITKToVTKFilterType = itk::ImageToVTKImageFilter< LesionSegmentationCLI::InputImageType >;
   RealITKToVTKFilterType::Pointer itk2vtko = RealITKToVTKFilterType::New();
   itk2vtko->SetInput( image);
   itk2vtko->Update();
@@ -382,13 +382,13 @@ int main( int argc, char * argv[] )
 
   LesionSegmentationCLI args( argc, argv );
 
-  typedef LesionSegmentationCLI::InputImageType InputImageType;
-  typedef LesionSegmentationCLI::RealImageType  RealImageType;
+  using InputImageType = LesionSegmentationCLI::InputImageType;
+  using RealImageType = LesionSegmentationCLI::RealImageType;
   const unsigned int ImageDimension = LesionSegmentationCLI::ImageDimension;
 
-  typedef itk::ImageFileReader< InputImageType > InputReaderType;
-  typedef itk::ImageFileWriter< RealImageType > OutputWriterType;
-  typedef itk::LesionSegmentationImageFilter8< InputImageType, RealImageType > SegmentationFilterType;
+  using InputReaderType = itk::ImageFileReader< InputImageType >;
+  using OutputWriterType = itk::ImageFileWriter< RealImageType >;
+  using SegmentationFilterType = itk::LesionSegmentationImageFilter8< InputImageType, RealImageType >;
 
 
   // Read the volume
@@ -421,7 +421,7 @@ int main( int argc, char * argv[] )
   //To make sure the tumor polydata aligns with the image volume during
   //vtk rendering in ViewImageAndSegmentationSurface(),
   //reorient image so that the direction matrix is an identity matrix.
-  typedef itk::ImageFileReader< InputImageType > InputReaderType;
+  using InputReaderType = itk::ImageFileReader< InputImageType >;
   itk::OrientImageFilter<InputImageType,InputImageType>::Pointer orienter =
   itk::OrientImageFilter<InputImageType,InputImageType>::New();
   orienter->UseImageDirectionOn();
@@ -478,13 +478,13 @@ int main( int argc, char * argv[] )
   // Write ROI if requested
   if (args.GetOptionWasSet("OutputROI"))
     {
-    typedef itk::RegionOfInterestImageFilter<
-      InputImageType, InputImageType > ROIFilterType;
+    using ROIFilterType = itk::RegionOfInterestImageFilter<
+      InputImageType, InputImageType >;
 
     ROIFilterType::Pointer roiFilter = ROIFilterType::New();
     roiFilter->SetRegionOfInterest( roiRegion );
 
-    typedef itk::ImageFileWriter< InputImageType > ROIWriterType;
+    using ROIWriterType = itk::ImageFileWriter< InputImageType >;
     ROIWriterType::Pointer roiWriter = ROIWriterType::New();
     roiWriter->SetFileName( args.GetValueAsString("OutputROI") );
     roiFilter->SetInput( image );
@@ -505,7 +505,7 @@ int main( int argc, char * argv[] )
 
 
   // Progress reporting
-  typedef itk::LesionSegmentationCommandLineProgressReporter ProgressReporterType;
+  using ProgressReporterType = itk::LesionSegmentationCommandLineProgressReporter;
   ProgressReporterType::Pointer progressCommand =
     ProgressReporterType::New();
 
@@ -539,7 +539,7 @@ int main( int argc, char * argv[] )
 
   // Compute volume
 
-  typedef itk::ImageToVTKImageFilter< RealImageType > RealITKToVTKFilterType;
+  using RealITKToVTKFilterType = itk::ImageToVTKImageFilter< RealImageType >;
   RealITKToVTKFilterType::Pointer itk2vtko = RealITKToVTKFilterType::New();
   itk2vtko->SetInput( seg->GetOutput() );
   itk2vtko->Update();

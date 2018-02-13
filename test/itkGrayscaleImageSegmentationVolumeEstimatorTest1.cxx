@@ -24,11 +24,11 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
 {
   const unsigned int Dimension = 3;
 
-  typedef itk::GrayscaleImageSegmentationVolumeEstimator<Dimension>  VolumeEstimatorType;
+  using VolumeEstimatorType = itk::GrayscaleImageSegmentationVolumeEstimator<Dimension>;
 
   VolumeEstimatorType::Pointer  volumeEstimator = VolumeEstimatorType::New();
   
-  typedef itk::ImageSpatialObject< Dimension > ImageSpatialObjectType;
+  using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
 
@@ -46,11 +46,11 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
     std::cout << excp << std::endl;
     }
 
-  typedef VolumeEstimatorType::InputImageType   InputImageType;
+  using InputImageType = VolumeEstimatorType::InputImageType;
 
   InputImageType::Pointer image = InputImageType::New();
 
-  typedef VolumeEstimatorType::InputImageSpatialObjectType  InputImageSpatialObjectType;
+  using InputImageSpatialObjectType = VolumeEstimatorType::InputImageSpatialObjectType;
 
   InputImageSpatialObjectType::Pointer inputImageSpatialObject = InputImageSpatialObjectType::New();
 
@@ -78,7 +78,7 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
   image->SetRegions( region );
   image->Allocate();
 
-  typedef itk::ImageRegionIterator< InputImageType > IteratorType;
+  using IteratorType = itk::ImageRegionIterator< InputImageType >;
 
   IteratorType itr( image, region );
 
@@ -130,7 +130,7 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
 
   volumeEstimator->Print( std::cout );
 
-  typedef itk::ImageFileWriter< InputImageType > WriterType;
+  using WriterType = itk::ImageFileWriter< InputImageType >;
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput( image );
   writer->SetFileName("sphereForVolumeTest.mhd");

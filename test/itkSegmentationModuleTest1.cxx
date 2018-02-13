@@ -23,12 +23,12 @@ int itkSegmentationModuleTest1( int itkNotUsed(argc), char * itkNotUsed(argv) []
 {
   const unsigned int Dimension = 3;
 
-  typedef itk::SegmentationModule< Dimension >      SegmentationModuleType;
-  typedef SegmentationModuleType::SpatialObjectType SpatialObjectType;
+  using SegmentationModuleType = itk::SegmentationModule< Dimension >;
+  using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
 
-  typedef itk::ImageSpatialObject< Dimension > ImageSpatialObjectType;
+  using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
 

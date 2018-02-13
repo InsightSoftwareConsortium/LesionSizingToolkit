@@ -48,11 +48,11 @@ int itkLesionSegmentationMethodTest6( int argc, char * argv [] )
 
 
   const unsigned int Dimension = 3;
-  typedef signed short   InputPixelType;
+  using InputPixelType = signed short;
 
-  typedef itk::Image< InputPixelType, Dimension > InputImageType;
+  using InputImageType = itk::Image< InputPixelType, Dimension >;
 
-  typedef itk::ImageFileReader< InputImageType > InputImageReaderType;
+  using InputImageReaderType = itk::ImageFileReader< InputImageType >;
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
 
   inputImageReader->SetFileName( argv[2] );
@@ -68,30 +68,30 @@ int itkLesionSegmentationMethodTest6( int argc, char * argv [] )
     }
 
 
-  typedef itk::LesionSegmentationMethod< Dimension >   MethodType;
+  using MethodType = itk::LesionSegmentationMethod< Dimension >;
 
   MethodType::Pointer  lesionSegmentationMethod = MethodType::New();
   
-  typedef itk::ImageMaskSpatialObject< Dimension > ImageMaskSpatialObjectType;
+  using ImageMaskSpatialObjectType = itk::ImageMaskSpatialObject< Dimension >;
 
   ImageMaskSpatialObjectType::Pointer regionOfInterest = ImageMaskSpatialObjectType::New();
 
   lesionSegmentationMethod->SetRegionOfInterest( regionOfInterest );
 
-  typedef itk::SatoVesselnessSigmoidFeatureGenerator< Dimension > VesselnessGeneratorType;
+  using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator< Dimension >;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
 
-  typedef itk::LungWallFeatureGenerator< Dimension > LungWallGeneratorType;
+  using LungWallGeneratorType = itk::LungWallFeatureGenerator< Dimension >;
   LungWallGeneratorType::Pointer lungWallGenerator = LungWallGeneratorType::New();
 
-  typedef itk::SigmoidFeatureGenerator< Dimension >   SigmoidFeatureGeneratorType;
+  using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator< Dimension >;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
  
-  typedef itk::GradientMagnitudeSigmoidFeatureGenerator< Dimension > GradientMagnitudeSigmoidGeneratorType;
+  using GradientMagnitudeSigmoidGeneratorType = itk::GradientMagnitudeSigmoidFeatureGenerator< Dimension >;
   GradientMagnitudeSigmoidGeneratorType::Pointer gradientMagnitudeSigmoidGenerator = 
     GradientMagnitudeSigmoidGeneratorType::New();
 
-  typedef itk::MinimumFeatureAggregator< Dimension >   FeatureAggregatorType;
+  using FeatureAggregatorType = itk::MinimumFeatureAggregator< Dimension >;
   FeatureAggregatorType::Pointer featureAggregator = FeatureAggregatorType::New();
 
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
@@ -101,9 +101,9 @@ int itkLesionSegmentationMethodTest6( int argc, char * argv [] )
 
   lesionSegmentationMethod->AddFeatureGenerator( featureAggregator );
 
-  typedef MethodType::SpatialObjectType    SpatialObjectType;
+  using SpatialObjectType = MethodType::SpatialObjectType;
 
-  typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
   InputImageType::Pointer inputImage = inputImageReader->GetOutput();
@@ -130,7 +130,7 @@ int itkLesionSegmentationMethodTest6( int argc, char * argv [] )
   gradientMagnitudeSigmoidGenerator->SetAlpha( -0.1 );
   gradientMagnitudeSigmoidGenerator->SetBeta( 150.0 );
 
-  typedef itk::FastMarchingAndShapeDetectionLevelSetSegmentationModule< Dimension > SegmentationModuleType;
+  using SegmentationModuleType = itk::FastMarchingAndShapeDetectionLevelSetSegmentationModule< Dimension >;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
 
   segmentationModule->SetMaximumRMSError( argc > 4 ? atof(argv[4]) : 0.0002 );
@@ -142,7 +142,7 @@ int itkLesionSegmentationMethodTest6( int argc, char * argv [] )
 
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
-  typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
+  using LandmarksReaderType = itk::LandmarksReader< Dimension >;
   
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
@@ -154,9 +154,9 @@ int itkLesionSegmentationMethodTest6( int argc, char * argv [] )
   lesionSegmentationMethod->Update();
 
   
-  typedef SegmentationModuleType::SpatialObjectType           SpatialObjectType;
-  typedef SegmentationModuleType::OutputSpatialObjectType     OutputSpatialObjectType;
-  typedef SegmentationModuleType::OutputImageType             OutputImageType;
+  using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
+  using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
+  using OutputImageType = SegmentationModuleType::OutputImageType;
 
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
 
@@ -165,7 +165,7 @@ int itkLesionSegmentationMethodTest6( int argc, char * argv [] )
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
-  typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
+  using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
   OutputWriterType::Pointer writer = OutputWriterType::New();
 
   writer->SetFileName( argv[3] );

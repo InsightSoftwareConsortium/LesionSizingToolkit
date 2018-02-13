@@ -55,8 +55,8 @@ int main(int argc, char * argv [] )
     }
   
 
-  typedef vtkSmartPointer< vtkContourVisualizationModule >  vtkContourVisualizationModulePointer;
-  typedef std::vector< vtkContourVisualizationModulePointer >    ContoursContainer;
+  using vtkContourVisualizationModulePointer = vtkSmartPointer< vtkContourVisualizationModule >;
+  using ContoursContainer = std::vector< vtkContourVisualizationModulePointer >;
 
   ContoursContainer  contourModules;
 
@@ -73,7 +73,7 @@ int main(int argc, char * argv [] )
   
   if (itksys::SystemTools::FileExists(argv[2]))
     {
-    typedef itk::SpatialObjectReader< 3, unsigned short > SpatialObjectReaderType;
+    using SpatialObjectReaderType = itk::SpatialObjectReader< 3, unsigned short >;
 
     SpatialObjectReaderType::Pointer landmarkPointsReader = SpatialObjectReaderType::New();
 
@@ -90,14 +90,14 @@ int main(int argc, char * argv [] )
 
     std::cout << "Number of object in the scene:" << scene->GetNumberOfObjects(1) << std::endl;
 
-    typedef SpatialObjectReaderType::SceneType::ObjectListType     ObjectListType;
+    using ObjectListType = SpatialObjectReaderType::SceneType::ObjectListType;
 
     ObjectListType * sceneChildren = scene->GetObjects(999999);
 
     ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
 
     /** Type of the input set of seed points. They are stored in a Landmark Spatial Object. */
-    typedef itk::LandmarkSpatialObject< 3 >  InputSpatialObjectType;
+    using InputSpatialObjectType = itk::LandmarkSpatialObject< 3 >;
 
     const InputSpatialObjectType * landmarkSpatialObject = NULL;
 
@@ -112,9 +112,9 @@ int main(int argc, char * argv [] )
       spatialObjectItr++;
       }
    
-    typedef InputSpatialObjectType::PointListType            PointListType;
-    typedef InputSpatialObjectType::SpatialObjectPointType   SpatialObjectPointType;
-    typedef SpatialObjectPointType::PointType                PointType;
+    using PointListType = InputSpatialObjectType::PointListType;
+    using SpatialObjectPointType = InputSpatialObjectType::SpatialObjectPointType;
+    using PointType = SpatialObjectPointType::PointType;
 
 
     const PointListType & points = landmarkSpatialObject->GetPoints();

@@ -38,11 +38,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT IsotropicResampler : public ProcessObject
 {
 public:
-  /** Standard class typedefs. */
-  typedef IsotropicResampler              Self;
-  typedef ProcessObject                   Superclass;
-  typedef SmartPointer<Self>              Pointer;
-  typedef SmartPointer<const Self>        ConstPointer;
+  /** Standard class type alias. */
+  using Self = IsotropicResampler;
+  using Superclass = ProcessObject;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -55,12 +55,12 @@ public:
 
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
-  typedef signed short                                      InputPixelType;
-  typedef Image< InputPixelType, Dimension >                InputImageType;
-  typedef ImageSpatialObject< NDimension, InputPixelType >  InputImageSpatialObjectType;
-  typedef typename InputImageSpatialObjectType::Pointer     InputImageSpatialObjectPointer;
-  typedef SpatialObject< NDimension >                       SpatialObjectType;
-  typedef typename SpatialObjectType::Pointer               SpatialObjectPointer;
+  using InputPixelType = signed short;
+  using InputImageType = Image< InputPixelType, Dimension >;
+  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
+  using SpatialObjectType = SpatialObject< NDimension >;
+  using SpatialObjectPointer = typename SpatialObjectType::Pointer;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
@@ -87,10 +87,10 @@ private:
   IsotropicResampler(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typedef signed short                                OutputPixelType;
-  typedef Image< OutputPixelType, Dimension >         OutputImageType;
+  using OutputPixelType = signed short;
+  using OutputImageType = Image< OutputPixelType, Dimension >;
 
-  typedef ImageSpatialObject< NDimension, OutputPixelType >  OutputImageSpatialObjectType;
+  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
   
   double    m_OutputSpacing;
 };

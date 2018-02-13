@@ -42,11 +42,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT SatoLocalStructureFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef SatoLocalStructureFeatureGenerator                Self;
-  typedef FeatureGenerator<NDimension>                      Superclass;
-  typedef SmartPointer<Self>                                Pointer;
-  typedef SmartPointer<const Self>                          ConstPointer;
+  /** Standard class type alias. */
+  using Self = SatoLocalStructureFeatureGenerator;
+  using Superclass = FeatureGenerator<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -59,11 +59,11 @@ public:
 
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
-  typedef signed short                                      InputPixelType;
-  typedef Image< InputPixelType, Dimension >                InputImageType;
-  typedef ImageSpatialObject< NDimension, InputPixelType >  InputImageSpatialObjectType;
-  typedef typename InputImageSpatialObjectType::Pointer     InputImageSpatialObjectPointer;
-  typedef typename Superclass::SpatialObjectType            SpatialObjectType;
+  using InputPixelType = signed short;
+  using InputImageType = Image< InputPixelType, Dimension >;
+  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
+  using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
@@ -100,24 +100,24 @@ private:
   SatoLocalStructureFeatureGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typedef float                                       InternalPixelType;
-  typedef Image< InternalPixelType, Dimension >       InternalImageType;
+  using InternalPixelType = float;
+  using InternalImageType = Image< InternalPixelType, Dimension >;
 
-  typedef InternalPixelType                           OutputPixelType;
-  typedef InternalImageType                           OutputImageType;
+  using OutputPixelType = InternalPixelType;
+  using OutputImageType = InternalImageType;
 
-  typedef ImageSpatialObject< NDimension, OutputPixelType >  OutputImageSpatialObjectType;
+  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
 
-  typedef HessianRecursiveGaussianImageFilter< InputImageType >     HessianFilterType;
-  typedef typename HessianFilterType::OutputImageType               HessianImageType;
-  typedef typename HessianImageType::PixelType                      HessianPixelType;
+  using HessianFilterType = HessianRecursiveGaussianImageFilter< InputImageType >;
+  using HessianImageType = typename HessianFilterType::OutputImageType;
+  using HessianPixelType = typename HessianImageType::PixelType;
 
-  typedef  FixedArray< double, HessianPixelType::Dimension >   EigenValueArrayType;
-  typedef  Image< EigenValueArrayType, Dimension >             EigenValueImageType;
+  using EigenValueArrayType = FixedArray< double, HessianPixelType::Dimension >;
+  using EigenValueImageType = Image< EigenValueArrayType, Dimension >;
 
-  typedef  SymmetricEigenAnalysisImageFilter< HessianImageType, EigenValueImageType >     EigenAnalysisFilterType;
+  using EigenAnalysisFilterType = SymmetricEigenAnalysisImageFilter< HessianImageType, EigenValueImageType >;
 
-  typedef  LocalStructureImageFilter< EigenValueImageType, OutputImageType >     LocalStructureFilterType;
+  using LocalStructureFilterType = LocalStructureImageFilter< EigenValueImageType, OutputImageType >;
 
   typename HessianFilterType::Pointer             m_HessianFilter;
   typename EigenAnalysisFilterType::Pointer       m_EigenAnalysisFilter;

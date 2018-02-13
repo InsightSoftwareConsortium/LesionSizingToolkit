@@ -32,17 +32,17 @@ int itkFrangiTubularnessFeatureGeneratorTest1( int argc, char * argv [] )
 
   const unsigned int Dimension = 3;
 
-  typedef signed short    InputPixelType;
-  typedef float           OutputPixelType;
+  using InputPixelType = signed short;
+  using OutputPixelType = float;
 
-  typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
+  using InputImageType = itk::Image< InputPixelType,  Dimension >;
+  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
 
-  typedef itk::ImageFileReader< InputImageType >     ReaderType;
-  typedef itk::ImageFileWriter< OutputImageType >    WriterType;
+  using ReaderType = itk::ImageFileReader< InputImageType >;
+  using WriterType = itk::ImageFileWriter< OutputImageType >;
 
-  typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
-  typedef itk::ImageSpatialObject< Dimension, OutputPixelType > OutputImageSpatialObjectType;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
+  using OutputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, OutputPixelType >;
 
   ReaderType::Pointer reader = ReaderType::New();
 
@@ -58,8 +58,8 @@ int itkFrangiTubularnessFeatureGeneratorTest1( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  typedef itk::FrangiTubularnessFeatureGenerator< Dimension >   FrangiTubularnessFeatureGeneratorType;
-  typedef FrangiTubularnessFeatureGeneratorType::SpatialObjectType    SpatialObjectType;
+  using FrangiTubularnessFeatureGeneratorType = itk::FrangiTubularnessFeatureGenerator< Dimension >;
+  using SpatialObjectType = FrangiTubularnessFeatureGeneratorType::SpatialObjectType;
 
   FrangiTubularnessFeatureGeneratorType::Pointer  featureGenerator = FrangiTubularnessFeatureGeneratorType::New();
   

@@ -121,18 +121,18 @@ int main(int argc, char * argv [] )
   
   try
     {
-    typedef signed short    PixelType;
-    typedef float           MaskPixelType;
+    using PixelType = signed short;
+    using MaskPixelType = float;
 
     const unsigned int Dimension = 3;
 
-    typedef itk::Image< PixelType, Dimension > ImageType;
+    using ImageType = itk::Image< PixelType, Dimension >;
 
-    typedef itk::Image< MaskPixelType, Dimension > MaskImageType;
+    using MaskImageType = itk::Image< MaskPixelType, Dimension >;
     
-    typedef itk::ImageFileReader< ImageType > ReaderType;
+    using ReaderType = itk::ImageFileReader< ImageType >;
 
-    typedef itk::ImageFileReader< MaskImageType > MaskReaderType;
+    using MaskReaderType = itk::ImageFileReader< MaskImageType >;
 
     ReaderType::Pointer reader  = ReaderType::New();
     reader->SetFileName( argv[1] );
@@ -143,8 +143,8 @@ int main(int argc, char * argv [] )
     maskReader->Update();
 
     
-    typedef itk::VTKImageExport< ImageType >     ExportFilterType;
-    typedef itk::VTKImageExport< MaskImageType > MaskExportFilterType;
+    using ExportFilterType = itk::VTKImageExport< ImageType >;
+    using MaskExportFilterType = itk::VTKImageExport< MaskImageType >;
 
     ExportFilterType::Pointer     itkExporter1 = ExportFilterType::New();
     MaskExportFilterType::Pointer itkExporter2 = MaskExportFilterType::New();

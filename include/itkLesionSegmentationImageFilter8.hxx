@@ -249,7 +249,7 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   this->GraftOutput(outputImage);
 
   /* // DEBUGGING CODE
-  typedef ImageFileWriter< OutputImageType > WriterType;
+  using WriterType = ImageFileWriter< OutputImageType >;
   typename WriterType::Pointer writer = WriterType::New();
   writer->SetFileName("output.mha");
   writer->SetInput(outputImage);

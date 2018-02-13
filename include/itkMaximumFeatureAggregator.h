@@ -42,11 +42,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT MaximumFeatureAggregator : public FeatureAggregator<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef MaximumFeatureAggregator            Self;
-  typedef FeatureAggregator<NDimension>       Superclass;
-  typedef SmartPointer<Self>                  Pointer;
-  typedef SmartPointer<const Self>            ConstPointer;
+  /** Standard class type alias. */
+  using Self = MaximumFeatureAggregator;
+  using Superclass = FeatureAggregator<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -58,9 +58,9 @@ public:
   static constexpr unsigned int Dimension = NDimension;
 
   /** Type of the image and specific SpatialObject produced as output */
-  typedef typename Superclass::OutputPixelType                OutputPixelType;
-  typedef typename Superclass::OutputImageType                OutputImageType;
-  typedef typename Superclass::OutputImageSpatialObjectType   OutputImageSpatialObjectType;
+  using OutputPixelType = typename Superclass::OutputPixelType;
+  using OutputImageType = typename Superclass::OutputImageType;
+  using OutputImageSpatialObjectType = typename Superclass::OutputImageSpatialObjectType;
 
 
 protected:

@@ -35,11 +35,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT SinglePhaseLevelSetSegmentationModule : public SegmentationModule<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef SinglePhaseLevelSetSegmentationModule         Self;
-  typedef SegmentationModule<NDimension>                Superclass;
-  typedef SmartPointer<Self>                            Pointer;
-  typedef SmartPointer<const Self>                      ConstPointer;
+  /** Standard class type alias. */
+  using Self = SinglePhaseLevelSetSegmentationModule;
+  using Superclass = SegmentationModule<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -52,21 +52,21 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef typename Superclass::SpatialObjectType         SpatialObjectType;
-  typedef typename Superclass::SpatialObjectPointer      SpatialObjectPointer;
+  using SpatialObjectType = typename Superclass::SpatialObjectType;
+  using SpatialObjectPointer = typename Superclass::SpatialObjectPointer;
 
   /** Types of the input, feature and output images. */
-  typedef float                                         InputPixelType;
-  typedef float                                         FeaturePixelType;
-  typedef float                                         OutputPixelType;
-  typedef Image< InputPixelType, NDimension >           InputImageType;
-  typedef Image< FeaturePixelType, NDimension >         FeatureImageType;
-  typedef Image< OutputPixelType, NDimension >          OutputImageType;
+  using InputPixelType = float;
+  using FeaturePixelType = float;
+  using OutputPixelType = float;
+  using InputImageType = Image< InputPixelType, NDimension >;
+  using FeatureImageType = Image< FeaturePixelType, NDimension >;
+  using OutputImageType = Image< OutputPixelType, NDimension >;
 
   /** Types of the Spatial objects used for input, feature and output images. */
-  typedef ImageSpatialObject< NDimension, InputPixelType >     InputSpatialObjectType;
-  typedef ImageSpatialObject< NDimension, FeaturePixelType >   FeatureSpatialObjectType;
-  typedef ImageSpatialObject< NDimension, OutputPixelType >    OutputSpatialObjectType;
+  using InputSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using FeatureSpatialObjectType = ImageSpatialObject< NDimension, FeaturePixelType >;
+  using OutputSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
 
   /** Weight that controls the propagating behavior of the level set. */
   itkSetMacro( PropagationScaling, double );
@@ -134,7 +134,7 @@ private:
 
   bool          m_InvertOutputIntensities;
 
-  typedef typename InputImageType::ConstPointer  ImageConstPointer;
+  using ImageConstPointer = typename InputImageType::ConstPointer;
   mutable ImageConstPointer m_ZeroSetInputImage;
 };
 

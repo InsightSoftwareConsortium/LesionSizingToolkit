@@ -22,12 +22,12 @@ int itkFeatureGeneratorTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
   const unsigned int Dimension = 3;
 
-  typedef itk::FeatureGenerator< Dimension >      FeatureGeneratorType;
-  typedef FeatureGeneratorType::SpatialObjectType SpatialObjectType;
+  using FeatureGeneratorType = itk::FeatureGenerator< Dimension >;
+  using SpatialObjectType = FeatureGeneratorType::SpatialObjectType;
 
   FeatureGeneratorType::Pointer  featureGenerator = FeatureGeneratorType::New();
   
-  typedef itk::ImageSpatialObject< Dimension > ImageSpatialObjectType;
+  using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
 

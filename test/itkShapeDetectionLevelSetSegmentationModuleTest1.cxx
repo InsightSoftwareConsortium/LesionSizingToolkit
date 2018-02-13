@@ -35,20 +35,20 @@ int itkShapeDetectionLevelSetSegmentationModuleTest1( int argc, char * argv [] )
 
   const unsigned int Dimension = 3;
 
-  typedef itk::ShapeDetectionLevelSetSegmentationModule< Dimension >   SegmentationModuleType;
+  using SegmentationModuleType = itk::ShapeDetectionLevelSetSegmentationModule< Dimension >;
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
   
-  typedef SegmentationModuleType::InputImageType       InputImageType;
-  typedef SegmentationModuleType::FeatureImageType     FeatureImageType;
-  typedef SegmentationModuleType::OutputImageType      OutputImageType;
+  using InputImageType = SegmentationModuleType::InputImageType;
+  using FeatureImageType = SegmentationModuleType::FeatureImageType;
+  using OutputImageType = SegmentationModuleType::OutputImageType;
 
-  typedef itk::ImageFileReader< InputImageType >       InputReaderType;
-  typedef itk::ImageFileWriter< InputImageType >       InputWriterType;
-  typedef itk::ImageFileReader< FeatureImageType >     FeatureReaderType;
-  typedef itk::ImageFileWriter< OutputImageType >      WriterType;
+  using InputReaderType = itk::ImageFileReader< InputImageType >;
+  using InputWriterType = itk::ImageFileWriter< InputImageType >;
+  using FeatureReaderType = itk::ImageFileReader< FeatureImageType >;
+  using WriterType = itk::ImageFileWriter< OutputImageType >;
 
-  typedef itk::RescaleIntensityImageFilter< InputImageType, InputImageType >  RescaleFilterType;
+  using RescaleFilterType = itk::RescaleIntensityImageFilter< InputImageType, InputImageType >;
 
   InputReaderType::Pointer inputReader = InputReaderType::New();
   InputWriterType::Pointer inputWriter = InputWriterType::New();
@@ -82,9 +82,9 @@ int itkShapeDetectionLevelSetSegmentationModuleTest1( int argc, char * argv [] )
     }
 
 
-  typedef SegmentationModuleType::InputSpatialObjectType          InputSpatialObjectType;
-  typedef SegmentationModuleType::FeatureSpatialObjectType        FeatureSpatialObjectType;
-  typedef SegmentationModuleType::OutputSpatialObjectType         OutputSpatialObjectType;
+  using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
+  using FeatureSpatialObjectType = SegmentationModuleType::FeatureSpatialObjectType;
+  using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
 
   InputSpatialObjectType::Pointer inputObject = InputSpatialObjectType::New();
   FeatureSpatialObjectType::Pointer featureObject = FeatureSpatialObjectType::New();
@@ -121,7 +121,7 @@ int itkShapeDetectionLevelSetSegmentationModuleTest1( int argc, char * argv [] )
 
   segmentationModule->Update();
 
-  typedef SegmentationModuleType::SpatialObjectType    SpatialObjectType;
+  using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
 
   OutputSpatialObjectType::ConstPointer outputObject = 

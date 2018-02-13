@@ -47,27 +47,27 @@ int main( int argc, char ** argv )
     }
 
 
-  typedef signed short        InputPixelType;
-  typedef signed short        OutputPixelType;
+  using InputPixelType = signed short;
+  using OutputPixelType = signed short;
   const   unsigned int        Dimension = 3;
 
-  typedef itk::Image< InputPixelType,  Dimension >    InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >    OutputImageType;
+  using InputImageType = itk::Image< InputPixelType,  Dimension >;
+  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
 
-  typedef itk::ImageFileReader< InputImageType  >  ReaderType;
-  typedef itk::ImageFileWriter< OutputImageType >  WriterType;
+  using ReaderType = itk::ImageFileReader< InputImageType  >;
+  using WriterType = itk::ImageFileWriter< OutputImageType >;
 
-  typedef itk::RegionOfInterestImageFilter< InputImageType, 
-                                            OutputImageType > FilterType;
+  using FilterType = itk::RegionOfInterestImageFilter< InputImageType, 
+                                            OutputImageType >;
 
-  typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
+  using LandmarksReaderType = itk::LandmarksReader< Dimension >;
   
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName( argv[3] );
   landmarksReader->Update();
 
-  typedef itk::LandmarkSpatialObject< Dimension >   InputSpatialObjectType;
+  using InputSpatialObjectType = itk::LandmarkSpatialObject< Dimension >;
   const InputSpatialObjectType * inputSeeds = landmarksReader->GetOutput();
   const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
 
@@ -77,7 +77,7 @@ int main( int argc, char ** argv )
     return EXIT_FAILURE;
     }
 
-  typedef InputSpatialObjectType::PointListType   PointListType;
+  using PointListType = InputSpatialObjectType::PointListType;
 
   const PointListType & points = inputSeeds->GetPoints();
 

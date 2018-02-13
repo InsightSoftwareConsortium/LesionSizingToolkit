@@ -33,11 +33,11 @@ int itkSatoVesselnessFeatureGeneratorMultiScaleTest1( int argc, char * argv [] )
 
 
   const unsigned int     Dimension = 3;
-  typedef signed short   InputPixelType;
+  using InputPixelType = signed short;
 
-  typedef itk::Image< InputPixelType, Dimension > InputImageType;
+  using InputImageType = itk::Image< InputPixelType, Dimension >;
 
-  typedef itk::ImageFileReader< InputImageType > InputImageReaderType;
+  using InputImageReaderType = itk::ImageFileReader< InputImageType >;
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
 
   inputImageReader->SetFileName( argv[1] );
@@ -53,12 +53,12 @@ int itkSatoVesselnessFeatureGeneratorMultiScaleTest1( int argc, char * argv [] )
     }
 
 
-  typedef itk::MaximumFeatureAggregator< Dimension >   AggregatorType;
+  using AggregatorType = itk::MaximumFeatureAggregator< Dimension >;
 
   AggregatorType::Pointer  featureAggregator = AggregatorType::New();
 
-  typedef itk::SatoVesselnessFeatureGenerator< Dimension > FeatureGeneratorType;
-  typedef FeatureGeneratorType::SpatialObjectType          SpatialObjectType;
+  using FeatureGeneratorType = itk::SatoVesselnessFeatureGenerator< Dimension >;
+  using SpatialObjectType = FeatureGeneratorType::SpatialObjectType;
 
   FeatureGeneratorType::Pointer  featureGenerator1 = FeatureGeneratorType::New();
   FeatureGeneratorType::Pointer  featureGenerator2 = FeatureGeneratorType::New();
@@ -90,9 +90,9 @@ int itkSatoVesselnessFeatureGeneratorMultiScaleTest1( int argc, char * argv [] )
     featureGenerator4->SetAlpha2( atof( argv[5] ) );
     }
 
-  typedef AggregatorType::SpatialObjectType    SpatialObjectType;
+  using SpatialObjectType = AggregatorType::SpatialObjectType;
 
-  typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
   InputImageType::Pointer inputImage = inputImageReader->GetOutput();
@@ -123,15 +123,15 @@ int itkSatoVesselnessFeatureGeneratorMultiScaleTest1( int argc, char * argv [] )
 
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
-  typedef AggregatorType::OutputImageSpatialObjectType  OutputImageSpatialObjectType;
-  typedef AggregatorType::OutputImageType               OutputImageType;
+  using OutputImageSpatialObjectType = AggregatorType::OutputImageSpatialObjectType;
+  using OutputImageType = AggregatorType::OutputImageType;
 
   OutputImageSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputImageSpatialObjectType * >( finalFeature.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
-  typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
+  using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
   OutputWriterType::Pointer writer = OutputWriterType::New();
 
   writer->SetFileName( argv[2] );

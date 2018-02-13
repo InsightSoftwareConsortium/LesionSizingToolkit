@@ -43,11 +43,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT LesionSegmentationMethod : public ProcessObject
 {
 public:
-  /** Standard class typedefs. */
-  typedef LesionSegmentationMethod      Self;
-  typedef ProcessObject                 Superclass;
-  typedef SmartPointer<Self>            Pointer;
-  typedef SmartPointer<const Self>      ConstPointer;
+  /** Standard class type alias. */
+  using Self = LesionSegmentationMethod;
+  using Superclass = ProcessObject;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -60,9 +60,9 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  typedef SpatialObject< NDimension >                 SpatialObjectType;
-  typedef typename SpatialObjectType::Pointer         SpatialObjectPointer;
-  typedef typename SpatialObjectType::ConstPointer    SpatialObjectConstPointer;
+  using SpatialObjectType = SpatialObject< NDimension >;
+  using SpatialObjectPointer = typename SpatialObjectType::Pointer;
+  using SpatialObjectConstPointer = typename SpatialObjectType::ConstPointer;
 
   /** SpatialObject that defines the Region of Interest in the input data */
   itkSetObjectMacro( RegionOfInterest, SpatialObjectType );
@@ -76,7 +76,7 @@ public:
 
   /** Type of the class that will generate input features in the form of
    * spatial objects. */
-  typedef FeatureGenerator< Dimension >         FeatureGeneratorType;
+  using FeatureGeneratorType = FeatureGenerator< Dimension >;
 
   /**
    * Method for adding a feature generator that will compute the Nth feature to
@@ -86,8 +86,8 @@ public:
 
   /** Type of the segmentation module that encapsulate the actual segmentation
    * algorithm. */
-  typedef SegmentationModule< Dimension >             SegmentationModuleType;
-  typedef typename SegmentationModuleType::Pointer    SegmentationModulePointer;
+  using SegmentationModuleType = SegmentationModule< Dimension >;
+  using SegmentationModulePointer = typename SegmentationModuleType::Pointer;
 
 
   /**
@@ -113,10 +113,10 @@ private:
   SpatialObjectConstPointer                 m_RegionOfInterest;
   SpatialObjectConstPointer                 m_InitialSegmentation;
   
-  typedef typename FeatureGeneratorType::Pointer                FeatureGeneratorPointer;
-  typedef std::vector< FeatureGeneratorPointer >                FeatureGeneratorArrayType;
-  typedef typename FeatureGeneratorArrayType::iterator          FeatureGeneratorIterator;
-  typedef typename FeatureGeneratorArrayType::const_iterator    FeatureGeneratorConstIterator;
+  using FeatureGeneratorPointer = typename FeatureGeneratorType::Pointer;
+  using FeatureGeneratorArrayType = std::vector< FeatureGeneratorPointer >;
+  using FeatureGeneratorIterator = typename FeatureGeneratorArrayType::iterator;
+  using FeatureGeneratorConstIterator = typename FeatureGeneratorArrayType::const_iterator;
 
   FeatureGeneratorArrayType                 m_FeatureGenerators;
 

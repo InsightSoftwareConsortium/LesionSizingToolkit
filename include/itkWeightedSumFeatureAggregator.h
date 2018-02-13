@@ -44,11 +44,11 @@ template <unsigned int NDimension>
 class ITK_EXPORT WeightedSumFeatureAggregator : public FeatureAggregator<NDimension>
 {
 public:
-  /** Standard class typedefs. */
-  typedef WeightedSumFeatureAggregator        Self;
-  typedef FeatureAggregator<NDimension>       Superclass;
-  typedef SmartPointer<Self>                  Pointer;
-  typedef SmartPointer<const Self>            ConstPointer;
+  /** Standard class type alias. */
+  using Self = WeightedSumFeatureAggregator;
+  using Superclass = FeatureAggregator<NDimension>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -64,9 +64,9 @@ public:
   void virtual AddWeight( double weight );
 
   /** Type of the image and specific SpatialObject produced as output */
-  typedef typename Superclass::OutputPixelType                OutputPixelType;
-  typedef typename Superclass::OutputImageType                OutputImageType;
-  typedef typename Superclass::OutputImageSpatialObjectType   OutputImageSpatialObjectType;
+  using OutputPixelType = typename Superclass::OutputPixelType;
+  using OutputImageType = typename Superclass::OutputImageType;
+  using OutputImageSpatialObjectType = typename Superclass::OutputImageSpatialObjectType;
 
 protected:
   WeightedSumFeatureAggregator();
@@ -80,7 +80,7 @@ private:
 
   void ConsolidateFeatures() override;
 
-  typedef std::vector< double >     WeightsArrayType;
+  using WeightsArrayType = std::vector< double >;
 
   WeightsArrayType                  m_Weights;
 

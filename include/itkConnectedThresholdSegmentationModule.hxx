@@ -65,8 +65,8 @@ void
 ConnectedThresholdSegmentationModule<NDimension>
 ::GenerateData()
 {
-  typedef ConnectedThresholdImageFilter<
-    FeatureImageType, OutputImageType >           FilterType;
+  using FilterType = ConnectedThresholdImageFilter<
+    FeatureImageType, OutputImageType >;
 
   typename FilterType::Pointer filter = FilterType::New();
 
@@ -78,8 +78,8 @@ ConnectedThresholdSegmentationModule<NDimension>
  
   const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
 
-  typedef typename InputSpatialObjectType::PointListType            PointListType;
-  typedef typename FeatureImageType::IndexType                      IndexType;
+  using PointListType = typename InputSpatialObjectType::PointListType;
+  using IndexType = typename FeatureImageType::IndexType;
 
   const PointListType & points = inputSeeds->GetPoints();
 

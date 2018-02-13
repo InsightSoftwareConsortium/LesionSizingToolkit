@@ -35,15 +35,15 @@ int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
 
   const unsigned int Dimension = 3;
 
-  typedef itk::ConnectedThresholdSegmentationModule< Dimension >   SegmentationModuleType;
+  using SegmentationModuleType = itk::ConnectedThresholdSegmentationModule< Dimension >;
 
-  typedef SegmentationModuleType::FeatureImageType     FeatureImageType;
-  typedef SegmentationModuleType::OutputImageType      OutputImageType;
+  using FeatureImageType = SegmentationModuleType::FeatureImageType;
+  using OutputImageType = SegmentationModuleType::OutputImageType;
 
-  typedef itk::ImageFileReader< FeatureImageType >     FeatureReaderType;
-  typedef itk::ImageFileWriter< OutputImageType >      OutputWriterType;
+  using FeatureReaderType = itk::ImageFileReader< FeatureImageType >;
+  using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
 
-  typedef itk::LandmarksReader< Dimension >    LandmarksReaderType;
+  using LandmarksReaderType = itk::LandmarksReader< Dimension >;
   
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
@@ -67,9 +67,9 @@ int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
   
-  typedef SegmentationModuleType::InputSpatialObjectType          InputSpatialObjectType;
-  typedef SegmentationModuleType::FeatureSpatialObjectType        FeatureSpatialObjectType;
-  typedef SegmentationModuleType::OutputSpatialObjectType         OutputSpatialObjectType;
+  using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
+  using FeatureSpatialObjectType = SegmentationModuleType::FeatureSpatialObjectType;
+  using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
 
   InputSpatialObjectType::Pointer inputObject = InputSpatialObjectType::New();
   FeatureSpatialObjectType::Pointer featureObject = FeatureSpatialObjectType::New();
@@ -117,7 +117,7 @@ int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
 
   segmentationModule->Update();
 
-  typedef SegmentationModuleType::SpatialObjectType    SpatialObjectType;
+  using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
 
   OutputSpatialObjectType::ConstPointer outputObject = 

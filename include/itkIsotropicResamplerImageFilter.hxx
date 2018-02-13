@@ -108,12 +108,12 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
     return;
     }
 
-  typedef itk::IdentityTransform< double, ImageDimension >  TransformType;
+  using TransformType = itk::IdentityTransform< double, ImageDimension >;
 
   typename TransformType::Pointer transform = TransformType::New();
   transform->SetIdentity();
 
-  typedef itk::BSplineInterpolateImageFunction< InputImageType, double >  BSplineInterpolatorType;
+  using BSplineInterpolatorType = itk::BSplineInterpolateImageFunction< InputImageType, double >;
 
   typename BSplineInterpolatorType::Pointer bsplineInterpolator = BSplineInterpolatorType::New();
 

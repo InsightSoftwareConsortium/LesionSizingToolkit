@@ -172,8 +172,8 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
   this->m_InternalRegion = *fit;
 
   // Mark all the pixels in the boundary of the seed image as visited
-  typedef itk::ImageRegionExclusionIteratorWithIndex< 
-    SeedMaskImageType > ExclusionIteratorType;
+  using ExclusionIteratorType = itk::ImageRegionExclusionIteratorWithIndex< 
+    SeedMaskImageType >;
   ExclusionIteratorType exIt( this->m_SeedsMask, region );
   exIt.SetExclusionRegion( this->m_InternalRegion );
   for (exIt.GoToBegin(); !exIt.IsAtEnd(); ++exIt)
@@ -233,7 +233,7 @@ void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::VisitAllSeedsAndTransitionTheirState()
 {
-  typedef typename SeedArrayType::const_iterator   SeedIterator;
+  using SeedIterator = typename SeedArrayType::const_iterator;
 
   SeedIterator seedItr = this->m_SeedArray1->begin();
 
@@ -283,11 +283,11 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
   //
   //  Paste new values into the output image
   //
-  typedef typename SeedArrayType::const_iterator   SeedIterator;
+  using SeedIterator = typename SeedArrayType::const_iterator;
 
   SeedIterator seedItr = this->m_SeedArray1->begin();
 
-  typedef typename SeedNewValuesArrayType::const_iterator   SeedsNewValuesIterator;
+  using SeedsNewValuesIterator = typename SeedNewValuesArrayType::const_iterator;
 
   SeedsNewValuesIterator newValueItr = this->m_SeedsNewValues.begin();
 
@@ -383,9 +383,9 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
   // Visit the offset of each neighbor in Index as well as buffer space
   // and if they are backgroundValue then insert them as new seeds
   //
-  typedef typename NeighborhoodType::OffsetType    NeighborOffsetType;
+  using NeighborOffsetType = typename NeighborhoodType::OffsetType;
 
-  typedef typename NeighborOffsetArrayType::const_iterator   NeigborOffsetIterator;
+  using NeigborOffsetIterator = typename NeighborOffsetArrayType::const_iterator;
 
   NeigborOffsetIterator neighborItr = this->m_NeighborBufferOffset.begin();
 
@@ -449,7 +449,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
   // Visit the offset of each neighbor in Index space and convert it to linear
   // buffer offsets that can be used for pixel access
   //
-  typedef typename NeighborhoodType::OffsetType    NeighborOffsetType;
+  using NeighborOffsetType = typename NeighborhoodType::OffsetType;
 
   for( unsigned int i = 0; i < neighborhoodSize; i++ )
     {

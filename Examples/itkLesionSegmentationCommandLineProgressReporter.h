@@ -29,11 +29,11 @@ namespace itk
 class ITKCommon_EXPORT LesionSegmentationCommandLineProgressReporter : public Command
 {
 public:
-  /** Standard class typedefs. */
-  typedef LesionSegmentationCommandLineProgressReporter Self;
-  typedef Object                     Superclass;
-  typedef SmartPointer< Self >       Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  /** Standard class type alias. */
+  using Self = LesionSegmentationCommandLineProgressReporter;
+  using Superclass = Object;
+  using Pointer = SmartPointer< Self >;
+  using ConstPointer = SmartPointer< const Self >;
 
   itkNewMacro(Self);
 

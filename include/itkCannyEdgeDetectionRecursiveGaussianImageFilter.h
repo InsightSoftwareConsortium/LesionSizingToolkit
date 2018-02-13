@@ -93,49 +93,48 @@ class ITK_EXPORT CannyEdgeDetectionRecursiveGaussianImageFilter
   : public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
-  /** Standard "Self" & Superclass typedef.  */
-  typedef CannyEdgeDetectionRecursiveGaussianImageFilter                 Self;
-  typedef ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  /** Standard "Self" & Superclass type alias.  */
+  using Self = CannyEdgeDetectionRecursiveGaussianImageFilter;
+  using Superclass = ImageToImageFilter<TInputImage, TOutputImage>;
    
-  /** Image typedef support   */
-  typedef TInputImage  InputImageType;
-  typedef TOutputImage OutputImageType;
+  /** Image type alias support   */
+  using InputImageType = TInputImage;
+  using OutputImageType = TOutputImage;
       
-  /** SmartPointer typedef support  */
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  /** SmartPointer type alias support  */
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Define pixel types. */
-  typedef typename TInputImage::PixelType   InputImagePixelType;
-  typedef typename TOutputImage::PixelType  OutputImagePixelType;
-  typedef typename TInputImage::IndexType   IndexType;
+  using InputImagePixelType = typename TInputImage::PixelType;
+  using OutputImagePixelType = typename TOutputImage::PixelType;
+  using IndexType = typename TInputImage::IndexType;
 
-  typedef SmoothingRecursiveGaussianImageFilter<
-        InputImageType, OutputImageType> GaussianImageFilterType;
-  typedef typename GaussianImageFilterType::ScalarRealType ScalarRealType;
-  typedef typename GaussianImageFilterType::SigmaArrayType SigmaArrayType;
+  using GaussianImageFilterType = SmoothingRecursiveGaussianImageFilter<
+        InputImageType, OutputImageType>;
+  using ScalarRealType = typename GaussianImageFilterType::ScalarRealType;
+  using SigmaArrayType = typename GaussianImageFilterType::SigmaArrayType;
   
   /** The default boundary condition is used unless overridden 
    *in the Evaluate() method. */
-  typedef ZeroFluxNeumannBoundaryCondition<OutputImageType>
-  DefaultBoundaryConditionType;
+  using DefaultBoundaryConditionType = ZeroFluxNeumannBoundaryCondition<OutputImageType>;
 
   /** The type of data structure that is passed to this function object
    * to evaluate at a pixel that does not lie on a data set boundary.
    */
-  typedef ConstNeighborhoodIterator<OutputImageType,
-                                    DefaultBoundaryConditionType> NeighborhoodType;
+  using NeighborhoodType = ConstNeighborhoodIterator<OutputImageType,
+                                    DefaultBoundaryConditionType>;
 
-  typedef ListNode<IndexType>            ListNodeType;
-  typedef ObjectStore<ListNodeType>      ListNodeStorageType;
-  typedef SparseFieldLayer<ListNodeType> ListType;
-  typedef typename ListType::Pointer     ListPointerType;
+  using ListNodeType = ListNode<IndexType>;
+  using ListNodeStorageType = ObjectStore<ListNodeType>;
+  using ListType = SparseFieldLayer<ListNodeType>;
+  using ListPointerType = typename ListType::Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
     
   /** Typedef to describe the output image region type. */
-  typedef typename TOutputImage::RegionType OutputImageRegionType;
+  using OutputImageRegionType = typename TOutputImage::RegionType;
     
   /** Run-time type information (and related methods). */
   itkTypeMacro(CannyEdgeDetectionRecursiveGaussianImageFilter, ImageToImageFilter);
@@ -145,7 +144,7 @@ public:
   static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
   
   /** Typedef of double containers */
-  typedef FixedArray<double, itkGetStaticConstMacro(ImageDimension)> ArrayType;
+  using ArrayType = FixedArray<double, itkGetStaticConstMacro(ImageDimension)>;
 
   /** Smoothing parameters for the Gaussian filter. */
   void SetSigmaArray( const SigmaArrayType & sigmas );
@@ -215,8 +214,8 @@ protected:
 
   void GenerateData() override;
 
-  typedef MultiplyImageFilter< OutputImageType, 
-              OutputImageType, OutputImageType>       MultiplyImageFilterType;
+  using MultiplyImageFilterType = MultiplyImageFilter< OutputImageType, 
+              OutputImageType, OutputImageType>;
 
 private:
   ~CannyEdgeDetectionRecursiveGaussianImageFilter() override{};
