@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
   using InputPixelType = signed short;
   using RealPixelType = float;
   using OutputPixelType = float;
-  const   unsigned int     Dimension = 3;
+  constexpr unsigned int Dimension = 3;
 
   using InputImageType = itk::Image<InputPixelType, Dimension>;
   using RealImageType = itk::Image<RealPixelType, Dimension>;

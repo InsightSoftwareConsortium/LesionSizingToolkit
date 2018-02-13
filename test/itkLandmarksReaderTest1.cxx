@@ -28,7 +28,7 @@ int itkLandmarksReaderTest1( int argc, char * argv [] )
     }
 
 
-  const unsigned int Dimension = 3;
+  constexpr unsigned int Dimension = 3;
 
   using InputSpatialObjectType = itk::LandmarkSpatialObject< Dimension >;
 

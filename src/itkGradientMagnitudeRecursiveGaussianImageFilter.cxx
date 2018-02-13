@@ -42,7 +42,7 @@ int main( int argc, char * argv[] )
   using InputPixelType = float;
   using OutputPixelType = float;
 
-  const unsigned Dimension = 3;
+  constexpr unsigned Dimension  = 3;
 
   using InputImageType = itk::Image< InputPixelType,  Dimension >;
   using OutputImageType = itk::Image< OutputPixelType, Dimension >;

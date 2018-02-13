@@ -18,7 +18,7 @@ macro( VOLCANO_CONVERT_DCM2MHA
     -IgnoreDirection
     )
 
-endmacro( VOLCANO_CONVERT_DCM2MHA )
+endmacro()
 
         
 #############################################################################
@@ -83,7 +83,7 @@ IF( LSTK_SANDBOX_USE_VTK )
     )
 ENDIF( LSTK_SANDBOX_USE_VTK )
 
-endmacro( TEST_VOLCANO_DATASET )
+endmacro()
 
 
 #############################################################################
@@ -112,6 +112,6 @@ macro( TEST_VOLCANO_DATASET_PAIR
        ${INSTANCE_NAME2}   # S02A01
      )
 
-endmacro( TEST_VOLCANO_DATASET_PAIR )
+endmacro()
 
 

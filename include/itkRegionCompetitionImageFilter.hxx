@@ -259,7 +259,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 
   unsigned int neighborhoodSize = bit.Size();
 
-  const OutputImagePixelType backgroundValue = 0;  // no-label value.
+  constexpr OutputImagePixelType backgroundValue  = 0;  // no-label value.
 
   for( unsigned int lb = 0; lb < this->m_NumberOfLabels; lb++ )
     {
@@ -445,7 +445,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 
   NeigborOffsetIterator neighborItr = this->m_NeighborBufferOffset.begin();
 
-  const OutputImagePixelType backgroundValue = 0;  // FIXME: replace with NO-Label.
+  constexpr OutputImagePixelType backgroundValue  = 0;  // FIXME: replace with NO-Label.
 
   for( unsigned int i = 0; i < neighborhoodSize; ++i, ++neighborItr )
     {

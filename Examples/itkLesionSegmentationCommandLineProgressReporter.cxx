@@ -17,7 +17,7 @@
  *=========================================================================*/
 
 #include "itkLesionSegmentationCommandLineProgressReporter.h"
-#include <stdio.h>
+#include <cstdio>
 
 namespace itk
 {

@@ -33,7 +33,7 @@ int itkConfidenceConnectedSegmentationModuleTest1( int argc, char * argv [] )
     }
 
 
-  const unsigned int Dimension = 3;
+  constexpr unsigned int Dimension = 3;
 
   using SegmentationModuleType = itk::ConfidenceConnectedSegmentationModule< Dimension >;
 

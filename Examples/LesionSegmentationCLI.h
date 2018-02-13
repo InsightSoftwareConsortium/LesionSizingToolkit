@@ -18,7 +18,7 @@
 #else
   #include "dirent_win.h" // exists only on POSIX type compilers
 #endif
-#include <errno.h>
+#include <cerrno>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -27,7 +27,7 @@ class LesionSegmentationCLI : public MetaCommand
 {
 public:
   using PixelType = short;
-  const static unsigned int ImageDimension = 3;
+  constexpr static unsigned int ImageDimension  = 3;
   using InputImageType = itk::Image< PixelType, ImageDimension >;
   using RealImageType = itk::Image< float, ImageDimension >;
 

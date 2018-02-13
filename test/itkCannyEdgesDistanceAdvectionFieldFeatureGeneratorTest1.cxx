@@ -33,7 +33,7 @@ int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * a
     return EXIT_FAILURE;
     }
 
-  const unsigned int Dimension = 3;
+  constexpr unsigned int Dimension = 3;
   using InputPixelType = signed short;
   using OutputPixelType = itk::CovariantVector< float >;
 
