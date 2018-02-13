@@ -18,7 +18,7 @@
 #else
   #include "dirent_win.h" // exists only on POSIX type compilers
 #endif
-#include <errno.h>
+#include <cerrno>
 #include <vector>
 #include <string>
 #include <iostream>

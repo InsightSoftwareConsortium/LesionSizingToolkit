@@ -77,8 +77,8 @@
 #define DIRENT_H
 
 #include <windows.h>
-#include <string.h>
-#include <assert.h>
+#include <cstring>
+#include <cassert>
 
 
 typedef struct dirent
