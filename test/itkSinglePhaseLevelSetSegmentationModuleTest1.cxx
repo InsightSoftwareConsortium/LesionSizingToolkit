@@ -21,7 +21,7 @@
 
 int itkSinglePhaseLevelSetSegmentationModuleTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
-  const unsigned int Dimension = 3;
+  constexpr unsigned int Dimension = 3;
 
   using SegmentationModuleType = itk::SinglePhaseLevelSetSegmentationModule< Dimension >;
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
@@ -45,11 +45,11 @@ int itkSinglePhaseLevelSetSegmentationModuleTest1( int itkNotUsed(argc), char * 
   segmentationModule->SetMaximumRMSError ( 1.0 );
   segmentationModule->SetMaximumNumberOfIterations ( 1 );
 
-  const double propagationScaling = 1.3;
-  const double curvatureScaling = 1.7;
-  const double advectionScaling = 1.9;
-  const double maximumRMSError = 0.01;
-  const unsigned int maximumNumberOfIterations = 179;
+  constexpr double propagationScaling = 1.3;
+  constexpr double curvatureScaling = 1.7;
+  constexpr double advectionScaling = 1.9;
+  constexpr double maximumRMSError = 0.01;
+  constexpr unsigned int maximumNumberOfIterations = 179;
 
   // Set specific values and check them back
   segmentationModule->SetPropagationScaling ( propagationScaling );

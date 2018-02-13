@@ -41,7 +41,7 @@ int itkLesionSegmentationMethodTest8b( int argc, char * argv [] )
     resampleThickSliceData |= (strcmp("-ResampleThickSliceData", argv[i]) == 0);
     }
 
-  const unsigned int Dimension = 3;
+  constexpr unsigned int Dimension = 3;
   using InputPixelType = signed short;
   using OutputPixelType = float;
   using InputImageType = itk::Image< InputPixelType,  Dimension >;

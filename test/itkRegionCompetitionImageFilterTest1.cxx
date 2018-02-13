@@ -23,7 +23,7 @@ const
 
 int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
-  const unsigned int Dimension = 3;
+  constexpr unsigned int Dimension = 3;
 
   using InputPixelType = signed short;
   using BinaryPixelType = unsigned char;

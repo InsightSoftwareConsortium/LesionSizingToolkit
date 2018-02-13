@@ -35,7 +35,7 @@ int itkWeightedSumFeatureAggregatorTest1( int argc, char * argv [] )
     }
 
 
-  const unsigned int Dimension = 3;
+  constexpr unsigned int Dimension = 3;
   using InputPixelType = signed short;
 
   using InputImageType = itk::Image< InputPixelType, Dimension >;

@@ -31,7 +31,7 @@ int itkGeodesicActiveContourLevelSetSegmentationModuleTest1( int argc, char * ar
     }
 
 
-  const unsigned int Dimension = 3;
+  constexpr unsigned int Dimension = 3;
 
   using SegmentationModuleType = itk::GeodesicActiveContourLevelSetSegmentationModule< Dimension >;
 

@@ -22,7 +22,7 @@
 
 int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
-  const unsigned int Dimension = 3;
+  constexpr unsigned int Dimension = 3;
 
   using VolumeEstimatorType = itk::GrayscaleImageSegmentationVolumeEstimator<Dimension>;
 
@@ -96,7 +96,7 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
   center[1] = 50.0 * spacing[1];
   center[2] = 50.0 * spacing[2];
 
-  const double radius = 15.0;
+  constexpr double radius = 15.0;
 
   while( !itr.IsAtEnd() )
     {
