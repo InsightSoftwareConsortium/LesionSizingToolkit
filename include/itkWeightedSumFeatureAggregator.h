@@ -57,7 +57,7 @@ public:
   itkTypeMacro(WeightedSumFeatureAggregator, FeatureAggregator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Add the weight that will be used to multiply the corresponding feature
    * when computing the weighted sum. */

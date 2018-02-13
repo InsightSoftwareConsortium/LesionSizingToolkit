@@ -44,7 +44,7 @@ public:
   itkTypeMacro(FeatureAggregatorSurrogate, FeatureAggregator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
 
 protected:

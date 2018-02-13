@@ -55,7 +55,7 @@ public:
   itkTypeMacro(MaximumFeatureAggregator, FeatureAggregator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Type of the image and specific SpatialObject produced as output */
   typedef typename Superclass::OutputPixelType                OutputPixelType;

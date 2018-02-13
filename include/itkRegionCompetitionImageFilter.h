@@ -70,8 +70,8 @@ public:
 
 
   /** Image dimension constants */
-  itkStaticConstMacro(InputImageDimension,  unsigned int, TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  static constexpr unsigned int InputImageDimension = TInputImage::ImageDimension;
+  static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
   /** Set/Get the maximum number of iterations that will be applied to the
    * propagating front */

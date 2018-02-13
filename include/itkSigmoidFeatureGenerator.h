@@ -56,7 +56,7 @@ public:
   itkTypeMacro(SigmoidFeatureGenerator, FeatureGenerator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */

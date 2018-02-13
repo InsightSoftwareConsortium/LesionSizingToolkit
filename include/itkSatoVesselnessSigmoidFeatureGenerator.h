@@ -52,7 +52,7 @@ public:
   itkTypeMacro(SatoVesselnessSigmoidFeatureGenerator, SatoVesselnessFeatureGenerator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Alpha value to be used in the Sigmoid transformation. It should be a
    * negative number if the feature is going to be used to exclude vessels, and

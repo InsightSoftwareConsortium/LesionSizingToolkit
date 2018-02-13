@@ -65,11 +65,9 @@ public:
   itkTypeMacro(IsotropicResamplerImageFilter, ImageToImageFilter);
 
   /** ImageDimension constant    */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
 
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
   itkSetMacro( OutputSpacing, SpacingType );
   itkGetMacro( OutputSpacing, SpacingType );

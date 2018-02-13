@@ -69,8 +69,8 @@ public:
   typedef typename Superclass::InputSizeType              InputSizeType;
   
   /** Image dimension constants */
-  itkStaticConstMacro(InputImageDimension,  unsigned int, TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  static constexpr unsigned int InputImageDimension = TInputImage::ImageDimension;
+  static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
   /** Majority threshold. It is the number of pixels over 50% that will decide
    * whether an OFF pixel will become ON or not. For example, if the

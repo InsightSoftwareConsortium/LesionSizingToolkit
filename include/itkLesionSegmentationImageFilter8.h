@@ -75,11 +75,9 @@ public:
   itkTypeMacro(LesionSegmentationImageFilter8, ImageToImageFilter);
 
   /** ImageDimension constant    */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
 
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
   typedef CannyEdgesFeatureGenerator< ImageDimension > CannyEdgesFeatureGeneratorType;
   typedef typename CannyEdgesFeatureGeneratorType::SigmaArrayType SigmaArrayType;

@@ -58,7 +58,7 @@ public:
   itkTypeMacro(GrayscaleImageSegmentationVolumeEstimator, SegmentationVolumeEstimator);
 
   /** Dimension of the space */
-  itkStaticConstMacro(Dimension, unsigned int, NDimension);
+  static constexpr unsigned int Dimension = NDimension;
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
