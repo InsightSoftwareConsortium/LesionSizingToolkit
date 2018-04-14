@@ -44,6 +44,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT WeightedSumFeatureAggregator : public FeatureAggregator<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(WeightedSumFeatureAggregator);
+
   /** Standard class type alias. */
   using Self = WeightedSumFeatureAggregator;
   using Superclass = FeatureAggregator<NDimension>;
@@ -73,11 +75,7 @@ protected:
   ~WeightedSumFeatureAggregator() override;
   void PrintSelf(std::ostream& os, Indent indent) const override;
 
-
 private:
-  WeightedSumFeatureAggregator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   void ConsolidateFeatures() override;
 
   using WeightsArrayType = std::vector< double >;

@@ -42,6 +42,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT GradientMagnitudeSigmoidFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(GradientMagnitudeSigmoidFeatureGenerator);
+
   /** Standard class type alias. */
   using Self = GradientMagnitudeSigmoidFeatureGenerator;
   using Superclass = FeatureGenerator<NDimension>;
@@ -97,9 +99,6 @@ protected:
   void  GenerateData () override;
 
 private:
-  GradientMagnitudeSigmoidFeatureGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   using InternalPixelType = float;
   using InternalImageType = Image< InternalPixelType, Dimension >;
 

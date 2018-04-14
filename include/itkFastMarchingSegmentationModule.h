@@ -38,6 +38,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT FastMarchingSegmentationModule : public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(FastMarchingSegmentationModule);
+
   /** Standard class type alias. */
   using Self = FastMarchingSegmentationModule;
   using Superclass = SinglePhaseLevelSetSegmentationModule<NDimension>;
@@ -95,11 +97,6 @@ protected:
 
   double m_StoppingValue;
   double m_DistanceFromSeeds;
-
-private:
-  FastMarchingSegmentationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
 };
 
 } // end namespace itk

@@ -39,6 +39,8 @@ class IsotropicResamplerImageFilter
   : public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(IsotropicResamplerImageFilter);
+
   /** Standard "Self" & Superclass type alias.  */
   using Self = IsotropicResamplerImageFilter;
   using Superclass = ImageToImageFilter<TInputImage, TOutputImage>;
@@ -99,8 +101,6 @@ protected:
 
 private:
   ~IsotropicResamplerImageFilter() override;
-  IsotropicResamplerImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
 
   SpacingType m_OutputSpacing;
   using ResampleFilterType = ResampleImageFilter< TInputImage, TOutputImage >;

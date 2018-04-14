@@ -41,6 +41,8 @@ template <unsigned int NDimension>
 class BinaryThresholdFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(BinaryThresholdFeatureGenerator);
+
   /** Standard class type alias. */
   using Self = BinaryThresholdFeatureGenerator;
   using Superclass = FeatureGenerator<NDimension>;
@@ -78,9 +80,6 @@ protected:
   void  GenerateData () override;
 
 private:
-  BinaryThresholdFeatureGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   using OutputPixelType = float;
   using OutputImageType = Image< OutputPixelType, Dimension >;
 

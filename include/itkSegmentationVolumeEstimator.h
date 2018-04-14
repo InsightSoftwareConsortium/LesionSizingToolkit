@@ -38,6 +38,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT SegmentationVolumeEstimator : public ProcessObject
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(SegmentationVolumeEstimator);
+
   /** Standard class type alias. */
   using Self = SegmentationVolumeEstimator;
   using Superclass = ProcessObject;
@@ -83,11 +85,6 @@ protected:
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
   void  GenerateData() override;
-
-private:
-  SegmentationVolumeEstimator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
 };
 
 } // end namespace itk

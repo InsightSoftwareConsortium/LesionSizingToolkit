@@ -46,6 +46,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT MorphologicalOpenningFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(MorphologicalOpenningFeatureGenerator);
+
   /** Standard class type alias. */
   using Self = MorphologicalOpenningFeatureGenerator;
   using Superclass = FeatureGenerator<NDimension>;
@@ -92,9 +94,6 @@ protected:
   void  GenerateData () override;
 
 private:
-  MorphologicalOpenningFeatureGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   using InternalPixelType = unsigned char;
   using InternalImageType = Image< InternalPixelType, Dimension >;
 

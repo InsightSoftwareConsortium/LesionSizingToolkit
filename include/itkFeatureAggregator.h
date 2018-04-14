@@ -40,6 +40,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT FeatureAggregator : public FeatureGenerator<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(FeatureAggregator);
+
   /** Standard class type alias. */
   using Self = FeatureAggregator;
   using Superclass = FeatureGenerator<NDimension>;
@@ -96,9 +98,6 @@ protected:
   ProgressAccumulator::Pointer              m_ProgressAccumulator;
 
 private:
-  FeatureAggregator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   using FeatureGeneratorPointer = typename FeatureGeneratorType::Pointer;
   using FeatureGeneratorArrayType = std::vector< FeatureGeneratorPointer >;
   using FeatureGeneratorIterator = typename FeatureGeneratorArrayType::iterator;

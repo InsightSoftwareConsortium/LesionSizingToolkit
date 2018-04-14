@@ -41,6 +41,8 @@ class ITK_EXPORT VotingBinaryHoleFillFloodingImageFilter:
     public VotingBinaryImageFilter<TInputImage,TOutputImage>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(VotingBinaryHoleFillFloodingImageFilter);
+
   /** Standard class type alias. */
   using Self = VotingBinaryHoleFillFloodingImageFilter;
   using Superclass = VotingBinaryImageFilter<TInputImage,TOutputImage>;
@@ -113,10 +115,6 @@ protected:
   void PrintSelf ( std::ostream& os, Indent indent ) const override;
 
 private:
-  VotingBinaryHoleFillFloodingImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
-
   void AllocateOutputImageWorkingMemory();
 
   void InitializeNeighborhood();

@@ -38,6 +38,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT IsotropicResampler : public ProcessObject
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(IsotropicResampler);
+
   /** Standard class type alias. */
   using Self = IsotropicResampler;
   using Superclass = ProcessObject;
@@ -84,9 +86,6 @@ protected:
   void  GenerateData () override;
 
 private:
-  IsotropicResampler(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   using OutputPixelType = signed short;
   using OutputImageType = Image< OutputPixelType, Dimension >;
 

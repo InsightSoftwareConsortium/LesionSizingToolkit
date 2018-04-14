@@ -44,6 +44,8 @@ class ITK_EXPORT GrayscaleImageSegmentationVolumeEstimator :
  public SegmentationVolumeEstimator<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(GrayscaleImageSegmentationVolumeEstimator);
+
   /** Standard class type alias. */
   using Self = GrayscaleImageSegmentationVolumeEstimator;
   using Superclass = SegmentationVolumeEstimator<NDimension>;
@@ -80,11 +82,6 @@ protected:
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
   void  GenerateData() override;
-
-private:
-  GrayscaleImageSegmentationVolumeEstimator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
 };
 
 } // end namespace itk

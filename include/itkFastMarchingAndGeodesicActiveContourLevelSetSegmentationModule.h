@@ -39,6 +39,8 @@ class ITK_EXPORT FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule 
   public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule);
+
   /** Standard class type alias. */
   using Self = FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule;
   using Superclass = SinglePhaseLevelSetSegmentationModule<NDimension>;
@@ -97,10 +99,6 @@ protected:
   typename FastMarchingModuleType::Pointer m_FastMarchingModule;
   using GeodesicActiveContourLevelSetModuleType = GeodesicActiveContourLevelSetSegmentationModule< Dimension >;
   typename GeodesicActiveContourLevelSetModuleType::Pointer m_GeodesicActiveContourLevelSetModule;
-
-private:
-  FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
 };
 
 } // end namespace itk

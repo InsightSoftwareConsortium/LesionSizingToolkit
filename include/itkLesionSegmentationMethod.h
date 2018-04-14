@@ -43,6 +43,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT LesionSegmentationMethod : public ProcessObject
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(LesionSegmentationMethod);
+
   /** Standard class type alias. */
   using Self = LesionSegmentationMethod;
   using Superclass = ProcessObject;
@@ -107,9 +109,6 @@ protected:
   void  GenerateData() override;
 
 private:
-  LesionSegmentationMethod(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   SpatialObjectConstPointer                 m_RegionOfInterest;
   SpatialObjectConstPointer                 m_InitialSegmentation;
   

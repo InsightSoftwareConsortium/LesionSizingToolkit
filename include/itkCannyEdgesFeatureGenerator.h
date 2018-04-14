@@ -60,6 +60,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT CannyEdgesFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(CannyEdgesFeatureGenerator);
+
   /** Standard class type alias. */
   using Self = CannyEdgesFeatureGenerator;
   using Superclass = FeatureGenerator<NDimension>;
@@ -119,9 +121,6 @@ protected:
   void  GenerateData () override;
 
 private:
-  CannyEdgesFeatureGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   using InternalPixelType = float;
   using InternalImageType = Image< InternalPixelType, Dimension >;
 

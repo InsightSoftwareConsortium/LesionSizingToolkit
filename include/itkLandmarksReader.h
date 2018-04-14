@@ -37,6 +37,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT LandmarksReader : public ProcessObject
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(LandmarksReader);
+
   /** Standard class type alias. */
   using Self = LandmarksReader;
   using Superclass = ProcessObject;
@@ -73,10 +75,6 @@ protected:
   void GenerateData() override;
 
 private:
-  LandmarksReader(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
-
   using SpatialObjectReaderType = SpatialObjectReader< NDimension, unsigned short >;
   using SpatialObjectReaderPointer = typename SpatialObjectReaderType::Pointer;
   using SceneType = typename SpatialObjectReaderType::SceneType;

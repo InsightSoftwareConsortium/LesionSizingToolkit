@@ -39,6 +39,8 @@ class ITK_EXPORT FastMarchingAndShapeDetectionLevelSetSegmentationModule :
   public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(FastMarchingAndShapeDetectionLevelSetSegmentationModule);
+
   /** Standard class type alias. */
   using Self = FastMarchingAndShapeDetectionLevelSetSegmentationModule;
   using Superclass = SinglePhaseLevelSetSegmentationModule<NDimension>;
@@ -97,10 +99,6 @@ protected:
   typename FastMarchingModuleType::Pointer m_FastMarchingModule;
   using ShapeDetectionLevelSetModuleType = ShapeDetectionLevelSetSegmentationModule< Dimension >;
   typename ShapeDetectionLevelSetModuleType::Pointer m_ShapeDetectionLevelSetModule;
-
-private:
-  FastMarchingAndShapeDetectionLevelSetSegmentationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
 };
 
 } // end namespace itk

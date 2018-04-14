@@ -44,6 +44,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT DescoteauxSheetnessFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(DescoteauxSheetnessFeatureGenerator);
+
   /** Standard class type alias. */
   using Self = DescoteauxSheetnessFeatureGenerator;
   using Superclass = FeatureGenerator<NDimension>;
@@ -109,9 +111,6 @@ protected:
   void  GenerateData () override;
 
 private:
-  DescoteauxSheetnessFeatureGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   using InternalPixelType = float;
   using InternalImageType = Image< InternalPixelType, Dimension >;
 
