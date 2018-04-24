@@ -36,6 +36,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT RegionGrowingSegmentationModule : public SegmentationModule<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(RegionGrowingSegmentationModule);
+
   /** Standard class type alias. */
   using Self = RegionGrowingSegmentationModule;
   using Superclass = SegmentationModule<NDimension>;
@@ -88,9 +90,6 @@ protected:
   const FeatureImageType * GetInternalFeatureImage() const;
 
 private:
-  RegionGrowingSegmentationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   void ConvertIntensitiesToCenteredRange( OutputImageType * outputImage );
 };
 

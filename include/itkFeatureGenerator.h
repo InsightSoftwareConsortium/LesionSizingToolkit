@@ -40,6 +40,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT FeatureGenerator : public ProcessObject
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(FeatureGenerator);
+
   /** Standard class type alias. */
   using Self = FeatureGenerator;
   using Superclass = ProcessObject;
@@ -79,11 +81,6 @@ protected:
 
   /** non-const version of the method intended to be used in derived classes. */
   SpatialObjectType * GetInternalFeature();
-
-private:
-  FeatureGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
 };
 
 } // end namespace itk

@@ -42,6 +42,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT MaximumFeatureAggregator : public FeatureAggregator<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(MaximumFeatureAggregator);
+
   /** Standard class type alias. */
   using Self = MaximumFeatureAggregator;
   using Superclass = FeatureAggregator<NDimension>;
@@ -70,9 +72,6 @@ protected:
 
 
 private:
-  MaximumFeatureAggregator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   void ConsolidateFeatures() override;
 
 };

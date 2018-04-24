@@ -37,6 +37,8 @@ class ITK_EXPORT ConfidenceConnectedSegmentationModule :
   public RegionGrowingSegmentationModule<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(ConfidenceConnectedSegmentationModule);
+
   /** Standard class type alias. */
   using Self = ConfidenceConnectedSegmentationModule;
   using Superclass = RegionGrowingSegmentationModule<NDimension>;
@@ -73,9 +75,6 @@ protected:
   void  GenerateData () override;
 
 private:
-  ConfidenceConnectedSegmentationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   double        m_SigmaMultiplier;
 
 };

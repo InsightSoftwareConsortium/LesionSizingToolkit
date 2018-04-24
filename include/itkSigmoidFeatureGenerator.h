@@ -43,6 +43,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT SigmoidFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(SigmoidFeatureGenerator);
+
   /** Standard class type alias. */
   using Self = SigmoidFeatureGenerator;
   using Superclass = FeatureGenerator<NDimension>;
@@ -93,9 +95,6 @@ protected:
   void  GenerateData () override;
 
 private:
-  SigmoidFeatureGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   using OutputPixelType = float;
   using OutputImageType = Image< OutputPixelType, Dimension >;
 

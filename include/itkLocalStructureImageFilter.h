@@ -169,6 +169,8 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
                                        typename TOutputImage::PixelType>   >
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(LocalStructureImageFilter);
+
   /** Standard class type alias. */
   using Self = LocalStructureImageFilter;
   using Superclass = UnaryFunctorImageFilter<
@@ -212,11 +214,6 @@ public:
 protected:
   LocalStructureImageFilter() {}
   ~LocalStructureImageFilter() override {}
-
-private:
-  LocalStructureImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
 };
 
 } // end namespace itk

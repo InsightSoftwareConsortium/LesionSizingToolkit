@@ -77,6 +77,8 @@ class ITK_EXPORT VesselEnhancingDiffusion3DImageFilter :
 {
 
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(VesselEnhancingDiffusion3DImageFilter);
+
   using Precision = float;
   using ImageType = Image<PixelType, NDimension>;
   using PrecisionImageType = Image<Precision,NDimension>;
@@ -142,10 +144,6 @@ protected:
   void GenerateData() override;
 
 private:
-
-  VesselEnhancingDiffusion3DImageFilter(const Self&);
-  void operator=(const Self&);
-
   Precision                 m_TimeStep;
   unsigned int              m_Iterations;
   unsigned int              m_RecalculateVesselness;

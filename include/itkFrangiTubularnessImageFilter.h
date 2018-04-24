@@ -186,6 +186,8 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
                                        typename TOutputImage::PixelType>   >
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(FrangiTubularnessImageFilter);
+
   /** Standard class type alias. */
   using Self = FrangiTubularnessImageFilter;
   using Superclass = UnaryFunctorImageFilter<
@@ -242,11 +244,6 @@ public:
 protected:
   FrangiTubularnessImageFilter() {}
   ~FrangiTubularnessImageFilter() override {}
-
-private:
-  FrangiTubularnessImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
 };
 
 } // end namespace itk

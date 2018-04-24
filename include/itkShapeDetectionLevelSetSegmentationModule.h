@@ -37,6 +37,8 @@ class ITK_EXPORT ShapeDetectionLevelSetSegmentationModule :
   public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(ShapeDetectionLevelSetSegmentationModule);
+
   /** Standard class type alias. */
   using Self = ShapeDetectionLevelSetSegmentationModule;
   using Superclass = SinglePhaseLevelSetSegmentationModule<NDimension>;
@@ -75,11 +77,6 @@ protected:
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
   void  GenerateData () override;
-
-private:
-  ShapeDetectionLevelSetSegmentationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
 };
 
 } // end namespace itk

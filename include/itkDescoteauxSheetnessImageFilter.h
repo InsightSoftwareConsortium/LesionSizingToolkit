@@ -178,6 +178,8 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
                                        typename TOutputImage::PixelType>   >
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(DescoteauxSheetnessImageFilter);
+
   /** Standard class type alias. */
   using Self = DescoteauxSheetnessImageFilter;
   using Superclass = UnaryFunctorImageFilter<
@@ -234,11 +236,6 @@ public:
 protected:
   DescoteauxSheetnessImageFilter() {}
   ~DescoteauxSheetnessImageFilter() override {}
-
-private:
-  DescoteauxSheetnessImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
 };
 
 } // end namespace itk

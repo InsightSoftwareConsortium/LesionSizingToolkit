@@ -35,6 +35,8 @@ template <unsigned int NDimension>
 class ITK_EXPORT SinglePhaseLevelSetSegmentationModule : public SegmentationModule<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(SinglePhaseLevelSetSegmentationModule);
+
   /** Standard class type alias. */
   using Self = SinglePhaseLevelSetSegmentationModule;
   using Superclass = SegmentationModule<NDimension>;
@@ -122,9 +124,6 @@ protected:
   const FeatureImageType * GetInternalFeatureImage() const;
 
 private:
-  SinglePhaseLevelSetSegmentationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   double        m_PropagationScaling;
   double        m_CurvatureScaling;
   double        m_AdvectionScaling;

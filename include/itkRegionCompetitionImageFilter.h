@@ -42,6 +42,8 @@ class RegionCompetitionImageFilter:
     public ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(RegionCompetitionImageFilter);
+
   /** Standard class type alias. */
   using Self = RegionCompetitionImageFilter;
   using Superclass = ImageToImageFilter<TInputImage,TOutputImage>;
@@ -107,10 +109,6 @@ protected:
   void PrintSelf ( std::ostream& os, Indent indent ) const override;
 
 private:
-  RegionCompetitionImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
-
   void AllocateOutputImageWorkingMemory();
 
   void AllocateFrontsWorkingMemory();

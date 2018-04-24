@@ -37,6 +37,8 @@ class ITK_EXPORT GeodesicActiveContourLevelSetSegmentationModule :
   public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(GeodesicActiveContourLevelSetSegmentationModule);
+
   /** Standard class type alias. */
   using Self = GeodesicActiveContourLevelSetSegmentationModule;
   using Superclass = SinglePhaseLevelSetSegmentationModule<NDimension>;
@@ -75,11 +77,6 @@ protected:
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
   void  GenerateData () override;
-
-private:
-  GeodesicActiveContourLevelSetSegmentationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
 };
 
 } // end namespace itk
