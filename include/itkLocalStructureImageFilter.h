@@ -162,7 +162,7 @@ private:
 }
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LocalStructureImageFilter :
+class ITK_TEMPLATE_EXPORT LocalStructureImageFilter :
     public
 UnaryFunctorImageFilter<TInputImage,TOutputImage,
                         Function::LocalStructure< typename TInputImage::PixelType,

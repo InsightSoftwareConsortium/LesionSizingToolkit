@@ -37,7 +37,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_EXPORT SegmentationModule : public ProcessObject
+class ITK_TEMPLATE_EXPORT SegmentationModule : public ProcessObject
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(SegmentationModule);

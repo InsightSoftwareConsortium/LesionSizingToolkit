@@ -40,7 +40,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_EXPORT GrayscaleImageSegmentationVolumeEstimator :
+class ITK_TEMPLATE_EXPORT GrayscaleImageSegmentationVolumeEstimator :
  public SegmentationVolumeEstimator<NDimension>
 {
 public:

@@ -179,7 +179,7 @@ private:
 }
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT FrangiTubularnessImageFilter :
+class ITK_TEMPLATE_EXPORT FrangiTubularnessImageFilter :
     public
 UnaryFunctorImageFilter<TInputImage,TOutputImage, 
                         Function::Tubularness< typename TInputImage::PixelType, 

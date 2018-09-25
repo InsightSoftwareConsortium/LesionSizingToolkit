@@ -39,7 +39,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_EXPORT MinimumFeatureAggregator : public FeatureAggregator<NDimension>
+class ITK_TEMPLATE_EXPORT MinimumFeatureAggregator : public FeatureAggregator<NDimension>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(MinimumFeatureAggregator);

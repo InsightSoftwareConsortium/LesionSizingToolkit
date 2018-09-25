@@ -33,7 +33,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_EXPORT RegionGrowingSegmentationModule : public SegmentationModule<NDimension>
+class ITK_TEMPLATE_EXPORT RegionGrowingSegmentationModule : public SegmentationModule<NDimension>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(RegionGrowingSegmentationModule);

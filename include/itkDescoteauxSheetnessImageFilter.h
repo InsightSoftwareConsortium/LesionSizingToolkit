@@ -171,7 +171,7 @@ private:
 }
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT DescoteauxSheetnessImageFilter :
+class ITK_TEMPLATE_EXPORT DescoteauxSheetnessImageFilter :
     public
 UnaryFunctorImageFilter<TInputImage,TOutputImage, 
                         Function::Sheetness< typename TInputImage::PixelType, 

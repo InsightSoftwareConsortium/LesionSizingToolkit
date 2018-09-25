@@ -71,7 +71,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
 */
 template <class PixelType = short int, unsigned int NDimension = 3>
-class ITK_EXPORT VesselEnhancingDiffusion3DImageFilter :
+class ITK_TEMPLATE_EXPORT VesselEnhancingDiffusion3DImageFilter :
     public ImageToImageFilter<Image<PixelType, NDimension> ,
                               Image<PixelType, NDimension> >
 {

@@ -32,7 +32,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_EXPORT SinglePhaseLevelSetSegmentationModule : public SegmentationModule<NDimension>
+class ITK_TEMPLATE_EXPORT SinglePhaseLevelSetSegmentationModule : public SegmentationModule<NDimension>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(SinglePhaseLevelSetSegmentationModule);

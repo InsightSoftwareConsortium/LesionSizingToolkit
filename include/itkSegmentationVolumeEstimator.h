@@ -35,7 +35,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_EXPORT SegmentationVolumeEstimator : public ProcessObject
+class ITK_TEMPLATE_EXPORT SegmentationVolumeEstimator : public ProcessObject
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(SegmentationVolumeEstimator);
