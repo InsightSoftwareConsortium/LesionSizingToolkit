@@ -14,8 +14,10 @@ itk_module(LesionSizingToolkit
    ITKRegionGrowing
    ITKLabelVoting
    ITKMathematicalMorphology
+   ITKIOBruker
    ITKIOGDCM
    ITKIOMeta
+   ITKIOMINC
    ITKIOGE
    ITKIOBioRad
    ITKIOHDF5
