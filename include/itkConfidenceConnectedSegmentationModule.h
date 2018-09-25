@@ -33,7 +33,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_EXPORT ConfidenceConnectedSegmentationModule :
+class ITK_TEMPLATE_EXPORT ConfidenceConnectedSegmentationModule :
   public RegionGrowingSegmentationModule<NDimension>
 {
 public:

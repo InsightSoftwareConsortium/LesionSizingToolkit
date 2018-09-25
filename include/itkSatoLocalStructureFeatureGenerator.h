@@ -39,7 +39,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_EXPORT SatoLocalStructureFeatureGenerator : public FeatureGenerator<NDimension>
+class ITK_TEMPLATE_EXPORT SatoLocalStructureFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(SatoLocalStructureFeatureGenerator);

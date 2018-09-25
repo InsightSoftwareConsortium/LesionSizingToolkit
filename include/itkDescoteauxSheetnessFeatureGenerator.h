@@ -41,7 +41,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_EXPORT DescoteauxSheetnessFeatureGenerator : public FeatureGenerator<NDimension>
+class ITK_TEMPLATE_EXPORT DescoteauxSheetnessFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(DescoteauxSheetnessFeatureGenerator);

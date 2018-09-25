@@ -37,7 +37,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT VotingBinaryHoleFillFloodingImageFilter:
+class ITK_TEMPLATE_EXPORT VotingBinaryHoleFillFloodingImageFilter:
     public VotingBinaryImageFilter<TInputImage,TOutputImage>
 {
 public:

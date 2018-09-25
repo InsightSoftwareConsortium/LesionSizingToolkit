@@ -89,7 +89,7 @@ public:
  * \sa ZeroCrossingImageFilter
  * \sa ThresholdImageFilter */
 template<class TInputImage, class TOutputImage>
-class ITK_EXPORT CannyEdgeDetectionRecursiveGaussianImageFilter
+class ITK_TEMPLATE_EXPORT CannyEdgeDetectionRecursiveGaussianImageFilter
   : public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
