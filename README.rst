@@ -1,6 +1,21 @@
 The Lesion Sizing Toolkit (LSTK)
 ================================
 
+.. |CircleCI| image:: https://circleci.com/gh/InsightSoftwareConsortium/LesionSizingToolkit.svg?style=shield
+    :target: https://circleci.com/gh/InsightSoftwareConsortium/LesionSizingToolkit
+
+.. |TravisCI| image:: https://travis-ci.org/InsightSoftwareConsortium/LesionSizingToolkit.svg?branch=master
+    :target: https://travis-ci.org/InsightSoftwareConsortium/LesionSizingToolkit
+
+.. |AppVeyor| image:: https://img.shields.io/appveyor/ci/InsightSoftwareConsortium/lesionsizingtoolkit.svg
+    :target: https://ci.appveyor.com/project/InsightSoftwareConsortium/lesionsizingtoolkit
+
+=========== =========== ===========
+   Linux      macOS       Windows
+=========== =========== ===========
+|CircleCI|  |TravisCI|  |AppVeyor|
+=========== =========== ===========
+
 Overview
 --------
 
@@ -16,6 +31,18 @@ For more information, see the `Insight Journal article <http://hdl.handle.net/10
   The Insight Journal. January-December. 2012.
   http://hdl.handle.net/10380/3369
   http://www.insight-journal.org/browse/publication/869
+
+Installation
+------------
+
+Python
+^^^^^^
+
+Binary `Python packages <https://pypi.python.org/pypi/itk-lesionsizingtoolkit>`_
+are available for Linux, macOS, and Windows. They can be installed with::
+
+  python -m pip install --upgrade pip
+  python -m pip install itk-lesionsizingtoolkit
 
 Data
 ----
