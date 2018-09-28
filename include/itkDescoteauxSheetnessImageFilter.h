@@ -32,7 +32,7 @@ namespace itk
  * M.Descoteaux, M.Audette, K.Chinzei, el al.: 
  * "Bone enhancement filtering: Application to sinus bone segmentation
  *  and simulation of pituitary surgery."
- *  In: MICCAI.  (2005) 9–16
+ *  In: MICCAI.  (2005) 9-16
  *
  * \ingroup IntensityImageFilters  Multithreaded
  * \ingroup LesionSizingToolkit
