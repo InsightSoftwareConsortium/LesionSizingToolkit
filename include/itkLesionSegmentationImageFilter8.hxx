@@ -27,7 +27,7 @@
 namespace itk
 {
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 LesionSegmentationImageFilter8<TInputImage, TOutputImage>::
 LesionSegmentationImageFilter8()
 {
@@ -99,7 +99,7 @@ LesionSegmentationImageFilter8()
   m_UserSpecifiedSigmas = false;
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 ::GenerateInputRequestedRegion() throw(InvalidRequestedRegionError)
@@ -117,7 +117,7 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
     }
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 ::SetSigma( SigmaArrayType s )
@@ -126,7 +126,7 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
   m_CannyEdgesFeatureGenerator->SetSigmaArray(s);
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 ::GenerateOutputInformation()
@@ -177,7 +177,7 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 }
 
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 LesionSegmentationImageFilter8< TInputImage, TOutputImage >
 ::GenerateData()
@@ -258,7 +258,7 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
 ::ProgressUpdate( Object * caller,
                   const EventObject & e )
@@ -311,7 +311,7 @@ void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
     }
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
 ::SetAbortGenerateData( bool abort )
 {
@@ -321,14 +321,14 @@ void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
   this->m_LesionSegmentationMethod->SetAbortGenerateData(abort);
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
 ::SetUseVesselEnhancingDiffusion( bool b )
 {
   this->m_VesselnessFeatureGenerator->SetUseVesselEnhancingDiffusion(b);
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 ::PrintSelf(std::ostream& os, Indent indent) const

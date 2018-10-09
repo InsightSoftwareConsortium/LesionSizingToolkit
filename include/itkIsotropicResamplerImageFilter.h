@@ -34,7 +34,7 @@ namespace itk
  *\ingroup LesionSizingToolkit
  * \ingroup LesionSizingToolkit
  */
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 class IsotropicResamplerImageFilter
   : public ImageToImageFilter<TInputImage, TOutputImage>
 {

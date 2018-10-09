@@ -34,7 +34,7 @@ namespace itk
 {
 
 
-template <class TValueType>
+template <typename TValueType>
 class ListNode
 {
 public:
@@ -88,7 +88,7 @@ public:
  * \sa SmoothingRecursiveGaussianImageFilter
  * \sa ZeroCrossingImageFilter
  * \sa ThresholdImageFilter */
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 class ITK_TEMPLATE_EXPORT CannyEdgeDetectionRecursiveGaussianImageFilter
   : public ImageToImageFilter<TInputImage, TOutputImage>
 {

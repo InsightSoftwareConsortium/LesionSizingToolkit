@@ -41,7 +41,7 @@ namespace itk
 /** \class LesionSegmentationImageFilter8
  * \ingroup LesionSizingToolkit
  */
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 class LesionSegmentationImageFilter8
   : public ImageToImageFilter<TInputImage, TOutputImage>
 {

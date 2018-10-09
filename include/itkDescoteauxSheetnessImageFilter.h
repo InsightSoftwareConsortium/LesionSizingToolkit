@@ -39,7 +39,7 @@ namespace itk
  */
 namespace Function {  
   
-template< class TInput, class TOutput>
+template< typename TInput, typename TOutput>
 class Sheetness
 {
 public:
@@ -170,7 +170,7 @@ private:
 }; 
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 class ITK_TEMPLATE_EXPORT DescoteauxSheetnessImageFilter :
     public
 UnaryFunctorImageFilter<TInputImage,TOutputImage, 
