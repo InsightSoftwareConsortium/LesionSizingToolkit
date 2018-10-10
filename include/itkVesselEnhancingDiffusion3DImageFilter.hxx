@@ -39,7 +39,7 @@ namespace itk
 {
 
 // constructor
-template <class PixelType, unsigned int NDimension>
+template <typename PixelType, unsigned int NDimension>
 VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 ::VesselEnhancingDiffusion3DImageFilter():
     m_TimeStep(NumericTraits<Precision>::Zero),
@@ -54,7 +54,7 @@ VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 }
 
 // printself for debugging
-template <class PixelType, unsigned int NDimension>
+template <typename PixelType, unsigned int NDimension>
 void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 ::PrintSelf(std::ostream &os, Indent indent) const
 {
@@ -74,7 +74,7 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
  os << indent << "DarkObjectLightBackground  : " << m_DarkObjectLightBackground << std::endl;
 }
 // singleiter
-template <class PixelType, unsigned int NDimension>
+template <typename PixelType, unsigned int NDimension>
 void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 ::VED3DSingleIteration(typename PrecisionImageType::Pointer ci)
 {
@@ -413,7 +413,7 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 }
 
 // maxvesselresponse
-template <class PixelType, unsigned int NDimension>
+template <typename PixelType, unsigned int NDimension>
 void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 ::MaxVesselResponse(const typename PrecisionImageType::Pointer im)
 {
@@ -542,7 +542,7 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 }
 
 // vesselnessfunction
-template <class PixelType, unsigned int NDimension>
+template <typename PixelType, unsigned int NDimension>
 typename VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::Precision
 VesselEnhancingDiffusion3DImageFilter<PixelType,NDimension>
 ::VesselnessFunction3D( const Precision l1, const Precision l2, const Precision l3 )
@@ -578,7 +578,7 @@ VesselEnhancingDiffusion3DImageFilter<PixelType,NDimension>
 }
 
 // diffusiontensor
-template <class PixelType, unsigned int NDimension>
+template <typename PixelType, unsigned int NDimension>
 void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 ::DiffusionTensor()
 {
@@ -645,7 +645,7 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 }
 
 // generatedata
-template <class PixelType, unsigned int NDimension>
+template <typename PixelType, unsigned int NDimension>
 void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 ::GenerateData()
 {

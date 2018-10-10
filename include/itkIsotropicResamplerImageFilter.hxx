@@ -23,7 +23,7 @@
 namespace itk
 {
   
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 IsotropicResamplerImageFilter<TInputImage, TOutputImage>::
 IsotropicResamplerImageFilter()
 {
@@ -35,13 +35,13 @@ IsotropicResamplerImageFilter()
   this->m_ResampleFilter = ResampleFilterType::New();
 }
   
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 IsotropicResamplerImageFilter<TInputImage, TOutputImage>::
 ~IsotropicResamplerImageFilter()
 {
 }
  
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 IsotropicResamplerImageFilter< TInputImage, TOutputImage >
 ::GenerateOutputInformation()
@@ -85,7 +85,7 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
 #endif
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 IsotropicResamplerImageFilter< TInputImage, TOutputImage >
 ::GenerateData()
@@ -146,7 +146,7 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
   this->GraftOutput( this->m_ResampleFilter->GetOutput() );
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void IsotropicResamplerImageFilter< TInputImage,TOutputImage >
 ::SetAbortGenerateData( const bool abort )
 {
@@ -155,7 +155,7 @@ void IsotropicResamplerImageFilter< TInputImage,TOutputImage >
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 IsotropicResamplerImageFilter<TInputImage,TOutputImage>
 ::PrintSelf(std::ostream& os, Indent indent) const

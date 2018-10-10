@@ -34,7 +34,7 @@ namespace itk
  */
 namespace Function {  
   
-template< class TInput, class TOutput>
+template< typename TInput, typename TOutput>
 class Tubularness
 {
 public:
@@ -178,7 +178,7 @@ private:
 }; 
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 class ITK_TEMPLATE_EXPORT FrangiTubularnessImageFilter :
     public
 UnaryFunctorImageFilter<TInputImage,TOutputImage, 

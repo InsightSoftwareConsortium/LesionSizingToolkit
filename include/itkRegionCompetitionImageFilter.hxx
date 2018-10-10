@@ -30,7 +30,7 @@ namespace itk
 /**
  * Constructor
  */
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 RegionCompetitionImageFilter<TInputImage, TOutputImage>
 ::RegionCompetitionImageFilter()
 {
@@ -57,7 +57,7 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
 /**
  * Destructor
  */
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 RegionCompetitionImageFilter<TInputImage, TOutputImage>
 ::~RegionCompetitionImageFilter()
 {
@@ -84,7 +84,7 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
 /**
  * Standard PrintSelf method.
  */
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, Indent indent) const
@@ -96,7 +96,7 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
 /**
  * Set the input image containing initial labeled regions
  */
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage, TOutputImage>
 ::SetInputLabels( const TOutputImage * inputLabeledImage )
@@ -105,7 +105,7 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::GenerateData()
@@ -120,7 +120,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::IterateFrontPropagations()
@@ -141,7 +141,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::AllocateOutputImageWorkingMemory()
@@ -161,7 +161,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::ComputeNumberOfInputLabels()
@@ -185,7 +185,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
     }
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::AllocateFrontsWorkingMemory()
@@ -195,7 +195,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
   this->m_SeedsNewValues = new SeedNewValuesArrayType[ this->m_NumberOfLabels ];
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::InitializeNeighborhood()
@@ -206,7 +206,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::FindAllPixelsInTheBoundaryAndAddThemAsSeeds()
@@ -304,7 +304,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::VisitAllSeedsAndTransitionTheirState()
@@ -355,7 +355,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::PasteNewSeedValuesToOutputImage()
@@ -385,7 +385,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
     }
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::SwapSeedArrays()
@@ -396,7 +396,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::ClearSecondSeedArray()
@@ -409,7 +409,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 bool
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::TestForAvailabilityAtCurrentPixel() const
@@ -418,7 +418,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::PutCurrentPixelNeighborsIntoSeedArray()
@@ -470,7 +470,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 RegionCompetitionImageFilter<TInputImage,TOutputImage>
 ::ComputeArrayOfNeighborhoodBufferOffsets()

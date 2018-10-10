@@ -37,7 +37,7 @@ namespace itk
  * \ingroup RegionGrowingSegmentation
  * \ingroup LesionSizingToolkit
  */
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 class RegionCompetitionImageFilter:
     public ImageToImageFilter<TInputImage,TOutputImage>
 {

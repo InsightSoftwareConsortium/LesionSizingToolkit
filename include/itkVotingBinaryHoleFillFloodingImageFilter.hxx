@@ -31,7 +31,7 @@ namespace itk
 /**
  * Constructor
  */
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 VotingBinaryHoleFillFloodingImageFilter<TInputImage, TOutputImage>
 ::VotingBinaryHoleFillFloodingImageFilter()
 {
@@ -52,7 +52,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage, TOutputImage>
 /**
  * Destructor
  */
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 VotingBinaryHoleFillFloodingImageFilter<TInputImage, TOutputImage>
 ::~VotingBinaryHoleFillFloodingImageFilter()
 {
@@ -64,7 +64,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage, TOutputImage>
 /**
  * Standard PrintSelf method.
  */
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, Indent indent) const
@@ -73,7 +73,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage, TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::GenerateData()
@@ -87,7 +87,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::IterateFrontPropagations()
@@ -115,7 +115,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::AllocateOutputImageWorkingMemory()
@@ -135,7 +135,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
  
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::InitializeNeighborhood()
@@ -144,7 +144,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::FindAllPixelsInTheBoundaryAndAddThemAsSeeds()
@@ -228,7 +228,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::VisitAllSeedsAndTransitionTheirState()
@@ -275,7 +275,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::PasteNewSeedValuesToOutputImage()
@@ -299,7 +299,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
     }
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::SwapSeedArrays()
@@ -310,7 +310,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::ClearSecondSeedArray()
@@ -320,7 +320,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 bool 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::TestForQuorumAtCurrentPixel() const
@@ -362,7 +362,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::PutCurrentPixelNeighborsIntoSeedArray()
@@ -414,7 +414,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 unsigned int
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::GetNeighborhoodSize() const
@@ -423,7 +423,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::ComputeArrayOfNeighborhoodBufferOffsets()
@@ -465,7 +465,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
     }
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::ComputeBirthThreshold()

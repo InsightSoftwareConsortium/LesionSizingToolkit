@@ -27,7 +27,7 @@
 namespace itk
 {
   
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::
 CannyEdgeDetectionRecursiveGaussianImageFilter()
 {
@@ -80,7 +80,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter()
   m_NodeList = ListType::New();
 }
  
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
 ::AllocateUpdateBuffer()
@@ -95,7 +95,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
   m_UpdateBuffer1->Allocate();  
 }
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 ::GenerateInputRequestedRegion() throw(InvalidRequestedRegionError)
@@ -150,7 +150,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 ::ThreadedCompute2ndDerivative(const OutputImageRegionType&
@@ -204,7 +204,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 typename CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 ::OutputImagePixelType
 CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
@@ -262,7 +262,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 }
 
 // Calculate the second derivative
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 ::Compute2ndDerivative() 
@@ -276,7 +276,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   this->GetMultiThreader()->SingleMethodExecute();
 }
 
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 ITK_THREAD_RETURN_TYPE
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
 ::Compute2ndDerivativeThreaderCallback( void * arg )
@@ -305,7 +305,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
   return ITK_THREAD_RETURN_VALUE;
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 ::GenerateData()
@@ -363,7 +363,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   this->HysteresisThresholding();
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 ::HysteresisThresholding()
@@ -405,7 +405,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 ::FollowEdge(IndexType index)
@@ -468,7 +468,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 bool
 CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 ::InBounds(IndexType index)
@@ -489,7 +489,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 ::ThreadedCompute2ndDerivativePos(const OutputImageRegionType& outputRegionForThread, int threadId)
@@ -594,7 +594,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 }
 
 //Calculate the second derivative
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void 
 CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 ::Compute2ndDerivativePos() 
@@ -608,7 +608,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   this->GetMultiThreader()->SingleMethodExecute();
 }
 
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 ITK_THREAD_RETURN_TYPE
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
 ::Compute2ndDerivativePosThreaderCallback( void * arg )
@@ -686,7 +686,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 }
 
 
-template <class TInputImage, class TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 void 
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 ::PrintSelf(std::ostream& os, Indent indent) const
