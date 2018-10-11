@@ -19,14 +19,16 @@
 #include "itkImage.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
+
 
 int itkDescoteauxSheetnessImageFilterTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [(bright1/dark:0) sigma sheetness bloobiness noise]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage [(bright1/dark:0) sigma sheetness bloobiness noise]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -57,62 +59,78 @@ int itkDescoteauxSheetnessImageFilterTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
+  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+
+
   using FilterType = itk::DescoteauxSheetnessImageFilter< EigenValueImageType, OutputImageType >;
 
   FilterType::Pointer sheetnessFilter = FilterType::New();
-  
+
+  EXERCISE_BASIC_OBJECT_METHODS( sheetnessFilter,
+    DescoteauxSheetnessImageFilter,
+    UnaryFunctorImageFilter );
+
+
   hessian->SetInput( reader->GetOutput() );
   eigen->SetInput( hessian->GetOutput() );
   sheetnessFilter->SetInput( eigen->GetOutput() );
 
-  sheetnessFilter->SetDetectBrightSheets(true);
 
+  bool detectBrightSheets = true;
   if( argc > 3 )
     {
-    sheetnessFilter->SetDetectBrightSheets( atoi( argv[3] ) );
+    detectBrightSheets = std::stoi( argv[3] );
     }
+  sheetnessFilter->SetDetectBrightSheets( detectBrightSheets );
+  //TEST_SET_GET_BOOLEAN( sheetnessFilter, DetectBrightSheets, detectBrightSheets );
 
+  double sigma = 1.0;
   if( argc > 4 )
     {
-    hessian->SetSigma( atof( argv[4] ) );
+    hessian->SetSigma( std::stod( argv[4] ) );
     }
+  hessian->SetSigma( sigma );
+  TEST_SET_GET_VALUE( sigma, hessian->GetSigma() );
 
+  double sheetnessNormalization = 0.5;
   if( argc > 5 )
     {
-    sheetnessFilter->SetSheetnessNormalization( atof( argv[5] ) );
+    sheetnessNormalization = std::stod( argv[5] );
     }
+  sheetnessFilter->SetSheetnessNormalization( sheetnessNormalization );
+  //TEST_SET_GET_VALUE( sheetnessNormalization, sheetnessFilter->GetSheetnessNormalization() );
 
+  double bloobinessNormalization = 2.0;
   if( argc > 6 )
     {
-    sheetnessFilter->SetBloobinessNormalization( atof( argv[6] ) );
+    bloobinessNormalization = std::stod( argv[6] );
     }
+  sheetnessFilter->SetBloobinessNormalization( bloobinessNormalization );
+  //TEST_SET_GET_VALUE( bloobinessNormalization, sheetnessFilter->GetBloobinessNormalization() );
 
+  double noiseNormalization = 1.0;
   if( argc > 7 )
     {
-    sheetnessFilter->SetNoiseNormalization( atof( argv[7] ) );
+    noiseNormalization = std::stod( argv[7] );
     }
+  sheetnessFilter->SetNoiseNormalization( noiseNormalization );
+  //TEST_SET_GET_VALUE( noiseNormalization, sheetnessFilter->GetNoiseNormalization() );
 
 
   eigen->SetDimension( Dimension );
+
+
+  TRY_EXPECT_NO_EXCEPTION( sheetnessFilter->Update() );
+
 
   WriterType::Pointer writer = WriterType::New();
 
   writer->SetFileName( argv[2] );
   writer->SetInput( sheetnessFilter->GetOutput() );
 
-  try 
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  std::cout << "Name Of Class = " << sheetnessFilter->GetNameOfClass() << std::endl;
 
-  sheetnessFilter->Print( std::cout );
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

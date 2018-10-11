@@ -24,14 +24,16 @@
 #include "itkSigmoidFeatureGenerator.h"
 #include "itkConnectedThresholdSegmentationModule.h"
 #include "itkMinimumFeatureAggregator.h"
+#include "itkTestingMacros.h"
+
 
 int itkLesionSegmentationMethodTest3( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " landmarksFile inputImage outputImage ";
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " landmarksFile inputImage outputImage ";
     std::cerr << " [lowerThreshold upperThreshold] " << std::endl;
     return EXIT_FAILURE;
     }
@@ -47,22 +49,17 @@ int itkLesionSegmentationMethodTest3( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[2] );
 
-  try 
-    {
-    inputImageReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
+
 
   using LandmarksReaderType = itk::LandmarksReader< Dimension >;
-  
+
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName( argv[1] );
-  landmarksReader->Update();
+
+  TRY_EXPECT_NO_EXCEPTION( landmarksReader->Update() );
+
 
   using MethodType = itk::LesionSegmentationMethod< Dimension >;
 
@@ -112,39 +109,44 @@ int itkLesionSegmentationMethodTest3( int argc, char * argv [] )
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
   vesselnessGenerator->SetAlpha2( 2.0 );
- 
+
   sigmoidGenerator->SetAlpha( 100.0  );
   sigmoidGenerator->SetBeta( -200.0 );
- 
+
   using SegmentationModuleType = itk::ConnectedThresholdSegmentationModule< Dimension >;
-  
-  SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
+
+  SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS(segmentationModule,
+    ConnectedThresholdSegmentationModule,
+    RegionGrowingSegmentationModule );
+
 
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
 
   double lowerThreshold = 0.5;
-  double upperThreshold = 1.0;
-
   if( argc > 4 )
     {
-    lowerThreshold = atof( argv[4] );
+    lowerThreshold = std::stod( argv[4] );
     }
+  segmentationModule->SetLowerThreshold( lowerThreshold );
+  TEST_SET_GET_VALUE( lowerThreshold, segmentationModule->GetLowerThreshold() );
 
+  double upperThreshold = 1.0;
   if( argc > 5 )
     {
-    upperThreshold = atof( argv[5] );
+    upperThreshold = std::stod( argv[5] );
     }
-
-  segmentationModule->SetLowerThreshold( lowerThreshold );
   segmentationModule->SetUpperThreshold( upperThreshold );
+  TEST_SET_GET_VALUE( upperThreshold, segmentationModule->GettUpperThreshold() );
 
- 
+
   lesionSegmentationMethod->SetInitialSegmentation( landmarksReader->GetOutput() );
 
-  lesionSegmentationMethod->Update();
+  TRY_EXPECT_NO_EXCEPTION( lesionSegmentationMethod->Update() );
 
-  
+
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
   using OutputImageType = SegmentationModuleType::OutputImageType;
@@ -163,16 +165,9 @@ int itkLesionSegmentationMethodTest3( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  try 
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

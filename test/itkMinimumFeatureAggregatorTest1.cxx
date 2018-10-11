@@ -21,15 +21,16 @@
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkCannyEdgesFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
+#include "itkTestingMacros.h"
 
 
 int itkMinimumFeatureAggregatorTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage ";
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage ";
     return EXIT_FAILURE;
     }
 
@@ -44,21 +45,17 @@ int itkMinimumFeatureAggregatorTest1( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[1] );
 
-  try 
-    {
-    inputImageReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
 
 
   using AggregatorType = itk::MinimumFeatureAggregator< Dimension >;
 
-  AggregatorType::Pointer  featureAggregator = AggregatorType::New();
-  
+  AggregatorType::Pointer featureAggregator = AggregatorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureAggregator, MinimumFeatureAggregator,
+    FeatureAggregator );
+
+
   using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator< Dimension >;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
 
@@ -67,10 +64,10 @@ int itkMinimumFeatureAggregatorTest1( int argc, char * argv [] )
 
   using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator< Dimension >;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
- 
+
   using CannyEdgesFeatureGeneratorType = itk::CannyEdgesFeatureGenerator< Dimension >;
   CannyEdgesFeatureGeneratorType::Pointer  cannyEdgesGenerator = CannyEdgesFeatureGeneratorType::New();
- 
+
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
@@ -108,7 +105,7 @@ int itkMinimumFeatureAggregatorTest1( int argc, char * argv [] )
   cannyEdgesGenerator->SetUpperThreshold( 150.0 );
   cannyEdgesGenerator->SetLowerThreshold( 75.0 );
 
-  featureAggregator->Update();
+  TRY_EXPECT_NO_EXCEPTION( featureAggregator->Update() );
 
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
@@ -126,17 +123,9 @@ int itkMinimumFeatureAggregatorTest1( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-  try 
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  featureAggregator->Print( std::cout );
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

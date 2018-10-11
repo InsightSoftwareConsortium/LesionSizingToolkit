@@ -19,14 +19,16 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
+
 
 int itkCannyEdgesFeatureGeneratorTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [sigma upperthreshold lowerthreshold]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage [sigma upperthreshold lowerthreshold]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -47,21 +49,18 @@ int itkCannyEdgesFeatureGeneratorTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try 
-    {
-    reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+
 
   using CannyEdgesFeatureGeneratorType = itk::CannyEdgesFeatureGenerator< Dimension >;
   using SpatialObjectType = CannyEdgesFeatureGeneratorType::SpatialObjectType;
 
-  CannyEdgesFeatureGeneratorType::Pointer  featureGenerator = CannyEdgesFeatureGeneratorType::New();
-  
+  CannyEdgesFeatureGeneratorType::Pointer featureGenerator = CannyEdgesFeatureGeneratorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
+    CannyEdgesFeatureGenerator,
+    FeatureGenerator );
+
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -73,64 +72,33 @@ int itkCannyEdgesFeatureGeneratorTest1( int argc, char * argv [] )
 
   featureGenerator->SetInput( inputObject );
 
+
   double sigma = 1.0;
-  double lowerthreshold = 100;
-  double upperthreshold = 200;
-
-  featureGenerator->SetSigma( 1.5 );
-  featureGenerator->SetUpperThreshold( 1000 );
-  featureGenerator->SetLowerThreshold(   50 );
-
-  double tolerance = 1e-4;
-
-  featureGenerator->SetSigma( sigma );
-
-  if( vnl_math_abs( featureGenerator->GetSigma() - sigma ) > tolerance )
-    {
-    std::cerr << "Error in Set/GetSigma()" << std::endl;
-    std::cerr << "It should be " << sigma << std::endl;
-    std::cerr << "but got " << featureGenerator->GetSigma() << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  featureGenerator->SetLowerThreshold( lowerthreshold );
-  if( vnl_math_abs( featureGenerator->GetLowerThreshold() - lowerthreshold ) > tolerance )
-    {
-    std::cerr << "Error in Set/GetLowerThreshold()" << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  featureGenerator->SetUpperThreshold( upperthreshold );
-  if( vnl_math_abs( featureGenerator->GetUpperThreshold() - upperthreshold ) > tolerance )
-    {
-    std::cerr << "Error in Set/GetUpperThreshold()" << std::endl;
-    return EXIT_FAILURE;
-    }
-
   if( argc > 3 )
     {
-    featureGenerator->SetSigma( atof( argv[3] ) );
+    sigma = std::stod( argv[3] );
     }
+  featureGenerator->SetSigma( sigma );
+  TEST_SET_GET_VALUE( sigma, featureGenerator->GetSigma() );
 
+  double upperThreshold = 200;
   if( argc > 4 )
     {
-    featureGenerator->SetUpperThreshold( atof( argv[4] ) );
+    upperThreshold = std::stod( argv[4] );
     }
+  featureGenerator->SetUpperThreshold( upperThreshold );
+  TEST_SET_GET_VALUE( upperThreshold, featureGenerator->GetUpperThreshold() );
 
+  double lowerThreshold = 100;
   if( argc > 5 )
     {
-    featureGenerator->SetLowerThreshold( atof( argv[5] ) );
+    lowerThreshold = std::stod( argv[5] );
     }
+  featureGenerator->SetLowerThreshold( lowerThreshold );
+  TEST_SET_GET_VALUE( lowerThreshold, featureGenerator->GetLowerThreshold() );
 
-  try 
-    {
-    featureGenerator->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+
+  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
@@ -146,22 +114,9 @@ int itkCannyEdgesFeatureGeneratorTest1( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-
-  try 
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
 
-  std::cout << "Name Of Class = " << featureGenerator->GetNameOfClass() << std::endl;
-
-  featureGenerator->Print( std::cout );
-
- 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

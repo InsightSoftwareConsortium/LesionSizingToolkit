@@ -19,14 +19,16 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
+
 
 int itkSatoLocalStructureFeatureGeneratorTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [sigma alpha gamma]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage [sigma alpha gamma]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -48,20 +50,16 @@ int itkSatoLocalStructureFeatureGeneratorTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try
-    {
-    reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+
 
   using SatoLocalStructureFeatureGeneratorType = itk::SatoLocalStructureFeatureGenerator< Dimension >;
   using SpatialObjectType = SatoLocalStructureFeatureGeneratorType::SpatialObjectType;
 
-  SatoLocalStructureFeatureGeneratorType::Pointer  featureGenerator = SatoLocalStructureFeatureGeneratorType::New();
+  SatoLocalStructureFeatureGeneratorType::Pointer featureGenerator = SatoLocalStructureFeatureGeneratorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
+    SatoLocalStructureFeatureGenerator, FeatureGenerator );
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -74,31 +72,33 @@ int itkSatoLocalStructureFeatureGeneratorTest1( int argc, char * argv [] )
 
   featureGenerator->SetInput( inputObject );
 
+
+  double sigma = 1.0;
   if( argc > 3 )
     {
-    featureGenerator->SetSigma( atof( argv[3] ) );
+    sigma = std::stod( argv[3] );
     }
+  featureGenerator->SetSigma( sigma );
+  TEST_SET_GET_VALUE( sigma, featureGenerator->GetSigma() );
 
+  double alpha = 0.5;
   if( argc > 4 )
     {
-    featureGenerator->SetAlpha( atof( argv[4] ) );
+    alpha = std::stod( argv[4] );
     }
+  featureGenerator->SetAlpha( alpha );
+  TEST_SET_GET_VALUE( alpha, featureGenerator->GetAlpha() );
 
+  double gamma = 2.0;
   if( argc > 5 )
     {
-    featureGenerator->SetGamma( atof( argv[5] ) );
+    gamma = std::stod( argv[5] );
     }
+  featureGenerator->SetGamma( gamma );
+  TEST_SET_GET_VALUE( gamma, featureGenerator->GetGamma() );
 
 
-  try
-    {
-    featureGenerator->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
@@ -113,22 +113,9 @@ int itkSatoLocalStructureFeatureGeneratorTest1( int argc, char * argv [] )
   writer->SetFileName( argv[2] );
   writer->SetInput( outputImage );
 
-
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
 
-  std::cout << "Name Of Class = " << featureGenerator->GetNameOfClass() << std::endl;
-
-  featureGenerator->Print( std::cout );
-
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

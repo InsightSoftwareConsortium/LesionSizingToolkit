@@ -19,14 +19,16 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
+
 
 int itkIsotropicResamplerTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage " << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage " << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -48,20 +50,16 @@ int itkIsotropicResamplerTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try
-    {
-    reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+
 
   using ResampleFilterType = itk::IsotropicResampler< Dimension >;
   using SpatialObjectType = ResampleFilterType::SpatialObjectType;
 
-  ResampleFilterType::Pointer  resampler = ResampleFilterType::New();
+  ResampleFilterType::Pointer resampler = ResampleFilterType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( resampler,
+    IsotropicResampler, ProcessObject );
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -74,15 +72,7 @@ int itkIsotropicResamplerTest1( int argc, char * argv [] )
 
   resampler->SetInput( inputObject );
 
-  try
-    {
-    resampler->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( resampler->Update() );
 
 
   SpatialObjectType::ConstPointer resampledImage = resampler->GetOutput();
@@ -98,20 +88,9 @@ int itkIsotropicResamplerTest1( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
 
-  std::cout << "Name Of Class = " << resampler->GetNameOfClass() << std::endl;
-
-  resampler->Print( std::cout );
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

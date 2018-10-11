@@ -22,14 +22,16 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
+
 
 int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [variance upperthreshold lowerthreshold]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage [variance upperthreshold lowerthreshold]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -50,21 +52,18 @@ int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * a
 
   reader->SetFileName( argv[1] );
 
-  try 
-    {
-    reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+
 
   using CannyEdgesDistanceAdvectionFieldFeatureGeneratorType = itk::CannyEdgesDistanceAdvectionFieldFeatureGenerator< Dimension >;
   using SpatialObjectType = CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::SpatialObjectType;
 
-  CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::Pointer  featureGenerator = CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::New();
-  
+  CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::Pointer featureGenerator = CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
+    CannyEdgesDistanceAdvectionFieldFeatureGenerator,
+    FeatureGenerator );
+
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -76,30 +75,35 @@ int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * a
 
   featureGenerator->SetInput( inputObject );
 
+
+  double sigma = 1.0;
   if( argc > 3 )
     {
-    featureGenerator->SetSigma( atof( argv[3] ) );
+    sigma = std::stod( argv[3] );
     }
+  featureGenerator->SetSigma( sigma );
+  TEST_SET_GET_VALUE( sigma, featureGenerator->GetSigma() );
 
+  double upperThreshold =
+    itk::NumericTraits< CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::InternalPixelType >::max();
   if( argc > 4 )
     {
-    featureGenerator->SetUpperThreshold( atof( argv[4] ) );
+    upperThreshold = std::stod( argv[4] );
     }
+  featureGenerator->SetUpperThreshold( upperThreshold );
+  TEST_SET_GET_VALUE( upperThreshold, featureGenerator->GetUpperThreshold() );
 
+  double lowerThreshold =
+    itk::NumericTraits< CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::InternalPixelType >::min();
   if( argc > 5 )
     {
-    featureGenerator->SetLowerThreshold( atof( argv[4] ) );
+    lowerThreshold = std::stod( argv[5] );
     }
+  featureGenerator->SetLowerThreshold( lowerThreshold );
+  TEST_SET_GET_VALUE( lowerThreshold, featureGenerator->GetLowerThreshold() );
 
-  try 
-    {
-    featureGenerator->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+
+  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
@@ -115,22 +119,9 @@ int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * a
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-
-  try 
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
 
-  std::cout << "Name Of Class = " << featureGenerator->GetNameOfClass() << std::endl;
-
-  featureGenerator->Print( std::cout );
-
- 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

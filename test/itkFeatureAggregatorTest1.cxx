@@ -24,6 +24,8 @@
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
 #include "itkConnectedThresholdSegmentationModule.h"
+#include "itkTestingMacros.h"
+
 
 namespace itk 
 {
@@ -122,11 +124,11 @@ private:
 
 int itkFeatureAggregatorTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " landmarksFile inputImage outputImage ";
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " landmarksFile inputImage outputImage ";
     std::cerr << " [lowerThreshold upperThreshold] " << std::endl;
     return EXIT_FAILURE;
     }
@@ -142,30 +144,40 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[2] );
 
-  try 
-    {
-    inputImageReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
 
 
   using AggregatorType = itk::FeatureAggregatorSurrogate< Dimension >;
 
-  AggregatorType::Pointer  featureAggregator = AggregatorType::New();
-  
+  AggregatorType::Pointer featureAggregator = AggregatorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureAggregator,
+    FeatureAggregatorSurrogate,
+    FeatureAggregator );
+
   using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator< Dimension >;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( vesselnessGenerator,
+    SatoVesselnessSigmoidFeatureGenerator,
+    FeatureAggregator );
 
   using LungWallGeneratorType = itk::LungWallFeatureGenerator< Dimension >;
   LungWallGeneratorType::Pointer lungWallGenerator = LungWallGeneratorType::New();
 
+  EXERCISE_BASIC_OBJECT_METHODS( lungWallGenerator,
+    LungWallFeatureGenerator,
+    FeatureAggregator );
+
+
   using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator< Dimension >;
-  SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
- 
+  SigmoidFeatureGeneratorType::Pointer sigmoidGenerator = SigmoidFeatureGeneratorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( sigmoidGenerator,
+    SigmoidFeatureGenerator,
+    FeatureAggregator );
+
+
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
@@ -186,39 +198,58 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
 
-  lungWallGenerator->SetLungThreshold( -400 );
 
-  vesselnessGenerator->SetSigma( 1.0 );
-  vesselnessGenerator->SetAlpha1( 0.5 );
-  vesselnessGenerator->SetAlpha2( 2.0 );
- 
-  sigmoidGenerator->SetAlpha(  1.0  );
-  sigmoidGenerator->SetBeta( -200.0 );
- 
+  LungWallGeneratorType::InputPixelType lungThreshold = -400;
+  lungWallGenerator->SetLungThreshold( lungThreshold );
+  TEST_SET_GET_VALUE( lungThreshold, lungWallGenerator->GetLungThreshold() );
+
+
+  double sigma = 1.0;
+  vesselnessGenerator->SetSigma( sigma );
+  TEST_SET_GET_VALUE( sigma, vesselnessGenerator->GetSigma() );
+
+  double alpha1 = 0.5;
+  vesselnessGenerator->SetAlpha1( alpha1 );
+  TEST_SET_GET_VALUE( alpha1, vesselnessGenerator->GetAlpha1() );
+
+  double alpha2 = 2.0;
+  vesselnessGenerator->SetAlpha2( alpha2 );
+  TEST_SET_GET_VALUE( alpha2, vesselnessGenerator->GetAlpha2() );
+
+
+  double alpha = 1.0;
+  sigmoidGenerator->SetAlpha( alpha );
+  TEST_SET_GET_VALUE( alpha, sigmoidGenerator->GetAlpha() );
+
+  double beta = -200.0;
+  sigmoidGenerator->SetBeta( beta );
+  TEST_SET_GET_VALUE( beta, sigmoidGenerator->GetBeta() );
+
   using SegmentationModuleType = itk::ConnectedThresholdSegmentationModule< Dimension >;
-  
+
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
 
 
   double lowerThreshold = 0.5;
-  double upperThreshold = 1.0;
-
   if( argc > 4 )
     {
-    lowerThreshold = atof( argv[4] );
+    lowerThreshold = std::stod( argv[4] );
     }
+  segmentationModule->SetLowerThreshold( lowerThreshold );
+  TEST_SET_GET_VALUE( lowerThreshold, segmentationModule->GetLowerThreshold() );
 
+  double upperThreshold = 1.0;
   if( argc > 5 )
     {
-    upperThreshold = atof( argv[5] );
+    upperThreshold = std::stod( argv[5] );
     }
-
-  segmentationModule->SetLowerThreshold( lowerThreshold );
   segmentationModule->SetUpperThreshold( upperThreshold );
+  TEST_SET_GET_VALUE( upperThreshold, segmentationModule->GetUpperThreshold() );
 
-  featureAggregator->Update();
 
-  
+  TRY_EXPECT_NO_EXCEPTION( featureAggregator->Update() );
+
+
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
   using OutputImageType = SegmentationModuleType::OutputImageType;
@@ -237,18 +268,9 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  try 
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
 
-  featureAggregator->Print( std::cout );
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

@@ -18,6 +18,8 @@
 #include "itkImage.h"
 #include "itkSpatialObject.h"
 #include "itkImageMaskSpatialObject.h"
+#include "itkTestingMacros.h"
+
 
 int itkLesionSegmentationMethodTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
@@ -26,7 +28,11 @@ int itkLesionSegmentationMethodTest1( int itkNotUsed(argc), char * itkNotUsed(ar
   using MethodType = itk::LesionSegmentationMethod< Dimension >;
 
   MethodType::Pointer  segmentationMethod = MethodType::New();
-  
+
+  EXERCISE_BASIC_OBJECT_METHODS( segmentationMethod, LesionSegmentationMethod,
+    ProcessObject );
+
+
   using ImageMaskSpatialObjectType = itk::ImageMaskSpatialObject< Dimension >;
 
   ImageMaskSpatialObjectType::Pointer regionOfInterest = ImageMaskSpatialObjectType::New();
@@ -38,6 +44,7 @@ int itkLesionSegmentationMethodTest1( int itkNotUsed(argc), char * itkNotUsed(ar
 
   if( regionOfInterestReturned != regionOfInterest.GetPointer() )
     {
+    std::cerr << "Test failed! " << std::endl;
     std::cerr << "Error in Set/GetRegionOfInterest() " << std::endl;
     return EXIT_FAILURE;
     }
@@ -45,12 +52,13 @@ int itkLesionSegmentationMethodTest1( int itkNotUsed(argc), char * itkNotUsed(ar
   ImageMaskSpatialObjectType::Pointer initialSegmentation = ImageMaskSpatialObjectType::New();
 
   segmentationMethod->SetInitialSegmentation( initialSegmentation );
-  
+
   const MethodType::SpatialObjectType * initialSegmentationReturned =
     segmentationMethod->GetInitialSegmentation();
 
   if( initialSegmentationReturned != initialSegmentation.GetPointer() )
     {
+    std::cerr << "Test failed! " << std::endl;
     std::cerr << "Error in Set/GetInitialSegmentation() " << std::endl;
     return EXIT_FAILURE;
     }
@@ -61,20 +69,9 @@ int itkLesionSegmentationMethodTest1( int itkNotUsed(argc), char * itkNotUsed(ar
 
   segmentationMethod->AddFeatureGenerator( featureGenerator );
 
-  try
-    {
-    segmentationMethod->Update();
-    std::cerr << "Failed to catch expected exception" << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cout << "Caught expected exception" << std::endl;
-    std::cout << excp << std::endl;
-    }
+  TRY_EXPECT_EXCEPTION( segmentationMethod->Update() );
 
-  segmentationMethod->Print( std::cout );
 
-  
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

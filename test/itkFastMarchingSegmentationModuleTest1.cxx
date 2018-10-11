@@ -20,16 +20,18 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkLandmarksReader.h"
+#include "itkTestingMacros.h"
+
 
 int itkFastMarchingSegmentationModuleTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << "\n\tlandmarksFile\n\tfeatureImage\n\toutputImage ";
-    std::cerr << "\n\tstopping time for fast marching";
-    std::cerr << "\n\tdistance from seeds for fast marching" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " landmarksFile featureImage outputImage ";
+    std::cerr << " stoppingValue";
+    std::cerr << " distanceFromSeeds" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -43,28 +45,25 @@ int itkFastMarchingSegmentationModuleTest1( int argc, char * argv [] )
   using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
 
   using LandmarksReaderType = itk::LandmarksReader< Dimension >;
-  
+
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName( argv[1] );
-  landmarksReader->Update();
+  TRY_EXPECT_NO_EXCEPTION( landmarksReader->Update() );
 
 
   FeatureReaderType::Pointer featureReader = FeatureReaderType::New();
   featureReader->SetFileName( argv[2] );
-  try 
-    {
-    featureReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+
+  TRY_EXPECT_NO_EXCEPTION( featureReader->Update() );
 
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-  
+
+  EXERCISE_BASIC_OBJECT_METHODS( segmentationModule,
+    FastMarchingSegmentationModule, SinglePhaseLevelSetSegmentationModule );
+
+
   using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
   using FeatureSpatialObjectType = SegmentationModuleType::FeatureSpatialObjectType;
   using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
@@ -74,18 +73,31 @@ int itkFastMarchingSegmentationModuleTest1( int argc, char * argv [] )
 
   FeatureImageType::Pointer featureImage = featureReader->GetOutput();
   featureImage->DisconnectPipeline();
-  featureImage->Print( std::cout );
+
   featureObject->SetImage( featureImage );
 
   segmentationModule->SetFeature( featureObject );
   segmentationModule->SetInput( landmarksReader->GetOutput() );
 
-  const double stoppingTime = (argc > 4) ? atof( argv[4] ) : 10.0;
-  const double distanceFromSeeds = (argc > 5) ? atof( argv[5] ) : 5.0;
-
+  double stoppingTime = 10.0;
+  if (argc > 4)
+    {
+    stoppingTime = std::stod( argv[4] );
+    }
   segmentationModule->SetStoppingValue( stoppingTime );
+  TEST_SET_GET_VALUE( stoppingTime, segmentationModule->GetStoppingValue() );
+
+  double distanceFromSeeds = 5.0;
+  if (argc > 5)
+    {
+    distanceFromSeeds = std::stod( argv[5] );
+    }
   segmentationModule->SetDistanceFromSeeds( distanceFromSeeds );
-  segmentationModule->Update();
+  TEST_SET_GET_VALUE( distanceFromSeeds, segmentationModule->GetDistanceFromSeeds() );
+
+
+  TRY_EXPECT_NO_EXCEPTION( segmentationModule->Update() );
+
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
@@ -98,51 +110,10 @@ int itkFastMarchingSegmentationModuleTest1( int argc, char * argv [] )
   writer->SetFileName( argv[3] );
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
-  try 
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
 
-  segmentationModule->Print( std::cout );
-  
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  //
-  // Exercise Set/Get methods
-  //
-  segmentationModule->SetStoppingValue( 0.0 );
-  segmentationModule->SetDistanceFromSeeds( 0.0 );
 
-  if( segmentationModule->GetStoppingValue() != 0.0 )
-    {
-    std::cerr << "Error in Set/GetStoppingValue() " << std::endl;
-    return EXIT_FAILURE;
-    }
-  
-  if( segmentationModule->GetDistanceFromSeeds() != 0.0 )
-    {
-    std::cerr << "Error in Set/GetDistanceFromSeeds() " << std::endl;
-    return EXIT_FAILURE;
-    }
-  
-  segmentationModule->SetStoppingValue( stoppingTime );
-  segmentationModule->SetDistanceFromSeeds( distanceFromSeeds );
-
-  if( segmentationModule->GetStoppingValue() != stoppingTime )
-    {
-    std::cerr << "Error in Set/GetStoppingValue() " << std::endl;
-    return EXIT_FAILURE;
-    }
-  
-  if( segmentationModule->GetDistanceFromSeeds() != distanceFromSeeds )
-    {
-    std::cerr << "Error in Set/GetDistanceFromSeeds() " << std::endl;
-    return EXIT_FAILURE;
-    }
- 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

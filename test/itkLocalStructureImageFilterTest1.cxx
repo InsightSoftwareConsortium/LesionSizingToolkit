@@ -19,14 +19,16 @@
 #include "itkImage.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
+
 
 int itkLocalStructureImageFilterTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [sigma alpha gamma]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage [sigma alpha gamma]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -60,25 +62,39 @@ int itkLocalStructureImageFilterTest1( int argc, char * argv [] )
   using LocalStructureFilterType = itk::LocalStructureImageFilter< EigenValueImageType, OutputImageType >;
 
   LocalStructureFilterType::Pointer localStructure = LocalStructureFilterType::New();
-  
+
+  EXERCISE_BASIC_OBJECT_METHODS( localStructure,
+    LocalStructureImageFilter, UnaryFunctorImageFilter );
+
+
   hessian->SetInput( reader->GetOutput() );
   eigen->SetInput( hessian->GetOutput() );
   localStructure->SetInput( eigen->GetOutput() );
 
+
+  double sigma = 1.0;
   if( argc > 3 )
     {
-    hessian->SetSigma( atof( argv[3] ) );
+    sigma = std::stod( argv[3] );
     }
+  hessian->SetSigma( sigma );
+  TEST_SET_GET_VALUE( sigma, hessian->GetSigma() );
 
+  double alpha = 0.25;
   if( argc > 4 )
     {
-    localStructure->SetAlpha( atof( argv[4] ) );
+    alpha = std::stod( argv[4] );
     }
+  localStructure->SetAlpha( alpha );
+  //TEST_SET_GET_VALUE( alpha, localStructure->GetAlpha() );
 
+  double gamma = 0.5;
   if( argc > 5 )
     {
-    localStructure->SetGamma( atof( argv[5] ) );
+    gamma = std::stod( argv[5] );
     }
+  localStructure->SetGamma( gamma );
+  //TEST_SET_GET_VALUE( gamma, localStructure->GetGamma() );
 
   eigen->SetDimension( Dimension );
 
@@ -87,19 +103,9 @@ int itkLocalStructureImageFilterTest1( int argc, char * argv [] )
   writer->SetFileName( argv[2] );
   writer->SetInput( localStructure->GetOutput() );
 
-  try 
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  std::cout << "Name Of Class = " << localStructure->GetNameOfClass() << std::endl;
 
-  localStructure->Print( std::cout );
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

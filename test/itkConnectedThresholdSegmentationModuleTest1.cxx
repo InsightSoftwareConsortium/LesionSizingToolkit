@@ -20,14 +20,16 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkLandmarksReader.h"
+#include "itkTestingMacros.h"
+
 
 int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " landmarksFile featureImage outputImage ";
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " landmarksFile featureImage outputImage ";
     std::cerr << " [lowerThreshold upperThreshold] " << std::endl;
     return EXIT_FAILURE;
     }
@@ -44,29 +46,27 @@ int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
   using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
 
   using LandmarksReaderType = itk::LandmarksReader< Dimension >;
-  
+
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName( argv[1] );
-  landmarksReader->Update();
- 
+  TRY_EXPECT_NO_EXCEPTION( landmarksReader->Update() );
+
+
   FeatureReaderType::Pointer featureReader = FeatureReaderType::New();
 
   featureReader->SetFileName( argv[2] );
 
-  try 
-    {
-    featureReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( featureReader->Update() );
 
 
-  SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-  
+  SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( segmentationModule,
+    ConnectedThresholdSegmentationModule,
+    RegionGrowingSegmentationModule );
+
+
   using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
   using FeatureSpatialObjectType = SegmentationModuleType::FeatureSpatialObjectType;
   using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
@@ -78,44 +78,30 @@ int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
 
   featureImage->DisconnectPipeline();
 
-  featureImage->Print( std::cout );
-
   featureObject->SetImage( featureImage );
 
   segmentationModule->SetFeature( featureObject );
   segmentationModule->SetInput( landmarksReader->GetOutput() );
 
-  double lowerThreshold = -700;
-  double upperThreshold = 1000;
 
+  double lowerThreshold = 700;
   if( argc > 4 )
     {
-    lowerThreshold = atof( argv[4] );
+    lowerThreshold = std::stod( argv[4] );
     }
+  segmentationModule->SetLowerThreshold( lowerThreshold );
+  TEST_SET_GET_VALUE( lowerThreshold, segmentationModule->GetLowerThreshold() );
 
+  double upperThreshold = 1000;
   if( argc > 5 )
     {
-    upperThreshold = atof( argv[5] );
+    upperThreshold = std::stod( argv[5] );
     }
-
-  segmentationModule->SetLowerThreshold( lowerThreshold );
   segmentationModule->SetUpperThreshold( upperThreshold );
+  TEST_SET_GET_VALUE( upperThreshold, segmentationModule->GetUpperThreshold() );
 
 
-  if( segmentationModule->GetLowerThreshold() != lowerThreshold )
-    {
-    std::cerr << "Error in Set/GetLowerThreshold() " << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  if( segmentationModule->GetUpperThreshold() != upperThreshold )
-    {
-    std::cerr << "Error in Set/GetUpperThreshold() " << std::endl;
-    return EXIT_FAILURE;
-    }
-
-
-  segmentationModule->Update();
+  TRY_EXPECT_NO_EXCEPTION( segmentationModule->Update() );
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
@@ -130,21 +116,9 @@ int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
   writer->SetFileName( argv[3] );
   writer->SetInput( outputImage );
 
-
-  try 
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
 
-  segmentationModule->Print( std::cout );
-
-  std::cout << "Class name = " << segmentationModule->GetNameOfClass() << std::endl;
-  
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

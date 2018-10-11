@@ -22,6 +22,8 @@
 #include "itkGradientMagnitudeSigmoidFeatureGenerator.h"
 #include "itkSatoLocalStructureFeatureGenerator.h"
 #include "itkSatoVesselnessFeatureGenerator.h"
+#include "itkTestingMacros.h"
+
 
 int itkLesionSegmentationMethodTest2( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
@@ -29,8 +31,11 @@ int itkLesionSegmentationMethodTest2( int itkNotUsed(argc), char * itkNotUsed(ar
 
   using MethodType = itk::LesionSegmentationMethod< Dimension >;
 
-  MethodType::Pointer  segmentationMethod = MethodType::New();
-  
+  MethodType::Pointer segmentationMethod = MethodType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS(  segmentationMethod, LesionSegmentationMethod,
+    LightObject );
+
   using ImageMaskSpatialObjectType = itk::ImageMaskSpatialObject< Dimension >;
 
   ImageMaskSpatialObjectType::Pointer regionOfInterest = ImageMaskSpatialObjectType::New();
@@ -63,19 +68,9 @@ int itkLesionSegmentationMethodTest2( int itkNotUsed(argc), char * itkNotUsed(ar
   segmentationMethod->AddFeatureGenerator( localStructureGenerator );
   segmentationMethod->AddFeatureGenerator( gradientMagnitudeSigmoidGenerator );
 
-  try
-    {
-    segmentationMethod->Update();
-    std::cerr << "Failed to catch expected exception" << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cout << "Caught expected exception" << std::endl;
-    std::cout << excp << std::endl;
-    }
+  TRY_EXPECT_EXCEPTION( segmentationMethod->Update() );
 
-  segmentationMethod->Print( std::cout );
-  
+
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

@@ -19,14 +19,16 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
+
 
 int itkBinaryThresholdFeatureGeneratorTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [threshold]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage [threshold]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -48,23 +50,16 @@ int itkBinaryThresholdFeatureGeneratorTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try 
-    {
-    reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
 
   using BinaryThresholdFeatureGeneratorType = itk::BinaryThresholdFeatureGenerator< Dimension >;
   using SpatialObjectType = BinaryThresholdFeatureGeneratorType::SpatialObjectType;
 
-  BinaryThresholdFeatureGeneratorType::Pointer  featureGenerator = BinaryThresholdFeatureGeneratorType::New();
-  
-  std::cout << featureGenerator->GetNameOfClass() << std::endl;
-  featureGenerator->Print( std::cout );
+  BinaryThresholdFeatureGeneratorType::Pointer featureGenerator = BinaryThresholdFeatureGeneratorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
+    BinaryThresholdFeatureGenerator, FeatureGenerator );
+
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -77,34 +72,14 @@ int itkBinaryThresholdFeatureGeneratorTest1( int argc, char * argv [] )
   featureGenerator->SetInput( inputObject );
 
   double threshold  = 100.0;
-
   if( argc > 3 )
     {
-    threshold = atof( argv[3] );
+    threshold = std::stod( argv[3] );
     }
-
-  featureGenerator->SetThreshold( 0.0 );
-
   featureGenerator->SetThreshold( threshold );
-  if( featureGenerator->GetThreshold() != threshold )
-    {
-    std::cerr << "Error in Set/GetThreshold()" << std::endl;
-    return EXIT_FAILURE;
-    }
+  TEST_SET_GET_VALUE( threshold, featureGenerator->GetThreshold() );
 
-  std::cout << featureGenerator->GetNameOfClass() << std::endl;
-  featureGenerator->Print( std::cout );
-
-  try 
-    {
-    featureGenerator->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
-
+  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
@@ -119,22 +94,9 @@ int itkBinaryThresholdFeatureGeneratorTest1( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-
-  try 
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
 
-  std::cout << "Name Of Class = " << featureGenerator->GetNameOfClass() << std::endl;
-
-  featureGenerator->Print( std::cout );
-
- 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

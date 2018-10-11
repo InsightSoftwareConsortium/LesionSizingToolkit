@@ -19,14 +19,16 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
+
 
 int itkSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [alpha beta]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage [alpha beta]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -48,21 +50,18 @@ int itkSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try 
-    {
-    reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+
 
   using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator< Dimension >;
   using SpatialObjectType = SigmoidFeatureGeneratorType::SpatialObjectType;
 
-  SigmoidFeatureGeneratorType::Pointer  featureGenerator = SigmoidFeatureGeneratorType::New();
-  
+  SigmoidFeatureGeneratorType::Pointer featureGenerator = SigmoidFeatureGeneratorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
+    SigmoidFeatureGenerator,
+    FeatureGenerator );
+
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -74,45 +73,24 @@ int itkSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 
   featureGenerator->SetInput( inputObject );
 
-  double alpha =   1.0;
-  double beta  = 100.0;
-
+  double alpha = 1.0;
   if( argc > 3 )
     {
-    alpha = atof( argv[3] );
+    alpha = std::stod( argv[3] );
     }
+  featureGenerator->SetAlpha( alpha );
+  TEST_SET_GET_VALUE( alpha, featureGenerator->GetAlpha() );
 
+  double beta  = 100.0;
   if( argc > 4 )
     {
-    beta = atof( argv[4] );
+    beta = std::stod( argv[4] );
     }
-
-  featureGenerator->SetAlpha( 0.0 );
-  featureGenerator->SetBeta( 0.0 );
-
-  featureGenerator->SetAlpha( alpha );
-  if( featureGenerator->GetAlpha() != alpha )
-    {
-    std::cerr << "Error in Set/GetAlpha()" << std::endl;
-    return EXIT_FAILURE;
-    }
-
   featureGenerator->SetBeta( beta );
-  if( featureGenerator->GetBeta() != beta )
-    {
-    std::cerr << "Error in Set/GetBeta()" << std::endl;
-    return EXIT_FAILURE;
-    }
+  TEST_SET_GET_VALUE( beta, featureGenerator->GetBeta() );
 
-  try 
-    {
-    featureGenerator->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+
+  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
@@ -128,22 +106,9 @@ int itkSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-
-  try 
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
 
-  std::cout << "Name Of Class = " << featureGenerator->GetNameOfClass() << std::endl;
-
-  featureGenerator->Print( std::cout );
-
- 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

@@ -18,16 +18,20 @@
 #include "itkSymmetricEigenAnalysisImageFilter.h"
 #include "itkImage.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
+
 
 int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
 {
-
   if( argc < 2 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " outputImage [(bright1/dark:0) sigma sheetness bloobiness noise]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " outputImage [(bright1/dark:0) sigma sheetness bloobiness noise]" << std::endl;
     return EXIT_FAILURE;
     }
+
+  int testStatus = EXIT_SUCCESS;
 
   constexpr unsigned int Dimension = 3;
 
@@ -44,7 +48,7 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
   using EigenValueArrayType = itk::FixedArray< double, HessianPixelType::Dimension >;
   using EigenValueImageType = itk::Image< EigenValueArrayType, Dimension >;
 
-  using EigenAnalysisFilterType = itk::SymmetricEigenAnalysisImageFilter< 
+  using EigenAnalysisFilterType = itk::SymmetricEigenAnalysisImageFilter<
     HessianImageType, EigenValueImageType >;
 
   using WriterType = itk::ImageFileWriter< OutputImageType >;
@@ -59,7 +63,7 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
   spacing[0] = 0.5;
   spacing[1] = 0.5;
   spacing[2] = 0.5;
-  
+
   inputImage->SetSpacing( spacing );
 
 
@@ -101,10 +105,9 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
 
   InputImageType::IndexType firstIndex;
   firstIndex.Fill(0);
-  std::cout << "First pixel value = " << inputImage->GetPixel(firstIndex) << std::endl; 
-  //
-  // Populate the inputImage with a bright XY plane  
-  //
+  std::cout << "First pixel value = " << inputImage->GetPixel(firstIndex) << std::endl;
+
+  // Populate the inputImage with a bright XY plane
   while( !itr.IsAtEnd() )
     {
     itr.Set( brightValue );
@@ -115,64 +118,73 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
   using FilterType = itk::DescoteauxSheetnessImageFilter< EigenValueImageType, OutputImageType >;
 
   FilterType::Pointer sheetnessFilter = FilterType::New();
-  
+
+  EXERCISE_BASIC_OBJECT_METHODS( sheetnessFilter,
+    DescoteauxSheetnessImageFilter,
+    UnaryFunctorImageFilter );
+
+
   hessian->SetInput( inputImage );
   eigen->SetInput( hessian->GetOutput() );
   sheetnessFilter->SetInput( eigen->GetOutput() );
 
-  sheetnessFilter->SetDetectBrightSheets(true);
 
+  bool detectBrightSheets = true;
   if( argc > 2 )
     {
-    sheetnessFilter->SetDetectBrightSheets( atoi( argv[2] ) );
+    detectBrightSheets = std::stoi( argv[2] );
     }
+  sheetnessFilter->SetDetectBrightSheets( detectBrightSheets );
+  //TEST_SET_GET_BOOLEAN( sheetnessFilter, DetectBrightSheets, detectBrightSheets );
 
+  double sigma = 1.0;
   if( argc > 3 )
     {
-    hessian->SetSigma( atof( argv[3] ) );
+    sigma = std::stod( argv[3] );
     }
+  hessian->SetSigma( sigma );
+  TEST_SET_GET_VALUE( sigma, hessian->GetSigma() );
 
+  double sheetnessNormalization = 0.5;
   if( argc > 4 )
     {
-    sheetnessFilter->SetSheetnessNormalization( atof( argv[4] ) );
+    sheetnessNormalization = std::stod( argv[4] );
     }
+  sheetnessFilter->SetSheetnessNormalization( sheetnessNormalization );
+  //TEST_SET_GET_VALUE( sheetnessNormalization, sheetnessFilter->GetSheetnessNormalization() );
 
+  double bloobinessNormalization = 2.0;
   if( argc > 5 )
     {
-    sheetnessFilter->SetBloobinessNormalization( atof( argv[5] ) );
+    bloobinessNormalization = std::stod( argv[5] );
     }
+  sheetnessFilter->SetBloobinessNormalization( bloobinessNormalization );
+  //TEST_SET_GET_VALUE( bloobinessNormalization, sheetnessFilter->GetBloobinessNormalization() );
 
+  double noiseNormalization = 1.0;
   if( argc > 6 )
     {
-    sheetnessFilter->SetNoiseNormalization( atof( argv[6] ) );
+    noiseNormalization = std::stod( argv[6] );
     }
+  sheetnessFilter->SetNoiseNormalization( noiseNormalization );
+  //TEST_SET_GET_VALUE( noiseNormalization, sheetnessFilter->GetNoiseNormalization() );
 
 
   eigen->SetDimension( Dimension );
+
+
+  TRY_EXPECT_NO_EXCEPTION( sheetnessFilter->Update() );
+
 
   WriterType::Pointer writer = WriterType::New();
 
   writer->SetFileName( argv[1] );
   writer->SetInput( sheetnessFilter->GetOutput() );
 
-  try 
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  std::cout << "Name Of Class = " << sheetnessFilter->GetNameOfClass() << std::endl;
-
-  sheetnessFilter->Print( std::cout );
 
   OutputImageType::ConstPointer outputImage = sheetnessFilter->GetOutput();
-
-  std::cout << "Output Image = " << std::endl;
-  outputImage->Print( std::cout );
 
   using ConstIterator = itk::ImageRegionConstIterator< OutputImageType >;
 
@@ -181,8 +193,6 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
 
   citr.GoToBegin();
   iitr.GoToBegin();
-
-  bool failed = false;
 
   InputPixelType meanValue = ( brightValue + darkValue ) / 2.0;
 
@@ -197,20 +207,22 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
       {
       if( citr.Get() < 0.9 )
         {
+        std::cerr << "Test failed!" << std::endl;
         std::cerr << "Detection bright failure at index " << citr.GetIndex();
         std::cerr << " Input = " << iitr.Get();
         std::cerr << " Sheetness = " << citr.Get() << std::endl;
-        failed = true;
+        testStatus = EXIT_FAILURE;
         }
       }
     else
       {
       if( citr.Get() > 0.1 )
         {
+        std::cerr << "Test failed!" << std::endl;
         std::cerr << "Detection dark failure at index " << citr.GetIndex();
         std::cerr << " Input = " << iitr.Get();
         std::cerr << " Sheetness = " << citr.Get() << std::endl;
-        failed = true;
+        testStatus = EXIT_FAILURE;
         }
       }
 
@@ -218,11 +230,7 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
     ++iitr;
     }
 
-  if( failed )
-    {
-    std::cerr << "The output values didn't match expected values" << std::endl;
-    return EXIT_FAILURE;
-    }
 
-  return EXIT_SUCCESS;
+  std::cout << "Test finished." << std::endl;
+  return testStatus;
 }
