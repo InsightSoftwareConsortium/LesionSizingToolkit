@@ -24,13 +24,16 @@
 #include "itkImageFileWriter.h"
 #include "itkBinaryThresholdImageFilter.h"
 #include "itkVotingBinaryHoleFillFloodingImageFilter.h"
+#include "itkTestingMacros.h"
+
 
 int itkVotingBinaryHoleFillFloodingImageFilterTest1( int argc, char * argv[] )
 {
   if( argc < 7 )
     {
-    std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << " inputImageFile outputImageFile inputThreshold radius majority maxNumberOfIterations" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImageFile outputImageFile inputThreshold radius majority maxNumberOfIterations" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -57,7 +60,7 @@ int itkVotingBinaryHoleFillFloodingImageFilterTest1( int argc, char * argv[] )
 
   ThresholderType::Pointer thresholder = ThresholderType::New();
 
-  thresholder->SetLowerThreshold( atoi( argv[3] ) );
+  thresholder->SetLowerThreshold( std::stoi( argv[3] ) );
   thresholder->SetUpperThreshold( itk::NumericTraits< InputPixelType >::max() );
 
   thresholder->SetOutsideValue(  0 );
@@ -68,7 +71,12 @@ int itkVotingBinaryHoleFillFloodingImageFilterTest1( int argc, char * argv[] )
 
   FilterType::Pointer filter = FilterType::New();
 
-  const unsigned int radius = atoi( argv[4] );
+  EXERCISE_BASIC_OBJECT_METHODS( filter,
+    VotingBinaryHoleFillFloodingImageFilter,
+    VotingBinaryImageFilter );
+
+
+  const unsigned int radius = std::stoi( argv[4] );
 
   OutputImageType::SizeType indexRadius;
 
@@ -81,31 +89,26 @@ int itkVotingBinaryHoleFillFloodingImageFilterTest1( int argc, char * argv[] )
   filter->SetBackgroundValue(   0 );
   filter->SetForegroundValue( 255 );
 
-  const unsigned int majorityThreshold = atoi( argv[5] );
+  const unsigned int majorityThreshold = std::stoi( argv[5] );
 
   filter->SetMajorityThreshold( majorityThreshold  );
 
-  const unsigned int maximumNumberOfIterations = atoi( argv[6] );
-
-  filter->SetMaximumNumberOfIterations( maximumNumberOfIterations  );
-
-  if( filter->GetMaximumNumberOfIterations() != maximumNumberOfIterations )
-    {
-    std::cerr << "Error in Set/GetMaximumNumberOfIterations() " << std::endl;
-    return EXIT_FAILURE;
-    }
+  const unsigned int maximumNumberOfIterations = std::stoi( argv[6] );
+  filter->SetMaximumNumberOfIterations( maximumNumberOfIterations );
+  TEST_SET_GET_VALUE( maximumNumberOfIterations, filter->GetMaximumNumberOfIterations() );
 
   thresholder->SetInput( reader->GetOutput() );
   filter->SetInput( thresholder->GetOutput() );
   writer->SetInput( filter->GetOutput() );
-  writer->Update();
 
-  std::cout << "Class name " << filter->GetNameOfClass() << std::endl;
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  filter->Print( std::cout );
 
-  std::cout << "Iteration used = " << filter->GetCurrentIterationNumber()     << std::endl;
-  std::cout << "Pixels changes = " << filter->GetTotalNumberOfPixelsChanged() << std::endl;
+  std::cout << "Iteration used = " << filter->GetCurrentIterationNumber()
+    << std::endl;
+  std::cout << "Pixels changes = " << filter->GetTotalNumberOfPixelsChanged()
+    << std::endl;
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

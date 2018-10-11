@@ -19,14 +19,16 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
+
 
 int itkSatoVesselnessSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [sigma alpha1 alpha2 ";
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage [sigma alpha1 alpha2 ";
     std::cerr << " sigmoidAlpha sigmoidBeta]" << std::endl;
     return EXIT_FAILURE;
     }
@@ -49,20 +51,16 @@ int itkSatoVesselnessSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try
-    {
-    reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+
 
   using SatoVesselnessSigmoidFeatureGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator< Dimension >;
   using SpatialObjectType = SatoVesselnessSigmoidFeatureGeneratorType::SpatialObjectType;
 
-  SatoVesselnessSigmoidFeatureGeneratorType::Pointer  featureGenerator = SatoVesselnessSigmoidFeatureGeneratorType::New();
+  SatoVesselnessSigmoidFeatureGeneratorType::Pointer featureGenerator = SatoVesselnessSigmoidFeatureGeneratorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
+    SatoVesselnessSigmoidFeatureGenerator, SatoVesselnessFeatureGenerator );
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -75,41 +73,49 @@ int itkSatoVesselnessSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 
   featureGenerator->SetInput( inputObject );
 
+
+  double sigma = 1.0;
   if( argc > 3 )
     {
-    featureGenerator->SetSigma( atof( argv[3] ) );
+    sigma = std::stod( argv[3] );
     }
+  featureGenerator->SetSigma( sigma );
+  TEST_SET_GET_VALUE( sigma, featureGenerator->GetSigma() );
 
+  double alpha1 = 0.5;
   if( argc > 4 )
     {
-    featureGenerator->SetAlpha1( atof( argv[4] ) );
+    alpha1 = std::stod( argv[4] );
     }
+  featureGenerator->SetAlpha1( alpha1 );
+  TEST_SET_GET_VALUE( alpha1, featureGenerator->GetAlpha1() );
 
+  double alpha2 = 2.0;
   if( argc > 5 )
     {
-    featureGenerator->SetAlpha2( atof( argv[5] ) );
+    alpha2 = std::stod( argv[5] );
     }
+  featureGenerator->SetAlpha2( alpha2 );
+  TEST_SET_GET_VALUE( alpha2, featureGenerator->GetAlpha2() );
 
+  double sigmoidAlpha = 1.0;
   if( argc > 6 )
     {
-    featureGenerator->SetSigmoidAlpha( atof( argv[6] ) );
+    sigmoidAlpha = std::stod( argv[6] );
     }
+  featureGenerator->SetSigmoidAlpha( sigmoidAlpha );
+  TEST_SET_GET_VALUE( sigmoidAlpha, featureGenerator->GetSigmoidAlpha() );
 
+  double sigmoidBeta = -200.0;
   if( argc > 7 )
     {
-    featureGenerator->SetSigmoidBeta( atof( argv[7] ) );
+    sigmoidBeta = std::stod( argv[7] );
     }
+  featureGenerator->SetSigmoidBeta( sigmoidBeta );
+  TEST_SET_GET_VALUE( sigmoidBeta, featureGenerator->GetSigmoidBeta() );
 
 
-  try
-    {
-    featureGenerator->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
@@ -125,21 +131,9 @@ int itkSatoVesselnessSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  std::cout << "Name Of Class = " << featureGenerator->GetNameOfClass() << std::endl;
-
-  featureGenerator->Print( std::cout );
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

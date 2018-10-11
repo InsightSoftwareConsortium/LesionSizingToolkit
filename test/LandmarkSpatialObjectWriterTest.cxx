@@ -21,6 +21,8 @@
 #include "itkLandmarkSpatialObject.h"
 #include "itkSpatialObjectWriter.h"
 #include "itkSpatialObjectReader.h"
+#include "itkTestingMacros.h"
+
 
 int LandmarkSpatialObjectWriterTest( int itkNotUsed(argc), char * argv [] )
 {
@@ -33,7 +35,7 @@ int LandmarkSpatialObjectWriterTest( int itkNotUsed(argc), char * argv [] )
   using SpatialPointType = LandmarkType::SpatialObjectPointType;
   using PointListType = LandmarkType::PointListType;
 
-  PointListType     listOfPoints;
+  PointListType listOfPoints;
 
   SpatialPointType p;
 
@@ -63,9 +65,8 @@ int LandmarkSpatialObjectWriterTest( int itkNotUsed(argc), char * argv [] )
   writer->SetFileName( argv[1] );
   writer->SetBinaryPoints(false);
 
-  writer->Update();
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  std::cout << " [TEST DONE]" << std::endl;
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

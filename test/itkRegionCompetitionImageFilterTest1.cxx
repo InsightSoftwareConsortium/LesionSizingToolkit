@@ -19,6 +19,7 @@ const
 #include "itkRegionCompetitionImageFilter.h"
 #include "itkImageFileWriter.h"
 #include "itkImage.h"
+#include "itkTestingMacros.h"
 
 
 int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
@@ -149,13 +150,16 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput( inputImage );
   writer->SetFileName("inputCompetitionImage.mha");
-  writer->Update();
+
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
 
   thresholderFilter->SetInput( inputImage );
   thresholderFilter->SetUpperThreshold( 2000 );
   thresholderFilter->SetLowerThreshold(  400 );
-  thresholderFilter->Update();
+
+  TRY_EXPECT_NO_EXCEPTION( thresholderFilter->Update() );
+
   componentsFilter->SetInput( thresholderFilter->GetOutput() );
   relabelerFilter->SetInput( componentsFilter->GetOutput() );
 
@@ -166,17 +170,23 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   LabelWriterType::Pointer labelWriter = LabelWriterType::New();
   labelWriter->SetInput( relabelerFilter->GetOutput() );
   labelWriter->SetFileName("labeledImage.mha");
-  labelWriter->Update();
+
+  TRY_EXPECT_NO_EXCEPTION( labelWriter->Update() );
+
 
   competitionFilter->SetInput( inputImage );
   competitionFilter->SetInputLabels( labelImagePt);
-  competitionFilter->Update();
+
+  TRY_EXPECT_NO_EXCEPTION( competitionFilter->Update() );
+
 
   // Write the output image
   labelWriter->SetInput( competitionFilter->GetOutput() );
   labelWriter->SetFileName("labeledSegmentedImage.mha");
-  labelWriter->Update();
+
+  TRY_EXPECT_NO_EXCEPTION( labelWriter->Update() );
 
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

@@ -20,14 +20,16 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkLandmarksReader.h"
+#include "itkTestingMacros.h"
+
 
 int itkConfidenceConnectedSegmentationModuleTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " landmarksFile featureImage outputImage ";
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " landmarksFile featureImage outputImage ";
     std::cerr << " [sigmaMultiplier] " << std::endl;
     return EXIT_FAILURE;
     }
@@ -54,18 +56,14 @@ int itkConfidenceConnectedSegmentationModuleTest1( int argc, char * argv [] )
 
   featureReader->SetFileName( argv[2] );
 
-  try
-    {
-    featureReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( featureReader->Update() );
 
 
-  SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
+  SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( segmentationModule,
+    ConfidenceConnectedSegmentationModule,
+    RegionGrowingSegmentationModule );
 
   using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
   using FeatureSpatialObjectType = SegmentationModuleType::FeatureSpatialObjectType;
@@ -78,17 +76,22 @@ int itkConfidenceConnectedSegmentationModuleTest1( int argc, char * argv [] )
 
   featureImage->DisconnectPipeline();
 
-  featureImage->Print( std::cout );
-
   featureObject->SetImage( featureImage );
 
   segmentationModule->SetFeature( featureObject );
   segmentationModule->SetInput( landmarksReader->GetOutput() );
 
-  const double sigmaMultiplier = (argc > 4) ? atof( argv[4] ) : 2.0;
-  segmentationModule->SetSigmaMultiplier( sigmaMultiplier );
 
-  segmentationModule->Update();
+  double sigmaMultiplier = 2.0;
+  if( argc > 4 )
+    {
+    sigmaMultiplier = std::stod( argv[4] );
+    }
+  segmentationModule->SetSigmaMultiplier( sigmaMultiplier );
+  TEST_SET_GET_VALUE( sigmaMultiplier, segmentationModule->GetSigmaMultiplier() );
+
+
+  TRY_EXPECT_NO_EXCEPTION( segmentationModule->Update() );
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
@@ -103,35 +106,10 @@ int itkConfidenceConnectedSegmentationModuleTest1( int argc, char * argv [] )
   writer->SetFileName( argv[3] );
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
 
-  segmentationModule->Print( std::cout );
-  std::cout << "Class name = " << segmentationModule->GetNameOfClass() << std::endl;
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  //
-  // Exerciser Get methods
-  //
-  segmentationModule->SetSigmaMultiplier( 0.0 );
-  if( segmentationModule->GetSigmaMultiplier() != 0.0 )
-    {
-    std::cerr << "Error in Set/GetSigmaMultiplier() " << std::endl;
-    return EXIT_FAILURE;
-    }
 
-  segmentationModule->SetSigmaMultiplier( sigmaMultiplier );
-  if( segmentationModule->GetSigmaMultiplier() != sigmaMultiplier )
-    {
-    std::cerr << "Error in Set/GetSigmaMultiplier() " << std::endl;
-    return EXIT_FAILURE;
-    }
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

@@ -18,6 +18,8 @@
 #include "itkImage.h"
 #include "itkSpatialObject.h"
 #include "itkImageMaskSpatialObject.h"
+#include "itkTestingMacros.h"
+
 
 int itkLesionSegmentationMethodTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
@@ -26,6 +28,9 @@ int itkLesionSegmentationMethodTest1( int itkNotUsed(argc), char * itkNotUsed(ar
   using MethodType = itk::LesionSegmentationMethod< Dimension >;
 
   MethodType::Pointer  segmentationMethod = MethodType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( segmentationMethod, LesionSegmentationMethod,
+    ProcessObject );
 
   using ImageMaskSpatialObjectType = itk::ImageMaskSpatialObject< Dimension >;
 
@@ -38,6 +43,7 @@ int itkLesionSegmentationMethodTest1( int itkNotUsed(argc), char * itkNotUsed(ar
 
   if( regionOfInterestReturned != regionOfInterest.GetPointer() )
     {
+    std::cerr << "Test failed! " << std::endl;
     std::cerr << "Error in Set/GetRegionOfInterest() " << std::endl;
     return EXIT_FAILURE;
     }
@@ -51,6 +57,7 @@ int itkLesionSegmentationMethodTest1( int itkNotUsed(argc), char * itkNotUsed(ar
 
   if( initialSegmentationReturned != initialSegmentation.GetPointer() )
     {
+    std::cerr << "Test failed! " << std::endl;
     std::cerr << "Error in Set/GetInitialSegmentation() " << std::endl;
     return EXIT_FAILURE;
     }
@@ -61,20 +68,9 @@ int itkLesionSegmentationMethodTest1( int itkNotUsed(argc), char * itkNotUsed(ar
 
   segmentationMethod->AddFeatureGenerator( featureGenerator );
 
-  try
-    {
-    segmentationMethod->Update();
-    std::cerr << "Failed to catch expected exception" << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cout << "Caught expected exception" << std::endl;
-    std::cout << excp << std::endl;
-    }
-
-  segmentationMethod->Print( std::cout );
+  TRY_EXPECT_EXCEPTION( segmentationMethod->Update() );
 
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

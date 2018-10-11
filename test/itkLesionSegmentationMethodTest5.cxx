@@ -29,18 +29,20 @@
 #include "itkGradientMagnitudeSigmoidFeatureGenerator.h"
 #include "itkShapeDetectionLevelSetSegmentationModule.h"
 #include "itkMinimumFeatureAggregator.h"
+#include "itkTestingMacros.h"
+
 
 int itkLesionSegmentationMethodTest5( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << "\n\tinputSegmentation\n\tinputImage\n\toutputImage ";
-    std::cerr << "\n\t[RMSErrorForShapeDetection]"
-              << "\n\t[IterationsForShapeDetection]"
-              << "\n\t[CurvatureScalingForShapeDetection]"
-              << "\n\t[PropagationScalingForShapeDetection]"
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputSegmentation inputImage outputImage ";
+    std::cerr << " [RMSErrorForShapeDetection]"
+              << " [IterationsForShapeDetection]"
+              << " [CurvatureScalingForShapeDetection]"
+              << " [PropagationScalingForShapeDetection]"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -56,15 +58,7 @@ int itkLesionSegmentationMethodTest5( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[2] );
 
-  try
-    {
-    inputImageReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
 
 
   using MethodType = itk::LesionSegmentationMethod< Dimension >;
@@ -132,22 +126,42 @@ int itkLesionSegmentationMethodTest5( int argc, char * argv [] )
   using SegmentationModuleType = itk::ShapeDetectionLevelSetSegmentationModule< Dimension >;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
 
-  if (argc > 4)
+  EXERCISE_BASIC_OBJECT_METHODS( segmentationModule,
+    ShapeDetectionLevelSetSegmentationModule,
+    SinglePhaseLevelSetSegmentationModule );
+
+
+  double maximumRMSError = 0.0002;
+  if( argc > 4 )
     {
-    segmentationModule->SetMaximumRMSError( atof( argv[4]) );
+    maximumRMSError = std::stod( argv[4] );
     }
-  if (argc > 5)
+  segmentationModule->SetMaximumRMSError( maximumRMSError );
+  TEST_SET_GET_VALUE( maximumRMSError, segmentationModule->GetMaximumRMSError() );
+
+  unsigned int maximumNumberOfIterations = 300;
+  if( argc > 5 )
     {
-    segmentationModule->SetMaximumNumberOfIterations( atoi( argv[5]) );
+    maximumNumberOfIterations = std::stoi( argv[5] );
     }
-  if (argc > 6)
+  segmentationModule->SetMaximumNumberOfIterations( maximumNumberOfIterations );
+  TEST_SET_GET_VALUE( maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations() );
+
+  double curvatureScaling = 1.0;
+  if( argc > 6 )
     {
-    segmentationModule->SetCurvatureScaling( atof( argv[6]) );
+    curvatureScaling = std::stod( argv[6] );
     }
-  if (argc > 7)
+  segmentationModule->SetCurvatureScaling( curvatureScaling );
+  TEST_SET_GET_VALUE( curvatureScaling, segmentationModule->GetCurvatureScaling() );
+
+  double propagationScaling = 500.0;
+  if( argc > 7 )
     {
-    segmentationModule->SetPropagationScaling( atof( argv[7]) );
+    propagationScaling = std::stod( argv[7] );
     }
+  segmentationModule->SetPropagationScaling( propagationScaling );
+  TEST_SET_GET_VALUE( propagationScaling, segmentationModule->GetPropagationScaling() );
 
 
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
@@ -161,15 +175,7 @@ int itkLesionSegmentationMethodTest5( int argc, char * argv [] )
 
   inputSegmentationReader->SetFileName( argv[1] );
 
-  try
-    {
-    inputSegmentationReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( inputSegmentationReader->Update() );
 
   InputSegmentationType::Pointer inputSegmentation = inputSegmentationReader->GetOutput();
 
@@ -181,7 +187,7 @@ int itkLesionSegmentationMethodTest5( int argc, char * argv [] )
 
   lesionSegmentationMethod->SetInitialSegmentation( inputImageSpatialObject );
 
-  lesionSegmentationMethod->Update();
+  TRY_EXPECT_NO_EXCEPTION( lesionSegmentationMethod->Update() );
 
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
@@ -202,20 +208,9 @@ int itkLesionSegmentationMethodTest5( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
 
-  segmentationModule->Print( std::cout );
-
-  std::cout << "Name of class " << segmentationModule->GetNameOfClass() << std::endl;
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

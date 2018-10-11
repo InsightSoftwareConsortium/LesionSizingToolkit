@@ -19,14 +19,16 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
+
 
 int itkDescoteauxSheetnessFeatureGeneratorTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [(bright1/dark:0) sigma sheetness bloobiness noise ]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage [(bright1/dark:0) sigma sheetness bloobiness noise ]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -48,21 +50,16 @@ int itkDescoteauxSheetnessFeatureGeneratorTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try
-    {
-    reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
 
   using DescoteauxSheetnessFeatureGeneratorType = itk::DescoteauxSheetnessFeatureGenerator< Dimension >;
   using SpatialObjectType = DescoteauxSheetnessFeatureGeneratorType::SpatialObjectType;
 
-  DescoteauxSheetnessFeatureGeneratorType::Pointer  featureGenerator = DescoteauxSheetnessFeatureGeneratorType::New();
+  DescoteauxSheetnessFeatureGeneratorType::Pointer featureGenerator = DescoteauxSheetnessFeatureGeneratorType::New();
 
+  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
+    DescoteauxSheetnessFeatureGenerator,
+    FeatureGenerator );
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -74,76 +71,47 @@ int itkDescoteauxSheetnessFeatureGeneratorTest1( int argc, char * argv [] )
 
   featureGenerator->SetInput( inputObject );
 
-  //
-  // Exercise brightness methods
-  //
-  featureGenerator->DetectBrightSheetsOff();
-  featureGenerator->SetDetectBrightSheets( true );
-  if( !featureGenerator->GetDetectBrightSheets() )
-    {
-    std::cerr << "Error in Set/GetDetectBrightSheets()" << std::endl;
-    return EXIT_FAILURE;
-    }
 
-  featureGenerator->SetDetectBrightSheets( false );
-  if( featureGenerator->GetDetectBrightSheets() )
-    {
-    std::cerr << "Error in Set/GetDetectBrightSheets()" << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  featureGenerator->DetectBrightSheetsOn();
-  if( !featureGenerator->GetDetectBrightSheets() )
-    {
-    std::cerr << "Error in DetectBrightSheetsOn()" << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  featureGenerator->DetectBrightSheetsOff();
-  if( featureGenerator->GetDetectBrightSheets() )
-    {
-    std::cerr << "Error in DetectBrightSheetsOff()" << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  // Finally leave it On
-  featureGenerator->DetectBrightSheetsOn();
-
-
+  bool detectBrightSheets = true;
   if( argc > 3 )
     {
-    featureGenerator->SetDetectBrightSheets( atoi( argv[3] ) );
+    detectBrightSheets = std::stoi( argv[3] );
     }
+  TEST_SET_GET_BOOLEAN( featureGenerator, DetectBrightSheets, detectBrightSheets );
 
+  double sigma = 1.0;
   if( argc > 4 )
     {
-    featureGenerator->SetSigma( atof( argv[4] ) );
+    sigma = std::stod( argv[4] );
     }
+  featureGenerator->SetSigma( sigma );
+  TEST_SET_GET_VALUE( sigma, featureGenerator->GetSigma() );
 
+  double sheetnessNormalization = 0.5;
   if( argc > 5 )
     {
-    featureGenerator->SetSheetnessNormalization( atof( argv[5] ) );
+    sheetnessNormalization = std::stod( argv[5] );
     }
+  featureGenerator->SetSheetnessNormalization( sheetnessNormalization );
+  TEST_SET_GET_VALUE( sheetnessNormalization, featureGenerator->GetSheetnessNormalization() );
 
+  double bloobinessNormalization = 2.0;
   if( argc > 6 )
     {
-    featureGenerator->SetBloobinessNormalization( atof( argv[6] ) );
+    bloobinessNormalization = std::stod( argv[6] );
     }
+  featureGenerator->SetBloobinessNormalization( bloobinessNormalization );
+  TEST_SET_GET_VALUE( bloobinessNormalization, featureGenerator->GetBloobinessNormalization() );
 
+  double noiseNormalization = 1.0;
   if( argc > 7 )
     {
-    featureGenerator->SetNoiseNormalization( atof( argv[7] ) );
+    noiseNormalization = std::stod( argv[7] );
     }
+  featureGenerator->SetNoiseNormalization( noiseNormalization );
+  TEST_SET_GET_VALUE( noiseNormalization, featureGenerator->GetNoiseNormalization() );
 
-  try
-    {
-    featureGenerator->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
@@ -158,21 +126,8 @@ int itkDescoteauxSheetnessFeatureGeneratorTest1( int argc, char * argv [] )
   writer->SetFileName( argv[2] );
   writer->SetInput( outputImage );
 
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  std::cout << "Name Of Class = " << featureGenerator->GetNameOfClass() << std::endl;
-
-  featureGenerator->Print( std::cout );
-
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

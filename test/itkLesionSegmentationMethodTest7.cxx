@@ -28,21 +28,24 @@
 #include "itkSigmoidFeatureGenerator.h"
 #include "itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule.h"
 #include "itkMinimumFeatureAggregator.h"
+#include "itkTestingMacros.h"
 
+
+// Applies fast marhching followed by segmentation using geodesic active contours.
 int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Applies fast marhching followed by segmentation using geodesic active contours. Arguments" << std::endl;
-    std::cerr << argv[0] << "\n\tlandmarksFile\n\tinputImage\n\toutputImage ";
-    std::cerr << "\n\t[RMSErrorForGeodesicActiveContour]"
-              << "\n\t[IterationsForGeodesicActiveContour]"
-              << "\n\t[CurvatureScalingForGeodesicActiveContour]"
-              << "\n\t[PropagationScalingForGeodesicActiveContour]"
-              << "\n\t[AdvectionScalingForGeodesicActiveContour]";
-    std::cerr << "\n\t[stopping time for fast marching]";
-    std::cerr << "\n\t[distance from seeds for fast marching]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " landmarksFile inputImage outputImage";
+    std::cerr << " [RMSErrorForGeodesicActiveContour]"
+              << " [IterationsForGeodesicActiveContour]"
+              << " [CurvatureScalingForGeodesicActiveContour]"
+              << " [PropagationScalingForGeodesicActiveContour]"
+              << " [AdvectionScalingForGeodesicActiveContour]";
+    std::cerr << " [stoppingTime]";
+    std::cerr << " [distanceFromSeeds]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -57,16 +60,7 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[2] );
 
-  try
-    {
-    inputImageReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
-
+  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
 
   using MethodType = itk::LesionSegmentationMethod< Dimension >;
 
@@ -115,14 +109,70 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
   sigmoidGenerator->SetBeta( -200.0 );
 
   using SegmentationModuleType = itk::FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule< Dimension >;
-  SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-  segmentationModule->SetMaximumRMSError( argc > 4 ? atof(argv[4]) : 0.0002 );
-  segmentationModule->SetMaximumNumberOfIterations( argc > 5 ? atoi(argv[5]) : 300 );
-  segmentationModule->SetCurvatureScaling( argc > 6 ? atof(argv[6]) : 1.0 );
-  segmentationModule->SetPropagationScaling( argc > 7 ? atof(argv[7]) : 500.0 );
-  segmentationModule->SetAdvectionScaling( argc > 8 ? atof(argv[8]) : 0.0 );
-  segmentationModule->SetStoppingValue( argc > 9 ? atof(argv[9]) : 5.0 );
-  segmentationModule->SetDistanceFromSeeds( argc > 10 ? atof(argv[10]) : 2.0 );
+  SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( segmentationModule,
+    FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule,
+    SinglePhaseLevelSetSegmentationModule );
+
+
+  double maximumRMSError = 0.0002;
+  if( argc > 4 )
+    {
+    maximumRMSError = std::stod( argv[4] );
+    }
+  segmentationModule->SetMaximumRMSError( maximumRMSError );
+  TEST_SET_GET_VALUE( maximumRMSError, segmentationModule->GetMaximumRMSError() );
+
+  unsigned int maximumNumberOfIterations = 300;
+  if( argc > 5 )
+    {
+    maximumNumberOfIterations = std::stoi( argv[5] );
+    }
+  segmentationModule->SetMaximumNumberOfIterations( maximumNumberOfIterations );
+  TEST_SET_GET_VALUE( maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations() );
+
+  double curvatureScaling = 1.0;
+  if( argc > 6 )
+    {
+    curvatureScaling = std::stod( argv[6] );
+    }
+  segmentationModule->SetCurvatureScaling( curvatureScaling );
+  TEST_SET_GET_VALUE( curvatureScaling, segmentationModule->GetCurvatureScaling() );
+
+  double propagationScaling = 500.0;
+  if( argc > 7 )
+    {
+    propagationScaling = std::stod( argv[7] );
+    }
+  segmentationModule->SetPropagationScaling( propagationScaling );
+  TEST_SET_GET_VALUE( propagationScaling, segmentationModule->GetPropagationScaling() );
+
+  double advectionScaling = 0.0;
+  if( argc > 8 )
+    {
+    advectionScaling = std::stod( argv[8] );
+    }
+  segmentationModule->SetAdvectionScaling( advectionScaling );
+  TEST_SET_GET_VALUE( advectionScaling, segmentationModule->GetAdvectionScaling() );
+
+  double stoppingValue = 5.0;
+  if( argc > 9 )
+    {
+    stoppingValue = std::stod( argv[9] );
+    }
+  segmentationModule->SetStoppingValue( stoppingValue );
+  TEST_SET_GET_VALUE( stoppingValue, segmentationModule->GetStoppingValue() );
+
+  double distanceFromSeeds = 2.0;
+  if( argc > 10 )
+    {
+    distanceFromSeeds = std::stod( argv[10] );
+    }
+  segmentationModule->SetDistanceFromSeeds( distanceFromSeeds );
+  TEST_SET_GET_VALUE( distanceFromSeeds, segmentationModule->GetDistanceFromSeeds() );
+
+
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
   using LandmarksReaderType = itk::LandmarksReader< Dimension >;
@@ -130,10 +180,12 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName( argv[1] );
-  landmarksReader->Update();
+
+  TRY_EXPECT_NO_EXCEPTION( landmarksReader->Update() );
+
 
   lesionSegmentationMethod->SetInitialSegmentation( landmarksReader->GetOutput() );
-  lesionSegmentationMethod->Update();
+  TRY_EXPECT_NO_EXCEPTION( lesionSegmentationMethod->Update() );
 
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
@@ -152,15 +204,7 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
 
   //
@@ -168,18 +212,8 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
   //
   lesionSegmentationMethod->AddFeatureGenerator( lungWallGenerator );
 
-  try
-    {
-    lesionSegmentationMethod->Update();
-    std::cerr << "Failure to throw expected exception" << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cout << "Caught expected exception " << std::endl;
-    std::cout << excp << std::endl;
-    }
+  TRY_EXPECT_EXCEPTION( lesionSegmentationMethod->Update() );
 
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

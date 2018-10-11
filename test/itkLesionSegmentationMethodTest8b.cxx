@@ -22,15 +22,18 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkLandmarksReader.h"
+#include "itkTestingMacros.h"
 
+
+// Applies fast marhching followed by segmentation using geodesic active contours.
 int itkLesionSegmentationMethodTest8b( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Applies fast marhching followed by segmentation using geodesic active contours. Arguments" << std::endl;
-    std::cerr << argv[0] << "\n\tlandmarksFile\n\tinputImage\n\toutputImage ";
-    std::cerr << "\n\t[SigmoidBeta] [-ResampleThickSliceData] [-UseVesselEnhancingDiffusion]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " landmarksFile inputImage outputImage";
+    std::cerr << " [SigmoidBeta] [-ResampleThickSliceData] [-UseVesselEnhancingDiffusion]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -56,62 +59,48 @@ int itkLesionSegmentationMethodTest8b( int argc, char * argv [] )
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
   inputImageReader->SetFileName( argv[2] );
 
-  try
-    {
-    inputImageReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
 
   const InputImageType * inputImage = inputImageReader->GetOutput();
 
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
   landmarksReader->SetFileName( argv[1] );
-  landmarksReader->Update();
+
+  TRY_EXPECT_NO_EXCEPTION( landmarksReader->Update() );
+
+
   const SeedSpatialObjectType * landmarks = landmarksReader->GetOutput();
 
   SegmentationMethodType::Pointer segmentationMethod = SegmentationMethodType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( segmentationMethod, LesionSegmentationImageFilter8,
+    ImageToImageFilter );
+
+
   segmentationMethod->SetInput( inputImage );
   segmentationMethod->SetSeeds( landmarks->GetPoints() );
   segmentationMethod->SetRegionOfInterest( inputImage->GetBufferedRegion() );
 
+  double sigmoidBeta = -500.0;
   if( argc > 4 )
     {
-    const double sigmoidBeta = atof( argv[4] );
-    std::cout << "Using SigmoidBeta = " << sigmoidBeta << std::endl;
-    segmentationMethod->SetSigmoidBeta( sigmoidBeta );
+    sigmoidBeta = std::stod( argv[4] );
     }
+  segmentationMethod->SetSigmoidBeta( sigmoidBeta );
+  TEST_SET_GET_VALUE( sigmoidBeta, segmentationMethod->GetSigmoidBeta() );
 
   segmentationMethod->SetResampleThickSliceData( resampleThickSliceData );
   segmentationMethod->SetUseVesselEnhancingDiffusion( useVesselEnhancingDiffusion );
 
-  try
-    {
-    segmentationMethod->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( segmentationMethod->Update() );
 
   OutputWriterType::Pointer writer = OutputWriterType::New();
   writer->SetFileName( argv[3] );
   writer->SetInput( segmentationMethod->GetOutput() );
   writer->UseCompressionOn();
 
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

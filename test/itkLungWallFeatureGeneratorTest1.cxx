@@ -19,14 +19,16 @@
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
+
 
 int itkLungWallFeatureGeneratorTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [lungThreshold]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage [lungThreshold]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -48,20 +50,15 @@ int itkLungWallFeatureGeneratorTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try
-    {
-    reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
 
   using LungWallFeatureGeneratorType = itk::LungWallFeatureGenerator< Dimension >;
   using SpatialObjectType = LungWallFeatureGeneratorType::SpatialObjectType;
 
-  LungWallFeatureGeneratorType::Pointer  featureGenerator = LungWallFeatureGeneratorType::New();
+  LungWallFeatureGeneratorType::Pointer featureGenerator = LungWallFeatureGeneratorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
+    LungWallFeatureGenerator, FeatureGenerator );
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -74,21 +71,15 @@ int itkLungWallFeatureGeneratorTest1( int argc, char * argv [] )
 
   featureGenerator->SetInput( inputObject );
 
+  LungWallFeatureGeneratorType::InputPixelType lungThreshold = 100;
   if( argc > 3 )
     {
-    featureGenerator->SetLungThreshold( atoi( argv[3] ) );
+    lungThreshold = std::stoi( argv[3] );
     }
+  featureGenerator->SetLungThreshold( lungThreshold );
+  TEST_SET_GET_VALUE( lungThreshold, featureGenerator->GetLungThreshold() );
 
-
-  try
-    {
-    featureGenerator->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
@@ -104,36 +95,8 @@ int itkLungWallFeatureGeneratorTest1( int argc, char * argv [] )
   writer->UseCompressionOn();
   writer->SetInput( outputImage );
 
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
-
-
-  std::cout << "Name Of Class = " << featureGenerator->GetNameOfClass() << std::endl;
-
-  featureGenerator->Print( std::cout );
-
-
-  featureGenerator->SetLungThreshold( 100 );
-  if( featureGenerator->GetLungThreshold() != 100 )
-    {
-    std::cerr << "Error in Set/GetLungThreshold()" << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  featureGenerator->SetLungThreshold( 200 );
-  if( featureGenerator->GetLungThreshold() != 200 )
-    {
-    std::cerr << "Error in Set/GetLungThreshold()" << std::endl;
-    return EXIT_FAILURE;
-    }
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }
