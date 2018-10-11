@@ -30,24 +30,27 @@
 #include "itkSigmoidFeatureGenerator.h"
 #include "itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule.h"
 #include "itkMinimumFeatureAggregator.h"
+#include "itkTestingMacros.h"
 
+
+// Applies fast marhching followed by segmentation using geodesic active contours.
 int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Applies fast marhching followed by segmentation using geodesic active contours. Arguments" << std::endl;
-    std::cerr << argv[0] << "\n\tlandmarksFile\n\tinputImage\n\toutputImage ";
-    std::cerr << "\n\t[CannySigma]"
-              << "\n\t[CannyUpperThreshold]"
-              << "\n\t[CannyLowerThreshold]"
-              << "\n\t[RMSErrorForGeodesicActiveContour]"
-              << "\n\t[IterationsForGeodesicActiveContour]"
-              << "\n\t[CurvatureScalingForGeodesicActiveContour]"
-              << "\n\t[PropagationScalingForGeodesicActiveContour]"
-              << "\n\t[AdvectionScalingForGeodesicActiveContour]";
-    std::cerr << "\n\t[stopping time for fast marching]";
-    std::cerr << "\n\t[distance from seeds for fast marching]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " landmarksFile inputImage outputImage";
+    std::cerr << " [CannySigma]"
+              << " [CannyUpperThreshold]"
+              << " [CannyLowerThreshold]"
+              << " [RMSErrorForGeodesicActiveContour]"
+              << " [IterationsForGeodesicActiveContour]"
+              << " [CurvatureScalingForGeodesicActiveContour]"
+              << " [PropagationScalingForGeodesicActiveContour]"
+              << " [AdvectionScalingForGeodesicActiveContour]";
+    std::cerr << " stoppingValue";
+    std::cerr << " distanceFromSeeds" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -62,20 +65,16 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[2] );
 
-  try
-    {
-    inputImageReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
 
 
   using MethodType = itk::LesionSegmentationMethod< Dimension >;
 
-  MethodType::Pointer  lesionSegmentationMethod = MethodType::New();
+  MethodType::Pointer lesionSegmentationMethod = MethodType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( lesionSegmentationMethod, LesionSegmentationMethod,
+    LightObject );
+
 
   using ImageMaskSpatialObjectType = itk::ImageMaskSpatialObject< Dimension >;
 
@@ -122,15 +121,8 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
 
   resampler->SetInput( inputObject );
 
-  try
-    {
-    resampler->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( resampler->Update() );
+
 
   SpatialObjectType::ConstPointer resampledObject = resampler->GetOutput();
 
@@ -154,21 +146,96 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
                         inputImage->GetSpacing()[1],
                         inputImage->GetSpacing()[2] };
   double maxSpacing = (spacing[0] > spacing[1] ? spacing[0] : spacing[1]);
-  maxSpacing = (maxSpacing > spacing[2] ? maxSpacing : spacing[2]);
 
-  cannyEdgesGenerator->SetSigma( argc > 4 ? atof(argv[4]) : maxSpacing );
-  cannyEdgesGenerator->SetUpperThreshold( argc > 5 ? atof(argv[5]) : 150.0 );
-  cannyEdgesGenerator->SetLowerThreshold( argc > 6 ? atof(argv[6]) :  75.0 );
+  maxSpacing = (maxSpacing > spacing[2] ? maxSpacing : spacing[2]);
+  if( argc > 4 )
+    {
+    maxSpacing = std::stod( argv[4] );
+    }
+  cannyEdgesGenerator->SetSigma( maxSpacing );
+  TEST_SET_GET_VALUE( maxSpacing, cannyEdgesGenerator->GetSigma() );
+
+  double upperThreshold = 150.0;
+  if( argc > 5 )
+    {
+    upperThreshold = std::stod( argv[5] );
+    }
+  cannyEdgesGenerator->SetUpperThreshold( upperThreshold );
+  TEST_SET_GET_VALUE( upperThreshold, cannyEdgesGenerator->GetUpperThreshold() );
+
+  double lowerThreshold = 75.0;
+  if( argc > 6 )
+    {
+    lowerThreshold = std::stod( argv[6] );
+    }
+  cannyEdgesGenerator->SetLowerThreshold( lowerThreshold );
+  TEST_SET_GET_VALUE( lowerThreshold, cannyEdgesGenerator->GetLowerThreshold() );
+
 
   using SegmentationModuleType = itk::FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule< Dimension >;
-  SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-  segmentationModule->SetMaximumRMSError( argc > 7 ? atof(argv[7]) : 0.0002 );
-  segmentationModule->SetMaximumNumberOfIterations( argc > 8 ? atoi(argv[8]) : 300 );
-  segmentationModule->SetCurvatureScaling( argc > 9 ? atof(argv[9]) : 1.0 );
-  segmentationModule->SetPropagationScaling( argc > 10 ? atof(argv[10]) : 500.0 );
-  segmentationModule->SetAdvectionScaling( argc > 11 ? atof(argv[11]) : 0.0 );
-  segmentationModule->SetStoppingValue( argc > 12 ? atof(argv[12]) : 5.0 );
-  segmentationModule->SetDistanceFromSeeds( argc > 13 ? atof(argv[13]) : 0.5 );
+  SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( segmentationModule,
+    FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule,
+    SinglePhaseLevelSetSegmentationModule );
+
+  double maximumRMSError = 0.0002;
+  if( argc > 7 )
+    {
+    maximumRMSError = std::stod( argv[7] );
+    }
+  segmentationModule->SetMaximumRMSError( maximumRMSError );
+  TEST_SET_GET_VALUE( maximumRMSError, segmentationModule->GetMaximumRMSError() );
+
+  unsigned int maximumNumberOfIterations = 300;
+  if( argc > 8 )
+    {
+    maximumNumberOfIterations = std::stoi( argv[8] );
+    }
+  segmentationModule->SetMaximumNumberOfIterations( maximumNumberOfIterations );
+  TEST_SET_GET_VALUE( maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations() );
+
+  double curvatureScaling = 1.0;
+  if( argc > 9 )
+    {
+    curvatureScaling = std::stod( argv[9] );
+    }
+  segmentationModule->SetCurvatureScaling( curvatureScaling );
+  TEST_SET_GET_VALUE( curvatureScaling, segmentationModule->GetCurvatureScaling() );
+
+  double propagationScaling = 500.0;
+  if( argc > 10 )
+    {
+    propagationScaling = std::stod( argv[10] );
+    }
+  segmentationModule->SetPropagationScaling( propagationScaling );
+  TEST_SET_GET_VALUE( propagationScaling, segmentationModule->GetPropagationScaling() );
+
+  double advectionScaling = 0.0;
+  if( argc > 11 )
+    {
+    advectionScaling = std::stod( argv[11] );
+    }
+  segmentationModule->SetAdvectionScaling( advectionScaling );
+  TEST_SET_GET_VALUE( advectionScaling, segmentationModule->GetAdvectionScaling() );
+
+  double stoppingValue = 5.0;
+  if( argc > 12 )
+    {
+    stoppingValue = std::stod( argv[12] );
+    }
+  segmentationModule->SetStoppingValue( stoppingValue );
+  TEST_SET_GET_VALUE( stoppingValue, segmentationModule->GetStoppingValue() );
+
+  double distanceFromSeeds = 0.5;
+  if( argc > 13 )
+    {
+    distanceFromSeeds = std::stod( argv[13] );
+    }
+  segmentationModule->SetDistanceFromSeeds( distanceFromSeeds );
+  TEST_SET_GET_VALUE( distanceFromSeeds, segmentationModule->GetDistanceFromSeeds() );
+
+
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
   using LandmarksReaderType = itk::LandmarksReader< Dimension >;
@@ -201,16 +268,7 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
 
   //
@@ -218,18 +276,9 @@ int itkLesionSegmentationMethodTest10( int argc, char * argv [] )
   //
   lesionSegmentationMethod->AddFeatureGenerator( lungWallGenerator );
 
-  try
-    {
-    lesionSegmentationMethod->Update();
-    std::cerr << "Failure to throw expected exception" << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cout << "Caught expected exception " << std::endl;
-    std::cout << excp << std::endl;
-    }
+  TRY_EXPECT_EXCEPTION( lesionSegmentationMethod->Update() );
 
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

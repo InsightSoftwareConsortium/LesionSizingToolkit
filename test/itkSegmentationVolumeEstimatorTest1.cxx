@@ -18,6 +18,8 @@
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageMaskSpatialObject.h"
+#include "itkTestingMacros.h"
+
 
 namespace itk
 {
@@ -27,12 +29,13 @@ class VolumeEstimatorSurrogate : public SegmentationVolumeEstimator<3>
 public:
   /** Standard class type alias. */
   using Self = VolumeEstimatorSurrogate;
-  using Superclass = ProcessObject;
+  using Superclass = SegmentationVolumeEstimator;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro( Self );
 
+  itkTypeMacro( VolumeEstimatorSurrogate, SegmentationVolumeEstimator );
 };
 
 }
@@ -44,7 +47,10 @@ int itkSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed
 
   using VolumeEstimatorType = itk::VolumeEstimatorSurrogate;
 
-  VolumeEstimatorType::Pointer  volumeEstimator = VolumeEstimatorType::New();
+  VolumeEstimatorType::Pointer volumeEstimator = VolumeEstimatorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( volumeEstimator, VolumeEstimatorSurrogate,
+    SegmentationVolumeEstimator );
 
   using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
 
@@ -52,7 +58,8 @@ int itkSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed
 
   volumeEstimator->SetInput( inputObject );
 
-  volumeEstimator->Update();
+  TRY_EXPECT_NO_EXCEPTION( volumeEstimator->Update() );
+
 
   VolumeEstimatorType::RealType volume1 = volumeEstimator->GetVolume();
 
@@ -60,13 +67,12 @@ int itkSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed
 
   if( volumeObject->Get() != volume1 )
     {
+    std::cerr << "Test failed!" << std::endl;
     std::cerr << "Error in GetVolumeOutput() and/or GetVolume() " << std::endl;
     return EXIT_FAILURE;
     }
 
-  volumeEstimator->Print( std::cout );
 
-  std::cout << "Class name = " << volumeEstimator->GetNameOfClass() << std::endl;
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

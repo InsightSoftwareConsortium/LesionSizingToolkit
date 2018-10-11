@@ -18,6 +18,8 @@
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageMaskSpatialObject.h"
+#include "itkTestingMacros.h"
+
 
 int itkSegmentationModuleTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
@@ -26,7 +28,11 @@ int itkSegmentationModuleTest1( int itkNotUsed(argc), char * itkNotUsed(argv) []
   using SegmentationModuleType = itk::SegmentationModule< Dimension >;
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
 
-  SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
+  SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( segmentationModule, SegmentationModule,
+    ProcessObject );
+
 
   using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
 
@@ -38,14 +44,9 @@ int itkSegmentationModuleTest1( int itkNotUsed(argc), char * itkNotUsed(argv) []
 
   segmentationModule->SetFeature( featureObject );
 
+  TRY_EXPECT_NO_EXCEPTION( segmentationModule->Update() );
 
-  segmentationModule->Update();
 
-  SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
-
-  segmentationModule->Print( std::cout );
-
-  std::cout << "Class name = " << segmentationModule->GetNameOfClass() << std::endl;
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

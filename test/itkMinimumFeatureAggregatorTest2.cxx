@@ -20,15 +20,17 @@
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
+#include "itkTestingMacros.h"
+
 
 namespace itk
 {
 
-class MinimumFeatureAggregatorDerived : public MinimumFeatureAggregator<3>
+class MinimumFeatureAggregatorSurrogate : public MinimumFeatureAggregator<3>
 {
 public:
   /** Standard class type alias. */
-  using Self = MinimumFeatureAggregatorDerived;
+  using Self = MinimumFeatureAggregatorSurrogate;
   using Superclass = MinimumFeatureAggregator<3>;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
@@ -37,7 +39,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MinimumFeatureAggregatorDerived, MinimumFeatureAggregator);
+  itkTypeMacro(MinimumFeatureAggregatorSurrogate, MinimumFeatureAggregator);
 
   using InputFeatureType = Superclass::InputFeatureType;
 
@@ -54,11 +56,11 @@ public:
 
 int itkMinimumFeatureAggregatorTest2( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage ";
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage ";
     return EXIT_FAILURE;
     }
 
@@ -73,20 +75,16 @@ int itkMinimumFeatureAggregatorTest2( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[1] );
 
-  try
-    {
-    inputImageReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
 
+  using AggregatorType = itk::MinimumFeatureAggregatorSurrogate;
 
-  using AggregatorType = itk::MinimumFeatureAggregatorDerived;
+  AggregatorType::Pointer featureAggregator = AggregatorType::New();
 
-  AggregatorType::Pointer  featureAggregator = AggregatorType::New();
+  EXERCISE_BASIC_OBJECT_METHODS( featureAggregator,
+    MinimumFeatureAggregatorSurrogate,
+    MinimumFeatureAggregator );
+
 
   using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator< Dimension >;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
@@ -117,17 +115,34 @@ int itkMinimumFeatureAggregatorTest2( int argc, char * argv [] )
   vesselnessGenerator->SetInput( inputObject );
   sigmoidGenerator->SetInput( inputObject );
 
-  lungWallGenerator->SetLungThreshold( -400 );
 
-  vesselnessGenerator->SetSigma( 1.0 );
-  vesselnessGenerator->SetAlpha1( 0.5 );
-  vesselnessGenerator->SetAlpha2( 2.0 );
-
-  sigmoidGenerator->SetAlpha(  1.0  );
-  sigmoidGenerator->SetBeta( -200.0 );
+  LungWallGeneratorType::InputPixelType lungThreshold = -400;
+  lungWallGenerator->SetLungThreshold( lungThreshold );
+  TEST_SET_GET_VALUE( lungThreshold, lungWallGenerator->GetLungThreshold() );
 
 
-  featureAggregator->Update();
+  double sigma = 1.0;
+  vesselnessGenerator->SetSigma( sigma );
+  TEST_SET_GET_VALUE( sigma, vesselnessGenerator->GetSigma() );
+
+  double alpha1 = 0.5;
+  vesselnessGenerator->SetAlpha1( alpha1 );
+  TEST_SET_GET_VALUE( alpha1, vesselnessGenerator->GetAlpha1() );
+
+  double alpha2 = 2.0;
+  vesselnessGenerator->SetAlpha2( alpha2 );
+  TEST_SET_GET_VALUE( alpha2, vesselnessGenerator->GetAlpha2() );
+
+  double alpha = 1.0;
+  sigmoidGenerator->SetAlpha( alpha );
+  TEST_SET_GET_VALUE( alpha, sigmoidGenerator->GetAlpha() );
+
+  double beta = -200.0;
+  sigmoidGenerator->SetBeta( beta );
+  TEST_SET_GET_VALUE( beta, sigmoidGenerator->GetBeta() );
+
+
+  TRY_EXPECT_NO_EXCEPTION( featureAggregator->Update() );
 
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
@@ -145,51 +160,34 @@ int itkMinimumFeatureAggregatorTest2( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  featureAggregator->Print( std::cout );
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
   //
   // Exercise GetInputFeature()
   //
   if( featureAggregator->GetInputFeature( 0 ) != lungWallGenerator->GetFeature() )
     {
+     std::cerr << "Test failed!" << std::endl;
     std::cerr << "Failure to recover feature 0 with GetInputFeature()" << std::endl;
     return EXIT_FAILURE;
     }
 
   if( featureAggregator->GetInputFeature( 1 ) != vesselnessGenerator->GetFeature() )
     {
+    std::cerr << "Test failed!" << std::endl;
     std::cerr << "Failure to recover feature 1 with GetInputFeature()" << std::endl;
     return EXIT_FAILURE;
     }
 
   if( featureAggregator->GetInputFeature( 2 ) != sigmoidGenerator->GetFeature() )
     {
+    std::cerr << "Test failed!" << std::endl;
     std::cerr << "Failure to recover feature 2 with GetInputFeature()" << std::endl;
     return EXIT_FAILURE;
     }
 
-  try
-    {
-    featureAggregator->GetInputFeature( 3 );
-    std::cerr << "Failure to catch an exception for GetInputFeature() with out of range argument" << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cout << "Caught expected exception" << std::endl;
-    std::cout << excp << std::endl;
-    }
+  TRY_EXPECT_EXCEPTION( featureAggregator->GetInputFeature( 3 ) );
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

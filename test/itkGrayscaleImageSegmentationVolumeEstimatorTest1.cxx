@@ -18,15 +18,21 @@
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
 
 
 int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 {
+  int testStatus = EXIT_SUCCESS;
+
   constexpr unsigned int Dimension = 3;
 
   using VolumeEstimatorType = itk::GrayscaleImageSegmentationVolumeEstimator<Dimension>;
 
-  VolumeEstimatorType::Pointer  volumeEstimator = VolumeEstimatorType::New();
+  VolumeEstimatorType::Pointer volumeEstimator = VolumeEstimatorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( volumeEstimator,
+    GrayscaleImageSegmentationVolumeEstimator, SegmentationVolumeEstimator );
 
   using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
 
@@ -34,17 +40,8 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
 
   volumeEstimator->SetInput( inputObject );
 
-  try
-    {
-    volumeEstimator->Update();
-    std::cerr << "Failed to catch expected exception" << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cout << "Caught expected exception" << std::endl;
-    std::cout << excp << std::endl;
-    }
+  TRY_EXPECT_EXCEPTION( volumeEstimator->Update() );
+
 
   using InputImageType = VolumeEstimatorType::InputImageType;
 
@@ -116,7 +113,7 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
     ++itr;
     }
 
-  volumeEstimator->Update();
+  TRY_EXPECT_NO_EXCEPTION( volumeEstimator->Update() );
 
   VolumeEstimatorType::RealType volume1 = volumeEstimator->GetVolume();
 
@@ -124,8 +121,9 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
 
   if( volumeObject->Get() != volume1 )
     {
+    std::cerr << "Test failed!" << std::endl;
     std::cerr << "Error in GetVolumeOutput() and/or GetVolume() " << std::endl;
-    return EXIT_FAILURE;
+    testStatus = EXIT_FAILURE;
     }
 
   volumeEstimator->Print( std::cout );
@@ -134,9 +132,8 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput( image );
   writer->SetFileName("sphereForVolumeTest.mhd");
-  writer->Update();
 
-  std::cout << "Class name = " << volumeEstimator->GetNameOfClass() << std::endl;
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
   const double pi = atan(1.0) * 4.0;
 
@@ -146,16 +143,21 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
 
   const double percentage = 100.0 * vnl_math_abs( difference ) / expectedVolume;
 
-  std::cout << "Expected  Volume = " << expectedVolume << std::endl;
-  std::cout << "Estimated Volume = " << volume1 << std::endl;
-  std::cout << "Difference       = " << difference << std::endl;
-  std::cout << "Percentage       = " << percentage << "%" << std::endl;
+  const double epsilon = 1e-6;
+  const double allowedVolumePercentageError = 1e-1; // 0.1%
+  if( !itk::Math::FloatAlmostEqual( allowedVolumePercentageError, percentage, 10, epsilon ) )
+  {
+    std::cerr.precision( static_cast< int >( itk::Math::abs( std::log10( epsilon ) ) ) );
+    std::cerr << "Test failed!" << std::endl;
+    std::cerr << "Error in volume computation" << std::endl;
+    std::cerr << "Expected value " << expectedVolume << std::endl;
+    std::cerr << " differs from " << volume1;
+    std::cerr << "by " << difference << std::endl;
+    std::cerr << " , " << percentage << "%" << std::endl;
+    testStatus = EXIT_FAILURE;
+  }
 
-  if( percentage > 0.1 )  // This is: 0.1%
-    {
-    std::cout << "Error too large. Test FAILED!" << std::endl;
-    return EXIT_FAILURE;
-    }
 
-  return EXIT_SUCCESS;
+  std::cout << "Test finished." << std::endl;
+  return testStatus;
 }

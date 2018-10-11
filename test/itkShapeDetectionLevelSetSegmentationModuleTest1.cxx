@@ -20,14 +20,16 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
+#include "itkTestingMacros.h"
+
 
 int itkShapeDetectionLevelSetSegmentationModuleTest1( int argc, char * argv [] )
 {
-
   if( argc < 4 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage featureImage outputImage ";
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage featureImage outputImage ";
     std::cerr << " [propagationScaling curvatureScaling maximumNumberOfIterations]" << std::endl;
     return EXIT_FAILURE;
     }
@@ -37,7 +39,11 @@ int itkShapeDetectionLevelSetSegmentationModuleTest1( int argc, char * argv [] )
 
   using SegmentationModuleType = itk::ShapeDetectionLevelSetSegmentationModule< Dimension >;
 
-  SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
+  SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( segmentationModule,
+    ShapeDetectionLevelSetSegmentationModule,
+    SinglePhaseLevelSetSegmentationModule );
 
   using InputImageType = SegmentationModuleType::InputImageType;
   using FeatureImageType = SegmentationModuleType::FeatureImageType;
@@ -56,6 +62,8 @@ int itkShapeDetectionLevelSetSegmentationModuleTest1( int argc, char * argv [] )
 
   inputReader->SetFileName( argv[1] );
 
+  TRY_EXPECT_NO_EXCEPTION( inputReader->Update() );
+
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
   rescaler->SetInput( inputReader->GetOutput() );
@@ -63,24 +71,12 @@ int itkShapeDetectionLevelSetSegmentationModuleTest1( int argc, char * argv [] )
   rescaler->SetOutputMinimum( -4.0 );
   rescaler->SetOutputMaximum(  4.0 );
 
-  inputWriter->SetFileName( "inputSegmentation.mha" );
+  TRY_EXPECT_NO_EXCEPTION( rescaler->Update() );
 
-  inputWriter->SetInput( rescaler->GetOutput() );
-  inputWriter->Update();
 
   featureReader->SetFileName( argv[2] );
 
-  try
-    {
-    rescaler->Update();
-    featureReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
-
+  TRY_EXPECT_NO_EXCEPTION( featureReader->Update() );
 
   using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
   using FeatureSpatialObjectType = SegmentationModuleType::FeatureSpatialObjectType;
@@ -95,31 +91,33 @@ int itkShapeDetectionLevelSetSegmentationModuleTest1( int argc, char * argv [] )
   segmentationModule->SetInput( inputObject );
   segmentationModule->SetFeature( featureObject );
 
-  double propagationScaling = 1.0;
-  double curvatureScaling = 1.0;
-  unsigned int maximumNumberOfIterations = 50;
 
+  double propagationScaling = 1.0;
   if( argc > 4 )
     {
-    propagationScaling = atof( argv[4] );
+    propagationScaling = std::stod( argv[4] );
     }
+  segmentationModule->SetPropagationScaling( propagationScaling );
+  TEST_SET_GET_VALUE( propagationScaling, segmentationModule->GetPropagationScaling() );
 
+  double curvatureScaling = 1.0;
   if( argc > 5 )
     {
-    curvatureScaling = atof( argv[5] );
+    curvatureScaling = std::stod( argv[5] );
     }
+  segmentationModule->SetCurvatureScaling( curvatureScaling );
+  TEST_SET_GET_VALUE( curvatureScaling, segmentationModule->GetCurvatureScaling() );
 
+  unsigned int maximumNumberOfIterations = 50;
   if( argc > 6 )
     {
-    maximumNumberOfIterations = atoi( argv[6] );
+    maximumNumberOfIterations = std::stoi( argv[6] );
     }
-
-
-  segmentationModule->SetPropagationScaling( propagationScaling );
-  segmentationModule->SetCurvatureScaling( curvatureScaling );
   segmentationModule->SetMaximumNumberOfIterations( maximumNumberOfIterations );
+  TEST_SET_GET_VALUE( maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations() );
 
-  segmentationModule->Update();
+
+  TRY_EXPECT_NO_EXCEPTION( segmentationModule->Update() );
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
@@ -134,20 +132,8 @@ int itkShapeDetectionLevelSetSegmentationModuleTest1( int argc, char * argv [] )
   writer->SetFileName( argv[3] );
   writer->SetInput( outputImage );
 
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-
-  segmentationModule->Print( std::cout );
-
-  std::cout << "Class name = " << segmentationModule->GetNameOfClass() << std::endl;
-
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

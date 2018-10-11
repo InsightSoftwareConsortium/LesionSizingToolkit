@@ -18,15 +18,16 @@
 #include "itkImageFileWriter.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkMinimumFeatureAggregator.h"
+#include "itkTestingMacros.h"
 
 
 int itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage ";
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage ";
     std::cerr << " [sigma alpha1 alpha2 " << std::endl;
     std::cerr << " sigmoidAlpha sigmoidBeta]" << std::endl;
     return EXIT_FAILURE;
@@ -43,15 +44,7 @@ int itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1( int argc, char * ar
 
   inputImageReader->SetFileName( argv[1] );
 
-  try
-    {
-    inputImageReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
 
 
   using AggregatorType = itk::MinimumFeatureAggregator< Dimension >;
@@ -61,51 +54,99 @@ int itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1( int argc, char * ar
   using FeatureGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator< Dimension >;
   using SpatialObjectType = FeatureGeneratorType::SpatialObjectType;
 
-  FeatureGeneratorType::Pointer  featureGenerator1 = FeatureGeneratorType::New();
-  FeatureGeneratorType::Pointer  featureGenerator2 = FeatureGeneratorType::New();
-  FeatureGeneratorType::Pointer  featureGenerator3 = FeatureGeneratorType::New();
-  FeatureGeneratorType::Pointer  featureGenerator4 = FeatureGeneratorType::New();
+  FeatureGeneratorType::Pointer featureGenerator1 = FeatureGeneratorType::New();
 
+  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator1,
+    SatoVesselnessSigmoidFeatureGenerator, FeatureGenerator );
+
+  FeatureGeneratorType::Pointer featureGenerator2 = FeatureGeneratorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator2,
+    SatoVesselnessSigmoidFeatureGenerator, FeatureGenerator );
+
+  FeatureGeneratorType::Pointer featureGenerator3 = FeatureGeneratorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator3,
+    SatoVesselnessSigmoidFeatureGenerator, FeatureGenerator );
+
+  FeatureGeneratorType::Pointer featureGenerator4 = FeatureGeneratorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator4,
+    SatoVesselnessSigmoidFeatureGenerator, FeatureGenerator );
+
+
+  double smallestSigma = 1.0;
   if( argc > 3 )
     {
-    double smallestSigma = atof( argv[3] );
-    featureGenerator1->SetSigma( smallestSigma );
-    featureGenerator2->SetSigma( smallestSigma * 2.0 );
-    featureGenerator3->SetSigma( smallestSigma * 4.0 );
-    featureGenerator4->SetSigma( smallestSigma * 8.0 );
+    smallestSigma = std::stod( argv[3] );
     }
+  featureGenerator1->SetSigma( smallestSigma );
+  TEST_SET_GET_VALUE( smallestSigma, featureGenerator1->GetSigma() );
+  double smallestSigma2 = smallestSigma * 2.0;
+  featureGenerator2->SetSigma( smallestSigma2 );
+  TEST_SET_GET_VALUE( smallestSigma2, featureGenerator2->GetSigma() );
+  double smallestSigma3 = smallestSigma * 4.0;
+  featureGenerator3->SetSigma( smallestSigma3 );
+  TEST_SET_GET_VALUE( smallestSigma3, featureGenerator3->GetSigma() );
+  double smallestSigma4 = smallestSigma * 8.0;
+  featureGenerator4->SetSigma( smallestSigma4 );
+  TEST_SET_GET_VALUE( smallestSigma4, featureGenerator4->GetSigma() );
 
+  double alpha1 = 0.5;
   if( argc > 4 )
     {
-    featureGenerator1->SetAlpha1( atof( argv[4] ) );
-    featureGenerator2->SetAlpha1( atof( argv[4] ) );
-    featureGenerator3->SetAlpha1( atof( argv[4] ) );
-    featureGenerator4->SetAlpha1( atof( argv[4] ) );
+    alpha1 = std::stod( argv[4] );
     }
+  featureGenerator1->SetAlpha1( alpha1 );
+  TEST_SET_GET_VALUE( alpha1, featureGenerator1->GetAlpha1() );
+  featureGenerator2->SetAlpha1( alpha1 );
+  TEST_SET_GET_VALUE( alpha1, featureGenerator2->GetAlpha1() );
+  featureGenerator3->SetAlpha1( alpha1 );
+  TEST_SET_GET_VALUE( alpha1, featureGenerator3->GetAlpha1() );
+  featureGenerator4->SetAlpha1( alpha1 );
+  TEST_SET_GET_VALUE( alpha1, featureGenerator4->GetAlpha1() );
 
+  double alpha2 = 2.0;
   if( argc > 5 )
     {
-    featureGenerator1->SetAlpha2( atof( argv[5] ) );
-    featureGenerator2->SetAlpha2( atof( argv[5] ) );
-    featureGenerator3->SetAlpha2( atof( argv[5] ) );
-    featureGenerator4->SetAlpha2( atof( argv[5] ) );
+    alpha2 = std::stod( argv[5] );
     }
+  featureGenerator1->SetAlpha2( alpha2 );
+  TEST_SET_GET_VALUE( alpha2, featureGenerator1->GetAlpha2() );
+  featureGenerator2->SetAlpha2( alpha2 );
+  TEST_SET_GET_VALUE( alpha2, featureGenerator2->GetAlpha2() );
+  featureGenerator3->SetAlpha2( alpha2 );
+  TEST_SET_GET_VALUE( alpha2, featureGenerator3->GetAlpha2() );
+  featureGenerator4->SetAlpha2( alpha2 );
+  TEST_SET_GET_VALUE( alpha2, featureGenerator4->GetAlpha2() );
 
+  double sigmoidAlpha = -1.0;
   if( argc > 6 )
     {
-    featureGenerator1->SetSigmoidAlpha( atof( argv[6] ) );
-    featureGenerator2->SetSigmoidAlpha( atof( argv[6] ) );
-    featureGenerator3->SetSigmoidAlpha( atof( argv[6] ) );
-    featureGenerator4->SetSigmoidAlpha( atof( argv[6] ) );
+    sigmoidAlpha = std::stod( argv[6] );
     }
+  featureGenerator1->SetSigmoidAlpha( alpha2 );
+  TEST_SET_GET_VALUE( alpha2, featureGenerator1->GetSigmoidAlpha() );
+  featureGenerator2->SetSigmoidAlpha( alpha2 );
+  TEST_SET_GET_VALUE( alpha2, featureGenerator2->GetSigmoidAlpha() );
+  featureGenerator3->SetSigmoidAlpha( alpha2 );
+  TEST_SET_GET_VALUE( alpha2, featureGenerator3->GetSigmoidAlpha() );
+  featureGenerator4->SetSigmoidAlpha( alpha2 );
+  TEST_SET_GET_VALUE( alpha2, featureGenerator4->GetSigmoidAlpha() );
 
+  double sigmoidBeta = 90.0;
   if( argc > 7 )
     {
-    featureGenerator1->SetSigmoidBeta( atof( argv[7] ) );
-    featureGenerator2->SetSigmoidBeta( atof( argv[7] ) );
-    featureGenerator3->SetSigmoidBeta( atof( argv[7] ) );
-    featureGenerator4->SetSigmoidBeta( atof( argv[7] ) );
+    sigmoidBeta = std::stod( argv[7] );
     }
+  featureGenerator1->SetSigmoidBeta( sigmoidBeta );
+  TEST_SET_GET_VALUE( sigmoidBeta, featureGenerator1->GetSigmoidBeta() );
+  featureGenerator2->SetSigmoidBeta( sigmoidBeta );
+  TEST_SET_GET_VALUE( sigmoidBeta, featureGenerator2->GetSigmoidBeta() );
+  featureGenerator3->SetSigmoidBeta( sigmoidBeta );
+  TEST_SET_GET_VALUE( sigmoidBeta, featureGenerator3->GetSigmoidBeta() );
+  featureGenerator4->SetSigmoidBeta( sigmoidBeta );
+  TEST_SET_GET_VALUE( sigmoidBeta, featureGenerator4->GetSigmoidBeta() );
 
 
   using SpatialObjectType = AggregatorType::SpatialObjectType;
@@ -129,15 +170,8 @@ int itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1( int argc, char * ar
   featureAggregator->AddFeatureGenerator( featureGenerator3 );
   featureAggregator->AddFeatureGenerator( featureGenerator4 );
 
-  try
-    {
-    featureAggregator->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( featureAggregator->Update() );
+
 
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
@@ -156,17 +190,11 @@ int itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1( int argc, char * ar
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
   featureAggregator->Print( std::cout );
 
+
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

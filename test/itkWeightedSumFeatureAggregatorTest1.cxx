@@ -21,15 +21,16 @@
 #include "itkLungWallFeatureGenerator.h"
 #include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkSigmoidFeatureGenerator.h"
+#include "itkTestingMacros.h"
 
 
 int itkWeightedSumFeatureAggregatorTest1( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " landmarksFile inputImage outputImage ";
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " landmarksFile inputImage outputImage ";
     std::cerr << " [lowerThreshold upperThreshold] " << std::endl;
     return EXIT_FAILURE;
     }
@@ -45,15 +46,7 @@ int itkWeightedSumFeatureAggregatorTest1( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[2] );
 
-  try
-    {
-    inputImageReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
 
 
   using AggregatorType = itk::WeightedSumFeatureAggregator< Dimension >;
@@ -123,16 +116,8 @@ int itkWeightedSumFeatureAggregatorTest1( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
 
   featureAggregator->Print( std::cout );
 
@@ -141,18 +126,9 @@ int itkWeightedSumFeatureAggregatorTest1( int argc, char * argv [] )
   //
   featureAggregator->AddWeight( 13.0 );
 
-  try
-    {
-    featureAggregator->Update();
-    std::cerr << "Failure to produce expected exception" << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cout << "Caught expected exception " << std::endl;
-    std::cout << excp << std::endl;
-    }
+  TRY_EXPECT_EXCEPTION( featureAggregator->Update() );
 
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

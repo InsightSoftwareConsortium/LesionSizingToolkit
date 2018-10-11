@@ -29,16 +29,19 @@
 #include "itkSigmoidFeatureGenerator.h"
 #include "itkFastMarchingSegmentationModule.h"
 #include "itkMinimumFeatureAggregator.h"
+#include "itkMinimumFeatureAggregator.h"
+#include "itkTestingMacros.h"
+
 
 int itkLesionSegmentationMethodTest4( int argc, char * argv [] )
 {
-
   if( argc < 3 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << "\n\tlandmarksFile\n\tinputImage\n\toutputImage ";
-    std::cerr << "\n\tstopping time for fast marching";
-    std::cerr << "\n\tdistance from seeds for fast marching" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " landmarksFile inputImage outputImage";
+    std::cerr << " stoppingValue";
+    std::cerr << " distanceFromSeeds" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -53,15 +56,7 @@ int itkLesionSegmentationMethodTest4( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[2] );
 
-  try
-    {
-    inputImageReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
 
 
   using MethodType = itk::LesionSegmentationMethod< Dimension >;
@@ -84,7 +79,7 @@ int itkLesionSegmentationMethodTest4( int argc, char * argv [] )
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
 
   using CannyEdgesFeatureGeneratorType = itk::CannyEdgesFeatureGenerator< Dimension >;
-  CannyEdgesFeatureGeneratorType::Pointer  cannyEdgesGenerator = CannyEdgesFeatureGeneratorType::New();
+  CannyEdgesFeatureGeneratorType::Pointer cannyEdgesGenerator = CannyEdgesFeatureGeneratorType::New();
 
   using FeatureAggregatorType = itk::MinimumFeatureAggregator< Dimension >;
   FeatureAggregatorType::Pointer featureAggregator = FeatureAggregatorType::New();
@@ -129,11 +124,22 @@ int itkLesionSegmentationMethodTest4( int argc, char * argv [] )
   using SegmentationModuleType = itk::FastMarchingSegmentationModule< Dimension >;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
 
-  const double stoppingTime = (argc > 4) ? atof( argv[4] ) : 10.0;
-  const double distanceFromSeeds = (argc > 5) ? atof( argv[5] ) : 5.0;
-
+  double stoppingTime = 10.0;
+  if( argc > 4 )
+    {
+    stoppingTime = std::stod( argv[4] );
+    }
   segmentationModule->SetStoppingValue( stoppingTime );
+  TEST_SET_GET_VALUE( stoppingTime, segmentationModule->GetStoppingValue() );
+
+  double distanceFromSeeds = 5.0;
+  if( argc > 5 )
+    {
+    distanceFromSeeds = std::stod( argv[5] );
+    }
   segmentationModule->SetDistanceFromSeeds( distanceFromSeeds );
+  TEST_SET_GET_VALUE( distanceFromSeeds, segmentationModule->GetDistanceFromSeeds() );
+
 
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
@@ -142,11 +148,13 @@ int itkLesionSegmentationMethodTest4( int argc, char * argv [] )
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName( argv[1] );
-  landmarksReader->Update();
+
+  TRY_EXPECT_NO_EXCEPTION( landmarksReader->Update() );
+
 
   lesionSegmentationMethod->SetInitialSegmentation( landmarksReader->GetOutput() );
 
-  lesionSegmentationMethod->Update();
+  TRY_EXPECT_NO_EXCEPTION( lesionSegmentationMethod->Update() );
 
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
@@ -167,20 +175,13 @@ int itkLesionSegmentationMethodTest4( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
 
   segmentationModule->Print( std::cout );
 
   std::cout << "Name of class " << segmentationModule->GetNameOfClass() << std::endl;
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

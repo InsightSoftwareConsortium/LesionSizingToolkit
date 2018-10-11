@@ -18,15 +18,16 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkDescoteauxSheetnessFeatureGenerator.h"
+#include "itkTestingMacros.h"
 
 
 int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv [] )
 {
-
   if( argc < 5 )
     {
-    std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage (bright=1/dark=0) sigma numberOfScales [sheetness bloobiness noise ]" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage outputImage (bright=1/dark=0) sigma numberOfScales [sheetness bloobiness noise ]" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -41,16 +42,7 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
 
   inputImageReader->SetFileName( argv[1] );
 
-  try
-    {
-    inputImageReader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
-
+  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
 
   using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -64,7 +56,11 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
 
   using AggregatorType = itk::MaximumFeatureAggregator< Dimension >;
 
-  AggregatorType::Pointer  featureAggregator = AggregatorType::New();
+  AggregatorType::Pointer featureAggregator = AggregatorType::New();
+
+  EXERCISE_BASIC_OBJECT_METHODS( featureAggregator,
+    MaximumFeatureAggregator,
+    UnaryFunctorImageFilter );
 
   using DescoteauxSheetnessFeatureGeneratorType = itk::DescoteauxSheetnessFeatureGenerator< Dimension >;
   using SpatialObjectType = DescoteauxSheetnessFeatureGeneratorType::SpatialObjectType;
@@ -74,32 +70,45 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
   FeatureGeneratorArray  featureGeneratorArray;
 
   unsigned int octave = 1;
-  double smallestSigma = atof( argv[4] );
+  double smallestSigma = std::stod( argv[4] );
 
-  const unsigned int numberOfScales = atoi( argv[5] );
+  const unsigned int numberOfScales = std::stoi( argv[5] );
 
-  for( unsigned int k = 0; k < numberOfScales; k++ )
+  for( unsigned int k = 0; k < numberOfScales; ++k )
     {
-    DescoteauxSheetnessFeatureGeneratorType::Pointer  featureGenerator = DescoteauxSheetnessFeatureGeneratorType::New();
+    DescoteauxSheetnessFeatureGeneratorType::Pointer featureGenerator = DescoteauxSheetnessFeatureGeneratorType::New();
     featureGeneratorArray.push_back( featureGenerator );
 
-    featureGenerator->SetDetectBrightSheets( atoi( argv[3] ) );
-    featureGenerator->SetSigma( smallestSigma * octave );
+    bool detectBrightSheets = std::stoi( argv[3] );
+    TEST_SET_GET_BOOLEAN( featureGenerator, DetectBrightSheets, detectBrightSheets );
 
+    double sigma = smallestSigma * octave;
+    featureGenerator->SetSigma( sigma );
+    TEST_SET_GET_VALUE( sigma, featureGenerator->GetSigma() );
+
+    double sheetnessNormalization = 0.5;
     if( argc > 6 )
       {
-      featureGenerator->SetSheetnessNormalization( atof( argv[6] ) );
+      sheetnessNormalization = std::stod( argv[6] );
       }
+    featureGenerator->SetSheetnessNormalization( sheetnessNormalization );
+    //TEST_SET_GET_VALUE( sheetnessNormalization, featureGenerator->GetSheetnessNormalization() );
 
+    double bloobinessNormalization = 2.0;
     if( argc > 7 )
       {
-      featureGenerator->SetBloobinessNormalization( atof( argv[7] ) );
+      bloobinessNormalization = std::stod( argv[7] );
       }
+    featureGenerator->SetBloobinessNormalization( bloobinessNormalization );
+    //TEST_SET_GET_VALUE( bloobinessNormalization, featureGenerator->GetBloobinessNormalization() );
 
+    double noiseNormalization = 1.0;
     if( argc > 8 )
       {
-      featureGenerator->SetNoiseNormalization( atof( argv[8] ) );
+      noiseNormalization = std::stod( argv[8] );
       }
+    featureGenerator->SetNoiseNormalization( noiseNormalization );
+    //TEST_SET_GET_VALUE( noiseNormalization, featureGenerator->GetNoiseNormalization() );
 
     octave *= 2;
 
@@ -107,15 +116,7 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
     featureAggregator->AddFeatureGenerator( featureGenerator );
     }
 
-  try
-    {
-    featureAggregator->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( featureAggregator->Update() );
 
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
@@ -134,17 +135,9 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
+  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
 
-  featureAggregator->Print( std::cout );
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }
