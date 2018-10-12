@@ -29,6 +29,8 @@
 #include "itkBSplineInterpolateImageFunction.h"
 #include "itkWindowedSincInterpolateImageFunction.h"
 
+#include <string>
+
 
 int main( int argc, char * argv[] )
 {
@@ -100,7 +102,7 @@ int main( int argc, char * argv[] )
   LinearInterpolatorType::Pointer linearInterpolator = LinearInterpolatorType::New();
 
 
-  switch( atoi( argv[4] ) )
+  switch( std::stoi( argv[4] ) )
     {
     case 0:
       resampler->SetInterpolator( bsplineInterpolator );
@@ -127,7 +129,7 @@ int main( int argc, char * argv[] )
   ImageType::SpacingType outputSpacing;
 
   const double finalSpacing = (strcmp( argv[3], "-minspacing" ) == 0)
-                                        ? minSpacing : atof( argv[3] );
+                                        ? minSpacing : std::stod( argv[3] );
 
   outputSpacing[0] = finalSpacing;
   outputSpacing[1] = finalSpacing;

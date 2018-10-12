@@ -31,6 +31,8 @@
 #include "itkEllipseSpatialObject.h"
 #include "itkImage.h"
 
+#include <string>
+
 
 int main( int argc, char ** argv )
 {
@@ -119,7 +121,7 @@ int main( int argc, char ** argv )
 
   InputImageType::IndexType originIndex;
 
-  const double radius = atof( argv[4] );
+  const double radius = std::stod( argv[4] );
 
   originIndex[0] = centralIndex[0] - radius / spacing[0];
   originIndex[1] = centralIndex[1] - radius / spacing[1];

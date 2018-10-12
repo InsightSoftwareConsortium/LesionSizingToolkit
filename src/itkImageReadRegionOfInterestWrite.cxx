@@ -29,6 +29,8 @@
 #include "itkRegionOfInterestImageFilter.h"
 #include "itkImage.h"
 
+#include <string>
+
 
 int main( int argc, char ** argv )
 {
@@ -61,14 +63,14 @@ int main( int argc, char ** argv )
   FilterType::Pointer filter = FilterType::New();
 
   OutputImageType::IndexType start;
-  start[0] = atoi( argv[3] );
-  start[1] = atoi( argv[4] );
-  start[2] = atoi( argv[5] );
+  start[0] = std::stoi( argv[3] );
+  start[1] = std::atoi( argv[4] );
+  start[2] = std::atoi( argv[5] );
 
   OutputImageType::SizeType size;
-  size[0] = atoi( argv[6] );
-  size[1] = atoi( argv[7] );
-  size[2] = atoi( argv[8] );
+  size[0] = std::atoi( argv[6] );
+  size[1] = std::atoi( argv[7] );
+  size[2] = std::atoi( argv[8] );
 
 
   OutputImageType::RegionType desiredRegion;
