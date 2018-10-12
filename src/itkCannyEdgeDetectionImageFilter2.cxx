@@ -29,6 +29,8 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkCannyEdgeDetectionRecursiveGaussianImageFilter.h"
 
+#include <string>
+
 
 int main(int argc, char* argv[])
 {
@@ -51,17 +53,17 @@ int main(int argc, char* argv[])
 
   if( argc > 3 )
     {
-    sigma = atof( argv[3] );
+    sigma = std::stod( argv[3] );
     }
 
   if( argc > 4 )
     {
-    upperThreshold = atof( argv[4] );
+    upperThreshold = std::stod( argv[4] );
     }
 
   if( argc > 5 )
     {
-    lowerThreshold = atof( argv[5] );
+    lowerThreshold = std::stod( argv[5] );
     }
 
   using InputPixelType = signed short;

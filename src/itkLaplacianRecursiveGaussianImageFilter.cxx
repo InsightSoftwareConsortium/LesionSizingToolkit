@@ -24,6 +24,8 @@
 #include "itkImageFileWriter.h"
 #include "itkLaplacianRecursiveGaussianImageFilter.h"
 
+#include <string>
+
 
 int main( int argc, char * argv[] )
 {
@@ -59,7 +61,7 @@ int main( int argc, char * argv[] )
 
   laplacian->SetInput( reader->GetOutput() );
 
-  const double sigma = atof( argv[3] );
+  const double sigma = std::stod( argv[3] );
 
   laplacian->SetSigma( sigma );
 
