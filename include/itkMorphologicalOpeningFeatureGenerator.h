@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    itkMorphologicalOpenningFeatureGenerator.h
+  Module:    itkMorphologicalOpeningFeatureGenerator.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef itkMorphologicalOpenningFeatureGenerator_h
-#define itkMorphologicalOpenningFeatureGenerator_h
+#ifndef itkMorphologicalOpeningFeatureGenerator_h
+#define itkMorphologicalOpeningFeatureGenerator_h
 
 #include "itkFeatureGenerator.h"
 #include "itkImage.h"
@@ -29,7 +29,7 @@
 namespace itk
 {
 
-/** \class MorphologicalOpenningFeatureGenerator
+/** \class MorphologicalOpeningFeatureGenerator
  * \brief Generates a feature image based on intensity and removes small pieces from it.
  *
  * This feature generator thresholds the input image, runs an Openning
@@ -43,13 +43,13 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_TEMPLATE_EXPORT MorphologicalOpenningFeatureGenerator : public FeatureGenerator<NDimension>
+class ITK_TEMPLATE_EXPORT MorphologicalOpeningFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(MorphologicalOpenningFeatureGenerator);
+  ITK_DISALLOW_COPY_AND_ASSIGN(MorphologicalOpeningFeatureGenerator);
 
   /** Standard class type alias. */
-  using Self = MorphologicalOpenningFeatureGenerator;
+  using Self = MorphologicalOpeningFeatureGenerator;
   using Superclass = FeatureGenerator<NDimension>;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
@@ -58,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MorphologicalOpenningFeatureGenerator, FeatureGenerator);
+  itkTypeMacro(MorphologicalOpeningFeatureGenerator, FeatureGenerator);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;
@@ -85,8 +85,8 @@ public:
   itkGetMacro( LungThreshold, InputPixelType );
 
 protected:
-  MorphologicalOpenningFeatureGenerator();
-  ~MorphologicalOpenningFeatureGenerator() override;
+  MorphologicalOpeningFeatureGenerator();
+  ~MorphologicalOpeningFeatureGenerator() override;
   void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
@@ -131,7 +131,7 @@ private:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkMorphologicalOpenningFeatureGenerator.hxx"
+# include "itkMorphologicalOpeningFeatureGenerator.hxx"
 #endif
 
 #endif

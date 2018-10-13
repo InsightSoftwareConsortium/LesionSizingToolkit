@@ -37,7 +37,7 @@ itkMaximumFeatureAggregatorTest1.cxx
 itkMaximumFeatureAggregatorTest2.cxx
 itkMinimumFeatureAggregatorTest1.cxx
 itkMinimumFeatureAggregatorTest2.cxx
-itkMorphologicalOpenningFeatureGeneratorTest1.cxx
+itkMorphologicalOpeningFeatureGeneratorTest1.cxx
 itkRegionCompetitionImageFilterTest1.cxx
 itkRegionGrowingSegmentationModuleTest1.cxx
 itkSatoLocalStructureFeatureGeneratorTest1.cxx
@@ -185,10 +185,10 @@ itk_add_test(NAME itkLungWallFeatureGeneratorTest1
   -400.0
  )
 
-itk_add_test(NAME itkMorphologicalOpenningFeatureGeneratorTest1
-  COMMAND LesionSizingToolkitTestDriver itkMorphologicalOpenningFeatureGeneratorTest1
+itk_add_test(NAME itkMorphologicalOpeningFeatureGeneratorTest1
+  COMMAND LesionSizingToolkitTestDriver itkMorphologicalOpeningFeatureGeneratorTest1
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
-  ${TEMP}/MorphologicalOpenningFeatureGeneratorTest1_1.mha
+  ${TEMP}/MorphologicalOpeningFeatureGeneratorTest1_1.mha
   -400.0
  )
 
