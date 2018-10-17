@@ -1,32 +1,27 @@
-set(DOCUMENTATION "This module contains a collection of classes for performing
-measurement of lesions. Its clinical motivation is the study of cancerous lung
-lesions. However, the functionalities developed here are usable in a wider
-range of applications. The Lesion Sizing Toolkit is built upon ITK and adds to
-it specific classes for computing image features that are then combined into a
-detection and measurement layer.")
+# the top-level README is used for describing this module, just
+# re-used it for documentation here
+get_filename_component(MY_CURRENT_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+file(READ "${MY_CURRENT_DIR}/README.rst" DOCUMENTATION)
 
+# itk_module() defines the module dependencies in LesionSizingToolkit
+# The testing module in LesionSizingToolkit depends on ITKTestKernel
+# By convention those modules outside of ITK are not prefixed with
+# ITK.
+
+# define the dependencies of the include module and the tests
 itk_module(LesionSizingToolkit
- DEPENDS
-   ITKImageFeature
-   ITKLevelSets
-   ITKStatistics
-   ITKIOSpatialObjects
-   ITKRegionGrowing
-   ITKLabelVoting
-   ITKMathematicalMorphology
-   ITKIOBruker
-   ITKIOGDCM
-   ITKIOMeta
-   ITKIOMINC
-   ITKIOGE
-   ITKIOBioRad
-   ITKIOHDF5
-   ITKIOLSM
-   ITKIOMRC
-   ITKIOStimulate
-   ITKVtkGlue
-   ITKTestKernel #to handle IO in src
- EXCLUDE_FROM_DEFAULT
- DESCRIPTION
-   "${DOCUMENTATION}"
+  DEPENDS
+    ITKImageFeature
+    ITKLevelSets
+    ITKStatistics
+    ITKRegionGrowing
+    ITKLabelVoting
+    ITKMathematicalMorphology
+    ITKImageIO
+    ITKVtkGlue
+  TEST_DEPENDS
+    ITKTestKernel
+  EXCLUDE_FROM_DEFAULT
+  DESCRIPTION
+    "${DOCUMENTATION}"
 )
