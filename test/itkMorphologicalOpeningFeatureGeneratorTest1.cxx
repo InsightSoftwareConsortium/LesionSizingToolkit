@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Lesion Sizing Toolkit
-  Module:    itkMorphologicalOpenningFeatureGeneratorTest1.cxx
+  Module:    itkMorphologicalOpeningFeatureGeneratorTest1.cxx
 
   Copyright (c) Kitware Inc. 
   All rights reserved.
@@ -13,14 +13,14 @@
 
 =========================================================================*/
 
-#include "itkMorphologicalOpenningFeatureGenerator.h"
+#include "itkMorphologicalOpeningFeatureGenerator.h"
 #include "itkImage.h"
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 
-int itkMorphologicalOpenningFeatureGeneratorTest1( int argc, char * argv [] )
+int itkMorphologicalOpeningFeatureGeneratorTest1( int argc, char * argv [] )
 {
 
   if( argc < 3 )
@@ -58,7 +58,7 @@ int itkMorphologicalOpenningFeatureGeneratorTest1( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  using FeatureGeneratorType = itk::MorphologicalOpenningFeatureGenerator< Dimension >;
+  using FeatureGeneratorType = itk::MorphologicalOpeningFeatureGenerator< Dimension >;
   using SpatialObjectType = FeatureGeneratorType::SpatialObjectType;
 
   FeatureGeneratorType::Pointer  featureGenerator = FeatureGeneratorType::New();
