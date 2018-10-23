@@ -15,7 +15,7 @@ setup(
     name='lesionsizingtoolkit',
     version='0.0.1',
     author='Xiao Xiao Liu',
-    author_email='xiaoxiao.liu@kitware.com',
+    author_email='itk+community@discourse.itk.org',
     packages=['itk'],
     package_dir={'itk': 'itk'},
     download_url=r'https://github.com/InsightSoftwareConsortium/LesionSizingToolkit',
