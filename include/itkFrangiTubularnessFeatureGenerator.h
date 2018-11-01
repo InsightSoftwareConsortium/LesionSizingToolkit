@@ -119,7 +119,7 @@ private:
   using EigenValueImageType = Image< EigenValueArrayType, Dimension >;
 
   using EigenAnalysisFilterType = SymmetricEigenAnalysisImageFilter< HessianImageType, EigenValueImageType >;
- 
+
   using SheetnessFilterType = FrangiTubularnessImageFilter< EigenValueImageType, OutputImageType >;
 
   typename HessianFilterType::Pointer             m_HessianFilter;

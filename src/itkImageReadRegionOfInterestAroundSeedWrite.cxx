@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -59,11 +59,11 @@ int main( int argc, char ** argv )
   using ReaderType = itk::ImageFileReader< InputImageType  >;
   using WriterType = itk::ImageFileWriter< OutputImageType >;
 
-  using FilterType = itk::RegionOfInterestImageFilter< InputImageType, 
+  using FilterType = itk::RegionOfInterestImageFilter< InputImageType,
                                             OutputImageType >;
 
   using LandmarksReaderType = itk::LandmarksReader< Dimension >;
-  
+
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName( argv[3] );
@@ -100,16 +100,16 @@ int main( int argc, char ** argv )
   writer->SetInput( filter->GetOutput() );
   writer->UseCompressionOn();
 
-  try 
-    { 
-    reader->Update(); 
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cerr << "ExceptionObject caught !" << std::endl; 
-    std::cerr << err << std::endl; 
+  try
+    {
+    reader->Update();
+    }
+  catch( itk::ExceptionObject & err )
+    {
+    std::cerr << "ExceptionObject caught !" << std::endl;
+    std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    } 
+    }
 
   const InputImageType * inputImage = reader->GetOutput();
 
@@ -137,26 +137,26 @@ int main( int argc, char ** argv )
 
   desiredRegion.SetIndex( originIndex );
   desiredRegion.SetSize( regionSize );
-  
+
   desiredRegion.PadByRadius( 2 );
 
-  desiredRegion.Crop( inputImage->GetBufferedRegion() ); 
+  desiredRegion.Crop( inputImage->GetBufferedRegion() );
 
   filter->SetRegionOfInterest( desiredRegion );
   std::cout << "Desired region: " << desiredRegion << std::endl;
   std::cout << "ImageLargestPossibleRegion: " << inputImage->GetLargestPossibleRegion() << std::endl;
   std::cout << "Seed is at : " << seedPoint << " Index: " << centralIndex << std::endl;
 
-  try 
-    { 
-    writer->Update(); 
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cerr << "ExceptionObject caught !" << std::endl; 
-    std::cerr << err << std::endl; 
+  try
+    {
+    writer->Update();
+    }
+  catch( itk::ExceptionObject & err )
+    {
+    std::cerr << "ExceptionObject caught !" << std::endl;
+    std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    } 
+    }
 
   return EXIT_SUCCESS;
 }

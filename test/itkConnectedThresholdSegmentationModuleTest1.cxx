@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkConnectedThresholdSegmentationModuleTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -44,17 +44,17 @@ int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
   using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
 
   using LandmarksReaderType = itk::LandmarksReader< Dimension >;
-  
+
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName( argv[1] );
   landmarksReader->Update();
- 
+
   FeatureReaderType::Pointer featureReader = FeatureReaderType::New();
 
   featureReader->SetFileName( argv[2] );
 
-  try 
+  try
     {
     featureReader->Update();
     }
@@ -66,7 +66,7 @@ int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
 
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-  
+
   using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
   using FeatureSpatialObjectType = SegmentationModuleType::FeatureSpatialObjectType;
   using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
@@ -120,7 +120,7 @@ int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
 
-  OutputSpatialObjectType::ConstPointer outputObject = 
+  OutputSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -131,7 +131,7 @@ int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
   writer->SetInput( outputImage );
 
 
-  try 
+  try
     {
     writer->Update();
     }
@@ -145,6 +145,6 @@ int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
   segmentationModule->Print( std::cout );
 
   std::cout << "Class name = " << segmentationModule->GetNameOfClass() << std::endl;
-  
+
   return EXIT_SUCCESS;
 }

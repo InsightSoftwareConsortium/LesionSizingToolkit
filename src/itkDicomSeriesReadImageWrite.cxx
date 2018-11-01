@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,7 +39,7 @@ int main( int argc, char* argv[] )
   if( argc < 3 )
     {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << " DicomDirectory  outputFileName  [seriesName] [-IgnoreDirection]" 
+    std::cerr << argv[0] << " DicomDirectory  outputFileName  [seriesName] [-IgnoreDirection]"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -54,7 +54,7 @@ int main( int argc, char* argv[] )
 
   using ImageIOType = itk::GDCMImageIO;
   ImageIOType::Pointer dicomIO = ImageIOType::New();
-  
+
   reader->SetImageIO( dicomIO );
 
   using NamesGeneratorType = itk::GDCMSeriesFileNames;
@@ -64,7 +64,7 @@ int main( int argc, char* argv[] )
   nameGenerator->AddSeriesRestriction("0008|0021" );
 
   nameGenerator->SetDirectory( argv[1] );
-  
+
   try
     {
     std::cout << std::endl << "The directory: " << std::endl;
@@ -73,9 +73,9 @@ int main( int argc, char* argv[] )
     std::cout << std::endl << std::endl;
 
     using SeriesIdContainer = std::vector< std::string >;
-    
+
     const SeriesIdContainer & seriesUID = nameGenerator->GetSeriesUIDs();
-    
+
     auto seriesItr = seriesUID.begin();
     auto seriesEnd = seriesUID.end();
     while( seriesItr != seriesEnd )
@@ -83,7 +83,7 @@ int main( int argc, char* argv[] )
       std::cout << seriesItr->c_str() << std::endl;
       seriesItr++;
       }
-  
+
 
     std::string seriesIdentifier;
     seriesIdentifier = seriesUID.begin()->c_str();
@@ -99,7 +99,7 @@ int main( int argc, char* argv[] )
     FileNamesContainer fileNames;
 
     fileNames = nameGenerator->GetFileNames( seriesIdentifier );
- 
+
     FileNamesContainer::const_iterator  fitr = fileNames.begin();
     FileNamesContainer::const_iterator  fend = fileNames.end();
 
@@ -139,7 +139,7 @@ int main( int argc, char* argv[] )
 
     using WriterType = itk::ImageFileWriter< ImageType >;
     WriterType::Pointer writer = WriterType::New();
-    
+
     writer->SetFileName( argv[2] );
     writer->UseCompressionOn();
     writer->SetInput( image );

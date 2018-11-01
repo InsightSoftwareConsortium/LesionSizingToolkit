@@ -9,8 +9,8 @@
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     std::cerr << argv[0] << " inputImage outputImage [sigma upperThrehold lowerThreshold]" << std::endl;
     return EXIT_FAILURE;
     }
-   
+
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
@@ -103,34 +103,34 @@ int main(int argc, char* argv[])
   writer->SetInput( cannyFilter->GetOutput() );
   writer->UseCompressionOn();
 
-  try 
+  try
     {
     writer->Update();
     }
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "ExceptionObject caught !" << std::endl; 
-    std::cout << err << std::endl; 
+  catch( itk::ExceptionObject & err )
+    {
+    std::cout << "ExceptionObject caught !" << std::endl;
+    std::cout << err << std::endl;
     return EXIT_FAILURE;
-    } 
+    }
 
   if( argc > 6 )
     {
     writer->SetInput( cannyFilter->GetNonMaximumSuppressionImage() );
     writer->SetFileName( argv[6] );
 
-    try 
+    try
       {
       writer->Update();
       }
-    catch( itk::ExceptionObject & err ) 
-      { 
-      std::cout << "ExceptionObject caught !" << std::endl; 
-      std::cout << err << std::endl; 
+    catch( itk::ExceptionObject & err )
+      {
+      std::cout << "ExceptionObject caught !" << std::endl;
+      std::cout << err << std::endl;
       return EXIT_FAILURE;
-      } 
+      }
     }
-  
+
 
   return EXIT_SUCCESS;
 }

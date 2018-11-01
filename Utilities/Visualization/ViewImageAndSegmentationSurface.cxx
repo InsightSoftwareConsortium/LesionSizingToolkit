@@ -9,8 +9,8 @@
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -104,7 +104,7 @@ void ConnectPipelines(VTK_Exporter* exporter, ITK_Importer importer)
  * well.
  */
 int main(int argc, char * argv [] )
-{  
+{
 
   // Load a scalar image and a segmentation mask and display the
   // scalar image with the contours of the mask overlaid on it.
@@ -114,11 +114,11 @@ int main(int argc, char * argv [] )
     std::cerr << "Missing parameters" << std::endl;
     std::cerr << "Usage: " << argv[0] << " imageFileName maskFileName";
     std::cerr << " [isocontourValue] [representation:0=surface/1=wireframe]";
-    std::cerr << " [outputSurface.stl]"; 
+    std::cerr << " [outputSurface.stl]";
     std::cerr << std::endl;
     return 1;
     }
-  
+
   try
     {
     using PixelType = signed short;
@@ -129,7 +129,7 @@ int main(int argc, char * argv [] )
     using ImageType = itk::Image< PixelType, Dimension >;
 
     using MaskImageType = itk::Image< MaskPixelType, Dimension >;
-    
+
     using ReaderType = itk::ImageFileReader< ImageType >;
 
     using MaskReaderType = itk::ImageFileReader< MaskImageType >;
@@ -142,7 +142,7 @@ int main(int argc, char * argv [] )
     maskReader->SetFileName( argv[2] );
     maskReader->Update();
 
-    
+
     using ExportFilterType = itk::VTKImageExport< ImageType >;
     using MaskExportFilterType = itk::VTKImageExport< MaskImageType >;
 
@@ -156,13 +156,13 @@ int main(int argc, char * argv [] )
     // itk::VTKImageExport instance.
     VTK_CREATE( vtkImageImport, vtkImporter1 );
     ConnectPipelines(itkExporter1, vtkImporter1.GetPointer() );
-    
+
     VTK_CREATE( vtkImageImport, vtkImporter2 );
     ConnectPipelines(itkExporter2, vtkImporter2.GetPointer() );
-    
+
 
     vtkImporter1->Update();
-     
+
     //------------------------------------------------------------------------
     // VTK pipeline.
     //------------------------------------------------------------------------
@@ -176,7 +176,7 @@ int main(int argc, char * argv [] )
     renWin->SetSize(600, 600);
     renWin->AddRenderer(renderer);
     iren->SetRenderWindow(renWin);
-    
+
 
     // use cell picker for interacting with the image orthogonal views.
     //
@@ -186,7 +186,7 @@ int main(int argc, char * argv [] )
 
     //assign default props to the ipw's texture plane actor
     VTK_CREATE(vtkProperty , ipwProp);
-     
+
 
     // Create 3 orthogonal view using the ImagePlaneWidget
     //
@@ -242,10 +242,10 @@ int main(int argc, char * argv [] )
 
     xImagePlaneWidget->SetInteractor( iren );
     xImagePlaneWidget->On();
-     
+
     yImagePlaneWidget->SetInteractor( iren );
     yImagePlaneWidget->On();
-     
+
     zImagePlaneWidget->SetInteractor( iren );
     zImagePlaneWidget->On();
 
@@ -268,7 +268,7 @@ int main(int argc, char * argv [] )
       contourValue = atoi( argv[3] );
       }
 
-    contour->SetValue( 0, contourValue ); 
+    contour->SetValue( 0, contourValue );
 
 
     VTK_CREATE(vtkPolyDataMapper , polyMapper);
@@ -291,9 +291,9 @@ int main(int argc, char * argv [] )
     property->SetRepresentationToSurface();
 
     polyActor->SetProperty( property );
-  
+
     renderer->AddActor( polyActor );
-    
+
 
     if( argc > 4 )
       {

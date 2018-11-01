@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -52,7 +52,7 @@ int itkVotingBinaryHoleFillFloodingImageFilterTest1( int argc, char * argv[] )
   reader->SetFileName( argv[1] );
   writer->SetFileName( argv[2] );
 
-  using ThresholderType = itk::BinaryThresholdImageFilter< 
+  using ThresholderType = itk::BinaryThresholdImageFilter<
     InputImageType, OutputImageType >;
 
   ThresholderType::Pointer thresholder = ThresholderType::New();
@@ -62,8 +62,8 @@ int itkVotingBinaryHoleFillFloodingImageFilterTest1( int argc, char * argv[] )
 
   thresholder->SetOutsideValue(  0 );
   thresholder->SetInsideValue( 255 );
- 
-  using FilterType = itk::VotingBinaryHoleFillFloodingImageFilter< 
+
+  using FilterType = itk::VotingBinaryHoleFillFloodingImageFilter<
     OutputImageType, OutputImageType >;
 
   FilterType::Pointer filter = FilterType::New();
@@ -71,7 +71,7 @@ int itkVotingBinaryHoleFillFloodingImageFilterTest1( int argc, char * argv[] )
   const unsigned int radius = atoi( argv[4] );
 
   OutputImageType::SizeType indexRadius;
-  
+
   indexRadius[0] = radius; // radius along x
   indexRadius[1] = radius; // radius along y
   indexRadius[2] = radius; // radius along z
@@ -101,7 +101,7 @@ int itkVotingBinaryHoleFillFloodingImageFilterTest1( int argc, char * argv[] )
   writer->Update();
 
   std::cout << "Class name " << filter->GetNameOfClass() << std::endl;
-  
+
   filter->Print( std::cout );
 
   std::cout << "Iteration used = " << filter->GetCurrentIterationNumber()     << std::endl;

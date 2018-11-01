@@ -9,8 +9,8 @@
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@
 
 
 int main(int argc, char * argv [] )
-{  
+{
 
   if( argc < 4 )
     {
@@ -39,12 +39,12 @@ int main(int argc, char * argv [] )
     std::cerr << std::endl;
     return 1;
     }
-  
+
   VTK_CREATE( vtkMetaImageReader, imageReader );
 
   imageReader->SetFileName( argv[1] );
   imageReader->Update();
-  
+
   float isoValue = atof( argv[2] );
 
   VTK_CREATE( vtkContourFilter, contourFilter );
@@ -58,7 +58,7 @@ int main(int argc, char * argv [] )
 
 
 
-  std::string surfaceFileNameExtension = 
+  std::string surfaceFileNameExtension =
     vtksys::SystemTools::GetFilenameLastExtension( argv[3] );
 
   if( surfaceFileNameExtension == ".vtk" )

@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkCannyEdgesDistanceFeatureGeneratorTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -47,7 +47,7 @@ int itkCannyEdgesDistanceFeatureGeneratorTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try 
+  try
     {
     reader->Update();
     }
@@ -61,7 +61,7 @@ int itkCannyEdgesDistanceFeatureGeneratorTest1( int argc, char * argv [] )
   using SpatialObjectType = CannyEdgesDistanceFeatureGeneratorType::SpatialObjectType;
 
   CannyEdgesDistanceFeatureGeneratorType::Pointer  featureGenerator = CannyEdgesDistanceFeatureGeneratorType::New();
-  
+
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -122,7 +122,7 @@ int itkCannyEdgesDistanceFeatureGeneratorTest1( int argc, char * argv [] )
     featureGenerator->SetLowerThreshold( atof( argv[5] ) );
     }
 
-  try 
+  try
     {
     featureGenerator->Update();
     }
@@ -135,7 +135,7 @@ int itkCannyEdgesDistanceFeatureGeneratorTest1( int argc, char * argv [] )
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
-  OutputImageSpatialObjectType::ConstPointer outputObject = 
+  OutputImageSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputImageSpatialObjectType * >( feature.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -147,7 +147,7 @@ int itkCannyEdgesDistanceFeatureGeneratorTest1( int argc, char * argv [] )
   writer->UseCompressionOn();
 
 
-  try 
+  try
     {
     writer->Update();
     }
@@ -162,6 +162,6 @@ int itkCannyEdgesDistanceFeatureGeneratorTest1( int argc, char * argv [] )
 
   featureGenerator->Print( std::cout );
 
- 
+
   return EXIT_SUCCESS;
 }

@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkSinglePhaseLevelSetSegmentationModuleTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -27,7 +27,7 @@ int itkSinglePhaseLevelSetSegmentationModuleTest1( int itkNotUsed(argc), char * 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-  
+
   using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
@@ -95,6 +95,6 @@ int itkSinglePhaseLevelSetSegmentationModuleTest1( int itkNotUsed(argc), char * 
   segmentationModule->Print( std::cout );
 
   std::cout << "Class name = " << segmentationModule->GetNameOfClass() << std::endl;
-  
+
   return EXIT_SUCCESS;
 }

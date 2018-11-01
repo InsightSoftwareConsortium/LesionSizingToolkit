@@ -138,7 +138,7 @@ RegionGrowingSegmentationModule<NDimension>
   using IteratorType = ImageRegionIterator< OutputImageType >;
 
   IteratorType itr( image, image->GetBufferedRegion() );
-  
+
   itr.GoToBegin();
 
   //

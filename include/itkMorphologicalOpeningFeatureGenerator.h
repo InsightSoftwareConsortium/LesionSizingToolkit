@@ -34,7 +34,7 @@ namespace itk
  *
  * This feature generator thresholds the input image, runs an Openning
  * Mathematical Morphology Filter and then a Voting Hole Filling filter.
- * The net effect is the elimination of small islands and small holes 
+ * The net effect is the elimination of small islands and small holes
  * from the thresholded image.
  *
  * SpatialObjects are used as inputs and outputs of this class.
@@ -107,7 +107,7 @@ private:
   using ThresholdFilterPointer = typename ThresholdFilterType::Pointer;
 
   using KernelType = BinaryBallStructuringElement< InternalPixelType, Dimension >;
-  using OpenningFilterType = BinaryMorphologicalOpeningImageFilter< 
+  using OpenningFilterType = BinaryMorphologicalOpeningImageFilter<
     InternalImageType, InternalImageType, KernelType >;
   using OpenningFilterPointer = typename OpenningFilterType::Pointer;
 

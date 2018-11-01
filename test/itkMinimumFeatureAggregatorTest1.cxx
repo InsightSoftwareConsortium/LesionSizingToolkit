@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkMinimumFeatureAggregatorTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -44,7 +44,7 @@ int itkMinimumFeatureAggregatorTest1( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[1] );
 
-  try 
+  try
     {
     inputImageReader->Update();
     }
@@ -58,7 +58,7 @@ int itkMinimumFeatureAggregatorTest1( int argc, char * argv [] )
   using AggregatorType = itk::MinimumFeatureAggregator< Dimension >;
 
   AggregatorType::Pointer  featureAggregator = AggregatorType::New();
-  
+
   using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator< Dimension >;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
 
@@ -67,10 +67,10 @@ int itkMinimumFeatureAggregatorTest1( int argc, char * argv [] )
 
   using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator< Dimension >;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
- 
+
   using CannyEdgesFeatureGeneratorType = itk::CannyEdgesFeatureGenerator< Dimension >;
   CannyEdgesFeatureGeneratorType::Pointer  cannyEdgesGenerator = CannyEdgesFeatureGeneratorType::New();
- 
+
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
@@ -113,7 +113,7 @@ int itkMinimumFeatureAggregatorTest1( int argc, char * argv [] )
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
   using OutputImageSpatialObjectType = AggregatorType::OutputImageSpatialObjectType;
-  OutputImageSpatialObjectType::ConstPointer outputObject = 
+  OutputImageSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputImageSpatialObjectType * >( finalFeature.GetPointer() );
 
   using OutputImageType = AggregatorType::OutputImageType;
@@ -126,7 +126,7 @@ int itkMinimumFeatureAggregatorTest1( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-  try 
+  try
     {
     writer->Update();
     }

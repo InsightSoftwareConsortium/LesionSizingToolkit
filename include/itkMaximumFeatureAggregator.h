@@ -24,7 +24,7 @@ namespace itk
 
 /** \class MaximumFeatureAggregator
  * \brief Class for combining multiple features into a single one by computing
- * the pixel-wise maximum. 
+ * the pixel-wise maximum.
  *
  * This class generates a new feature object containing an image that is
  * computed as the pixel-wise maximum of all the input feature images.

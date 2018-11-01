@@ -97,7 +97,7 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
     {
     return this->m_ZeroSetInputImage;
     }
-  
+
   return nullptr;
 }
 
@@ -140,8 +140,8 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
     typename RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
     rescaler->SetInput( outputImage );
     rescaler->SetWindowMinimum( calculator->GetMinimum() );
-    rescaler->SetWindowMaximum( calculator->GetMaximum() ); 
-    rescaler->SetOutputMinimum(  4.0 ); // Note that the values must be [4:-4] here to 
+    rescaler->SetWindowMaximum( calculator->GetMaximum() );
+    rescaler->SetOutputMinimum(  4.0 ); // Note that the values must be [4:-4] here to
     rescaler->SetOutputMaximum( -4.0 ); // make sure that we invert and not just rescale.
     rescaler->InPlaceOn();
     rescaler->Update();

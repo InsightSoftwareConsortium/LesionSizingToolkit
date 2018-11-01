@@ -136,7 +136,7 @@ FeatureAggregator<NDimension>
   while( gitr != gend )
     {
     const unsigned long t = (*gitr)->GetMTime();
-    if (t > mtime) 
+    if (t > mtime)
       {
       mtime = t;
       }

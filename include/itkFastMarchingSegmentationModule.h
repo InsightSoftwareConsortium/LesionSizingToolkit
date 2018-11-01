@@ -29,7 +29,7 @@ namespace itk
  *
  * Takes as input a landmark spatial object and a feature image and produces as
  * output a segmentation of the output level set. Threshold this at 0 and you
- * will get the zero set. 
+ * will get the zero set.
  *
  * \ingroup SpatialObjectFilters
  * \ingroup LesionSizingToolkit

@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkGrayscaleImageSegmentationVolumeEstimatorTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -27,7 +27,7 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
   using VolumeEstimatorType = itk::GrayscaleImageSegmentationVolumeEstimator<Dimension>;
 
   VolumeEstimatorType::Pointer  volumeEstimator = VolumeEstimatorType::New();
-  
+
   using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
@@ -57,13 +57,13 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
   volumeEstimator->SetInput( inputImageSpatialObject );
 
   inputImageSpatialObject->SetImage( image );
- 
+
   InputImageType::SpacingType spacing;
 
   spacing[0] = 0.5;
   spacing[1] = 0.5;
   spacing[2] = 0.8;
-  
+
   image->SetSpacing( spacing );
 
 
@@ -88,7 +88,7 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
   InputImageType::PointType point;
 
   //
-  // Populate the image with a sphere 
+  // Populate the image with a sphere
   //
   InputImageType::PointType center;
 
@@ -102,7 +102,7 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
     {
     index = itr.GetIndex();
     image->TransformIndexToPhysicalPoint( index, point );
-    const double distance = point.EuclideanDistanceTo( center ); 
+    const double distance = point.EuclideanDistanceTo( center );
 
     if( distance > radius )
       {
@@ -137,7 +137,7 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
   writer->Update();
 
   std::cout << "Class name = " << volumeEstimator->GetNameOfClass() << std::endl;
- 
+
   const double pi = atan(1.0) * 4.0;
 
   const double expectedVolume = ( 4.0 / 3.0 ) * pi * ( radius * radius * radius );

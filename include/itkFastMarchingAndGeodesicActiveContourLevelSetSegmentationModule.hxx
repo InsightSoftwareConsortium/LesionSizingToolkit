@@ -76,7 +76,7 @@ FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
   progress->RegisterInternalFilter( this->m_FastMarchingModule, 0.3 );
-  progress->RegisterInternalFilter( 
+  progress->RegisterInternalFilter(
       this->m_GeodesicActiveContourLevelSetModule, 0.7 );
 
   this->m_FastMarchingModule->SetInput( this->GetInput() );

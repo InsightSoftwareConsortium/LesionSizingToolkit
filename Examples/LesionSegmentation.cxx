@@ -241,7 +241,7 @@ int ViewImageAndSegmentationSurface(
   imagePlaneWidget[0]->SetKeyPressActivationValue('x');
   imagePlaneWidget[1]->SetKeyPressActivationValue('y');
   imagePlaneWidget[2]->SetKeyPressActivationValue('z');
-  
+
 
   // Set the background to something grayish
   renderer->SetBackground(0.4392, 0.5020, 0.5647);
@@ -308,7 +308,7 @@ int ViewImageAndSegmentationSurface(
     VTK_CREATE( vtkActor, outlineActor );
     outlineActor->SetMapper(outlineMapper);
     outlineActor->GetProperty()->SetColor(0,1,0);
-    renderer->AddActor(outlineActor); 
+    renderer->AddActor(outlineActor);
     }
 
   std::cout << "Bringing up visualization.." << std::endl;
@@ -318,13 +318,13 @@ int ViewImageAndSegmentationSurface(
 
     double camPos[3][3] = { {1,0,0},{0,-1,0},{0,0,-1} };
     double viewUp[3][3] = { {0,0,1},{0,0,1},{0,-1,0} };
-    
+
     for (unsigned int i = 0; i < 3; i++)
       {
       std::ostringstream os;
-      os << args.GetValueAsString("Screenshot") 
+      os << args.GetValueAsString("Screenshot")
          << "_" << i << ".png" << std::ends;
-      
+
       renderer->GetActiveCamera()->SetPosition(camPos[i]);
       renderer->GetActiveCamera()->SetFocalPoint(0,0,0);
       renderer->GetActiveCamera()->SetViewUp(viewUp[i]);

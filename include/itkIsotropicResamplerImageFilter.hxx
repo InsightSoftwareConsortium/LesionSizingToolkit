@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,7 +22,7 @@
 
 namespace itk
 {
-  
+
 template <typename TInputImage, typename TOutputImage>
 IsotropicResamplerImageFilter<TInputImage, TOutputImage>::
 IsotropicResamplerImageFilter()
@@ -34,13 +34,13 @@ IsotropicResamplerImageFilter()
   this->m_DefaultPixelValue = static_cast< OutputImagePixelType >(0.0);
   this->m_ResampleFilter = ResampleFilterType::New();
 }
-  
+
 template <typename TInputImage, typename TOutputImage>
 IsotropicResamplerImageFilter<TInputImage, TOutputImage>::
 ~IsotropicResamplerImageFilter()
 {
 }
- 
+
 template< typename TInputImage, typename TOutputImage >
 void
 IsotropicResamplerImageFilter< TInputImage, TOutputImage >
@@ -61,7 +61,7 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
     {
     itkExceptionMacro("Missing input image");
     }
-  
+
   const SpacingType & inputSpacing = inputImage->GetSpacing();
 
   SizeType inputSize = inputImage->GetLargestPossibleRegion().GetSize(), finalSize;
@@ -70,7 +70,7 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
     const double dx = inputSize[i] * inputSpacing[i] / m_OutputSpacing[i];
     finalSize[i] = static_cast<SizeValueType>( dx );
     }
-  
+
   typename TOutputImage::RegionType outputLargestPossibleRegion;
   typename TOutputImage::RegionType::IndexType index;
   index.Fill(0);
@@ -102,7 +102,7 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
 
   if (m_OutputSpacing == inputImage->GetSpacing())
     {
-    // No need to resample. Desiered output spacing is the same as the input 
+    // No need to resample. Desiered output spacing is the same as the input
     // spacing. Let's just graft the output and be done with it.
     this->GraftOutput( const_cast< InputImageType * >(this->GetInput()) );
     return;
@@ -139,7 +139,7 @@ IsotropicResamplerImageFilter< TInputImage, TOutputImage >
   this->m_ResampleFilter->SetSize( finalSize );
   this->m_ResampleFilter->SetInput( inputImage );
 
-  progress->RegisterInternalFilter( this->m_ResampleFilter, 1.0 );  
+  progress->RegisterInternalFilter( this->m_ResampleFilter, 1.0 );
 
   this->m_ResampleFilter->Update();
 
@@ -156,7 +156,7 @@ void IsotropicResamplerImageFilter< TInputImage,TOutputImage >
 
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 IsotropicResamplerImageFilter<TInputImage,TOutputImage>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {

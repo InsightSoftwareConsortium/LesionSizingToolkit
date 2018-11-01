@@ -9,8 +9,8 @@
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,7 +38,7 @@
   vtkSmartPointer<type> name = vtkSmartPointer<type>::New()
 
 int main(int argc, char * argv [] )
-{  
+{
 
   // Load a scalar image and a segmentation mask and display the
   // scalar image with the contours of the mask overlaid on it.
@@ -53,7 +53,7 @@ int main(int argc, char * argv [] )
     std::cerr << std::endl;
     return 1;
     }
-  
+
 
   using vtkContourVisualizationModulePointer = vtkSmartPointer< vtkContourVisualizationModule >;
   using ContoursContainer = std::vector< vtkContourVisualizationModulePointer >;
@@ -64,13 +64,13 @@ int main(int argc, char * argv [] )
   imageReader->SetFileName( argv[1] );
   imageReader->Update();
   vtkImageData * inputImage = imageReader->GetOutput();
-  
 
-  // If a landmark file is specified use that as the point to plass the slice 
+
+  // If a landmark file is specified use that as the point to plass the slice
   // around, else use the center.
 
   double seedPoint[3];
-  
+
   if (itksys::SystemTools::FileExists(argv[2]))
     {
     using SpatialObjectReaderType = itk::SpatialObjectReader< 3, unsigned short >;
@@ -101,17 +101,17 @@ int main(int argc, char * argv [] )
 
     const InputSpatialObjectType * landmarkSpatialObject = NULL;
 
-    while( spatialObjectItr != sceneChildren->end() ) 
+    while( spatialObjectItr != sceneChildren->end() )
       {
       std::string objectName = (*spatialObjectItr)->GetTypeName();
       if( objectName == "LandmarkSpatialObject" )
         {
-        landmarkSpatialObject = 
+        landmarkSpatialObject =
           dynamic_cast< const InputSpatialObjectType * >( spatialObjectItr->GetPointer() );
         }
       spatialObjectItr++;
       }
-   
+
     using PointListType = InputSpatialObjectType::PointListType;
     using SpatialObjectPointType = InputSpatialObjectType::SpatialObjectPointType;
     using PointType = SpatialObjectPointType::PointType;
@@ -177,7 +177,7 @@ int main(int argc, char * argv [] )
 
   //
   // NOTE: The following computation assumes that the ZZ component of the
-  // Direction matrix is positive.  
+  // Direction matrix is positive.
   //
   const unsigned int sliceNumber = ( seedPoint[2] - imageOrigin[2] ) / imageSpacing[2];
 
@@ -212,7 +212,7 @@ int main(int argc, char * argv [] )
     newContourModule->SetPlaneOrigin( seedPoint );
     newContourModule->SetPlaneOrientation( vtkContourVisualizationModule::SLICE_ORIENTATION_XY );
     newContourModule->SetSegmentation( segmentationReader->GetOutput() );
- 
+
     newContourModule->Update();
 
     std::cout << "Iso-value used = " << newContourModule->GetIsoValue() << std::endl;
@@ -230,7 +230,7 @@ int main(int argc, char * argv [] )
   renderer->ResetCamera();
   camera->Zoom(1.2);
 
-  if ( produceScreenshot ) 
+  if ( produceScreenshot )
     {
     VTK_CREATE( vtkWindowToImageFilter, windowToImageFilter );
     VTK_CREATE( vtkPNGWriter, screenShotWriter );
@@ -247,7 +247,7 @@ int main(int argc, char * argv [] )
     screenShotWriter->SetInputData( windowToImageFilter->GetOutput() );
 #endif
     screenShotWriter->SetFileName( screenShotFileName.c_str() );
-    
+
     renderWindow->Render();
     screenShotWriter->Write();
 

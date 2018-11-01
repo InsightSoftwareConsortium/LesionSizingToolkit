@@ -27,7 +27,7 @@ namespace itk
 {
 
 /** \class LungWallFeatureGenerator
- * \brief Generates a feature image 
+ * \brief Generates a feature image
  *
  * The typical use of this class would be to generate the feature image needed
  * by a Level Set filter to internally compute its speed image. This

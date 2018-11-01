@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkGrayscaleImageSegmentationVolumeEstimatorTest2.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -39,7 +39,7 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest2( int argc, char * argv [] 
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
   inputImageReader->SetFileName( argv[1] );
 
-  try 
+  try
     {
     inputImageReader->Update();
     }
@@ -84,14 +84,14 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest2( int argc, char * argv [] 
 
   // Check if the file exists. If it does not, let's print out the axis labels
   // right at the top of the file.
-  const bool fileExists = 
+  const bool fileExists =
       itksys::SystemTools::FileExists( outpuFileName.c_str() );
 
   ouputFile.open( outpuFileName.c_str(), std::ios_base::app );
 
   if (!fileExists)
     {
-    ouputFile << "SegmentationMethodID DatasetID ExpectedVolume ComputedVolume " 
+    ouputFile << "SegmentationMethodID DatasetID ExpectedVolume ComputedVolume "
                << "PercentError RatioOfComputedVolumeToExpectedVolume "
                << "ComputedRadius " << std::endl;
     }

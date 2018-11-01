@@ -9,8 +9,8 @@
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@
 
 
 int main(int argc, char * argv [] )
-{  
+{
 
   if( argc < 7 )
     {
@@ -44,18 +44,18 @@ int main(int argc, char * argv [] )
     std::cerr << std::endl;
     return 1;
     }
-  
+
   VTK_CREATE( vtkMetaImageReader, imageReader );
 
   imageReader->SetFileName( argv[1] );
   imageReader->Update();
-  
+
   float isoValue = atof( argv[2] );
 
   VTK_CREATE( vtkContourFilter, contourFilter );
   VTK_CREATE( vtkCleanPolyData, cleanPolyData );
   VTK_CREATE( vtkTriangleFilter, triangleFilter );
-  contourFilter->SetValue( 0, isoValue ); 
+  contourFilter->SetValue( 0, isoValue );
 #if VTK_MAJOR_VERSION <= 5
   contourFilter->SetInput( imageReader->GetOutput() );
   cleanPolyData->SetInput( contourFilter->GetOutput() );
@@ -103,14 +103,14 @@ int main(int argc, char * argv [] )
 
   // Check if the file exists. If it does not, let's print out the axis labels
   // right at the top of the file.
-  const bool fileExists = 
+  const bool fileExists =
       vtksys::SystemTools::FileExists( outpuFileName.c_str() );
 
   ouputFile.open( outpuFileName.c_str(), std::ios_base::app );
 
   if (!fileExists)
     {
-    ouputFile << "SegmentationMethodID DatasetID ExpectedVolume ComputedVolume " 
+    ouputFile << "SegmentationMethodID DatasetID ExpectedVolume ComputedVolume "
                << "PercentError RatioOfComputedVolumeToExpectedVolume "
                << "ComputedRadius " << std::endl;
     }

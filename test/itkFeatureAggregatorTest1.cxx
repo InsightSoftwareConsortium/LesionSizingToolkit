@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkFeatureAggregatorTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -25,7 +25,7 @@
 #include "itkSigmoidFeatureGenerator.h"
 #include "itkConnectedThresholdSegmentationModule.h"
 
-namespace itk 
+namespace itk
 {
 template< unsigned int NDimension>
 class FeatureAggregatorSurrogate : public FeatureAggregator< NDimension >
@@ -50,7 +50,7 @@ public:
 protected:
   FeatureAggregatorSurrogate() {};
   ~FeatureAggregatorSurrogate() override {};
-  void PrintSelf(std::ostream& os, Indent indent) const override 
+  void PrintSelf(std::ostream& os, Indent indent) const override
     {
     this->Superclass::PrintSelf( os, indent );
     }
@@ -98,7 +98,7 @@ private:
 
       dstitr.GoToBegin();
       srcitr.GoToBegin();
-     
+
       while( !srcitr.IsAtEnd() )
         {
         if( dstitr.Get() > srcitr.Get() )
@@ -142,7 +142,7 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[2] );
 
-  try 
+  try
     {
     inputImageReader->Update();
     }
@@ -156,7 +156,7 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
   using AggregatorType = itk::FeatureAggregatorSurrogate< Dimension >;
 
   AggregatorType::Pointer  featureAggregator = AggregatorType::New();
-  
+
   using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator< Dimension >;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
 
@@ -165,7 +165,7 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
 
   using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator< Dimension >;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
- 
+
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
@@ -191,12 +191,12 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
   vesselnessGenerator->SetAlpha2( 2.0 );
- 
+
   sigmoidGenerator->SetAlpha(  1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
- 
+
   using SegmentationModuleType = itk::ConnectedThresholdSegmentationModule< Dimension >;
-  
+
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
 
 
@@ -218,14 +218,14 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
 
   featureAggregator->Update();
 
-  
+
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
   using OutputImageType = SegmentationModuleType::OutputImageType;
 
   SpatialObjectType::ConstPointer segmentation = featureAggregator->GetFeature();
 
-  OutputSpatialObjectType::ConstPointer outputObject = 
+  OutputSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -238,7 +238,7 @@ int itkFeatureAggregatorTest1( int argc, char * argv [] )
   writer->UseCompressionOn();
 
 
-  try 
+  try
     {
     writer->Update();
     }

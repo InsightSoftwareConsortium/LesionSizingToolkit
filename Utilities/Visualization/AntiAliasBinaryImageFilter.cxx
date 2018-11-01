@@ -9,8 +9,8 @@
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
     std::cerr << " [RMS] [numberOfIterations]" << std::endl;
     return EXIT_FAILURE;
     }
-   
+
   const std::string inputFilename  = argv[1];
   const std::string outputFilename = argv[2];
 
@@ -73,17 +73,17 @@ int main(int argc, char* argv[])
   antiAliasFilter->SetMaximumRMSError( maximumRMSError );
   antiAliasFilter->SetNumberOfIterations( numberOfIterations );
   antiAliasFilter->SetNumberOfLayers( 3 );
-  
-  try 
+
+  try
     {
     writer->Update();
     }
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "ExceptionObject caught !" << std::endl; 
-    std::cout << err << std::endl; 
+  catch( itk::ExceptionObject & err )
+    {
+    std::cout << "ExceptionObject caught !" << std::endl;
+    std::cout << err << std::endl;
     return EXIT_FAILURE;
-    } 
+    }
 
   std::cout << "Completed in " << antiAliasFilter->GetNumberOfIterations() << std::endl;
 

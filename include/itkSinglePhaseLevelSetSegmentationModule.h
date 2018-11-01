@@ -104,7 +104,7 @@ public:
   itkSetMacro( InvertOutputIntensities, bool );
   itkGetMacro( InvertOutputIntensities, bool );
   itkBooleanMacro( InvertOutputIntensities );
-  
+
 protected:
   SinglePhaseLevelSetSegmentationModule();
   ~SinglePhaseLevelSetSegmentationModule() override;

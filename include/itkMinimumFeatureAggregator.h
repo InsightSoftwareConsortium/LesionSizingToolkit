@@ -24,7 +24,7 @@ namespace itk
 
 /** \class MinimumFeatureAggregator
  * \brief Class for combining multiple features into a single one by computing
- * the pixel-wise minimum. 
+ * the pixel-wise minimum.
  *
  * This class generates a new feature object containing an image that is
  * computed as the pixel-wise minimum of all the input feature images.

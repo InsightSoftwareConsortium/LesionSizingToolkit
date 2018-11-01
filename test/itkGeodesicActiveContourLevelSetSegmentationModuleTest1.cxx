@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkGeodesicActiveContourLevelSetSegmentationModuleTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -36,7 +36,7 @@ int itkGeodesicActiveContourLevelSetSegmentationModuleTest1( int argc, char * ar
   using SegmentationModuleType = itk::GeodesicActiveContourLevelSetSegmentationModule< Dimension >;
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-  
+
   using InputImageType = SegmentationModuleType::InputImageType;
   using FeatureImageType = SegmentationModuleType::FeatureImageType;
   using OutputImageType = SegmentationModuleType::OutputImageType;
@@ -51,7 +51,7 @@ int itkGeodesicActiveContourLevelSetSegmentationModuleTest1( int argc, char * ar
   inputReader->SetFileName( argv[1] );
   featureReader->SetFileName( argv[2] );
 
-  try 
+  try
     {
     inputReader->Update();
     featureReader->Update();
@@ -75,7 +75,7 @@ int itkGeodesicActiveContourLevelSetSegmentationModuleTest1( int argc, char * ar
 
   segmentationModule->SetInput( inputObject );
   segmentationModule->SetFeature( featureObject );
-   
+
   if (argc > 4)
     {
     segmentationModule->SetAdvectionScaling( atof(argv[4]) );
@@ -99,13 +99,13 @@ int itkGeodesicActiveContourLevelSetSegmentationModuleTest1( int argc, char * ar
     segmentationModule->SetMaximumNumberOfIterations( atof(argv[7]) );
     std::cout << "Setting maximum iterations to " << atof(argv[7]) << std::endl;
     }
-  
+
   segmentationModule->Update();
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
 
-  OutputSpatialObjectType::ConstPointer outputObject = 
+  OutputSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -115,7 +115,7 @@ int itkGeodesicActiveContourLevelSetSegmentationModuleTest1( int argc, char * ar
   writer->SetFileName( argv[3] );
   writer->SetInput( outputImage );
 
-  try 
+  try
     {
     writer->Update();
     }
@@ -129,6 +129,6 @@ int itkGeodesicActiveContourLevelSetSegmentationModuleTest1( int argc, char * ar
   segmentationModule->Print( std::cout );
 
   std::cout << "Class name = " << segmentationModule->GetNameOfClass() << std::endl;
-  
+
   return EXIT_SUCCESS;
 }

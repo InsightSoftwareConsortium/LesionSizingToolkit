@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkLesionSegmentationMethodTest7.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -14,7 +14,7 @@
 =========================================================================*/
 
 // The test runs a shape detection level set from user supplied seed points
-// and then runs the shape detection level set with the results from the 
+// and then runs the shape detection level set with the results from the
 // fast marching to get the final segmentation.
 
 #include "itkLesionSegmentationMethod.h"
@@ -57,7 +57,7 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[2] );
 
-  try 
+  try
     {
     inputImageReader->Update();
     }
@@ -71,7 +71,7 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
   using MethodType = itk::LesionSegmentationMethod< Dimension >;
 
   MethodType::Pointer  lesionSegmentationMethod = MethodType::New();
-  
+
   using ImageMaskSpatialObjectType = itk::ImageMaskSpatialObject< Dimension >;
 
   ImageMaskSpatialObjectType::Pointer regionOfInterest = ImageMaskSpatialObjectType::New();
@@ -86,7 +86,7 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
 
   using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator< Dimension >;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
- 
+
   using FeatureAggregatorType = itk::MinimumFeatureAggregator< Dimension >;
   FeatureAggregatorType::Pointer featureAggregator = FeatureAggregatorType::New();
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
@@ -113,7 +113,7 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
   vesselnessGenerator->SetAlpha2( 2.0 );
   sigmoidGenerator->SetAlpha(  1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
- 
+
   using SegmentationModuleType = itk::FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule< Dimension >;
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
   segmentationModule->SetMaximumRMSError( argc > 4 ? atof(argv[4]) : 0.0002 );
@@ -126,7 +126,7 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
   lesionSegmentationMethod->SetSegmentationModule( segmentationModule );
 
   using LandmarksReaderType = itk::LandmarksReader< Dimension >;
-  
+
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName( argv[1] );
@@ -135,14 +135,14 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
   lesionSegmentationMethod->SetInitialSegmentation( landmarksReader->GetOutput() );
   lesionSegmentationMethod->Update();
 
-  
+
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
   using OutputImageType = SegmentationModuleType::OutputImageType;
 
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
 
-  OutputSpatialObjectType::ConstPointer outputObject = 
+  OutputSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
@@ -152,7 +152,7 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-  try 
+  try
     {
     writer->Update();
     }
@@ -163,12 +163,12 @@ int itkLesionSegmentationMethodTest7( int argc, char * argv [] )
     }
 
 
-  // 
+  //
   // Exercise the exception on the number of feature generators
   //
   lesionSegmentationMethod->AddFeatureGenerator( lungWallGenerator );
 
-  try 
+  try
     {
     lesionSegmentationMethod->Update();
     std::cerr << "Failure to throw expected exception" << std::endl;

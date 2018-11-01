@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkFeatureGeneratorTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -26,7 +26,7 @@ int itkFeatureGeneratorTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
   using SpatialObjectType = FeatureGeneratorType::SpatialObjectType;
 
   FeatureGeneratorType::Pointer  featureGenerator = FeatureGeneratorType::New();
-  
+
   using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
@@ -39,6 +39,6 @@ int itkFeatureGeneratorTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
 
   featureGenerator->Print( std::cout );
 
-  
+
   return EXIT_SUCCESS;
 }

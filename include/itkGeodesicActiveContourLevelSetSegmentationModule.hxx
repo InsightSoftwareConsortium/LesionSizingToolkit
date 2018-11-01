@@ -84,7 +84,7 @@ GeodesicActiveContourLevelSetSegmentationModule<NDimension>
   // Progress reporting - forward events from the fast marching filter.
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( filter, 1.0 );  
+  progress->RegisterInternalFilter( filter, 1.0 );
 
   filter->Update();
 

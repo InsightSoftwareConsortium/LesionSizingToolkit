@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,23 +22,23 @@
 
 namespace itk
 {
-  
+
 /** \class FrangiTubularnessImageFilter
  *
  * \brief Computes a measure of CrestLines from the Hessian Eigenvalues
  *
  * Based on the "Tubularness" measure proposed by Frangi et al.
- * 
+ *
  * \ingroup IntensityImageFilters  Multithreaded
  * \ingroup LesionSizingToolkit
  */
-namespace Function {  
-  
+namespace Function {
+
 template< typename TInput, typename TOutput>
 class Tubularness
 {
 public:
-  Tubularness() 
+  Tubularness()
     {
     m_Alpha  = 0.5; // suggested value in the paper
     m_Beta   = 0.5; // suggested value in the paper;
@@ -72,7 +72,7 @@ public:
   inline TOutput operator()( const TInput & A )
     {
     double tubularness = 0.0;
-    
+
     auto a1 = static_cast<double>( A[0] );
     auto a2 = static_cast<double>( A[1] );
     auto a3 = static_cast<double>( A[2] );
@@ -102,7 +102,7 @@ public:
       double tmpa = a1;
       a1 = a2;
       a2 = tmpa;
-      }   
+      }
 
     if( l2 > l3 )
       {
@@ -113,13 +113,13 @@ public:
       a3 = a2;
       a2 = tmpa;
       }
-    
+
     if( m_BrigthForeground )
       {
       //
       // Reject dark tubes and dark ridges over bright background
       //
-      if( a3 > 0.0 ) 
+      if( a3 > 0.0 )
         {
         return tubularness;
         }
@@ -129,7 +129,7 @@ public:
       //
       // Reject bright tubes and bright ridges over dark background
       //
-      if( a3 < 0.0 ) 
+      if( a3 < 0.0 )
         {
         return tubularness;
         }
@@ -145,9 +145,9 @@ public:
     const double Rb = l1 / vcl_sqrt( l2 * l3 );
     const double Rn = vcl_sqrt( l3*l3 + l2*l2 + l1*l1 );
 
-    tubularness  = ( 1.0 - vcl_exp( - ( Rs * Rs ) / ( 2.0 * m_Alpha * m_Alpha ) ) ); 
-    tubularness *= (       vcl_exp( - ( Rb * Rb ) / ( 2.0 * m_Beta  * m_Beta  ) ) ); 
-    tubularness *= ( 1.0 - vcl_exp( - ( Rn * Rn ) / ( 2.0 * m_Gamma * m_Gamma ) ) ); 
+    tubularness  = ( 1.0 - vcl_exp( - ( Rs * Rs ) / ( 2.0 * m_Alpha * m_Alpha ) ) );
+    tubularness *= (       vcl_exp( - ( Rb * Rb ) / ( 2.0 * m_Beta  * m_Beta  ) ) );
+    tubularness *= ( 1.0 - vcl_exp( - ( Rn * Rn ) / ( 2.0 * m_Gamma * m_Gamma ) ) );
 
     return static_cast<TOutput>( tubularness );
     }
@@ -175,14 +175,14 @@ private:
   double m_Beta;
   double m_Gamma;
   bool   m_BrigthForeground;
-}; 
+};
 }
 
 template <typename TInputImage, typename TOutputImage>
 class ITK_TEMPLATE_EXPORT FrangiTubularnessImageFilter :
     public
-UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                        Function::Tubularness< typename TInputImage::PixelType, 
+UnaryFunctorImageFilter<TInputImage,TOutputImage,
+                        Function::Tubularness< typename TInputImage::PixelType,
                                        typename TOutputImage::PixelType>   >
 {
 public:
@@ -191,9 +191,9 @@ public:
   /** Standard class type alias. */
   using Self = FrangiTubularnessImageFilter;
   using Superclass = UnaryFunctorImageFilter<
-    TInputImage,TOutputImage, 
-    Function::Tubularness< 
-      typename TInputImage::PixelType, 
+    TInputImage,TOutputImage,
+    Function::Tubularness<
+      typename TInputImage::PixelType,
       typename TOutputImage::PixelType> >;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
@@ -202,7 +202,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(FrangiTubularnessImageFilter, 
+  itkTypeMacro(FrangiTubularnessImageFilter,
                UnaryFunctorImageFilter);
 
   /** Set the normalization term for sheetness */

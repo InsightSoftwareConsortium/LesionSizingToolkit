@@ -90,7 +90,7 @@ private:
   using OutputImageType = Image< OutputPixelType, Dimension >;
 
   using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
-  
+
   double    m_OutputSpacing;
 };
 
