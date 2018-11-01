@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program:   Image Analysis Platform 
+  Program:   Image Analysis Platform
   Module:    vtkContourVisualizationModule.h
   Language:  C++
   Date:      $Date$
@@ -55,18 +55,18 @@ public:
   vtkActor * GetActor();
 
   // set the color of the contour
-  void SetContourColor( double r, double g, double b );  
+  void SetContourColor( double r, double g, double b );
 
   // Get contour color
-  void GetContourColor( double &r, double &g, double &b );  
+  void GetContourColor( double &r, double &g, double &b );
 
   // Set the visibility of the contour
-  void SetContourVisibility( int state );  
+  void SetContourVisibility( int state );
 
   // Get the visibility of the contour
-  int GetVisibility(); 
+  int GetVisibility();
 
-  // Get the scalar range of the input image. Returns 
+  // Get the scalar range of the input image. Returns
   // (VTK_DOUBLE_MAX, VTK_DOUBLE_MIN) if no data exists.
   void GetScalarRange(double range[2]);
 
@@ -74,7 +74,7 @@ public:
   double GetIsoValue();
 
   void SetIsoValue(double isovalue);
-  
+
   // Update the contour filter to reflect the current state
   // of the segmentation.
   void Update();

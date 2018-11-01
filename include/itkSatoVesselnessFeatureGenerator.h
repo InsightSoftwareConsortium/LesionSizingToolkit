@@ -30,7 +30,7 @@ namespace itk
 
 /** \class SatoVesselnessFeatureGenerator
  * \brief Generates a feature image by computing the Sato Vesselness measure of
- * the input image. 
+ * the input image.
  *
  * The typical use of this class would be to generate the Vesselness-map needed
  * by a Level Set filter to internally compute its speed image.

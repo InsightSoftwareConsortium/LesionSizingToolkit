@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkConfidenceConnectedSegmentationModuleTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -44,7 +44,7 @@ int itkConfidenceConnectedSegmentationModuleTest1( int argc, char * argv [] )
   using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
 
   using LandmarksReaderType = itk::LandmarksReader< Dimension >;
-  
+
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName( argv[1] );
@@ -54,7 +54,7 @@ int itkConfidenceConnectedSegmentationModuleTest1( int argc, char * argv [] )
 
   featureReader->SetFileName( argv[2] );
 
-  try 
+  try
     {
     featureReader->Update();
     }
@@ -66,7 +66,7 @@ int itkConfidenceConnectedSegmentationModuleTest1( int argc, char * argv [] )
 
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-  
+
   using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
   using FeatureSpatialObjectType = SegmentationModuleType::FeatureSpatialObjectType;
   using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
@@ -93,7 +93,7 @@ int itkConfidenceConnectedSegmentationModuleTest1( int argc, char * argv [] )
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
 
-  OutputSpatialObjectType::ConstPointer outputObject = 
+  OutputSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -103,7 +103,7 @@ int itkConfidenceConnectedSegmentationModuleTest1( int argc, char * argv [] )
   writer->SetFileName( argv[3] );
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
-  try 
+  try
     {
     writer->Update();
     }
@@ -115,7 +115,7 @@ int itkConfidenceConnectedSegmentationModuleTest1( int argc, char * argv [] )
 
   segmentationModule->Print( std::cout );
   std::cout << "Class name = " << segmentationModule->GetNameOfClass() << std::endl;
-  
+
   //
   // Exerciser Get methods
   //

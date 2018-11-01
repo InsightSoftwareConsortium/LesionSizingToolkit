@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkLandmarksReaderTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -36,7 +36,7 @@ int itkLandmarksReaderTest1( int argc, char * argv [] )
   //  Reading the landmarks file with the itkLandmarksReader.
   //
   using LandmarksReaderType = itk::LandmarksReader< Dimension >;
-  
+
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   std::string inputFileName = argv[1];
@@ -85,17 +85,17 @@ int itkLandmarksReaderTest1( int argc, char * argv [] )
 
   const InputSpatialObjectType * landmarkSpatialObject2 = nullptr;
 
-  while( spatialObjectItr != sceneChildren->end() ) 
+  while( spatialObjectItr != sceneChildren->end() )
     {
     std::string objectName = (*spatialObjectItr)->GetTypeName();
     if( objectName == "LandmarkSpatialObject" )
       {
-      landmarkSpatialObject2 = 
+      landmarkSpatialObject2 =
         dynamic_cast< const InputSpatialObjectType * >( spatialObjectItr->GetPointer() );
       }
     spatialObjectItr++;
     }
- 
+
   using PointListType = InputSpatialObjectType::PointListType;
 
   const unsigned int numberOfPoints1 = landmarkSpatialObject1->GetNumberOfPoints();

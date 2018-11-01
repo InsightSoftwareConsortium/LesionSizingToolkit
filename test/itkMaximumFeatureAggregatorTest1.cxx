@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkMaximumFeatureAggregatorTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -44,7 +44,7 @@ int itkMaximumFeatureAggregatorTest1( int argc, char * argv [] )
 
   inputImageReader->SetFileName( argv[2] );
 
-  try 
+  try
     {
     inputImageReader->Update();
     }
@@ -58,7 +58,7 @@ int itkMaximumFeatureAggregatorTest1( int argc, char * argv [] )
   using AggregatorType = itk::MaximumFeatureAggregator< Dimension >;
 
   AggregatorType::Pointer  featureAggregator = AggregatorType::New();
-  
+
   using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator< Dimension >;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
 
@@ -67,7 +67,7 @@ int itkMaximumFeatureAggregatorTest1( int argc, char * argv [] )
 
   using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator< Dimension >;
   SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
- 
+
   featureAggregator->AddFeatureGenerator( lungWallGenerator );
   featureAggregator->AddFeatureGenerator( vesselnessGenerator );
   featureAggregator->AddFeatureGenerator( sigmoidGenerator );
@@ -93,17 +93,17 @@ int itkMaximumFeatureAggregatorTest1( int argc, char * argv [] )
   vesselnessGenerator->SetSigma( 1.0 );
   vesselnessGenerator->SetAlpha1( 0.5 );
   vesselnessGenerator->SetAlpha2( 2.0 );
- 
+
   sigmoidGenerator->SetAlpha(  1.0  );
   sigmoidGenerator->SetBeta( -200.0 );
- 
+
 
   featureAggregator->Update();
 
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
   using OutputImageSpatialObjectType = AggregatorType::OutputImageSpatialObjectType;
-  OutputImageSpatialObjectType::ConstPointer outputObject = 
+  OutputImageSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputImageSpatialObjectType * >( finalFeature.GetPointer() );
 
   using OutputImageType = AggregatorType::OutputImageType;
@@ -117,7 +117,7 @@ int itkMaximumFeatureAggregatorTest1( int argc, char * argv [] )
   writer->UseCompressionOn();
 
 
-  try 
+  try
     {
     writer->Update();
     }

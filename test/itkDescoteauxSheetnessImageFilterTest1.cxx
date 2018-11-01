@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkDescoteauxSheetnessImageFilterTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -45,7 +45,7 @@ int itkDescoteauxSheetnessImageFilterTest1( int argc, char * argv [] )
   using EigenValueArrayType = itk::FixedArray< double, HessianPixelType::Dimension >;
   using EigenValueImageType = itk::Image< EigenValueArrayType, Dimension >;
 
-  using EigenAnalysisFilterType = itk::SymmetricEigenAnalysisImageFilter< 
+  using EigenAnalysisFilterType = itk::SymmetricEigenAnalysisImageFilter<
     HessianImageType, EigenValueImageType >;
 
   using ReaderType = itk::ImageFileReader< InputImageType >;
@@ -60,7 +60,7 @@ int itkDescoteauxSheetnessImageFilterTest1( int argc, char * argv [] )
   using FilterType = itk::DescoteauxSheetnessImageFilter< EigenValueImageType, OutputImageType >;
 
   FilterType::Pointer sheetnessFilter = FilterType::New();
-  
+
   hessian->SetInput( reader->GetOutput() );
   eigen->SetInput( hessian->GetOutput() );
   sheetnessFilter->SetInput( eigen->GetOutput() );
@@ -100,7 +100,7 @@ int itkDescoteauxSheetnessImageFilterTest1( int argc, char * argv [] )
   writer->SetFileName( argv[2] );
   writer->SetInput( sheetnessFilter->GetOutput() );
 
-  try 
+  try
     {
     writer->Update();
     }

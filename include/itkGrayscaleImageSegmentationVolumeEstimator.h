@@ -32,7 +32,7 @@ namespace itk
  *
  * The estimation of the volume is done by the equivalent of rescaling the
  * intensity range to [0:1] and then adding the contributions of all the
- * pixels. 
+ * pixels.
  *
  * The pixels size is, of course, taken into account.
  *

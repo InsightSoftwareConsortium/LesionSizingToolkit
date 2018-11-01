@@ -26,7 +26,7 @@ namespace itk
 {
 
 /** \class FeatureAggregator
- * \brief Class for combining multiple features into a single one. 
+ * \brief Class for combining multiple features into a single one.
  *
  * This class is the base class for specific implementation of feature
  * mixing strategies.
@@ -75,7 +75,7 @@ public:
    * Method for adding a feature generator that will compute the Nth feature to
    * be passed to the segmentation module.
    */
-  void AddFeatureGenerator( FeatureGeneratorType * generator ); 
+  void AddFeatureGenerator( FeatureGeneratorType * generator );
 
   /** Check all feature generators and return consolidate MTime */
   unsigned long GetMTime() const override;

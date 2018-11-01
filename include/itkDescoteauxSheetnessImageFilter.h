@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,14 +22,14 @@
 
 namespace itk
 {
-  
+
 /** \class DescoteauxSheetnessImageFilter
  *
  * \brief Computes a measure of Sheetness from the Hessian Eigenvalues
  *
  * Based on the "Sheetness" measure proposed by Decouteaux et. al.
- * 
- * M.Descoteaux, M.Audette, K.Chinzei, el al.: 
+ *
+ * M.Descoteaux, M.Audette, K.Chinzei, el al.:
  * "Bone enhancement filtering: Application to sinus bone segmentation
  *  and simulation of pituitary surgery."
  *  In: MICCAI.  (2005) 9-16
@@ -37,13 +37,13 @@ namespace itk
  * \ingroup IntensityImageFilters  Multithreaded
  * \ingroup LesionSizingToolkit
  */
-namespace Function {  
-  
+namespace Function {
+
 template< typename TInput, typename TOutput>
 class Sheetness
 {
 public:
-  Sheetness() 
+  Sheetness()
     {
     m_Alpha = 0.5; // suggested value in the paper
     m_Gamma = 0.5; // suggested value in the paper;
@@ -74,7 +74,7 @@ public:
     //
     // Sort the values by their absolute value.
     // At the end of the sorting we should have
-    // 
+    //
     //          l1 <= l2 <= l3
     //
     if( l2 > l3 )
@@ -95,7 +95,7 @@ public:
       double tmpa = a1;
       a1 = a2;
       a2 = tmpa;
-      }   
+      }
 
     if( l2 > l3 )
       {
@@ -106,17 +106,17 @@ public:
       a3 = a2;
       a2 = tmpa;
       }
-    
+
     if( this->m_DetectBrightSheets )
       {
-      if( a3 > 0.0 ) 
+      if( a3 > 0.0 )
         {
         return static_cast<TOutput>( sheetness );
         }
       }
     else
       {
-      if( a3 < 0.0 ) 
+      if( a3 < 0.0 )
         {
         return static_cast<TOutput>( sheetness );
         }
@@ -129,15 +129,15 @@ public:
     if( static_cast<double>( l3 ) < vnl_math::eps )
       {
       return static_cast<TOutput>( sheetness );
-      } 
+      }
 
     const double Rs = l2 / l3;
     const double Rb = vnl_math_abs( l3 + l3 - l2 - l1 ) / l3;
     const double Rn = vcl_sqrt( l3*l3 + l2*l2 + l1*l1 );
 
-    sheetness  =         vcl_exp( - ( Rs * Rs ) / ( 2.0 * m_Alpha * m_Alpha ) ); 
-    sheetness *= ( 1.0 - vcl_exp( - ( Rb * Rb ) / ( 2.0 * m_Gamma * m_Gamma ) ) ); 
-    sheetness *= ( 1.0 - vcl_exp( - ( Rn * Rn ) / ( 2.0 * m_C     * m_C     ) ) ); 
+    sheetness  =         vcl_exp( - ( Rs * Rs ) / ( 2.0 * m_Alpha * m_Alpha ) );
+    sheetness *= ( 1.0 - vcl_exp( - ( Rb * Rb ) / ( 2.0 * m_Gamma * m_Gamma ) ) );
+    sheetness *= ( 1.0 - vcl_exp( - ( Rn * Rn ) / ( 2.0 * m_C     * m_C     ) ) );
 
     return static_cast<TOutput>( sheetness );
     }
@@ -167,14 +167,14 @@ private:
   double    m_Gamma;
   double    m_C;
   bool      m_DetectBrightSheets;
-}; 
+};
 }
 
 template <typename TInputImage, typename TOutputImage>
 class ITK_TEMPLATE_EXPORT DescoteauxSheetnessImageFilter :
     public
-UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                        Function::Sheetness< typename TInputImage::PixelType, 
+UnaryFunctorImageFilter<TInputImage,TOutputImage,
+                        Function::Sheetness< typename TInputImage::PixelType,
                                        typename TOutputImage::PixelType>   >
 {
 public:
@@ -183,9 +183,9 @@ public:
   /** Standard class type alias. */
   using Self = DescoteauxSheetnessImageFilter;
   using Superclass = UnaryFunctorImageFilter<
-    TInputImage,TOutputImage, 
-    Function::Sheetness< 
-      typename TInputImage::PixelType, 
+    TInputImage,TOutputImage,
+    Function::Sheetness<
+      typename TInputImage::PixelType,
       typename TOutputImage::PixelType> >;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
@@ -194,7 +194,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(DescoteauxSheetnessImageFilter, 
+  itkTypeMacro(DescoteauxSheetnessImageFilter,
                UnaryFunctorImageFilter);
 
   /** Set the normalization term for sheetness */

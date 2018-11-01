@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkDescoteauxSheetnessImageFilterTest2.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -44,7 +44,7 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
   using EigenValueArrayType = itk::FixedArray< double, HessianPixelType::Dimension >;
   using EigenValueImageType = itk::Image< EigenValueArrayType, Dimension >;
 
-  using EigenAnalysisFilterType = itk::SymmetricEigenAnalysisImageFilter< 
+  using EigenAnalysisFilterType = itk::SymmetricEigenAnalysisImageFilter<
     HessianImageType, EigenValueImageType >;
 
   using WriterType = itk::ImageFileWriter< OutputImageType >;
@@ -59,7 +59,7 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
   spacing[0] = 0.5;
   spacing[1] = 0.5;
   spacing[2] = 0.5;
-  
+
   inputImage->SetSpacing( spacing );
 
 
@@ -101,9 +101,9 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
 
   InputImageType::IndexType firstIndex;
   firstIndex.Fill(0);
-  std::cout << "First pixel value = " << inputImage->GetPixel(firstIndex) << std::endl; 
+  std::cout << "First pixel value = " << inputImage->GetPixel(firstIndex) << std::endl;
   //
-  // Populate the inputImage with a bright XY plane  
+  // Populate the inputImage with a bright XY plane
   //
   while( !itr.IsAtEnd() )
     {
@@ -115,7 +115,7 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
   using FilterType = itk::DescoteauxSheetnessImageFilter< EigenValueImageType, OutputImageType >;
 
   FilterType::Pointer sheetnessFilter = FilterType::New();
-  
+
   hessian->SetInput( inputImage );
   eigen->SetInput( hessian->GetOutput() );
   sheetnessFilter->SetInput( eigen->GetOutput() );
@@ -155,7 +155,7 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
   writer->SetFileName( argv[1] );
   writer->SetInput( sheetnessFilter->GetOutput() );
 
-  try 
+  try
     {
     writer->Update();
     }

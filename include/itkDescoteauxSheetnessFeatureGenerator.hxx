@@ -102,7 +102,7 @@ void
 DescoteauxSheetnessFeatureGenerator<NDimension>
 ::GenerateData()
 {
-  typename InputImageSpatialObjectType::ConstPointer inputObject = 
+  typename InputImageSpatialObjectType::ConstPointer inputObject =
     dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
 
   if( !inputObject )

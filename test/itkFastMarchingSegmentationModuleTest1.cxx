@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkFastMarchingSegmentationModuleTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -43,7 +43,7 @@ int itkFastMarchingSegmentationModuleTest1( int argc, char * argv [] )
   using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
 
   using LandmarksReaderType = itk::LandmarksReader< Dimension >;
-  
+
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName( argv[1] );
@@ -52,7 +52,7 @@ int itkFastMarchingSegmentationModuleTest1( int argc, char * argv [] )
 
   FeatureReaderType::Pointer featureReader = FeatureReaderType::New();
   featureReader->SetFileName( argv[2] );
-  try 
+  try
     {
     featureReader->Update();
     }
@@ -64,7 +64,7 @@ int itkFastMarchingSegmentationModuleTest1( int argc, char * argv [] )
 
 
   SegmentationModuleType::Pointer  segmentationModule = SegmentationModuleType::New();
-  
+
   using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
   using FeatureSpatialObjectType = SegmentationModuleType::FeatureSpatialObjectType;
   using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
@@ -90,7 +90,7 @@ int itkFastMarchingSegmentationModuleTest1( int argc, char * argv [] )
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
 
-  OutputSpatialObjectType::ConstPointer outputObject = 
+  OutputSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
   OutputWriterType::Pointer writer = OutputWriterType::New();
@@ -98,7 +98,7 @@ int itkFastMarchingSegmentationModuleTest1( int argc, char * argv [] )
   writer->SetFileName( argv[3] );
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
-  try 
+  try
     {
     writer->Update();
     }
@@ -109,7 +109,7 @@ int itkFastMarchingSegmentationModuleTest1( int argc, char * argv [] )
     }
 
   segmentationModule->Print( std::cout );
-  
+
 
   //
   // Exercise Set/Get methods
@@ -122,13 +122,13 @@ int itkFastMarchingSegmentationModuleTest1( int argc, char * argv [] )
     std::cerr << "Error in Set/GetStoppingValue() " << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   if( segmentationModule->GetDistanceFromSeeds() != 0.0 )
     {
     std::cerr << "Error in Set/GetDistanceFromSeeds() " << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   segmentationModule->SetStoppingValue( stoppingTime );
   segmentationModule->SetDistanceFromSeeds( distanceFromSeeds );
 
@@ -137,12 +137,12 @@ int itkFastMarchingSegmentationModuleTest1( int argc, char * argv [] )
     std::cerr << "Error in Set/GetStoppingValue() " << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   if( segmentationModule->GetDistanceFromSeeds() != distanceFromSeeds )
     {
     std::cerr << "Error in Set/GetDistanceFromSeeds() " << std::endl;
     return EXIT_FAILURE;
     }
- 
+
   return EXIT_SUCCESS;
 }

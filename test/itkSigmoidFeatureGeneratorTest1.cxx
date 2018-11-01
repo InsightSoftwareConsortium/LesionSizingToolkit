@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkSigmoidFeatureGeneratorTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -48,7 +48,7 @@ int itkSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 
   reader->SetFileName( argv[1] );
 
-  try 
+  try
     {
     reader->Update();
     }
@@ -62,7 +62,7 @@ int itkSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
   using SpatialObjectType = SigmoidFeatureGeneratorType::SpatialObjectType;
 
   SigmoidFeatureGeneratorType::Pointer  featureGenerator = SigmoidFeatureGeneratorType::New();
-  
+
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -104,7 +104,7 @@ int itkSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  try 
+  try
     {
     featureGenerator->Update();
     }
@@ -117,7 +117,7 @@ int itkSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
-  OutputImageSpatialObjectType::ConstPointer outputObject = 
+  OutputImageSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputImageSpatialObjectType * >( feature.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -129,7 +129,7 @@ int itkSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
   writer->UseCompressionOn();
 
 
-  try 
+  try
     {
     writer->Update();
     }
@@ -144,6 +144,6 @@ int itkSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 
   featureGenerator->Print( std::cout );
 
- 
+
   return EXIT_SUCCESS;
 }

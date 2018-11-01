@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -54,7 +54,7 @@ SegmentationVolumeEstimator<NDimension>
  * Return the value of the estimated volume
  */
 template <unsigned int NDimension>
-typename SegmentationVolumeEstimator<NDimension>::RealType 
+typename SegmentationVolumeEstimator<NDimension>::RealType
 SegmentationVolumeEstimator<NDimension>
 ::GetVolume() const
 {
@@ -67,7 +67,7 @@ SegmentationVolumeEstimator<NDimension>
  * that can be passed down a pipeline.
  */
 template <unsigned int NDimension>
-const typename SegmentationVolumeEstimator<NDimension>::RealObjectType * 
+const typename SegmentationVolumeEstimator<NDimension>::RealObjectType *
 SegmentationVolumeEstimator<NDimension>
 ::GetVolumeOutput() const
 {

@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -74,7 +74,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage, TOutputImage>
 
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::GenerateData()
 {
@@ -88,7 +88,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::IterateFrontPropagations()
 {
@@ -98,15 +98,15 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
   // Progress reporting
   ProgressReporter progress(this, 0, m_MaximumNumberOfIterations, 100000);
-  
-  while( this->m_CurrentIterationNumber < this->m_MaximumNumberOfIterations ) 
+
+  while( this->m_CurrentIterationNumber < this->m_MaximumNumberOfIterations )
     {
     this->VisitAllSeedsAndTransitionTheirState();
     this->m_CurrentIterationNumber++;
-    
+
     progress.CompletedPixel();   // not really a pixel but an iteration
     this->InvokeEvent( IterationEvent() );
-    
+
     if( this->m_NumberOfPixelsChangedInLastIteration ==  0 )
       {
       break;
@@ -116,7 +116,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::AllocateOutputImageWorkingMemory()
 {
@@ -134,9 +134,9 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
   this->m_SeedsMask->FillBuffer( 0 );
 }
 
- 
+
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::InitializeNeighborhood()
 {
@@ -145,7 +145,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::FindAllPixelsInTheBoundaryAndAddThemAsSeeds()
 {
@@ -156,7 +156,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
   ConstNeighborhoodIterator< InputImageType >   bit;
   ImageRegionIterator< OutputImageType >        itr;
   ImageRegionIterator< SeedMaskImageType >      mtr;
-  
+
   const InputSizeType & radius = this->GetRadius();
 
   // Find the data-set boundary "faces"
@@ -168,11 +168,11 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
   // Process only the internal face
   fit = faceList.begin();
-  
+
   this->m_InternalRegion = *fit;
 
   // Mark all the pixels in the boundary of the seed image as visited
-  using ExclusionIteratorType = itk::ImageRegionExclusionIteratorWithIndex< 
+  using ExclusionIteratorType = itk::ImageRegionExclusionIteratorWithIndex<
     SeedMaskImageType >;
   ExclusionIteratorType exIt( this->m_SeedsMask, region );
   exIt.SetExclusionRegion( this->m_InternalRegion );
@@ -188,12 +188,12 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
   bit.GoToBegin();
   itr.GoToBegin();
   mtr.GoToBegin();
-  
+
   unsigned int neighborhoodSize = bit.Size();
 
   const InputImagePixelType foregroundValue = this->GetForegroundValue();
   const InputImagePixelType backgroundValue = this->GetBackgroundValue();
-  
+
   this->m_SeedArray1->clear();
   this->m_SeedsNewValues.clear();
 
@@ -208,7 +208,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
       {
       itr.Set( backgroundValue );
       mtr.Set( 0 );
-      
+
       // Search for foreground pixels in the neighborhood
       for (unsigned int i = 0; i < neighborhoodSize; ++i)
         {
@@ -219,17 +219,17 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
           break;
           }
         }
-      }   
+      }
     ++bit;
     ++itr;
     ++mtr;
     }
-  this->m_SeedsNewValues.reserve( this->m_SeedArray1->size() ); 
+  this->m_SeedsNewValues.reserve( this->m_SeedArray1->size() );
 }
 
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::VisitAllSeedsAndTransitionTheirState()
 {
@@ -263,7 +263,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
     }
 
   this->PasteNewSeedValuesToOutputImage();
-   
+
   this->m_TotalNumberOfPixelsChanged += this->m_NumberOfPixelsChangedInLastIteration;
 
   // Now that the values have been copied to the output image, we can empty the
@@ -276,7 +276,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::PasteNewSeedValuesToOutputImage()
 {
@@ -300,7 +300,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::SwapSeedArrays()
 {
@@ -311,7 +311,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::ClearSecondSeedArray()
 {
@@ -321,7 +321,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
 
 template <typename TInputImage, typename TOutputImage>
-bool 
+bool
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::TestForQuorumAtCurrentPixel() const
 {
@@ -337,7 +337,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
   unsigned int numberOfNeighborsAtForegroundValue = 0;
 
   //
-  // From that buffer position, visit all other neighbor pixels 
+  // From that buffer position, visit all other neighbor pixels
   // and check if they are set to the foreground value.
   //
   auto neighborItr = this->m_NeighborBufferOffset.begin();
@@ -363,7 +363,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::PutCurrentPixelNeighborsIntoSeedArray()
 {
@@ -424,7 +424,7 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::ComputeArrayOfNeighborhoodBufferOffsets()
 {
@@ -466,14 +466,14 @@ VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 }
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 VotingBinaryHoleFillFloodingImageFilter<TInputImage,TOutputImage>
 ::ComputeBirthThreshold()
 {
   const unsigned int neighborhoodSize = this->GetNeighborhoodSize();
 
   // Take the number of neighbors, discount the central pixel, and take half of them.
-  auto threshold = static_cast<unsigned int>( (neighborhoodSize - 1 ) / 2.0 ); 
+  auto threshold = static_cast<unsigned int>( (neighborhoodSize - 1 ) / 2.0 );
 
   // add the majority threshold.
   threshold += this->GetMajorityThreshold();

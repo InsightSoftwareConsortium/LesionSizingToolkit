@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -48,16 +48,16 @@ public:
 /** \class CannyEdgeDetectionRecursiveGaussianImageFilter
  *
  * This filter is an implementation of a Canny edge detector for scalar-valued
- * images.  Based on John Canny's paper "A Computational Approach to Edge 
- * Detection"(IEEE Transactions on Pattern Analysis and Machine Intelligence, 
- * Vol. PAMI-8, No.6, November 1986),  there are four major steps used in the 
+ * images.  Based on John Canny's paper "A Computational Approach to Edge
+ * Detection"(IEEE Transactions on Pattern Analysis and Machine Intelligence,
+ * Vol. PAMI-8, No.6, November 1986),  there are four major steps used in the
  * edge-detection scheme:
  * (1) Smooth the input image with Gaussian filter.
- * (2) Calculate the second directional derivatives of the smoothed image. 
+ * (2) Calculate the second directional derivatives of the smoothed image.
  * (3) Non-Maximum Suppression: the zero-crossings of 2nd derivative are found,
- *     and the sign of third derivative is used to find the correct extrema. 
+ *     and the sign of third derivative is used to find the correct extrema.
  * (4) The hysteresis thresholding is applied to the gradient magnitude
- *      (multiplied with zero-crossings) of the smoothed image to find and 
+ *      (multiplied with zero-crossings) of the smoothed image to find and
  *      link edges.
  *
  * \par Inputs and Outputs
@@ -69,17 +69,17 @@ public:
  * There are four parameters for this filter that control the sub-filters used
  * by the algorithm.
  *
- * \par 
+ * \par
  * Sigma is used in the Gaussian smoothing of the input image.
  * See  itkSmoothingRecursiveGaussianImageFilter for information on these
  * parameters.
  *
  * \par
- * Threshold is the lowest allowed value in the output image.  Its data type is 
+ * Threshold is the lowest allowed value in the output image.  Its data type is
  * the same as the data type of the output image. Any values below the
  * Threshold level will be replaced with the OutsideValue parameter value, whose
  * default is zero.
- * 
+ *
  * \todo Edge-linking will be added when an itk connected component labeling
  * algorithm is available.
  *
@@ -96,11 +96,11 @@ public:
   /** Standard "Self" & Superclass type alias.  */
   using Self = CannyEdgeDetectionRecursiveGaussianImageFilter;
   using Superclass = ImageToImageFilter<TInputImage, TOutputImage>;
-   
+
   /** Image type alias support   */
   using InputImageType = TInputImage;
   using OutputImageType = TOutputImage;
-      
+
   /** SmartPointer type alias support  */
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
@@ -114,8 +114,8 @@ public:
         InputImageType, OutputImageType>;
   using ScalarRealType = typename GaussianImageFilterType::ScalarRealType;
   using SigmaArrayType = typename GaussianImageFilterType::SigmaArrayType;
-  
-  /** The default boundary condition is used unless overridden 
+
+  /** The default boundary condition is used unless overridden
    *in the Evaluate() method. */
   using DefaultBoundaryConditionType = ZeroFluxNeumannBoundaryCondition<OutputImageType>;
 
@@ -131,18 +131,18 @@ public:
   using ListPointerType = typename ListType::Pointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
-    
+  itkNewMacro(Self);
+
   /** Typedef to describe the output image region type. */
   using OutputImageRegionType = typename TOutputImage::RegionType;
-    
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(CannyEdgeDetectionRecursiveGaussianImageFilter, ImageToImageFilter);
-  
+
   /** ImageDimension constant    */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
   static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
-  
+
   /** Typedef of double containers */
   using ArrayType = FixedArray<double, itkGetStaticConstMacro(ImageDimension)>;
 
@@ -151,7 +151,7 @@ public:
   void SetSigma( ScalarRealType sigma );
   SigmaArrayType GetSigmaArray() const;
   ScalarRealType GetSigma() const;
-  
+
   /* Set the Threshold value for detected edges. */
   void SetThreshold(const OutputImagePixelType th)
     {
@@ -160,11 +160,11 @@ public:
     this->m_LowerThreshold = m_Threshold/2.0;
     itkLegacyReplaceBodyMacro(SetThreshold, 2.2, SetUpperThreshold);
     }
-  
+
   OutputImagePixelType GetThreshold(OutputImagePixelType itkNotUsed(th))
     {
     itkLegacyReplaceBodyMacro(GetThreshold, 2.2, GetUpperThreshold);
-    return this->m_Threshold; 
+    return this->m_Threshold;
     }
 
   ///* Set the Threshold value for detected edges. */
@@ -177,19 +177,19 @@ public:
   /* Set the Thresholdvalue for detected edges. */
   itkSetMacro(OutsideValue, OutputImagePixelType);
   itkGetMacro(OutsideValue, OutputImagePixelType);
-  
+
   OutputImageType * GetNonMaximumSuppressionImage() const
     {
     return this->m_MultiplyImageFilter->GetOutput();
     }
 
   /** CannyEdgeDetectionRecursiveGaussianImageFilter needs a larger input requested
-   * region than the output requested region ( derivative operators, etc).  
+   * region than the output requested region ( derivative operators, etc).
    * As such, CannyEdgeDetectionRecursiveGaussianImageFilter needs to provide an implementation
-   * for GenerateInputRequestedRegion() in order to inform the 
+   * for GenerateInputRequestedRegion() in order to inform the
    * pipeline execution model.
    *
-   * \sa ImageToImageFilter::GenerateInputRequestedRegion()  */  
+   * \sa ImageToImageFilter::GenerateInputRequestedRegion()  */
   void GenerateInputRequestedRegion() throw(InvalidRequestedRegionError) override;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
@@ -214,7 +214,7 @@ protected:
 
   void GenerateData() override;
 
-  using MultiplyImageFilterType = MultiplyImageFilter< OutputImageType, 
+  using MultiplyImageFilterType = MultiplyImageFilter< OutputImageType,
               OutputImageType, OutputImageType>;
 
 private:
@@ -237,9 +237,9 @@ private:
 
   /** Check if the index is in bounds or not */
   bool InBounds(IndexType index);
-  
 
-  /** Calculate the second derivative of the smoothed image, it writes the 
+
+  /** Calculate the second derivative of the smoothed image, it writes the
    *  result to m_UpdateBuffer using the ThreadedCompute2ndDerivative() method
    *  and multithreading mechanism.   */
   void Compute2ndDerivative();
@@ -255,37 +255,37 @@ private:
   //  virtual
   //  int SplitUpdateContainer(int i, int num, ThreadRegionType& splitRegion);
 
-  /** Does the actual work of calculating of the 2nd derivative over a region 
-   *  supplied by the multithreading mechanism.  
+  /** Does the actual work of calculating of the 2nd derivative over a region
+   *  supplied by the multithreading mechanism.
    *
    *  \sa Compute2ndDerivative
-   *  \sa Compute2ndDerivativeThreaderCallBack   */ 
+   *  \sa Compute2ndDerivativeThreaderCallBack   */
   void ThreadedCompute2ndDerivative(const OutputImageRegionType&
                                     outputRegionForThread, int threadId);
 
-  /** This callback method uses ImageSource::SplitRequestedRegion to acquire an 
+  /** This callback method uses ImageSource::SplitRequestedRegion to acquire an
    * output region that it passes to ThreadedCompute2ndDerivative for
    * processing.  */
   static ITK_THREAD_RETURN_TYPE
   Compute2ndDerivativeThreaderCallback( void * arg );
 
-  /** This methos is used to calculate the 2nd derivative for 
-   * non-boundary pixels. It is called by the ThreadedCompute2ndDerivative 
-   * method. */  
+  /** This methos is used to calculate the 2nd derivative for
+   * non-boundary pixels. It is called by the ThreadedCompute2ndDerivative
+   * method. */
   OutputImagePixelType ComputeCannyEdge(const NeighborhoodType &it,
                                         void *globalData );
 
-  /** Calculate the gradient of the second derivative of the smoothed image, 
-   *  it writes the result to m_UpdateBuffer1 using the 
+  /** Calculate the gradient of the second derivative of the smoothed image,
+   *  it writes the result to m_UpdateBuffer1 using the
    *  ThreadedCompute2ndDerivativePos() method and multithreading mechanism.
    */
   void Compute2ndDerivativePos();
 
-  /** Does the actual work of calculating of the 2nd derivative over a region 
-   *  supplied by the multithreading mechanism.  
+  /** Does the actual work of calculating of the 2nd derivative over a region
+   *  supplied by the multithreading mechanism.
    *
    *  \sa Compute2ndDerivativePos
-   *  \sa Compute3ndDerivativePosThreaderCallBack   */ 
+   *  \sa Compute3ndDerivativePosThreaderCallBack   */
   void ThreadedCompute2ndDerivativePos(const OutputImageRegionType&
                                        outputRegionForThread, int threadId);
 

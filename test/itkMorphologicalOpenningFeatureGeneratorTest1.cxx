@@ -1,9 +1,9 @@
 /*=========================================================================
 
   Program:   Lesion Sizing Toolkit
-  Module:    itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1.cxx
+  Module:    itkMorphologicalOpenningFeatureGeneratorTest1.cxx
 
-  Copyright (c) Kitware Inc.
+  Copyright (c) Kitware Inc. 
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -13,44 +13,42 @@
 
 =========================================================================*/
 
-// The output image here is going to be an image of covariant vectors.
-// (An advection field).
-//
-#include "itkCannyEdgesDistanceAdvectionFieldFeatureGenerator.h"
+#include "itkMorphologicalOpenningFeatureGenerator.h"
 #include "itkImage.h"
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 
-int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * argv [] )
+int itkMorphologicalOpenningFeatureGeneratorTest1( int argc, char * argv [] )
 {
 
   if( argc < 3 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << argv[0] << " inputImage outputImage [variance upperthreshold lowerthreshold]" << std::endl;
+    std::cerr << argv[0] << " inputImage outputImage [lungThreshold]" << std::endl;
     return EXIT_FAILURE;
     }
 
-  constexpr unsigned int Dimension = 3;
-  using InputPixelType = signed short;
-  using OutputPixelType = itk::CovariantVector< float >;
+  const unsigned int Dimension = 3;
 
-  using InputImageType = itk::Image< InputPixelType,  Dimension >;
-  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
+  typedef signed short    InputPixelType;
+  typedef float           OutputPixelType;
 
-  using ReaderType = itk::ImageFileReader< InputImageType >;
-  using WriterType = itk::ImageFileWriter< OutputImageType >;
+  typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
 
-  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
-  using OutputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, OutputPixelType >;
+  typedef itk::ImageFileReader< InputImageType >     ReaderType;
+  typedef itk::ImageFileWriter< OutputImageType >    WriterType;
+
+  typedef itk::ImageSpatialObject< Dimension, InputPixelType  > InputImageSpatialObjectType;
+  typedef itk::ImageSpatialObject< Dimension, OutputPixelType > OutputImageSpatialObjectType;
 
   ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName( argv[1] );
 
-  try
+  try 
     {
     reader->Update();
     }
@@ -60,11 +58,11 @@ int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * a
     return EXIT_FAILURE;
     }
 
-  using CannyEdgesDistanceAdvectionFieldFeatureGeneratorType = itk::CannyEdgesDistanceAdvectionFieldFeatureGenerator< Dimension >;
-  using SpatialObjectType = CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::SpatialObjectType;
+  typedef itk::MorphologicalOpenningFeatureGenerator< Dimension >   FeatureGeneratorType;
+  typedef FeatureGeneratorType::SpatialObjectType    SpatialObjectType;
 
-  CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::Pointer  featureGenerator = CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::New();
-
+  FeatureGeneratorType::Pointer  featureGenerator = FeatureGeneratorType::New();
+  
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -78,20 +76,11 @@ int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * a
 
   if( argc > 3 )
     {
-    featureGenerator->SetSigma( atof( argv[3] ) );
+    featureGenerator->SetLungThreshold( atoi( argv[3] ) );
     }
 
-  if( argc > 4 )
-    {
-    featureGenerator->SetUpperThreshold( atof( argv[4] ) );
-    }
 
-  if( argc > 5 )
-    {
-    featureGenerator->SetLowerThreshold( atof( argv[4] ) );
-    }
-
-  try
+  try 
     {
     featureGenerator->Update();
     }
@@ -104,7 +93,7 @@ int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * a
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
-  OutputImageSpatialObjectType::ConstPointer outputObject =
+  OutputImageSpatialObjectType::ConstPointer outputObject = 
     dynamic_cast< const OutputImageSpatialObjectType * >( feature.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -112,11 +101,11 @@ int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * a
   WriterType::Pointer writer = WriterType::New();
 
   writer->SetFileName( argv[2] );
-  writer->SetInput( outputImage );
   writer->UseCompressionOn();
+  writer->SetInput( outputImage );
 
 
-  try
+  try 
     {
     writer->Update();
     }
@@ -131,6 +120,20 @@ int itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1( int argc, char * a
 
   featureGenerator->Print( std::cout );
 
+ 
+  featureGenerator->SetLungThreshold( 100 );
+  if( featureGenerator->GetLungThreshold() != 100 )
+    {
+    std::cerr << "Error in Set/GetLungThreshold()" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  featureGenerator->SetLungThreshold( 200 );
+  if( featureGenerator->GetLungThreshold() != 200 )
+    {
+    std::cerr << "Error in Set/GetLungThreshold()" << std::endl;
+    return EXIT_FAILURE;
+    }
 
   return EXIT_SUCCESS;
 }

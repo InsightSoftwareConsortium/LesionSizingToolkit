@@ -84,7 +84,7 @@ public:
    * Method for adding a feature generator that will compute the Nth feature to
    * be passed to the segmentation module.
    */
-  void AddFeatureGenerator( FeatureGeneratorType * generator ); 
+  void AddFeatureGenerator( FeatureGeneratorType * generator );
 
   /** Type of the segmentation module that encapsulate the actual segmentation
    * algorithm. */
@@ -111,7 +111,7 @@ protected:
 private:
   SpatialObjectConstPointer                 m_RegionOfInterest;
   SpatialObjectConstPointer                 m_InitialSegmentation;
-  
+
   using FeatureGeneratorPointer = typename FeatureGeneratorType::Pointer;
   using FeatureGeneratorArrayType = std::vector< FeatureGeneratorPointer >;
   using FeatureGeneratorIterator = typename FeatureGeneratorArrayType::iterator;

@@ -33,7 +33,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_TEMPLATE_EXPORT GeodesicActiveContourLevelSetSegmentationModule : 
+class ITK_TEMPLATE_EXPORT GeodesicActiveContourLevelSetSegmentationModule :
   public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:

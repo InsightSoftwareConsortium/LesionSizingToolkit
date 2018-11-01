@@ -128,7 +128,7 @@ public:
 
       if (this->GetOptionWasSet("SeedUnitsInPixels"))
         {
-        
+
         // Convert seeds from pixel units to physical units
         IndexType index = {{
           static_cast< IndexValueType >(sx),
@@ -173,7 +173,7 @@ public:
             // Loop now and check the SOP instance UID. Some datasets in the
             // biochange challenge rely on the filename, yet others rely on
             // the SOP instance UID present in the file.
-            
+
             for (std::vector< std::string >::iterator it = filesInDir.begin();
                 it != filesInDir.end(); ++it)
               {
@@ -206,7 +206,7 @@ public:
           }
         }
 
-      // Sanity check      
+      // Sanity check
       std::cout << "Seed position in physical units: (" << sx << ","
                 << sy << "," << sz << ")" << std::endl;
       InputImageType::PointType pointSeed;
@@ -221,7 +221,7 @@ public:
             indexSeed << " does not lie within the image. The images extents are"
           << this->m_Image->GetBufferedRegion() << std::endl;
         exit(-1);
-        }      
+        }
 
       seeds[i].SetPosition(sx,sy,sz);
       }

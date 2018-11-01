@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkLesionSegmentationMethodTest2.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -30,7 +30,7 @@ int itkLesionSegmentationMethodTest2( int itkNotUsed(argc), char * itkNotUsed(ar
   using MethodType = itk::LesionSegmentationMethod< Dimension >;
 
   MethodType::Pointer  segmentationMethod = MethodType::New();
-  
+
   using ImageMaskSpatialObjectType = itk::ImageMaskSpatialObject< Dimension >;
 
   ImageMaskSpatialObjectType::Pointer regionOfInterest = ImageMaskSpatialObjectType::New();
@@ -76,6 +76,6 @@ int itkLesionSegmentationMethodTest2( int itkNotUsed(argc), char * itkNotUsed(ar
     }
 
   segmentationMethod->Print( std::cout );
-  
+
   return EXIT_SUCCESS;
 }

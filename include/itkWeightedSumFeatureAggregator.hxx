@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -57,7 +57,7 @@ WeightedSumFeatureAggregator<NDimension>
   Superclass::PrintSelf( os, indent );
 }
 
-  
+
 template <unsigned int NDimension>
 void
 WeightedSumFeatureAggregator<NDimension>
@@ -94,7 +94,7 @@ WeightedSumFeatureAggregator<NDimension>
 
   if( numberOfFeatures != numberOfWeights )
     {
-    itkExceptionMacro("Number of Weights " << numberOfWeights 
+    itkExceptionMacro("Number of Weights " << numberOfWeights
       << " different from " << " number of Features " << numberOfFeatures );
     }
 
@@ -102,7 +102,7 @@ WeightedSumFeatureAggregator<NDimension>
 
   for( unsigned int k = 0; k < numberOfWeights; k++ )
     {
-    sumOfWeights += this->m_Weights[k]; 
+    sumOfWeights += this->m_Weights[k];
     }
 
   for( unsigned int i = 0; i < numberOfFeatures; i++ )
@@ -119,7 +119,7 @@ WeightedSumFeatureAggregator<NDimension>
 
     dstitr.GoToBegin();
     srcitr.GoToBegin();
-   
+
     const double weight = this->m_Weights[i] / sumOfWeights;
 
     while( !srcitr.IsAtEnd() )

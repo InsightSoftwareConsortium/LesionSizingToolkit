@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program:   Image Analysis Platform 
+  Program:   Image Analysis Platform
   Module:    vtkContourVisualizationModule.cxx
   Language:  C++
   Date:      $Date$
@@ -60,7 +60,7 @@ vtkContourVisualizationModule::vtkContourVisualizationModule()
   this->Property->SetColor(1.0,0.0,0.0);
   this->Actor->SetProperty( this->Property );
 
-  
+
   this->Color[0] = 1.0;
   this->Color[1] = 0.0;
   this->Color[2] = 0.0;
@@ -113,7 +113,7 @@ void vtkContourVisualizationModule::SetAutoIsoValue()
 {
   double range[2];
   this->GetScalarRange(range);
-  this->ContourFilter->SetValue( 0, (range[1] + range[0]) / 2.0 ); 
+  this->ContourFilter->SetValue( 0, (range[1] + range[0]) / 2.0 );
 }
 
 double vtkContourVisualizationModule::GetIsoValue()
@@ -126,19 +126,19 @@ void vtkContourVisualizationModule::SetContourColor( double r, double g, double 
   this->Color[0] = r;
   this->Color[1] = g;
   this->Color[2] = b;
-  
-  this->Property->SetColor( r , g , b ); 
+
+  this->Property->SetColor( r , g , b );
   this->Modified();
 }
 
 void vtkContourVisualizationModule::GetContourColor( double &r, double &g , double &b)
 {
-  r = this->Color[0]; 
+  r = this->Color[0];
   g = this->Color[1];
-  b = this->Color[2]; 
+  b = this->Color[2];
 }
 
-int vtkContourVisualizationModule::GetVisibility() 
+int vtkContourVisualizationModule::GetVisibility()
 {
   return this->Visibility;
 }
@@ -146,11 +146,11 @@ int vtkContourVisualizationModule::GetVisibility()
 void vtkContourVisualizationModule::SetContourVisibility( int state  )
 {
   this->Visibility = state;
-  this->Actor->SetVisibility( this->Visibility ); 
+  this->Actor->SetVisibility( this->Visibility );
   this->Modified();
 }
 
-vtkActor * 
+vtkActor *
 vtkContourVisualizationModule::GetActor()
 {
   return this->Actor;
@@ -166,7 +166,7 @@ void vtkContourVisualizationModule::SetPlaneOrigin( double origin[3] )
 
 void vtkContourVisualizationModule::Update()
 {
-  vtkImageData * segmentation = 
+  vtkImageData * segmentation =
     dynamic_cast<vtkImageData *>( this->ResliceFilter->GetInput() );
 
   double * segmentationOrigin  = segmentation->GetOrigin();
@@ -181,11 +181,11 @@ void vtkContourVisualizationModule::Update()
 
   int    sliceExtent[6];
 
-  sliceExtent[0] = segmentationExtent[0]; 
-  sliceExtent[1] = segmentationExtent[1]; 
-  sliceExtent[2] = segmentationExtent[2]; 
-  sliceExtent[3] = segmentationExtent[3]; 
-  sliceExtent[4] = segmentationExtent[4]; 
+  sliceExtent[0] = segmentationExtent[0];
+  sliceExtent[1] = segmentationExtent[1];
+  sliceExtent[2] = segmentationExtent[2];
+  sliceExtent[3] = segmentationExtent[3];
+  sliceExtent[4] = segmentationExtent[4];
   sliceExtent[5] = segmentationExtent[5];
 
 
@@ -218,7 +218,7 @@ void vtkContourVisualizationModule::Update()
 
   this->ResliceFilter->SetOutputSpacing( segmentation->GetSpacing() );
 
-  this->ResliceFilter->SetOutputExtent( 
+  this->ResliceFilter->SetOutputExtent(
            sliceExtent[0], sliceExtent[1],
            sliceExtent[2], sliceExtent[3],
            sliceExtent[4], sliceExtent[5] );
@@ -256,7 +256,7 @@ void vtkContourVisualizationModule::GetScalarRange(double range[2])
   range[0] = VTK_DOUBLE_MAX;
   range[1] = VTK_DOUBLE_MIN;
 
-  vtkImageData * segmentation = 
+  vtkImageData * segmentation =
     dynamic_cast<vtkImageData *>( this->ResliceFilter->GetInput() );
   if (segmentation)
     {

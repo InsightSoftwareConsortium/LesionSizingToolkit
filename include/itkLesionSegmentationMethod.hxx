@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -66,7 +66,7 @@ LesionSegmentationMethod<NDimension>
 template <unsigned int NDimension>
 void
 LesionSegmentationMethod<NDimension>
-::AddFeatureGenerator( FeatureGeneratorType * generator ) 
+::AddFeatureGenerator( FeatureGeneratorType * generator )
 {
   this->m_FeatureGenerators.push_back( generator );
   this->Modified();
@@ -87,7 +87,7 @@ LesionSegmentationMethod<NDimension>
   os << "Segmentation Module " << this->m_SegmentationModule.GetPointer() << std::endl;
 
   os << "Feature generators = ";
-  
+
   auto gitr = this->m_FeatureGenerators.begin();
   auto gend = this->m_FeatureGenerators.end();
 
@@ -168,13 +168,13 @@ LesionSegmentationMethod<NDimension>
     {
     if( this->m_FeatureGenerators[0]->GetFeature() )
       {
-      this->m_SegmentationModule->SetFeature( 
+      this->m_SegmentationModule->SetFeature(
         this->m_FeatureGenerators[0]->GetFeature() );
       }
     }
 }
 
- 
+
 template <unsigned int NDimension>
 void
 LesionSegmentationMethod<NDimension>
@@ -182,7 +182,7 @@ LesionSegmentationMethod<NDimension>
 {
   this->m_ProgressAccumulator->RegisterInternalFilter(
                       this->m_SegmentationModule, 0.5);
-  this->m_SegmentationModule->SetInput( this->m_InitialSegmentation ); 
+  this->m_SegmentationModule->SetInput( this->m_InitialSegmentation );
   this->m_SegmentationModule->Update();
 }
 

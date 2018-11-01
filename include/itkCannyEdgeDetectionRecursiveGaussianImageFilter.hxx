@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,7 +26,7 @@
 #include <iostream>
 namespace itk
 {
-  
+
 template <typename TInputImage, typename TOutputImage>
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::
 CannyEdgeDetectionRecursiveGaussianImageFilter()
@@ -51,7 +51,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter()
   // Dummy neighborhood used to set up the slices.
   Neighborhood<OutputImagePixelType, ImageDimension> it;
   it.SetRadius(r);
-  
+
   // Slice the neighborhood
   m_Center =  it.Size() / 2;
 
@@ -65,7 +65,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter()
     m_ComputeCannyEdgeSlice[i]
       = std::slice( m_Center - m_Stride[i], 3, m_Stride[i]);
     }
-   
+
   // Allocate the derivative operator.
   m_ComputeCannyEdge1stDerivativeOper.SetDirection(0);
   m_ComputeCannyEdge1stDerivativeOper.SetOrder(1);
@@ -79,7 +79,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter()
   m_NodeStore = ListNodeStorageType::New();
   m_NodeList = ListType::New();
 }
- 
+
 template <typename TInputImage, typename TOutputImage>
 void
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
@@ -88,26 +88,26 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
   // The update buffer looks just like the input.
 
   typename TInputImage::ConstPointer input = this->GetInput();
-  
+
   m_UpdateBuffer1->CopyInformation( input );
   m_UpdateBuffer1->SetRequestedRegion(input->GetRequestedRegion());
   m_UpdateBuffer1->SetBufferedRegion(input->GetBufferedRegion());
-  m_UpdateBuffer1->Allocate();  
+  m_UpdateBuffer1->Allocate();
 }
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 ::GenerateInputRequestedRegion() throw(InvalidRequestedRegionError)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
-  return;  
+  return;
   // get pointers to the input and output
-  typename Superclass::InputImagePointer  inputPtr = 
+  typename Superclass::InputImagePointer  inputPtr =
     const_cast< TInputImage * >( this->GetInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-  
+
   if ( !inputPtr || !outputPtr )
     {
     return;
@@ -115,7 +115,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 
   //Set the kernel size.
   unsigned long radius = 1;
-  
+
   // get a copy of the input requested region (should equal the output
   // requested region)
   typename TInputImage::RegionType inputRequestedRegion;
@@ -137,7 +137,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 
     // store what we tried to request (prior to trying to crop)
     inputPtr->SetRequestedRegion( inputRequestedRegion );
-    
+
     // build an exception
     InvalidRequestedRegionError e(__FILE__, __LINE__);
     std::ostringstream msg;
@@ -181,17 +181,17 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 
   // support progress methods/callbacks
   ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels(), 100, 0.0f, 0.5f );
-  
+
   // Process the non-boundady region and then each of the boundary faces.
   // These are N-d regions which border the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-    { 
+    {
     NeighborhoodType bit(radius, input, *fit);
-      
+
     it = ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
-    
+
     while ( ! bit.IsAtEnd() )
       {
       it.Value() = ComputeCannyEdge(bit, globalData);
@@ -199,7 +199,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
       ++it;
       progress.CompletedPixel();
       }
-      
+
     }
 
 }
@@ -209,7 +209,7 @@ typename CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputIma
 ::OutputImagePixelType
 CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 ::ComputeCannyEdge(const NeighborhoodType &it,
-                   void * itkNotUsed(globalData) ) 
+                   void * itkNotUsed(globalData) )
 {
   unsigned int i, j;
   NeighborhoodInnerProduct<OutputImageType> innerProduct;
@@ -226,9 +226,9 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   for(i = 0; i < ImageDimension; i++)
     {
     dx[i] = innerProduct(m_ComputeCannyEdgeSlice[i], it,
-                         m_ComputeCannyEdge1stDerivativeOper); 
+                         m_ComputeCannyEdge1stDerivativeOper);
     dxx[i] = innerProduct(m_ComputeCannyEdgeSlice[i], it,
-                          m_ComputeCannyEdge2ndDerivativeOper);  
+                          m_ComputeCannyEdge2ndDerivativeOper);
     }
 
   deriv = NumericTraits<OutputImagePixelType>::Zero;
@@ -248,31 +248,31 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
       k++;
       }
     }
-  
+
   gradMag = 0.0001; // alpha * alpha;
   for (i = 0; i < ImageDimension; i++)
-    { 
+    {
     deriv += dx[i] * dx[i] * dxx[i];
     gradMag += dx[i] * dx[i];
     }
-  
+
   deriv = deriv/gradMag;
 
-  return deriv;  
+  return deriv;
 }
 
 // Calculate the second derivative
 template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
-::Compute2ndDerivative() 
+::Compute2ndDerivative()
 {
   CannyThreadStruct str;
   str.Filter = this;
 
   this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
   this->GetMultiThreader()->SetSingleMethod(this->Compute2ndDerivativeThreaderCallback, &str);
-  
+
   this->GetMultiThreader()->SingleMethodExecute();
 }
 
@@ -282,12 +282,12 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
 ::Compute2ndDerivativeThreaderCallback( void * arg )
 {
   CannyThreadStruct *str;
-  
+
   int total, threadId, threadCount;
-  
+
   threadId = ((MultiThreaderBase::WorkUnitInfo *)(arg))->WorkUnitID;
   threadCount = ((MultiThreaderBase::WorkUnitInfo *)(arg))->NumberOfWorkUnits;
-  
+
   str = (CannyThreadStruct *)(((MultiThreaderBase::WorkUnitInfo *)(arg))->UserData);
 
   // Execute the actual method with appropriate output region
@@ -313,16 +313,16 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   // Allocate the output
   this->GetOutput()->SetBufferedRegion( this->GetOutput()->GetRequestedRegion() );
   this->GetOutput()->Allocate();
- 
+
   typename  InputImageType::ConstPointer  input  = this->GetInput();
-  
-  typename ZeroCrossingImageFilter<TOutputImage, TOutputImage>::Pointer 
+
+  typename ZeroCrossingImageFilter<TOutputImage, TOutputImage>::Pointer
     zeroCrossFilter = ZeroCrossingImageFilter<TOutputImage, TOutputImage>::New();
 
   typename GradientMagnitudeImageFilter<TOutputImage, TOutputImage>::Pointer
     gradMag = GradientMagnitudeImageFilter<TOutputImage, TOutputImage>::New();
 
-  typename MultiplyImageFilter<TOutputImage, TOutputImage,TOutputImage>::Pointer multFilter 
+  typename MultiplyImageFilter<TOutputImage, TOutputImage,TOutputImage>::Pointer multFilter
     = MultiplyImageFilter<TOutputImage, TOutputImage,TOutputImage>::New();
 
   this->AllocateUpdateBuffer();
@@ -340,21 +340,21 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   this->Compute2ndDerivative();
 
   this->Compute2ndDerivativePos();
-  
+
   // 3. Non-maximum suppression----------
-  
-  // Calculate the zero crossings of the 2nd directional derivative and write 
-  // the result to output buffer. 
+
+  // Calculate the zero crossings of the 2nd directional derivative and write
+  // the result to output buffer.
   zeroCrossFilter->SetInput(this->GetOutput());
   zeroCrossFilter->Update();
-  
+
   // 4. Hysteresis Thresholding---------
-  
+
   // First get all the edges corresponding to zerocrossings
   m_MultiplyImageFilter->SetInput1(m_UpdateBuffer1);
   m_MultiplyImageFilter->SetInput2(zeroCrossFilter->GetOutput());
- 
-  // To save memory, we will graft the output of the m_GaussianFilter, 
+
+  // To save memory, we will graft the output of the m_GaussianFilter,
   // which is no longer needed, into the m_MultiplyImageFilter.
   m_MultiplyImageFilter->GraftOutput( m_GaussianFilter->GetOutput() );
   m_MultiplyImageFilter->Update();
@@ -377,9 +377,9 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   ListNodeType *node;
 
   ImageRegionIterator<TOutputImage> oit( input, input->GetRequestedRegion() );
-  
+
   oit.GoToBegin();
-  
+
   ImageRegionIterator<TOutputImage> uit(this->GetOutput(),
                                     this->GetOutput()->GetRequestedRegion());
   uit.GoToBegin();
@@ -414,7 +414,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   // gradients of the image. HysteresisThresholding of this image should give
   // the Canny output.
   typename OutputImageType::Pointer input = m_MultiplyImageFilter->GetOutput();
-  
+
   IndexType nIndex;
   IndexType cIndex;
   ListNodeType * node;
@@ -422,7 +422,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   //assign iterator radius
   Size<ImageDimension> radius; radius.Fill(1);
 
-  ConstNeighborhoodIterator<TOutputImage> oit(radius, 
+  ConstNeighborhoodIterator<TOutputImage> oit(radius,
                input, input->GetRequestedRegion());
   ImageRegionIteratorWithIndex<TOutputImage> uit( this->GetOutput(),
                                              this->GetOutput()->GetRequestedRegion());
@@ -432,8 +432,8 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
     {
     return;
     }
-  
-  int nSize = m_Center * 2 +1;  
+
+  int nSize = m_Center * 2 +1;
   while(!m_NodeList->Empty())
     {
     // Pop the front node from the list and read its index value.
@@ -459,7 +459,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
           node = m_NodeStore->Borrow();  // get a new node struct
           node->m_Value = nIndex;        // set its value
           m_NodeList->PushFront(node);   // add the new node to the list
-          
+
           uit.SetIndex(nIndex);
           uit.Value() = 1;
           }
@@ -476,7 +476,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   typename InputImageType::ConstPointer input = this->GetInput();
   typename InputImageType::SizeType sz;
   sz = (input->GetRequestedRegion()).GetSize();
-  
+
   for(unsigned int i = 0; i < ImageDimension; i++)
     {
     if(index[i] < 0 ||
@@ -509,7 +509,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   typename OutputImageType::Pointer input = m_GaussianFilter->GetOutput();
 
   typename  InputImageType::Pointer output  = m_UpdateBuffer1;
-  
+
 
   // set iterator radius
   Size<ImageDimension> radius; radius.Fill(1);
@@ -525,10 +525,10 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 
   // support progress methods/callbacks
   ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels(), 100, 0.5f, 0.5f);
-  
+
   InputImagePixelType zero = NumericTraits<InputImagePixelType>::Zero;
 
-  OutputImagePixelType dx[ImageDimension]; 
+  OutputImagePixelType dx[ImageDimension];
   OutputImagePixelType dx1[ImageDimension];
 
   OutputImagePixelType directional[ImageDimension];
@@ -542,10 +542,10 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   NeighborhoodInnerProduct<OutputImageType>  IP;
 
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-    {   
+    {
     bit = ConstNeighborhoodIterator<InputImageType>(radius,
                                                     input, *fit);
-    bit1 =ConstNeighborhoodIterator<InputImageType>(radius, 
+    bit1 =ConstNeighborhoodIterator<InputImageType>(radius,
                                                     input1, *fit);
     it = ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
@@ -555,33 +555,33 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 
     while ( ! bit.IsAtEnd()  )
       {
-      
+
       gradMag = 0.0001;
-      
+
       for ( unsigned int i = 0; i < ImageDimension; i++)
         {
         dx[i] = IP(m_ComputeCannyEdgeSlice[i], bit,
                    m_ComputeCannyEdge1stDerivativeOper);
         gradMag += dx[i] * dx[i];
-        
+
         dx1[i] = IP(m_ComputeCannyEdgeSlice[i], bit1,
                     m_ComputeCannyEdge1stDerivativeOper);
         }
-      
+
       gradMag = vcl_sqrt((double)gradMag);
       derivPos = zero;
       for ( unsigned int i = 0; i < ImageDimension; i++)
         {
-              
+
         //First calculate the directional derivative
 
         directional[i] = dx[i]/gradMag;
-                               
+
         //calculate gradient of 2nd derivative
-              
+
         derivPos += dx1[i] * directional[i];
         }
-          
+
       it.Value() = ((derivPos <= zero));
       it.Value() = it.Get() * gradMag;
       ++bit;
@@ -589,22 +589,22 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
       ++it;
       progress.CompletedPixel();
       }
-      
-    }  
+
+    }
 }
 
 //Calculate the second derivative
 template< typename TInputImage, typename TOutputImage >
-void 
+void
 CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
-::Compute2ndDerivativePos() 
+::Compute2ndDerivativePos()
 {
   CannyThreadStruct str;
   str.Filter = this;
 
   this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
   this->GetMultiThreader()->SetSingleMethod(this->Compute2ndDerivativePosThreaderCallback, &str);
-  
+
   this->GetMultiThreader()->SingleMethodExecute();
 }
 
@@ -614,12 +614,12 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
 ::Compute2ndDerivativePosThreaderCallback( void * arg )
 {
   CannyThreadStruct *str;
-  
+
   int total, threadId, threadCount;
-  
+
   threadId = ((MultiThreaderBase::WorkUnitInfo *)(arg))->WorkUnitID;
   threadCount = ((MultiThreaderBase::WorkUnitInfo *)(arg))->NumberOfWorkUnits;
-  
+
   str = (CannyThreadStruct *)(((MultiThreaderBase::WorkUnitInfo *)(arg))->UserData);
 
   // Execute the actual method with appropriate output region
@@ -629,19 +629,19 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
   OutputImageRegionType splitRegion;
   total = str->Filter->SplitRequestedRegion(threadId, threadCount,
                                             splitRegion);
-  
+
   if (threadId < total)
     {
     str->Filter->ThreadedCompute2ndDerivativePos( splitRegion, threadId);
     }
-  
+
   return ITK_THREAD_RETURN_VALUE;
 }
 
 // Set value of Sigma (isotropic)
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 ::SetSigma( ScalarRealType sigma )
 {
@@ -653,7 +653,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 // Set value of Sigma (an-isotropic)
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 ::SetSigmaArray( const SigmaArrayType & sigma )
 {
@@ -687,7 +687,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 
 
 template <typename TInputImage, typename TOutputImage>
-void 
+void
 CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {

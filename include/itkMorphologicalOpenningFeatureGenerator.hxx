@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    itkMorphologicalOpeningFeatureGenerator.hxx
+  Module:    itkMorphologicalOpenningFeatureGenerator.hxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -14,10 +14,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef itkMorphologicalOpeningFeatureGenerator_hxx
-#define itkMorphologicalOpeningFeatureGenerator_hxx
+#ifndef itkMorphologicalOpenningFeatureGenerator_hxx
+#define itkMorphologicalOpenningFeatureGenerator_hxx
 
-#include "itkMorphologicalOpeningFeatureGenerator.h"
+#include "itkMorphologicalOpenningFeatureGenerator.h"
 #include "itkProgressAccumulator.h"
 
 
@@ -28,8 +28,8 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-MorphologicalOpeningFeatureGenerator<NDimension>
-::MorphologicalOpeningFeatureGenerator()
+MorphologicalOpenningFeatureGenerator<NDimension>
+::MorphologicalOpenningFeatureGenerator()
 {
   this->SetNumberOfRequiredInputs( 1 );
   this->SetNumberOfRequiredOutputs( 1 );
@@ -56,14 +56,14 @@ MorphologicalOpeningFeatureGenerator<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-MorphologicalOpeningFeatureGenerator<NDimension>
-::~MorphologicalOpeningFeatureGenerator()
+MorphologicalOpenningFeatureGenerator<NDimension>
+::~MorphologicalOpenningFeatureGenerator()
 {
 }
 
 template <unsigned int NDimension>
 void
-MorphologicalOpeningFeatureGenerator<NDimension>
+MorphologicalOpenningFeatureGenerator<NDimension>
 ::SetInput( const SpatialObjectType * spatialObject )
 {
   // Process object is not const-correct so the const casting is required.
@@ -71,13 +71,13 @@ MorphologicalOpeningFeatureGenerator<NDimension>
 }
 
 template <unsigned int NDimension>
-const typename MorphologicalOpeningFeatureGenerator<NDimension>::SpatialObjectType *
-MorphologicalOpeningFeatureGenerator<NDimension>
+const typename MorphologicalOpenningFeatureGenerator<NDimension>::SpatialObjectType *
+MorphologicalOpenningFeatureGenerator<NDimension>
 ::GetFeature() const
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return nullptr;
+    return 0;
     }
 
   return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
@@ -90,7 +90,7 @@ MorphologicalOpeningFeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-MorphologicalOpeningFeatureGenerator<NDimension>
+MorphologicalOpenningFeatureGenerator<NDimension>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
@@ -103,7 +103,7 @@ MorphologicalOpeningFeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-MorphologicalOpeningFeatureGenerator<NDimension>
+MorphologicalOpenningFeatureGenerator<NDimension>
 ::GenerateData()
 {
   typename InputImageSpatialObjectType::ConstPointer inputObject =
@@ -150,7 +150,7 @@ MorphologicalOpeningFeatureGenerator<NDimension>
   ballSize.Fill( 1 );
   ball.SetRadius( ballSize );
   ball.CreateStructuringElement();
-
+   
   this->m_OpenningFilter->SetKernel( ball );
   this->m_OpenningFilter->SetBackgroundValue( 0 );
   this->m_OpenningFilter->SetForegroundValue( 1 );
@@ -170,7 +170,8 @@ MorphologicalOpeningFeatureGenerator<NDimension>
 
   outputImage->DisconnectPipeline();
 
-  auto * outputObject = dynamic_cast< OutputImageSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  OutputImageSpatialObjectType * outputObject =
+    dynamic_cast< OutputImageSpatialObjectType * >(this->ProcessObject::GetOutput(0));
 
   outputObject->SetImage( outputImage );
 }

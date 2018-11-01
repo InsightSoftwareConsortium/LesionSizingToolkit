@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,15 +25,15 @@
 namespace itk
 {
 
-/** \class VotingBinaryHoleFillFloodingImageFilter 
+/** \class VotingBinaryHoleFillFloodingImageFilter
  *
  * \brief Perform front-propagation under a quorum sensing (voting) algorithm
  * for filling holes in a binary mask.
- * 
+ *
  * This is an alternative implementation of the
  * VotingBinaryIterativeHoleFillingImageFilter.
  *
- * \ingroup RegionGrowingSegmentation 
+ * \ingroup RegionGrowingSegmentation
  * \ingroup LesionSizingToolkit
  */
 template <typename TInputImage, typename TOutputImage>
@@ -58,18 +58,18 @@ public:
   using InputImageType = typename Superclass::InputImageType;
   using InputImagePointer = typename InputImageType::Pointer;
   using InputImageConstPointer = typename InputImageType::ConstPointer;
-  using InputImageRegionType = typename InputImageType::RegionType; 
-  using InputImagePixelType = typename InputImageType::PixelType; 
+  using InputImageRegionType = typename InputImageType::RegionType;
+  using InputImagePixelType = typename InputImageType::PixelType;
   using IndexType = typename InputImageType::IndexType;
   using OffsetValueType = typename InputImageType::OffsetValueType;
-  
+
   using OutputImageType = typename Superclass::OutputImageType;
   using OutputImagePointer = typename OutputImageType::Pointer;
-  using OutputImageRegionType = typename OutputImageType::RegionType; 
-  using OutputImagePixelType = typename OutputImageType::PixelType; 
-  
+  using OutputImageRegionType = typename OutputImageType::RegionType;
+  using OutputImagePixelType = typename OutputImageType::PixelType;
+
   using InputSizeType = typename Superclass::InputSizeType;
-  
+
   /** Image dimension constants */
   static constexpr unsigned int InputImageDimension = TInputImage::ImageDimension;
   static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
@@ -79,7 +79,7 @@ public:
    * neighborhood of a pixel has 124 pixels (excluding itself), the 50% will be
    * 62, and if you set upd a Majority threshold of 5, that means that the
    * filter will require 67 or more neighbor pixels to be ON in order to switch
-   * the current OFF pixel to ON. The default value is 1. */ 
+   * the current OFF pixel to ON. The default value is 1. */
   itkGetConstReferenceMacro( MajorityThreshold, unsigned int );
   itkSetMacro( MajorityThreshold, unsigned int );
 
@@ -111,7 +111,7 @@ protected:
   ~VotingBinaryHoleFillFloodingImageFilter() override;
 
   void GenerateData() override;
-  
+
   void PrintSelf ( std::ostream& os, Indent indent ) const override;
 
 private:
@@ -132,7 +132,7 @@ private:
   void ClearSecondSeedArray();
 
   bool TestForQuorumAtCurrentPixel() const;
- 
+
   void PutCurrentPixelNeighborsIntoSeedArray();
 
   void ComputeArrayOfNeighborhoodBufferOffsets();
@@ -152,7 +152,7 @@ private:
   SeedArrayType *                   m_SeedArray2;
 
   InputImageRegionType              m_InternalRegion;
-  
+
   using SeedNewValuesArrayType = std::vector<OutputImagePixelType>;
 
   SeedNewValuesArrayType            m_SeedsNewValues;
@@ -161,22 +161,22 @@ private:
   unsigned int                      m_MaximumNumberOfIterations;
   unsigned int                      m_NumberOfPixelsChangedInLastIteration;
   unsigned int                      m_TotalNumberOfPixelsChanged;
-  
+
   IndexType                         m_CurrentPixelIndex;
 
   //
   // Variables used for addressing the Neighbors.
   // This could be factorized into a helper class.
   //
-  OffsetValueType                   m_OffsetTable[ InputImageDimension + 1 ]; 
-  
+  OffsetValueType                   m_OffsetTable[ InputImageDimension + 1 ];
+
   using NeighborOffsetArrayType = std::vector< OffsetValueType >;
 
   NeighborOffsetArrayType           m_NeighborBufferOffset;
 
 
   //
-  // Helper cache variables 
+  // Helper cache variables
   //
   const InputImageType *            m_InputImage;
   OutputImageType *                 m_OutputImage;

@@ -33,7 +33,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_TEMPLATE_EXPORT ConnectedThresholdSegmentationModule : 
+class ITK_TEMPLATE_EXPORT ConnectedThresholdSegmentationModule :
   public RegionGrowingSegmentationModule<NDimension>
 {
 public:
@@ -78,7 +78,7 @@ protected:
 private:
   double        m_LowerThreshold;
   double        m_UpperThreshold;
-  
+
 };
 
 } // end namespace itk

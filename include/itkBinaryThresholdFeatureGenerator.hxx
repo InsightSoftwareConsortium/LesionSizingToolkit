@@ -66,7 +66,7 @@ BinaryThresholdFeatureGenerator<NDimension>
   // Report progress.
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( this->m_BinaryThresholdFilter, 1.0 );  
+  progress->RegisterInternalFilter( this->m_BinaryThresholdFilter, 1.0 );
 
   typename InputImageSpatialObjectType::ConstPointer inputObject =
     dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );

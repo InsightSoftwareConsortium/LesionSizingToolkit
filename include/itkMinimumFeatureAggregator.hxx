@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -57,7 +57,7 @@ MinimumFeatureAggregator<NDimension>
   Superclass::PrintSelf( os, indent );
 }
 
- 
+
 template <unsigned int NDimension>
 void
 MinimumFeatureAggregator<NDimension>
@@ -94,7 +94,7 @@ MinimumFeatureAggregator<NDimension>
 
     dstitr.GoToBegin();
     srcitr.GoToBegin();
-   
+
     while( !srcitr.IsAtEnd() )
       {
       if( dstitr.Get() > srcitr.Get() )

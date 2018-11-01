@@ -73,9 +73,9 @@ ConnectedThresholdSegmentationModule<NDimension>
   const FeatureImageType * featureImage = this->GetInternalFeatureImage();
 
   filter->SetInput( featureImage );
-  
+
   const InputSpatialObjectType * inputSeeds = this->GetInternalInputLandmarks();
- 
+
   const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
 
   using PointListType = typename InputSpatialObjectType::PointListType;

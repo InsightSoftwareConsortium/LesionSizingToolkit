@@ -127,7 +127,7 @@ private:
   using EigenValueImageType = Image< EigenValueArrayType, Dimension >;
 
   using EigenAnalysisFilterType = SymmetricEigenAnalysisImageFilter< HessianImageType, EigenValueImageType >;
- 
+
   using SheetnessFilterType = DescoteauxSheetnessImageFilter< EigenValueImageType, OutputImageType >;
 
   using RescaleFilterType = RescaleIntensityImageFilter< OutputImageType, OutputImageType >;

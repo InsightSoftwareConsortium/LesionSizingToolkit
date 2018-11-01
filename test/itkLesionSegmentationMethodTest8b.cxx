@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkLesionSegmentationMethodTest8b.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -14,7 +14,7 @@
 =========================================================================*/
 
 // The test runs a shape detection level set from user supplied seed points
-// and then runs the shape detection level set with the results from the 
+// and then runs the shape detection level set with the results from the
 // fast marching to get the final segmentation.
 
 #include "itkLesionSegmentationImageFilter8.h"
@@ -46,7 +46,7 @@ int itkLesionSegmentationMethodTest8b( int argc, char * argv [] )
   using OutputPixelType = float;
   using InputImageType = itk::Image< InputPixelType,  Dimension >;
   using OutputImageType = itk::Image< OutputPixelType, Dimension >;
-  using SegmentationMethodType = itk::LesionSegmentationImageFilter8< 
+  using SegmentationMethodType = itk::LesionSegmentationImageFilter8<
           InputImageType, OutputImageType >;
   using InputImageReaderType = itk::ImageFileReader< InputImageType >;
   using LandmarksReaderType = itk::LandmarksReader< Dimension >;
@@ -56,7 +56,7 @@ int itkLesionSegmentationMethodTest8b( int argc, char * argv [] )
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
   inputImageReader->SetFileName( argv[2] );
 
-  try 
+  try
     {
     inputImageReader->Update();
     }
@@ -88,7 +88,7 @@ int itkLesionSegmentationMethodTest8b( int argc, char * argv [] )
   segmentationMethod->SetResampleThickSliceData( resampleThickSliceData );
   segmentationMethod->SetUseVesselEnhancingDiffusion( useVesselEnhancingDiffusion );
 
-  try 
+  try
     {
     segmentationMethod->Update();
     }
@@ -103,7 +103,7 @@ int itkLesionSegmentationMethodTest8b( int argc, char * argv [] )
   writer->SetInput( segmentationMethod->GetOutput() );
   writer->UseCompressionOn();
 
-  try 
+  try
     {
     writer->Update();
     }

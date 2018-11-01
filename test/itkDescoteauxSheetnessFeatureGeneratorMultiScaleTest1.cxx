@@ -3,7 +3,7 @@
   Program:   Lesion Sizing Toolkit
   Module:    itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1.cxx
 
-  Copyright (c) Kitware Inc. 
+  Copyright (c) Kitware Inc.
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -41,7 +41,7 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
 
   inputImageReader->SetFileName( argv[1] );
 
-  try 
+  try
     {
     inputImageReader->Update();
     }
@@ -75,7 +75,7 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
 
   unsigned int octave = 1;
   double smallestSigma = atof( argv[4] );
-  
+
   const unsigned int numberOfScales = atoi( argv[5] );
 
   for( unsigned int k = 0; k < numberOfScales; k++ )
@@ -107,7 +107,7 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
     featureAggregator->AddFeatureGenerator( featureGenerator );
     }
 
-  try 
+  try
     {
     featureAggregator->Update();
     }
@@ -116,13 +116,13 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
     }
- 
+
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
   using OutputImageSpatialObjectType = AggregatorType::OutputImageSpatialObjectType;
   using OutputImageType = AggregatorType::OutputImageType;
 
-  OutputImageSpatialObjectType::ConstPointer outputObject = 
+  OutputImageSpatialObjectType::ConstPointer outputObject =
     dynamic_cast< const OutputImageSpatialObjectType * >( finalFeature.GetPointer() );
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
@@ -134,7 +134,7 @@ int itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1( int argc, char * argv
   writer->SetInput( outputImage );
   writer->UseCompressionOn();
 
-  try 
+  try
     {
     writer->Update();
     }

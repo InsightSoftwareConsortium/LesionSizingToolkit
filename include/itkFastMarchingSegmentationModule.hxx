@@ -33,11 +33,11 @@ template <unsigned int NDimension>
 FastMarchingSegmentationModule<NDimension>
 ::FastMarchingSegmentationModule()
 {
-  this->m_StoppingValue = static_cast<double>( static_cast<OutputPixelType>( 
+  this->m_StoppingValue = static_cast<double>( static_cast<OutputPixelType>(
                       NumericTraits<OutputPixelType>::max() / 2.0 ) );
 
   this->m_DistanceFromSeeds = 0.0;
-  
+
   this->SetNumberOfRequiredInputs( 2 );
   this->SetNumberOfRequiredOutputs( 1 );
 
@@ -80,7 +80,7 @@ FastMarchingSegmentationModule<NDimension>
 ::GenerateData()
 {
   using FilterType = FastMarchingImageFilter< FeatureImageType, OutputImageType >;
-  
+
   typename FilterType::Pointer filter = FilterType::New();
 
   const FeatureImageType * featureImage = this->GetInternalFeatureImage();
@@ -93,7 +93,7 @@ FastMarchingSegmentationModule<NDimension>
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
   progress->RegisterInternalFilter( filter, 0.9 );
-  
+
   const InputSpatialObjectType * inputSeeds = this->GetInternalInputLandmarks();
   const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
 
@@ -104,7 +104,7 @@ FastMarchingSegmentationModule<NDimension>
   using NodeType = typename FilterType::NodeType;
 
   typename NodeContainer::Pointer trialPoints = NodeContainer::New();
-  
+
   const PointListType & points = inputSeeds->GetPoints();
 
   IndexType index;
@@ -120,9 +120,9 @@ FastMarchingSegmentationModule<NDimension>
     // = value from the seeds. That can be seen as computing
     // a distance map from the seeds.
     node.SetValue( -this->m_DistanceFromSeeds );
-    
+
     node.SetIndex( index );
-    trialPoints->InsertElement( i, node );  
+    trialPoints->InsertElement( i, node );
     }
 
   filter->SetTrialPoints( trialPoints );
@@ -138,7 +138,7 @@ FastMarchingSegmentationModule<NDimension>
   windowing->SetOutputMinimum( -4.0 );
   windowing->SetOutputMaximum(  4.0 );
   windowing->InPlaceOn();
-  progress->RegisterInternalFilter( windowing, 0.1 );  
+  progress->RegisterInternalFilter( windowing, 0.1 );
   windowing->Update();
 
   this->PackOutputImageInOutputSpatialObject( windowing->GetOutput() );

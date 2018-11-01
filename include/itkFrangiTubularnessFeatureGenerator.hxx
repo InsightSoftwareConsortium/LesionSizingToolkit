@@ -111,7 +111,7 @@ FrangiTubularnessFeatureGenerator<NDimension>
   progress->RegisterInternalFilter( this->m_EigenAnalysisFilter, .25 );
   progress->RegisterInternalFilter( this->m_SheetnessFilter, .25 );
 
-  typename InputImageSpatialObjectType::ConstPointer inputObject = 
+  typename InputImageSpatialObjectType::ConstPointer inputObject =
     dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
 
   if( !inputObject )

@@ -80,12 +80,12 @@ LandmarksReader<NDimension>
 
   typename SpatialObjectType::Pointer landmarkSpatialObject;
 
-  while( spatialObjectItr != sceneChildren->end() ) 
+  while( spatialObjectItr != sceneChildren->end() )
     {
     std::string objectName = (*spatialObjectItr)->GetTypeName();
     if( objectName == "LandmarkSpatialObject" )
       {
-      const auto * landmarkSpatialObjectRawPointer = 
+      const auto * landmarkSpatialObjectRawPointer =
         dynamic_cast< const SpatialObjectType * >( spatialObjectItr->GetPointer() );
       landmarkSpatialObject =
         const_cast< SpatialObjectType * >( landmarkSpatialObjectRawPointer );
@@ -98,7 +98,7 @@ LandmarksReader<NDimension>
     {
     itkExceptionMacro("Input file does not contain landmarks");
     }
- 
+
   landmarkSpatialObject->DisconnectPipeline();
 
   auto * outputObject = dynamic_cast< SpatialObjectType * >(this->ProcessObject::GetOutput(0));

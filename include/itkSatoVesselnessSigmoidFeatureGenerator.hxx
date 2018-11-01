@@ -79,11 +79,11 @@ SatoVesselnessSigmoidFeatureGenerator<NDimension>
   // from 0, but that's ok. :)
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( this->m_SigmoidFilter, 1.0 ); 
+  progress->RegisterInternalFilter( this->m_SigmoidFilter, 1.0 );
 
   //
   // Take the output of the superclass, and do further processing on it.
-  // 
+  //
   typename OutputImageSpatialObjectType::Pointer outputObject =
     dynamic_cast<OutputImageSpatialObjectType * >( this->GetInternalFeature() );
 
