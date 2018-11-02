@@ -200,7 +200,7 @@ int itkDescoteauxSheetnessImageFilterTest2( int argc, char * argv [] )
   while( !citr.IsAtEnd() )
     {
 
-    bool closeToSheet = ( vnl_math_abs( iitr.GetIndex()[2] - planeIndex[2] ) < 2 );
+    bool closeToSheet = ( vnl_math::abs( iitr.GetIndex()[2] - planeIndex[2] ) < 2 );
 
     if( iitr.Get() > meanValue || closeToSheet )
       {

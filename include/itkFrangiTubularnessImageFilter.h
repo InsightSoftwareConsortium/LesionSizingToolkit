@@ -77,9 +77,9 @@ public:
     auto a2 = static_cast<double>( A[1] );
     auto a3 = static_cast<double>( A[2] );
 
-    double l1 = vnl_math_abs( a1 );
-    double l2 = vnl_math_abs( a2 );
-    double l3 = vnl_math_abs( a3 );
+    double l1 = vnl_math::abs( a1 );
+    double l2 = vnl_math::abs( a2 );
+    double l3 = vnl_math::abs( a3 );
 
     //
     // Sort the values by their absolute value.

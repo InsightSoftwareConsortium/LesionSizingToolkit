@@ -67,9 +67,9 @@ public:
     auto a2 = static_cast<double>( A[1] );
     auto a3 = static_cast<double>( A[2] );
 
-    double l1 = vnl_math_abs( a1 );
-    double l2 = vnl_math_abs( a2 );
-    double l3 = vnl_math_abs( a3 );
+    double l1 = vnl_math::abs( a1 );
+    double l2 = vnl_math::abs( a2 );
+    double l3 = vnl_math::abs( a3 );
 
     //
     // Sort the values by their absolute value.
@@ -132,7 +132,7 @@ public:
       }
 
     const double Rs = l2 / l3;
-    const double Rb = vnl_math_abs( l3 + l3 - l2 - l1 ) / l3;
+    const double Rb = vnl_math::abs( l3 + l3 - l2 - l1 ) / l3;
     const double Rn = std::sqrt( l3*l3 + l2*l2 + l1*l1 );
 
     sheetness  =         std::exp( - ( Rs * Rs ) / ( 2.0 * m_Alpha * m_Alpha ) );
