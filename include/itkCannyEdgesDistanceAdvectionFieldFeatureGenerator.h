@@ -75,6 +75,8 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
+  using InternalPixelType = float;
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -118,7 +120,6 @@ protected:
   void  GenerateData () override;
 
 private:
-  using InternalPixelType = float;
   using InternalImageType = Image< InternalPixelType, Dimension >;
 
   using CastFilterType = CastImageFilter<
