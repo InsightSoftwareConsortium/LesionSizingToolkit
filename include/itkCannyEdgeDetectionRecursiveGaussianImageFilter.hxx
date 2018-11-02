@@ -270,7 +270,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   CannyThreadStruct str;
   str.Filter = this;
 
-  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
+  this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
   this->GetMultiThreader()->SetSingleMethod(this->Compute2ndDerivativeThreaderCallback, &str);
 
   this->GetMultiThreader()->SingleMethodExecute();
@@ -302,7 +302,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
     str->Filter->ThreadedCompute2ndDerivative(splitRegion, threadId);
     }
 
-  return ITK_THREAD_RETURN_VALUE;
+  return ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 template< typename TInputImage, typename TOutputImage >
@@ -602,7 +602,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter< TInputImage, TOutputImage >
   CannyThreadStruct str;
   str.Filter = this;
 
-  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
+  this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
   this->GetMultiThreader()->SetSingleMethod(this->Compute2ndDerivativePosThreaderCallback, &str);
 
   this->GetMultiThreader()->SingleMethodExecute();
@@ -635,7 +635,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>
     str->Filter->ThreadedCompute2ndDerivativePos( splitRegion, threadId);
     }
 
-  return ITK_THREAD_RETURN_VALUE;
+  return ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
 // Set value of Sigma (isotropic)

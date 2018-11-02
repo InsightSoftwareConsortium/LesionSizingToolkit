@@ -24,7 +24,7 @@
 #include "itkSmoothingRecursiveGaussianImageFilter.h"
 #include "itkMultiplyImageFilter.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
-#include "itkMultiThreader.h"
+#include "itkMultiThreaderBase.h"
 #include "itkDerivativeOperator.h"
 #include "itkSparseFieldLayer.h"
 #include "itkObjectStore.h"
@@ -32,6 +32,7 @@
 
 namespace itk
 {
+using MultiThreader = MultiThreaderBase;
 
 
 template <typename TValueType>
