@@ -17,8 +17,12 @@ itk_module(LesionSizingToolkit
     ITKRegionGrowing
     ITKLabelVoting
     ITKMathematicalMorphology
-    ITKImageIO
     ITKVtkGlue
+    ITKIOSpatialObjects
+    ITKCommon
+    ITKIOGDCM
+    ITKIOPNG
+    ITKIOMeta
   TEST_DEPENDS
     ITKTestKernel
   EXCLUDE_FROM_DEFAULT
