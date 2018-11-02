@@ -137,7 +137,7 @@ int itkLesionSegmentationMethodTest3( int argc, char * argv [] )
     upperThreshold = std::stod( argv[5] );
     }
   segmentationModule->SetUpperThreshold( upperThreshold );
-  TEST_SET_GET_VALUE( upperThreshold, segmentationModule->GettUpperThreshold() );
+  TEST_SET_GET_VALUE( upperThreshold, segmentationModule->GetUpperThreshold() );
 
 
   lesionSegmentationMethod->SetInitialSegmentation( landmarksReader->GetOutput() );
