@@ -18,7 +18,7 @@
 #define itkLocalStructureImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "vnl/vnl_math.h"
+#include "itkMath.h"
 
 namespace itk
 {
@@ -70,9 +70,9 @@ public:
     auto a2 = static_cast<double>( A[1] );
     auto a3 = static_cast<double>( A[2] );
 
-    double l1 = vnl_math::abs( a1 );
-    double l2 = vnl_math::abs( a2 );
-    double l3 = vnl_math::abs( a3 );
+    double l1 = itk::Math::abs( a1 );
+    double l2 = itk::Math::abs( a2 );
+    double l3 = itk::Math::abs( a3 );
 
     //
     // Sort the values by their absolute value.
@@ -110,12 +110,12 @@ public:
     //
     // Avoid divisions by zero.
     //
-    if( l3 < vnl_math::eps )
+    if( l3 < itk::Math::eps )
       {
       return 0.0;
       }
 
-    const double L3 = vnl_math::abs( static_cast<double>( a3 ) );
+    const double L3 = itk::Math::abs( static_cast<double>( a3 ) );
     const double W = WeightFunctionOmega( a2, a3 );
     const double F = WeightFunctionOmega( a1, a3 );
 
@@ -127,12 +127,12 @@ public:
     {
     if( ls <= 0.0 && lt <= ls )
       {
-      return ( 1 + std::pow( ls / vnl_math::abs( lt ), m_Gamma ) );
+      return ( 1 + std::pow( ls / itk::Math::abs( lt ), m_Gamma ) );
       }
-    const double abslt = vnl_math::abs( lt );
+    const double abslt = itk::Math::abs( lt );
     if( ls > 0.0  &&  abslt / m_Gamma > ls )
       {
-      return std::pow( 1 - m_Alpha * ls / vnl_math::abs( lt ), m_Gamma );
+      return std::pow( 1 - m_Alpha * ls / itk::Math::abs( lt ), m_Gamma );
       }
     return 0.0;
     }

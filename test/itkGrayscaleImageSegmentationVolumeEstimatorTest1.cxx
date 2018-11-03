@@ -141,7 +141,7 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
 
   const double difference = volume1 - expectedVolume;
 
-  const double percentage = 100.0 * vnl_math::abs( difference ) / expectedVolume;
+  const double percentage = 100.0 * itk::Math::abs( difference ) / expectedVolume;
 
   const double epsilon = 1e-6;
   const double allowedVolumePercentageError = 1e-1; // 0.1%

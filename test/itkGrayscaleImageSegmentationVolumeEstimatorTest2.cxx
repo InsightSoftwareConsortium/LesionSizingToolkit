@@ -64,8 +64,8 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest2( int argc, char * argv [] 
   //
   // Compute the radius of the equivalent-volume sphere
   //
-  const double radius3 = ( ( volume * 3.0 ) / ( 4.0 * vnl_math::pi ) );
-  const double radius = vnl_math::cuberoot( radius3 );
+  const double radius3 = ( ( volume * 3.0 ) / ( 4.0 * itk::Math::pi ) );
+  const double radius = std::cbrt( radius3 );
 
 
   const std::string segmentationMethodID = argv[2];
