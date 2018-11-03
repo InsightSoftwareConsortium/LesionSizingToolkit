@@ -18,7 +18,7 @@
 #define itkFrangiTubularnessImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "vnl/vnl_math.h"
+#include "itkMath.h"
 
 namespace itk
 {
@@ -77,9 +77,9 @@ public:
     auto a2 = static_cast<double>( A[1] );
     auto a3 = static_cast<double>( A[2] );
 
-    double l1 = vnl_math::abs( a1 );
-    double l2 = vnl_math::abs( a2 );
-    double l3 = vnl_math::abs( a3 );
+    double l1 = itk::Math::abs( a1 );
+    double l2 = itk::Math::abs( a2 );
+    double l3 = itk::Math::abs( a3 );
 
     //
     // Sort the values by their absolute value.
@@ -136,7 +136,7 @@ public:
       }
 
     // avoid divisions by zero
-    if( l2 < vnl_math::eps || l3 < vnl_math::eps )
+    if( l2 < itk::Math::eps || l3 < itk::Math::eps )
       {
       return tubularness;
       }

@@ -18,7 +18,7 @@
 #define itkDescoteauxSheetnessImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "vnl/vnl_math.h"
+#include "itkMath.h"
 
 namespace itk
 {
@@ -67,9 +67,9 @@ public:
     auto a2 = static_cast<double>( A[1] );
     auto a3 = static_cast<double>( A[2] );
 
-    double l1 = vnl_math::abs( a1 );
-    double l2 = vnl_math::abs( a2 );
-    double l3 = vnl_math::abs( a3 );
+    double l1 = itk::Math::abs( a1 );
+    double l2 = itk::Math::abs( a2 );
+    double l3 = itk::Math::abs( a3 );
 
     //
     // Sort the values by their absolute value.
@@ -126,13 +126,13 @@ public:
     //
     // Avoid divisions by zero (or close to zero)
     //
-    if( static_cast<double>( l3 ) < vnl_math::eps )
+    if( static_cast<double>( l3 ) < itk::Math::eps )
       {
       return static_cast<TOutput>( sheetness );
       }
 
     const double Rs = l2 / l3;
-    const double Rb = vnl_math::abs( l3 + l3 - l2 - l1 ) / l3;
+    const double Rb = itk::Math::abs( l3 + l3 - l2 - l1 ) / l3;
     const double Rn = std::sqrt( l3*l3 + l2*l2 + l1*l1 );
 
     sheetness  =         std::exp( - ( Rs * Rs ) / ( 2.0 * m_Alpha * m_Alpha ) );
