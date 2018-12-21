@@ -20,14 +20,14 @@ setup(
     package_dir={'itk': 'itk'},
     download_url=r'https://github.com/InsightSoftwareConsortium/LesionSizingToolkit',
     description=r'A generic and extensible ITK module for lesion segmentation',
-    long_description='LesionSizingToolkit (LSTK) provides a generic, modular, '
-                     'and extensible architecture for lesion sizing'
-                     'algorithms in medical images as well as a reference'
-                     'algorithm for lung solid lesion segmentation in CT images.\n'
-                     'Please refer to:'
-                     'Liu X., Helba B., Krishnan K., Reynolds P., McCormick M., Turner W., Ibáñez L., Yankelevitz D., Avila R.,'
-                     '“Fostering Open Science in Lung Cancer Lesion Sizing with ITK module LSTK”, '
-                     'Insight Journal, http://hdl.handle.net/10380/3369, 2012.',
+    long_description='lesionsizingtoolkit provides a generic, modular, and '
+                     'extensible architecture for lesion sizing algorithms '
+                     'in medical images as well as a reference algorithm for '
+                     'lung solid lesion segmentation in CT images.\n'
+                     'Please refer to:\n'
+                     'Liu X., Helba B., Krishnan K., Reynolds P., McCormick M., Turner W., Ibáñez L., Yankelevitz D., Avila R., '
+                     '"Fostering Open Science in Lung Cancer Lesion Sizing with ITK module LSTK", '
+                     'Insight Journal, January-December 2012, http://hdl.handle.net/10380/3369.',
     classifiers=[
         "License :: OSI Approved :: BSD 2-Clause \"Simplified\" License",
         "Programming Language :: Python",
@@ -49,7 +49,7 @@ setup(
         ],
     license='BSD',
     keywords='ITK InsightToolkit',
-    url=r'https://itk.org/',
+    url=r'https://github.com/InsightSoftwareConsortium/LesionSizingToolkit',
     install_requires=[
         r'itk'
     ]
