@@ -127,10 +127,10 @@ public:
   itkBooleanMacro( UseVesselEnhancingDiffusion );
 
   using SeedSpatialObjectType = itk::LandmarkSpatialObject< ImageDimension >;
-  using PointListType = typename SeedSpatialObjectType::PointListType;
+  using LandmarkPointListType = typename SeedSpatialObjectType::LandmarkPointListType;
 
-  void SetSeeds( PointListType p ) { this->m_Seeds = p; }
-  PointListType GetSeeds() { return m_Seeds; }
+  void SetSeeds( LandmarkPointListType p ) { this->m_Seeds = p; }
+  LandmarkPointListType GetSeeds() { return m_Seeds; }
 
   /** Report progress */
   void ProgressUpdate( Object * caller, const EventObject & event );
@@ -192,7 +192,7 @@ private:
   typename CommandType::Pointer                       m_CommandObserver;
   RegionType                                          m_RegionOfInterest;
   std::string                                         m_StatusMessage;
-  typename SeedSpatialObjectType::PointListType       m_Seeds;
+  typename SeedSpatialObjectType::LandmarkPointListType m_Seeds;
   typename InputImageSpatialObjectType::Pointer       m_InputSpatialObject;
   bool                                                m_ResampleThickSliceData;
   double                                              m_AnisotropyThreshold;

@@ -80,28 +80,28 @@ int main(int argc, char * argv [] )
     landmarkPointsReader->SetFileName( argv[2] );
     landmarkPointsReader->Update();
 
-    SpatialObjectReaderType::ScenePointer scene = landmarkPointsReader->GetScene();
+    SpatialObjectReaderType::GroupPointer group = landmarkPointsReader->GetGroup();
 
-    if( !scene )
+    if( !group )
       {
-      std::cerr << "No Scene : [FAILED]" << std::endl;
+      std::cerr << "No Group : [FAILED]" << std::endl;
       return EXIT_FAILURE;
       }
 
-    std::cout << "Number of object in the scene:" << scene->GetNumberOfObjects(1) << std::endl;
+    std::cout << "Number of objects in the group:" << group->GetNumberOfObjects(1) << std::endl;
 
-    using ObjectListType = SpatialObjectReaderType::SceneType::ObjectListType;
+    using ObjectListType = SpatialObjectReaderType::GroupType::ObjectListType;
 
-    ObjectListType * sceneChildren = scene->GetObjects(999999);
+    ObjectListType * groupChildren = group->GetObjects(999999);
 
-    ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
+    ObjectListType::const_iterator spatialObjectItr = groupChildren->begin();
 
     /** Type of the input set of seed points. They are stored in a Landmark Spatial Object. */
     using InputSpatialObjectType = itk::LandmarkSpatialObject< 3 >;
 
     const InputSpatialObjectType * landmarkSpatialObject = NULL;
 
-    while( spatialObjectItr != sceneChildren->end() )
+    while( spatialObjectItr != groupChildren->end() )
       {
       std::string objectName = (*spatialObjectItr)->GetTypeName();
       if( objectName == "LandmarkSpatialObject" )
@@ -112,12 +112,12 @@ int main(int argc, char * argv [] )
       spatialObjectItr++;
       }
 
-    using PointListType = InputSpatialObjectType::PointListType;
+    using LandmarkPointListType = InputSpatialObjectType::LandmarkPointListType;
     using SpatialObjectPointType = InputSpatialObjectType::SpatialObjectPointType;
     using PointType = SpatialObjectPointType::PointType;
 
 
-    const PointListType & points = landmarkSpatialObject->GetPoints();
+    const LandmarkPointListType & points = landmarkSpatialObject->GetPoints();
 
     // Grab the first point in the list of seed points
     PointType point = points[0].GetPosition();
