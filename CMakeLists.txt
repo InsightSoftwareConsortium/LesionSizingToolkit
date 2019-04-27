@@ -12,14 +12,65 @@ endif()
 
 option(LSTK_USE_VTK "Build visualization helper tools." OFF)
 if(LSTK_USE_VTK)
-  find_package(VTK REQUIRED COMPONENTS vtkRenderingVolume vtkIOGeometry vtkIOLegacy vtkIOImage vtkInteractionWidgets vtkInteractionImage)
-  set(VERSION_MIN "6.0.0")
-  if(${VTK_VERSION} VERSION_LESS ${VERSION_MIN})
-    message(ERROR " LSTK_USE_VTK requires VTK version ${VERSION_MIN} or newer but the current version is ${VTK_VERSION}")
-  endif()
-  include(${VTK_USE_FILE})
+  if(NOT COMMAND vtk_module_config)
+    macro(vtk_module_config ns)
+       foreach(arg ${ARGN})
+        if(${arg} MATCHES "^[Vv][Tt][Kk]")
+          string(REGEX REPLACE "^[Vv][Tt][Kk]" "" _arg ${arg})
+        else()
+          set(_arg ${arg})
+        endif()
+        set(${ns}_LIBRARIES ${${ns}_LIBRARIES} VTK::${_arg})
+       endforeach()
+    endmacro()
 
-  set(ITK_VTK_LSTK_LIBRARIES ${LesionSizingToolkit_LIBRARIES} ${VTK_LIBRARIES})
+    if(NOT VTK_RENDERING_BACKEND)
+      set(VTK_RENDERING_BACKEND OpenGL2)
+    endif()
+  endif()
+
+  if(NOT VTK_RENDERING_BACKEND)
+    if(NOT COMMAND vtk_module_config)
+      set(VTK_RENDERING_BACKEND OpenGL2)
+    else()
+      set(VTK_RENDERING_BACKEND OpenGL)
+    endif()
+  endif()
+
+  set(_target_freetypeopengl)
+  if(TARGET ${_target_prefix}RenderingFreeType${VTK_RENDERING_BACKEND})
+    set(_target_freetypeopengl ${_target_prefix}RenderingFreeType${VTK_RENDERING_BACKEND})
+  endif()
+
+  set(_required_vtk_libraries
+    ${_target_prefix}RenderingVolume
+    #${_target_prefix}Rendering${VTK_RENDERING_BACKEND}
+    ${_target_prefix}IOGeometry
+    ${_target_prefix}IOLegacy
+    ${_target_prefix}IOImage
+    ${_target_prefix}InteractionWidgets
+    ${_target_prefix}InteractionImage
+    )
+
+  vtk_module_config(ITK_VTK_LSTK
+    ${_required_vtk_libraries}
+    )
+
+  set(ITK_VTK_LSTK_LIBRARIES ${LesionSizingToolkit_LIBRARIES} ${_required_vtk_libraries})
+
+  # The VTK DICOMParser and vtkmetaio includes conflict with the ITK
+  # versions. Here we remove them from the include directories.
+  #
+  string(REGEX REPLACE "[^;]*MetaIO;"
+           "" ITK_VTK_LSTK_INCLUDE_DIRS "${ITK_VTK_LSTK_INCLUDE_DIRS}")
+  string(REGEX REPLACE "[^;]*vtkmetaio;"
+           "" ITK_VTK_LSTK_INCLUDE_DIRS "${ITK_VTK_LSTK_INCLUDE_DIRS}")
+  string(REGEX REPLACE "[^;]*DICOMParser;"
+           "" ITK_VTK_LSTK_INCLUDE_DIRS "${ITK_VTK_LSTK_INCLUDE_DIRS}")
+
+  # Add preprocessor definitions needed to use VTK.
+  set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS ${ITK_VTK_LSTK_VTK_DEFINITIONS})
+
   add_subdirectory(Examples)
   add_subdirectory(Utilities)
 endif()

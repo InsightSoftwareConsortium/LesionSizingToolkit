@@ -61,6 +61,12 @@ set(ITK_TEST_DRIVER itkTestDriver)
 
 CreateTestDriver(LesionSizingToolkit "${LesionSizingToolkit-Test_LIBRARIES}" "${LesionSizingToolkitTests}")
 
+if(VTK_VERSION VERSION_GREATER_EQUAL "8.90.0")
+  vtk_module_autoinit(
+    TARGETS LesionSizingToolkitTestDriver
+  MODULES ${VTK_LIBRARIES})
+endif()
+
 set(TEST_DATA_ROOT "${LesionSizingToolkit_SOURCE_DIR}/Data")
 set(TEMP ${ITK_TEST_OUTPUT_DIR})
 
