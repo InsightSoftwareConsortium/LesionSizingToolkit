@@ -67,20 +67,20 @@ LandmarksReader<NDimension>
 
   this->m_SpatialObjectReader->Update();
 
-  typename SpatialObjectReaderType::ScenePointer scene = this->m_SpatialObjectReader->GetScene();
+  typename SpatialObjectReaderType::GroupPointer group = this->m_SpatialObjectReader->GetGroup();
 
-  if( !scene )
+  if( !group )
     {
-    itkExceptionMacro("Couldn't fine a scene in file" << this->GetFileName() );
+    itkExceptionMacro("Couldn't fine a group in file" << this->GetFileName() );
     }
 
-  ObjectListType * sceneChildren = scene->GetObjects(999999);
+  ObjectListType * groupChildren = group->GetChildren(999999);
 
-  typename ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
+  typename ObjectListType::const_iterator spatialObjectItr = groupChildren->begin();
 
   typename SpatialObjectType::Pointer landmarkSpatialObject;
 
-  while( spatialObjectItr != sceneChildren->end() )
+  while( spatialObjectItr != groupChildren->end() )
     {
     std::string objectName = (*spatialObjectItr)->GetTypeName();
     if( objectName == "LandmarkSpatialObject" )
@@ -105,7 +105,7 @@ LandmarksReader<NDimension>
 
   outputObject->SetPoints( landmarkSpatialObject->GetPoints() );
 
-  delete sceneChildren;
+  delete groupChildren;
 }
 
 /*

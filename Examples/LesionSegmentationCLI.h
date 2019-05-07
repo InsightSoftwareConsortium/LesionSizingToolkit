@@ -32,7 +32,7 @@ public:
   using RealImageType = itk::Image< float, ImageDimension >;
 
   using SeedSpatialObjectType = itk::LandmarkSpatialObject< 3 >;
-  using PointListType = SeedSpatialObjectType::PointListType;
+  using LandmarkPointListType = SeedSpatialObjectType::LandmarkPointListType;
 
   LesionSegmentationCLI( int argc, char *argv[] ) : MetaCommand()
   {
@@ -88,7 +88,7 @@ public:
       }
     else
       {
-      PointListType seeds = this->GetSeeds();
+      LandmarkPointListType seeds = this->GetSeeds();
       seeds[0];
       for (int i = 0; i < 3; i++)
         {
@@ -111,12 +111,12 @@ public:
     return s;
     }
 
-  PointListType GetSeeds()
+  LandmarkPointListType GetSeeds()
     {
     std::list< std::string > seedsString = this->GetValueAsList("Seeds");
     std::list< std::string >::const_iterator fit = seedsString.begin();
     const unsigned int nb_of_markers = seedsString.size() / 3;
-    PointListType seeds(nb_of_markers);
+    LandmarkPointListType seeds(nb_of_markers);
     for (unsigned int i = 0; i < nb_of_markers; i++)
       {
       double sx = (double)atof((*fit).c_str());

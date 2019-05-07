@@ -79,11 +79,11 @@ int main( int argc, char ** argv )
     return EXIT_FAILURE;
     }
 
-  using PointListType = InputSpatialObjectType::PointListType;
+  using LandmarkPointListType = InputSpatialObjectType::LandmarkPointListType;
 
-  const PointListType & points = inputSeeds->GetPoints();
+  const LandmarkPointListType & points = inputSeeds->GetPoints();
 
-  InputImageType::PointType seedPoint = points[0].GetPosition();
+  InputImageType::PointType seedPoint = points[0].GetPositionInObjectSpace();
 
   FilterType::Pointer filter = FilterType::New();
 

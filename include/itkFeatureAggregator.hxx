@@ -125,17 +125,17 @@ FeatureAggregator<NDimension>
 }
 
 template <unsigned int NDimension>
-unsigned long
+ModifiedTimeType
 FeatureAggregator<NDimension>
 ::GetMTime() const
 {
   // MTime is the max of mtime of all feature generators.
-  unsigned long mtime = this->Superclass::GetMTime();
+  ModifiedTimeType  mtime = this->Superclass::GetMTime();
   auto gitr = this->m_FeatureGenerators.begin();
   auto gend = this->m_FeatureGenerators.end();
   while( gitr != gend )
     {
-    const unsigned long t = (*gitr)->GetMTime();
+    const ModifiedTimeType  t = (*gitr)->GetMTime();
     if (t > mtime)
       {
       mtime = t;

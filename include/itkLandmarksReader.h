@@ -77,8 +77,8 @@ protected:
 private:
   using SpatialObjectReaderType = SpatialObjectReader< NDimension, unsigned short >;
   using SpatialObjectReaderPointer = typename SpatialObjectReaderType::Pointer;
-  using SceneType = typename SpatialObjectReaderType::SceneType;
-  using ObjectListType = typename SceneType::ObjectListType;
+  using GroupType = typename SpatialObjectReaderType::GroupType;
+  using ObjectListType = typename GroupType::ObjectListType;
 
   std::string                     m_FileName;
   SpatialObjectReaderPointer      m_SpatialObjectReader;

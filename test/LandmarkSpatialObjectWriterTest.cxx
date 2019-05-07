@@ -33,30 +33,30 @@ int LandmarkSpatialObjectWriterTest( int itkNotUsed(argc), char * argv [] )
   using LandmarkType = itk::LandmarkSpatialObject< Dimension >;
   using LandmarkPointer = LandmarkType::Pointer;
   using SpatialPointType = LandmarkType::SpatialObjectPointType;
-  using PointListType = LandmarkType::PointListType;
+  using LandmarkPointListType = LandmarkType::LandmarkPointListType;
 
-  PointListType listOfPoints;
+  LandmarkPointListType listOfPoints;
 
   SpatialPointType p;
 
   p.SetColor(1,0,0,1);
 
-  p.SetPosition( 0.4, 0.5, 0.7 );
+  p.SetPositionInObjectSpace( 0.4, 0.5, 0.7 );
   listOfPoints.push_back( p );
 
-  p.SetPosition( 0.5, 0.4, 0.7 );
+  p.SetPositionInObjectSpace( 0.5, 0.4, 0.7 );
   listOfPoints.push_back( p );
 
-  p.SetPosition( 0.6, 0.3, 0.7 );
+  p.SetPositionInObjectSpace( 0.6, 0.3, 0.7 );
   listOfPoints.push_back( p );
 
-  p.SetPosition( 0.7, 0.2, 0.7 );
+  p.SetPositionInObjectSpace( 0.7, 0.2, 0.7 );
   listOfPoints.push_back( p );
 
 
   LandmarkPointer landmarkSpatialObject = LandmarkType::New();
   landmarkSpatialObject->SetPoints( listOfPoints );
-  landmarkSpatialObject->GetProperty()->SetName("Landmark 1");
+  landmarkSpatialObject->GetProperty().SetName("Landmark 1");
 
   WriterType::Pointer writer = WriterType::New();
 

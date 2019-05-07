@@ -78,16 +78,16 @@ ConnectedThresholdSegmentationModule<NDimension>
 
   const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
 
-  using PointListType = typename InputSpatialObjectType::PointListType;
+  using LandmarkPointListType = typename InputSpatialObjectType::LandmarkPointListType;
   using IndexType = typename FeatureImageType::IndexType;
 
-  const PointListType & points = inputSeeds->GetPoints();
+  const LandmarkPointListType & points = inputSeeds->GetPoints();
 
   IndexType index;
 
   for( unsigned int i=0; i < numberOfPoints; i++ )
     {
-    featureImage->TransformPhysicalPointToIndex( points[i].GetPosition(), index );
+    featureImage->TransformPhysicalPointToIndex( points[i].GetPositionInObjectSpace(), index );
     filter->AddSeed( index );
     }
 

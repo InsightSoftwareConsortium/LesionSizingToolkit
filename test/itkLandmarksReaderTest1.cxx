@@ -72,27 +72,27 @@ int itkLandmarksReaderTest1( int argc, char * argv [] )
   landmarkPointsReader->SetFileName( argv[1] );
   landmarkPointsReader->Update();
 
-  SpatialObjectReaderType::ScenePointer scene = landmarkPointsReader->GetScene();
+  SpatialObjectReaderType::GroupPointer group = landmarkPointsReader->GetGroup();
 
-  if( !scene )
+  if( !group )
     {
     std::cerr << "Test failed!" << std::endl;
-    std::cerr << "No Scene." << std::endl;
+    std::cerr << "No Group." << std::endl;
     return EXIT_FAILURE;
     }
 
-  std::cout << "Number of object in the scene:" << scene->GetNumberOfObjects(1) << std::endl;
+  std::cout << "Number of children in the group:" << group->GetNumberOfChildren(1) << std::endl;
 
-  using ObjectListType = SpatialObjectReaderType::SceneType::ObjectListType;
+  using ObjectListType = SpatialObjectReaderType::GroupType::ObjectListType;
 
-  ObjectListType * sceneChildren = scene->GetObjects(999999);
+  ObjectListType * groupChildren = group->GetChildren(999999);
 
-  ObjectListType::const_iterator spatialObjectItr = sceneChildren->begin();
+  ObjectListType::const_iterator spatialObjectItr = groupChildren->begin();
 
 
   const InputSpatialObjectType * landmarkSpatialObject2 = nullptr;
 
-  while( spatialObjectItr != sceneChildren->end() )
+  while( spatialObjectItr != groupChildren->end() )
     {
     std::string objectName = (*spatialObjectItr)->GetTypeName();
     if( objectName == "LandmarkSpatialObject" )
@@ -103,7 +103,7 @@ int itkLandmarksReaderTest1( int argc, char * argv [] )
     spatialObjectItr++;
     }
 
-  using PointListType = InputSpatialObjectType::PointListType;
+  using LandmarkPointListType = InputSpatialObjectType::LandmarkPointListType;
 
   const unsigned int numberOfPoints1 = landmarkSpatialObject1->GetNumberOfPoints();
   const unsigned int numberOfPoints2 = landmarkSpatialObject2->GetNumberOfPoints();
@@ -118,17 +118,17 @@ int itkLandmarksReaderTest1( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  const PointListType & points1 = landmarkSpatialObject1->GetPoints();
-  const PointListType & points2 = landmarkSpatialObject2->GetPoints();
+  const LandmarkPointListType & points1 = landmarkSpatialObject1->GetPoints();
+  const LandmarkPointListType & points2 = landmarkSpatialObject2->GetPoints();
 
   for( unsigned int i = 0; i < numberOfPoints1; ++i )
     {
-    if( points1[i].GetPosition() != points2[i].GetPosition() )
+    if( points1[i].GetPositionInObjectSpace() != points2[i].GetPositionInObjectSpace() )
       {
       std::cerr << "Test failed!" << std::endl;
       std::cerr << "Error : point " << i << " has different positions" << std::endl;
-      std::cerr << "Expected value " << points2[i].GetPosition() << std::endl;
-      std::cerr << " differs from" << points1[i].GetPosition() << std::endl;
+      std::cerr << "Expected value " << points2[i].GetPositionInObjectSpace() << std::endl;
+      std::cerr << " differs from" << points1[i].GetPositionInObjectSpace() << std::endl;
       return EXIT_FAILURE;
       }
     }
