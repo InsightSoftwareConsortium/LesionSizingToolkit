@@ -26,7 +26,6 @@ int itkSegmentationModuleTest1( int itkNotUsed(argc), char * itkNotUsed(argv) []
   constexpr unsigned int Dimension = 3;
 
   using SegmentationModuleType = itk::SegmentationModule< Dimension >;
-  using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
 
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
