@@ -11,7 +11,7 @@ macro( VOLCANO_CONVERT_DCM2MHA
        INSTANCE_NAME    # S02A01
      )
 
-  ADD_TEST( DTM_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
+  add_test( DTM_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
     ${CXX_TEST_PATH}/DicomSeriesReadImageWrite
     ${VOLCANO_DATA_DIR}/${COLLECTION_NAME}/${CASE_NAME}/${STUDY_NAME}/${INSTANCE_NAME}/
     ${TEMP}/${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}.mha
@@ -38,12 +38,12 @@ macro( TEST_VOLCANO_DATASET
        ${INSTANCE_NAME}    # S02A01
       )
 
-  SET( FILENAME_BASE "${TEMP}/${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}" )
-  SET( SEEDS_FILE ${TEST_DATA_ROOT}/Input/${CASE_NAME}_${STUDY_NAME}_Seeds.txt )
+  set( FILENAME_BASE "${TEMP}/${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}" )
+  set( SEEDS_FILE ${TEST_DATA_ROOT}/Input/${CASE_NAME}_${STUDY_NAME}_Seeds.txt )
 
-  SET(DATASET_ROI ${FILENAME_BASE}_ROI.mha )
-  SET(REGION_RADIUS 25)  # in millimeters
-  ADD_TEST(ROIS_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
+  set(DATASET_ROI ${FILENAME_BASE}_ROI.mha )
+  set(REGION_RADIUS 25)  # in millimeters
+  add_test(ROIS_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
     ${CXX_TEST_PATH}/ImageReadRegionOfInterestAroundSeedWrite
     ${FILENAME_BASE}.mha
     ${DATASET_ROI}
@@ -52,7 +52,7 @@ macro( TEST_VOLCANO_DATASET
     )
 
   # Resample to isotropic with Bspline kernel
-  ADD_TEST(RVTI_BSpline_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
+  add_test(RVTI_BSpline_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
     ${CXX_TEST_PATH}/ResampleVolumeToBeIsotropic
     ${DATASET_ROI}
     ${TEMP}/${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}_BSpline_Isotropic.mha
@@ -61,7 +61,7 @@ macro( TEST_VOLCANO_DATASET
     )
 
   # Segment
-  ADD_TEST(LSMT8e_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
+  add_test(LSMT8e_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
     ${CXX_TEST_PATH}/itkLesionSegmentationMethodTest8b
     ${SEEDS_FILE}
     ${DATASET_ROI}
@@ -70,9 +70,9 @@ macro( TEST_VOLCANO_DATASET
     -ResampleThickSliceData     # Supersample to isotropic
     )   
 
-IF( LSTK_SANDBOX_USE_VTK )
+if( LSTK_SANDBOX_USE_VTK )
   # Compute volume
-  ADD_TEST(LSMTVEB_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
+  add_test(LSMTVEB_${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}
     ${CXX_TEST_PATH}/IsoSurfaceVolumeEstimation
     ${TEMP}/${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}_LSMT8e_Segmentation.mha
     -0.5 # half pixel shift for the voxelized canny edges.
@@ -81,7 +81,7 @@ IF( LSTK_SANDBOX_USE_VTK )
     0 # Expected volume (unknown)
     ${TEMP}/${COLLECTION_NAME}-${CASE_NAME}-${STUDY_NAME}-${INSTANCE_NAME}_Volume.txt
     )
-ENDIF( LSTK_SANDBOX_USE_VTK )
+endif( LSTK_SANDBOX_USE_VTK )
 
 endmacro()
 

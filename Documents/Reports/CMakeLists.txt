@@ -1,21 +1,21 @@
 
-FIND_PACKAGE(LATEX)
+find_package(LATEX)
 
-IF(NOT PDFLATEX_COMPILER)
-  MESSAGE("pdflatex compiler was not found. Please pass to advanced mode and provide its full path")
-ENDIF(NOT PDFLATEX_COMPILER)
-
-
-FIND_PACKAGE(Gnuplot REQUIRED)
-
-MARK_AS_ADVANCED( CLEAR GNUPLOT )
-
-IF(NOT GNUPLOT)
-  MESSAGE("Gnuplot was not found. Please provide the full path to a gnuplot executable in the GNUPLOT variable.")
-ENDIF(NOT GNUPLOT)
+if(NOT PDFLATEX_COMPILER)
+  message("pdflatex compiler was not found. Please pass to advanced mode and provide its full path")
+endif(NOT PDFLATEX_COMPILER)
 
 
-IF( GNUPLOT AND PDFLATEX_COMPILER )
-  ADD_SUBDIRECTORY( Report001 )
-  ADD_SUBDIRECTORY( Report002 )
-ENDIF( GNUPLOT AND PDFLATEX_COMPILER )
+find_package(Gnuplot REQUIRED)
+
+mark_as_advanced( CLEAR GNUPLOT )
+
+if(NOT GNUPLOT)
+  message("Gnuplot was not found. Please provide the full path to a gnuplot executable in the GNUPLOT variable.")
+endif(NOT GNUPLOT)
+
+
+if( GNUPLOT AND PDFLATEX_COMPILER )
+  add_subdirectory( Report001 )
+  add_subdirectory( Report002 )
+endif( GNUPLOT AND PDFLATEX_COMPILER )
