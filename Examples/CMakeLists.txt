@@ -2,8 +2,8 @@
 # Insert examples here.
 #
 
-ADD_EXECUTABLE( LesionSegmentation
+add_executable( LesionSegmentation
    LesionSegmentation.cxx
    itkLesionSegmentationCommandLineProgressReporter.cxx )
-TARGET_LINK_LIBRARIES( LesionSegmentation ${ITK_VTK_LSTK_LIBRARIES} )
+target_link_libraries( LesionSegmentation ${ITK_VTK_LSTK_LIBRARIES} )
 

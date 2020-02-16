@@ -1,19 +1,19 @@
-PROJECT(Visualization)
+project(Visualization)
 
-INCLUDE_DIRECTORIES(${Visualization_SOURCE_DIR})
+include_directories(${Visualization_SOURCE_DIR})
 
-ADD_EXECUTABLE(ViewImageAndSegmentationSurface ViewImageAndSegmentationSurface.cxx )
-TARGET_LINK_LIBRARIES(ViewImageAndSegmentationSurface ${ITK_VTK_LSTK_LIBRARIES})
+add_executable(ViewImageAndSegmentationSurface ViewImageAndSegmentationSurface.cxx )
+target_link_libraries(ViewImageAndSegmentationSurface ${ITK_VTK_LSTK_LIBRARIES})
 
-ADD_EXECUTABLE(ViewImageSlicesAndSegmentationContours
+add_executable(ViewImageSlicesAndSegmentationContours
   ViewImageSlicesAndSegmentationContours.cxx
   vtkContourVisualizationModule.cxx
   )
-TARGET_LINK_LIBRARIES(ViewImageSlicesAndSegmentationContours ${ITK_VTK_LSTK_LIBRARIES})
+target_link_libraries(ViewImageSlicesAndSegmentationContours ${ITK_VTK_LSTK_LIBRARIES})
 
-ADD_EXECUTABLE(LesionSurfaceExtraction LesionSurfaceExtraction.cxx )
-TARGET_LINK_LIBRARIES(LesionSurfaceExtraction ${ITK_VTK_LSTK_LIBRARIES})
+add_executable(LesionSurfaceExtraction LesionSurfaceExtraction.cxx )
+target_link_libraries(LesionSurfaceExtraction ${ITK_VTK_LSTK_LIBRARIES})
 
-ADD_EXECUTABLE(IsoSurfaceVolumeEstimation IsoSurfaceVolumeEstimation.cxx )
-TARGET_LINK_LIBRARIES(IsoSurfaceVolumeEstimation ${ITK_VTK_LSTK_LIBRARIES})
+add_executable(IsoSurfaceVolumeEstimation IsoSurfaceVolumeEstimation.cxx )
+target_link_libraries(IsoSurfaceVolumeEstimation ${ITK_VTK_LSTK_LIBRARIES})
 

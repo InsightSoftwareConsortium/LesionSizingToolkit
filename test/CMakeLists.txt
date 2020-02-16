@@ -64,16 +64,16 @@ CreateTestDriver(LesionSizingToolkit "${LesionSizingToolkit-Test_LIBRARIES}" "${
 set(TEST_DATA_ROOT "${LesionSizingToolkit_SOURCE_DIR}/Data")
 set(TEMP ${ITK_TEST_OUTPUT_DIR})
 
-INCLUDE(CollectionTestMacro.cmake)
-FIND_PATH(TEST_CORNELL_DATA_ROOT README.txt DOC "Directory with data from the Cornell ELCAP database")
-FIND_PATH(TEST_NIST_DATA_ROOT  LevineJResNIST2008b.pdf DOC "Directory with data from the NIST Phantom database")
-FIND_PATH(TEST_FDA_DATA_ROOT  phantom_diameter_measures.xls DOC "Directory with data from the FDA Phantom database")
-FIND_PATH(TEST_VOLCANO_DATA_ROOT SCseeds.csv DOC "Directory with data from for the MICCAI Volcano challenge. http://www.via.cornell.edu/challenge")
+include(CollectionTestMacro.cmake)
+find_path(TEST_CORNELL_DATA_ROOT README.txt DOC "Directory with data from the Cornell ELCAP database")
+find_path(TEST_NIST_DATA_ROOT  LevineJResNIST2008b.pdf DOC "Directory with data from the NIST Phantom database")
+find_path(TEST_FDA_DATA_ROOT  phantom_diameter_measures.xls DOC "Directory with data from the FDA Phantom database")
+find_path(TEST_VOLCANO_DATA_ROOT SCseeds.csv DOC "Directory with data from for the MICCAI Volcano challenge. http://www.via.cornell.edu/challenge")
 
-OPTION(TEST_CORNELL_COLLECTION "Run tests in the collection of datasets from Cornell" OFF)
-OPTION(TEST_NIST_PHANTOM_COLLECTION "Run tests in the collection of phantom datasets from NIST" OFF)
-OPTION(TEST_FDA_PHANTOM_COLLECTION "Run tests in the collection of phantom datasets from FDA" OFF)
-OPTION(TEST_VOLCANO_DATA_COLLECTION "Run tests at MICCAI Volcano challenge. http://www.via.cornell.edu/challenge" OFF)
+option(TEST_CORNELL_COLLECTION "Run tests in the collection of datasets from Cornell" OFF)
+option(TEST_NIST_PHANTOM_COLLECTION "Run tests in the collection of phantom datasets from NIST" OFF)
+option(TEST_FDA_PHANTOM_COLLECTION "Run tests in the collection of phantom datasets from FDA" OFF)
+option(TEST_VOLCANO_DATA_COLLECTION "Run tests at MICCAI Volcano challenge. http://www.via.cornell.edu/challenge" OFF)
 
 
 
@@ -364,7 +364,7 @@ itk_add_test(NAME itkGeodesicActiveContourLevelSetSegmentationModuleTest1
  )
 
 
-SET_TESTS_PROPERTIES( itkGeodesicActiveContourLevelSetSegmentationModuleTest1
+set_tests_properties( itkGeodesicActiveContourLevelSetSegmentationModuleTest1
   PROPERTIES DEPENDS itkConfidenceConnectedSegmentationModuleTest1)
 
 itk_add_test(NAME itkShapeDetectionLevelSetSegmentationModuleTest1
@@ -377,7 +377,7 @@ itk_add_test(NAME itkShapeDetectionLevelSetSegmentationModuleTest1
  )
 
 
-SET_TESTS_PROPERTIES( itkShapeDetectionLevelSetSegmentationModuleTest1
+set_tests_properties( itkShapeDetectionLevelSetSegmentationModuleTest1
   PROPERTIES DEPENDS itkConfidenceConnectedSegmentationModuleTest1)
 
 itk_add_test(NAME itkShapeDetectionLevelSetSegmentationModuleTest2
@@ -389,11 +389,11 @@ itk_add_test(NAME itkShapeDetectionLevelSetSegmentationModuleTest2
     1.0   # Curvature Scaling
  )
 
-SET_TESTS_PROPERTIES( itkShapeDetectionLevelSetSegmentationModuleTest2
+set_tests_properties( itkShapeDetectionLevelSetSegmentationModuleTest2
   PROPERTIES DEPENDS itkConfidenceConnectedSegmentationModuleTest1)
 
 
-IF(TEST_CORNELL_DATA_ROOT)
+if(TEST_CORNELL_DATA_ROOT)
 
 itk_add_test(NAME itkFeatureAggregatorTest1
   COMMAND LesionSizingToolkitTestDriver itkFeatureAggregatorTest1
@@ -475,29 +475,29 @@ itk_add_test(NAME itkWeightedSumFeatureAggregatorTest1
   1.0
  )
 
-ENDIF(TEST_CORNELL_DATA_ROOT)
+endif(TEST_CORNELL_DATA_ROOT)
 
-IF(TEST_CORNELL_COLLECTION)
-  IF(TEST_CORNELL_DATA_ROOT)
-    INCLUDE(CornellCollectionTests.cmake)
-  ENDIF(TEST_CORNELL_DATA_ROOT)
-ENDIF(TEST_CORNELL_COLLECTION)
+if(TEST_CORNELL_COLLECTION)
+  if(TEST_CORNELL_DATA_ROOT)
+    include(CornellCollectionTests.cmake)
+  endif(TEST_CORNELL_DATA_ROOT)
+endif(TEST_CORNELL_COLLECTION)
 
-IF(TEST_NIST_PHANTOM_COLLECTION)
-  IF(TEST_NIST_DATA_ROOT)
-    INCLUDE(NISTPhantomCollectionTests.cmake)
-  ENDIF(TEST_NIST_DATA_ROOT)
-ENDIF(TEST_NIST_PHANTOM_COLLECTION)
+if(TEST_NIST_PHANTOM_COLLECTION)
+  if(TEST_NIST_DATA_ROOT)
+    include(NISTPhantomCollectionTests.cmake)
+  endif(TEST_NIST_DATA_ROOT)
+endif(TEST_NIST_PHANTOM_COLLECTION)
 
-IF(TEST_FDA_PHANTOM_COLLECTION)
-  IF(TEST_FDA_DATA_ROOT)
-    INCLUDE(FDAPhantomCollectionTests.cmake)
-  ENDIF(TEST_FDA_DATA_ROOT)
-ENDIF(TEST_FDA_PHANTOM_COLLECTION)
+if(TEST_FDA_PHANTOM_COLLECTION)
+  if(TEST_FDA_DATA_ROOT)
+    include(FDAPhantomCollectionTests.cmake)
+  endif(TEST_FDA_DATA_ROOT)
+endif(TEST_FDA_PHANTOM_COLLECTION)
 
-IF(TEST_VOLCANO_DATA_COLLECTION)
-  IF(TEST_VOLCANO_DATA_ROOT)
-    INCLUDE(VOLCANOCollectionTests.cmake)
-  ENDIF(TEST_VOLCANO_DATA_ROOT)
-ENDIF(TEST_VOLCANO_DATA_COLLECTION)
+if(TEST_VOLCANO_DATA_COLLECTION)
+  if(TEST_VOLCANO_DATA_ROOT)
+    include(VOLCANOCollectionTests.cmake)
+  endif(TEST_VOLCANO_DATA_ROOT)
+endif(TEST_VOLCANO_DATA_COLLECTION)
 

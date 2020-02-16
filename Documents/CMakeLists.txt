@@ -1,1 +1,1 @@
-ADD_SUBDIRECTORY( Reports )
+add_subdirectory( Reports )
