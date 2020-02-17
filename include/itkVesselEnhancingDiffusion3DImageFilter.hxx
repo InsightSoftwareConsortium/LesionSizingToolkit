@@ -42,12 +42,7 @@ namespace itk
 template <typename PixelType, unsigned int NDimension>
 VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::VesselEnhancingDiffusion3DImageFilter()
   : m_TimeStep(NumericTraits<Precision>::Zero)
-  , m_Iterations(0)
-  , m_RecalculateVesselness(0)
-  , m_Epsilon(0.0)
-  , m_Omega(0.0)
-  , m_Sensitivity(0.0)
-  , m_DarkObjectLightBackground(false)
+
 {
   this->SetNumberOfRequiredInputs(1);
 }

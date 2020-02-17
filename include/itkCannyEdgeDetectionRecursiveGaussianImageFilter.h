@@ -222,7 +222,6 @@ protected:
 
 private:
   ~CannyEdgeDetectionRecursiveGaussianImageFilter() override = default;
-  ;
 
   /** Thread-Data Structure   */
   struct CannyThreadStruct
