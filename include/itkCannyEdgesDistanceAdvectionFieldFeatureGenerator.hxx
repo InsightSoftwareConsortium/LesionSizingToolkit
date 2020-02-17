@@ -51,8 +51,8 @@ CannyEdgesDistanceAdvectionFieldFeatureGenerator<NDimension>::CannyEdgesDistance
  * Destructor
  */
 template <unsigned int NDimension>
-CannyEdgesDistanceAdvectionFieldFeatureGenerator<NDimension>::~CannyEdgesDistanceAdvectionFieldFeatureGenerator()
-{}
+CannyEdgesDistanceAdvectionFieldFeatureGenerator<NDimension>::~CannyEdgesDistanceAdvectionFieldFeatureGenerator() =
+  default;
 
 template <unsigned int NDimension>
 void

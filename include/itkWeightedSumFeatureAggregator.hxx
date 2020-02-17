@@ -30,16 +30,14 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-WeightedSumFeatureAggregator<NDimension>::WeightedSumFeatureAggregator()
-{}
+WeightedSumFeatureAggregator<NDimension>::WeightedSumFeatureAggregator() = default;
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-WeightedSumFeatureAggregator<NDimension>::~WeightedSumFeatureAggregator()
-{}
+WeightedSumFeatureAggregator<NDimension>::~WeightedSumFeatureAggregator() = default;
 
 
 /**

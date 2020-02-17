@@ -185,7 +185,8 @@ protected:
 
 
 private:
-  ~LesionSegmentationImageFilter8() override{};
+  ~LesionSegmentationImageFilter8() override = default;
+  ;
 
   double m_SigmoidBeta;
   double m_FastMarchingStoppingTime;

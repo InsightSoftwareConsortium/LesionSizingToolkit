@@ -47,8 +47,7 @@ FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<
  */
 template <unsigned int NDimension>
 FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<
-  NDimension>::~FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule()
-{}
+  NDimension>::~FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule() = default;
 
 
 /**

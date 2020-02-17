@@ -52,8 +52,7 @@ SinglePhaseLevelSetSegmentationModule<NDimension>::SinglePhaseLevelSetSegmentati
  * Destructor
  */
 template <unsigned int NDimension>
-SinglePhaseLevelSetSegmentationModule<NDimension>::~SinglePhaseLevelSetSegmentationModule()
-{}
+SinglePhaseLevelSetSegmentationModule<NDimension>::~SinglePhaseLevelSetSegmentationModule() = default;
 
 
 /**

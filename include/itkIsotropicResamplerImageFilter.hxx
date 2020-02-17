@@ -35,10 +35,6 @@ IsotropicResamplerImageFilter<TInputImage, TOutputImage>::IsotropicResamplerImag
 }
 
 template <typename TInputImage, typename TOutputImage>
-IsotropicResamplerImageFilter<TInputImage, TOutputImage>::~IsotropicResamplerImageFilter()
-{}
-
-template <typename TInputImage, typename TOutputImage>
 void
 IsotropicResamplerImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
 {

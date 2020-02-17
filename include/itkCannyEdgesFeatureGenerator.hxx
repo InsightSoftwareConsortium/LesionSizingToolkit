@@ -55,8 +55,7 @@ CannyEdgesFeatureGenerator<NDimension>::CannyEdgesFeatureGenerator()
  * Destructor
  */
 template <unsigned int NDimension>
-CannyEdgesFeatureGenerator<NDimension>::~CannyEdgesFeatureGenerator()
-{}
+CannyEdgesFeatureGenerator<NDimension>::~CannyEdgesFeatureGenerator() = default;
 
 template <unsigned int NDimension>
 void

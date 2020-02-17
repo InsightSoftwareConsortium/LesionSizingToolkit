@@ -29,16 +29,14 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-GrayscaleImageSegmentationVolumeEstimator<NDimension>::GrayscaleImageSegmentationVolumeEstimator()
-{}
+GrayscaleImageSegmentationVolumeEstimator<NDimension>::GrayscaleImageSegmentationVolumeEstimator() = default;
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-GrayscaleImageSegmentationVolumeEstimator<NDimension>::~GrayscaleImageSegmentationVolumeEstimator()
-{}
+GrayscaleImageSegmentationVolumeEstimator<NDimension>::~GrayscaleImageSegmentationVolumeEstimator() = default;
 
 
 /**

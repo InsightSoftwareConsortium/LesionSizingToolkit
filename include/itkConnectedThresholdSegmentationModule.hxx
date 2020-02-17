@@ -29,16 +29,14 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-ConnectedThresholdSegmentationModule<NDimension>::ConnectedThresholdSegmentationModule()
-{}
+ConnectedThresholdSegmentationModule<NDimension>::ConnectedThresholdSegmentationModule() = default;
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-ConnectedThresholdSegmentationModule<NDimension>::~ConnectedThresholdSegmentationModule()
-{}
+ConnectedThresholdSegmentationModule<NDimension>::~ConnectedThresholdSegmentationModule() = default;
 
 
 /**

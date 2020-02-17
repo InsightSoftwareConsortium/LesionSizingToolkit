@@ -43,8 +43,7 @@ SatoVesselnessSigmoidFeatureGenerator<NDimension>::SatoVesselnessSigmoidFeatureG
  * Destructor
  */
 template <unsigned int NDimension>
-SatoVesselnessSigmoidFeatureGenerator<NDimension>::~SatoVesselnessSigmoidFeatureGenerator()
-{}
+SatoVesselnessSigmoidFeatureGenerator<NDimension>::~SatoVesselnessSigmoidFeatureGenerator() = default;
 
 
 /**

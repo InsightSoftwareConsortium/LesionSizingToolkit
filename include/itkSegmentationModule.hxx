@@ -37,8 +37,7 @@ SegmentationModule<NDimension>::SegmentationModule()
  * Destructor
  */
 template <unsigned int NDimension>
-SegmentationModule<NDimension>::~SegmentationModule()
-{}
+SegmentationModule<NDimension>::~SegmentationModule() = default;
 
 template <unsigned int NDimension>
 void

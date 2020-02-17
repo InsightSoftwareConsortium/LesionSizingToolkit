@@ -49,8 +49,7 @@ SigmoidFeatureGenerator<NDimension>::SigmoidFeatureGenerator()
  * Destructor
  */
 template <unsigned int NDimension>
-SigmoidFeatureGenerator<NDimension>::~SigmoidFeatureGenerator()
-{}
+SigmoidFeatureGenerator<NDimension>::~SigmoidFeatureGenerator() = default;
 
 template <unsigned int NDimension>
 void

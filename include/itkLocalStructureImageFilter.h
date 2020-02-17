@@ -56,7 +56,7 @@ public:
     m_Alpha = 0.25; // suggested value in the paper
     m_Gamma = 0.50; // suggested value in the paper;
   }
-  ~LocalStructure() {}
+  ~LocalStructure() = default;
   bool
   operator!=(const LocalStructure &) const
   {
@@ -218,8 +218,8 @@ public:
 #endif
 
 protected:
-  LocalStructureImageFilter() {}
-  ~LocalStructureImageFilter() override {}
+  LocalStructureImageFilter() = default;
+  ~LocalStructureImageFilter() override = default;
 };
 
 } // end namespace itk

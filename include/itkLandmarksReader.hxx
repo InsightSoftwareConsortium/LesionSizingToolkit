@@ -44,8 +44,7 @@ LandmarksReader<NDimension>::LandmarksReader()
  * Destructor
  */
 template <unsigned int NDimension>
-LandmarksReader<NDimension>::~LandmarksReader()
-{}
+LandmarksReader<NDimension>::~LandmarksReader() = default;
 
 template <unsigned int NDimension>
 const typename LandmarksReader<NDimension>::SpatialObjectType *

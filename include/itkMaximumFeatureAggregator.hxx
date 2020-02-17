@@ -30,16 +30,14 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-MaximumFeatureAggregator<NDimension>::MaximumFeatureAggregator()
-{}
+MaximumFeatureAggregator<NDimension>::MaximumFeatureAggregator() = default;
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-MaximumFeatureAggregator<NDimension>::~MaximumFeatureAggregator()
-{}
+MaximumFeatureAggregator<NDimension>::~MaximumFeatureAggregator() = default;
 
 
 /**

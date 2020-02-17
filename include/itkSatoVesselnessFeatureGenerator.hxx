@@ -55,8 +55,7 @@ SatoVesselnessFeatureGenerator<NDimension>::SatoVesselnessFeatureGenerator()
  * Destructor
  */
 template <unsigned int NDimension>
-SatoVesselnessFeatureGenerator<NDimension>::~SatoVesselnessFeatureGenerator()
-{}
+SatoVesselnessFeatureGenerator<NDimension>::~SatoVesselnessFeatureGenerator() = default;
 
 template <unsigned int NDimension>
 void

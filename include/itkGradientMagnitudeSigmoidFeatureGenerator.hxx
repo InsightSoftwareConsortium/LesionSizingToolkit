@@ -53,8 +53,7 @@ GradientMagnitudeSigmoidFeatureGenerator<NDimension>::GradientMagnitudeSigmoidFe
  * Destructor
  */
 template <unsigned int NDimension>
-GradientMagnitudeSigmoidFeatureGenerator<NDimension>::~GradientMagnitudeSigmoidFeatureGenerator()
-{}
+GradientMagnitudeSigmoidFeatureGenerator<NDimension>::~GradientMagnitudeSigmoidFeatureGenerator() = default;
 
 template <unsigned int NDimension>
 void

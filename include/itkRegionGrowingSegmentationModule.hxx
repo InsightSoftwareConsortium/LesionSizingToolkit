@@ -43,8 +43,7 @@ RegionGrowingSegmentationModule<NDimension>::RegionGrowingSegmentationModule()
  * Destructor
  */
 template <unsigned int NDimension>
-RegionGrowingSegmentationModule<NDimension>::~RegionGrowingSegmentationModule()
-{}
+RegionGrowingSegmentationModule<NDimension>::~RegionGrowingSegmentationModule() = default;
 
 
 /**

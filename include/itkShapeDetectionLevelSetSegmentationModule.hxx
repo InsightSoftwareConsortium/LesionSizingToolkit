@@ -29,16 +29,14 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-ShapeDetectionLevelSetSegmentationModule<NDimension>::ShapeDetectionLevelSetSegmentationModule()
-{}
+ShapeDetectionLevelSetSegmentationModule<NDimension>::ShapeDetectionLevelSetSegmentationModule() = default;
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-ShapeDetectionLevelSetSegmentationModule<NDimension>::~ShapeDetectionLevelSetSegmentationModule()
-{}
+ShapeDetectionLevelSetSegmentationModule<NDimension>::~ShapeDetectionLevelSetSegmentationModule() = default;
 
 
 /**

@@ -50,8 +50,7 @@ FastMarchingSegmentationModule<NDimension>::FastMarchingSegmentationModule()
  * Destructor
  */
 template <unsigned int NDimension>
-FastMarchingSegmentationModule<NDimension>::~FastMarchingSegmentationModule()
-{}
+FastMarchingSegmentationModule<NDimension>::~FastMarchingSegmentationModule() = default;
 
 
 /**

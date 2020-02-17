@@ -51,8 +51,7 @@ SatoLocalStructureFeatureGenerator<NDimension>::SatoLocalStructureFeatureGenerat
  * Destructor
  */
 template <unsigned int NDimension>
-SatoLocalStructureFeatureGenerator<NDimension>::~SatoLocalStructureFeatureGenerator()
-{}
+SatoLocalStructureFeatureGenerator<NDimension>::~SatoLocalStructureFeatureGenerator() = default;
 
 template <unsigned int NDimension>
 void

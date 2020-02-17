@@ -47,8 +47,7 @@ FastMarchingAndShapeDetectionLevelSetSegmentationModule<
  */
 template <unsigned int NDimension>
 FastMarchingAndShapeDetectionLevelSetSegmentationModule<
-  NDimension>::~FastMarchingAndShapeDetectionLevelSetSegmentationModule()
-{}
+  NDimension>::~FastMarchingAndShapeDetectionLevelSetSegmentationModule() = default;
 
 
 /**

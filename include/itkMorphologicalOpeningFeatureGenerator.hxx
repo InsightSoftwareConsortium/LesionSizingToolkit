@@ -55,8 +55,7 @@ MorphologicalOpeningFeatureGenerator<NDimension>::MorphologicalOpeningFeatureGen
  * Destructor
  */
 template <unsigned int NDimension>
-MorphologicalOpeningFeatureGenerator<NDimension>::~MorphologicalOpeningFeatureGenerator()
-{}
+MorphologicalOpeningFeatureGenerator<NDimension>::~MorphologicalOpeningFeatureGenerator() = default;
 
 template <unsigned int NDimension>
 void

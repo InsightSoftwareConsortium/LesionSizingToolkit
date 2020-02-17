@@ -46,8 +46,7 @@ FeatureAggregator<NDimension>::FeatureAggregator()
  * Destructor
  */
 template <unsigned int NDimension>
-FeatureAggregator<NDimension>::~FeatureAggregator()
-{}
+FeatureAggregator<NDimension>::~FeatureAggregator() = default;
 
 
 /**
