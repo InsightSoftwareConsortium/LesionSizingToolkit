@@ -144,7 +144,7 @@ public:
   const char *
   GetStatusMessage() const
   {
-    return m_StatusMessage.length() ? m_StatusMessage.c_str() : NULL;
+    return m_StatusMessage.length() ? m_StatusMessage.c_str() : nullptr;
   }
 
   /* Manually specify sigma. This defaults to the max spacing in the dataset */
