@@ -52,8 +52,7 @@ LesionSegmentationMethod<NDimension>::LesionSegmentationMethod()
  * Destructor
  */
 template <unsigned int NDimension>
-LesionSegmentationMethod<NDimension>::~LesionSegmentationMethod()
-{}
+LesionSegmentationMethod<NDimension>::~LesionSegmentationMethod() = default;
 
 
 /**

@@ -221,7 +221,8 @@ protected:
   using MultiplyImageFilterType = MultiplyImageFilter<OutputImageType, OutputImageType, OutputImageType>;
 
 private:
-  ~CannyEdgeDetectionRecursiveGaussianImageFilter() override{};
+  ~CannyEdgeDetectionRecursiveGaussianImageFilter() override = default;
+  ;
 
   /** Thread-Data Structure   */
   struct CannyThreadStruct

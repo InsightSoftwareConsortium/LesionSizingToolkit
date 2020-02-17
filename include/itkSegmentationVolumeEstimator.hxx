@@ -43,8 +43,7 @@ SegmentationVolumeEstimator<NDimension>::SegmentationVolumeEstimator()
  * Destructor
  */
 template <unsigned int NDimension>
-SegmentationVolumeEstimator<NDimension>::~SegmentationVolumeEstimator()
-{}
+SegmentationVolumeEstimator<NDimension>::~SegmentationVolumeEstimator() = default;
 
 
 /**

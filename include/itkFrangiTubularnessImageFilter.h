@@ -46,7 +46,7 @@ public:
     m_Gamma = 1.0; // suggested value in the paper;
     m_BrigthForeground = true;
   }
-  ~Tubularness() {}
+  ~Tubularness() = default;
   Tubularness(const Tubularness & one)
   {
     this->m_Alpha = one.m_Alpha;
@@ -251,8 +251,8 @@ public:
 #endif
 
 protected:
-  FrangiTubularnessImageFilter() {}
-  ~FrangiTubularnessImageFilter() override {}
+  FrangiTubularnessImageFilter() = default;
+  ~FrangiTubularnessImageFilter() override = default;
 };
 
 } // end namespace itk

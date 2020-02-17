@@ -30,16 +30,14 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-MinimumFeatureAggregator<NDimension>::MinimumFeatureAggregator()
-{}
+MinimumFeatureAggregator<NDimension>::MinimumFeatureAggregator() = default;
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-MinimumFeatureAggregator<NDimension>::~MinimumFeatureAggregator()
-{}
+MinimumFeatureAggregator<NDimension>::~MinimumFeatureAggregator() = default;
 
 
 /**

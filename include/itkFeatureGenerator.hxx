@@ -37,8 +37,7 @@ FeatureGenerator<NDimension>::FeatureGenerator()
  * Destructor
  */
 template <unsigned int NDimension>
-FeatureGenerator<NDimension>::~FeatureGenerator()
-{}
+FeatureGenerator<NDimension>::~FeatureGenerator() = default;
 
 template <unsigned int NDimension>
 void

@@ -29,16 +29,14 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-ConfidenceConnectedSegmentationModule<NDimension>::ConfidenceConnectedSegmentationModule()
-{}
+ConfidenceConnectedSegmentationModule<NDimension>::ConfidenceConnectedSegmentationModule() = default;
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-ConfidenceConnectedSegmentationModule<NDimension>::~ConfidenceConnectedSegmentationModule()
-{}
+ConfidenceConnectedSegmentationModule<NDimension>::~ConfidenceConnectedSegmentationModule() = default;
 
 
 /**

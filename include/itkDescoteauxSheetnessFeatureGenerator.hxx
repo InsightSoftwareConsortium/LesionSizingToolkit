@@ -58,8 +58,7 @@ DescoteauxSheetnessFeatureGenerator<NDimension>::DescoteauxSheetnessFeatureGener
  * Destructor
  */
 template <unsigned int NDimension>
-DescoteauxSheetnessFeatureGenerator<NDimension>::~DescoteauxSheetnessFeatureGenerator()
-{}
+DescoteauxSheetnessFeatureGenerator<NDimension>::~DescoteauxSheetnessFeatureGenerator() = default;
 
 template <unsigned int NDimension>
 void

@@ -51,8 +51,7 @@ LungWallFeatureGenerator<NDimension>::LungWallFeatureGenerator()
  * Destructor
  */
 template <unsigned int NDimension>
-LungWallFeatureGenerator<NDimension>::~LungWallFeatureGenerator()
-{}
+LungWallFeatureGenerator<NDimension>::~LungWallFeatureGenerator() = default;
 
 template <unsigned int NDimension>
 void

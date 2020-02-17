@@ -30,16 +30,16 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-GeodesicActiveContourLevelSetSegmentationModule<NDimension>::GeodesicActiveContourLevelSetSegmentationModule()
-{}
+GeodesicActiveContourLevelSetSegmentationModule<NDimension>::GeodesicActiveContourLevelSetSegmentationModule() =
+  default;
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-GeodesicActiveContourLevelSetSegmentationModule<NDimension>::~GeodesicActiveContourLevelSetSegmentationModule()
-{}
+GeodesicActiveContourLevelSetSegmentationModule<NDimension>::~GeodesicActiveContourLevelSetSegmentationModule() =
+  default;
 
 
 /**

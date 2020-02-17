@@ -40,8 +40,7 @@ IsotropicResampler<NDimension>::IsotropicResampler()
 }
 
 template <unsigned int NDimension>
-IsotropicResampler<NDimension>::~IsotropicResampler()
-{}
+IsotropicResampler<NDimension>::~IsotropicResampler() = default;
 
 template <unsigned int NDimension>
 void

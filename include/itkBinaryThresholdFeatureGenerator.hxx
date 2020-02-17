@@ -42,8 +42,7 @@ BinaryThresholdFeatureGenerator<NDimension>::BinaryThresholdFeatureGenerator()
 
 
 template <unsigned int NDimension>
-BinaryThresholdFeatureGenerator<NDimension>::~BinaryThresholdFeatureGenerator()
-{}
+BinaryThresholdFeatureGenerator<NDimension>::~BinaryThresholdFeatureGenerator() = default;
 
 
 template <unsigned int NDimension>

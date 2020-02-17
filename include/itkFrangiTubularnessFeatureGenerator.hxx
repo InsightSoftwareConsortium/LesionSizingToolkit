@@ -54,8 +54,7 @@ FrangiTubularnessFeatureGenerator<NDimension>::FrangiTubularnessFeatureGenerator
  * Destructor
  */
 template <unsigned int NDimension>
-FrangiTubularnessFeatureGenerator<NDimension>::~FrangiTubularnessFeatureGenerator()
-{}
+FrangiTubularnessFeatureGenerator<NDimension>::~FrangiTubularnessFeatureGenerator() = default;
 
 template <unsigned int NDimension>
 void

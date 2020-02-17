@@ -51,7 +51,7 @@ public:
     m_C = 1.0;
     m_DetectBrightSheets = true;
   }
-  ~Sheetness() {}
+  ~Sheetness() = default;
   bool
   operator!=(const Sheetness &) const
   {
@@ -244,8 +244,8 @@ public:
 #endif
 
 protected:
-  DescoteauxSheetnessImageFilter() {}
-  ~DescoteauxSheetnessImageFilter() override {}
+  DescoteauxSheetnessImageFilter() = default;
+  ~DescoteauxSheetnessImageFilter() override = default;
 };
 
 } // end namespace itk

@@ -103,7 +103,7 @@ protected:
   GenerateData() override;
 
 private:
-  ~IsotropicResamplerImageFilter() override;
+  ~IsotropicResamplerImageFilter() override = default;
 
   SpacingType m_OutputSpacing;
   using ResampleFilterType = ResampleImageFilter<TInputImage, TOutputImage>;
