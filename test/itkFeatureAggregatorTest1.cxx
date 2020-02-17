@@ -58,9 +58,9 @@ protected:
   }
 
 private:
-  FeatureAggregatorSurrogate(const Self &); // purposely not implemented
+  FeatureAggregatorSurrogate(const Self &) = delete; // purposely not implemented
   void
-  operator=(const Self &); // purposely not implemented
+  operator=(const Self &) = delete; // purposely not implemented
 
   using FeatureGeneratorType = typename Superclass::FeatureGeneratorType;
   using FeatureGeneratorPointer = typename FeatureGeneratorType::Pointer;
