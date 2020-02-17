@@ -141,7 +141,6 @@ public:
 protected:
   VesselEnhancingDiffusion3DImageFilter();
   ~VesselEnhancingDiffusion3DImageFilter() override = default;
-  ;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
   void
@@ -149,16 +148,16 @@ protected:
 
 private:
   Precision              m_TimeStep;
-  unsigned int           m_Iterations;
-  unsigned int           m_RecalculateVesselness;
+  unsigned int           m_Iterations{ 0 };
+  unsigned int           m_RecalculateVesselness{ 0 };
   Precision              m_Alpha;
   Precision              m_Beta;
   Precision              m_Gamma;
-  Precision              m_Epsilon;
-  Precision              m_Omega;
-  Precision              m_Sensitivity;
+  Precision              m_Epsilon{ 0.0 };
+  Precision              m_Omega{ 0.0 };
+  Precision              m_Sensitivity{ 0.0 };
   std::vector<Precision> m_Scales;
-  bool                   m_DarkObjectLightBackground;
+  bool                   m_DarkObjectLightBackground{ false };
   bool                   m_Verbose;
   unsigned int           m_CurrentIteration;
 
