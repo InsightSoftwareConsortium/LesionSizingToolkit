@@ -92,7 +92,7 @@ public:
    * execution model.  The original documentation of this method is
    * below. \sa ProcessObject::GenerateOutputInformaton() */
   void
-  GenerateOutputInformation(void) override;
+  GenerateOutputInformation() override;
 
 protected:
   IsotropicResamplerImageFilter();
