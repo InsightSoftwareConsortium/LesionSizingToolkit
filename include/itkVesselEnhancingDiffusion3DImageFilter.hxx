@@ -57,9 +57,9 @@ VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::PrintSelf(std::ost
   os << indent << "Iterations             : " << m_Iterations << std::endl;
   os << indent << "RecalculateVesselness      : " << m_RecalculateVesselness << std::endl;
   os << indent << "Scales     : ";
-  for (unsigned int i = 0; i < m_Scales.size(); ++i)
+  for (float m_Scale : m_Scales)
   {
-    os << m_Scales[i] << " ";
+    os << m_Scale << " ";
   }
   os << std::endl;
   os << indent << "Epsilon                 : " << m_Epsilon << std::endl;
@@ -471,13 +471,13 @@ VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::MaxVesselResponse(
   vi->FillBuffer(NumericTraits<Precision>::Zero);
 
 
-  for (unsigned int i = 0; i < m_Scales.size(); ++i)
+  for (float & m_Scale : m_Scales)
   {
     using HessianType = HessianRecursiveGaussianImageFilter<PrecisionImageType>;
     typename HessianType::Pointer hessian = HessianType::New();
     hessian->SetInput(im);
     hessian->SetNormalizeAcrossScale(true);
-    hessian->SetSigma(m_Scales[i]);
+    hessian->SetSigma(m_Scale);
     hessian->Update();
 
     ImageRegionIterator<PrecisionImageType> itxx(m_Dxx, m_Dxx->GetLargestPossibleRegion());
@@ -681,9 +681,9 @@ VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::GenerateData()
     std::cout << "iterations/timestep \t" << m_Iterations << " " << m_TimeStep << std::endl;
     std::cout << "recalc v            \t" << m_RecalculateVesselness << std::endl;
     std::cout << "scales              \t";
-    for (unsigned int i = 0; i < m_Scales.size(); ++i)
+    for (float m_Scale : m_Scales)
     {
-      std::cout << m_Scales[i] << " ";
+      std::cout << m_Scale << " ";
     }
     std::cout << std::endl;
     std::cout << "alpha/beta/gamma    \t" << m_Alpha << " " << m_Beta << " " << m_Gamma << std::endl;
