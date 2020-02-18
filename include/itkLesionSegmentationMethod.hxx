@@ -152,7 +152,7 @@ template <unsigned int NDimension>
 void
 LesionSegmentationMethod<NDimension>::ConnectFeaturesToSegmentationModule()
 {
-  if (this->m_FeatureGenerators.size() > 0)
+  if (!this->m_FeatureGenerators.empty())
   {
     if (this->m_FeatureGenerators[0]->GetFeature())
     {
