@@ -23,99 +23,99 @@
 #include "itkTestingMacros.h"
 
 
-int itkConnectedThresholdSegmentationModuleTest1( int argc, char * argv [] )
+int
+itkConnectedThresholdSegmentationModuleTest1(int argc, char * argv[])
 {
-  if( argc < 3 )
-    {
+  if (argc < 3)
+  {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " landmarksFile featureImage outputImage ";
     std::cerr << " [lowerThreshold upperThreshold] " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   constexpr unsigned int Dimension = 3;
 
-  using SegmentationModuleType = itk::ConnectedThresholdSegmentationModule< Dimension >;
+  using SegmentationModuleType = itk::ConnectedThresholdSegmentationModule<Dimension>;
 
   using FeatureImageType = SegmentationModuleType::FeatureImageType;
   using OutputImageType = SegmentationModuleType::OutputImageType;
 
-  using FeatureReaderType = itk::ImageFileReader< FeatureImageType >;
-  using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
+  using FeatureReaderType = itk::ImageFileReader<FeatureImageType>;
+  using OutputWriterType = itk::ImageFileWriter<OutputImageType>;
 
-  using LandmarksReaderType = itk::LandmarksReader< Dimension >;
+  using LandmarksReaderType = itk::LandmarksReader<Dimension>;
 
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
-  landmarksReader->SetFileName( argv[1] );
-  TRY_EXPECT_NO_EXCEPTION( landmarksReader->Update() );
+  landmarksReader->SetFileName(argv[1]);
+  TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
 
 
   FeatureReaderType::Pointer featureReader = FeatureReaderType::New();
 
-  featureReader->SetFileName( argv[2] );
+  featureReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION( featureReader->Update() );
+  TRY_EXPECT_NO_EXCEPTION(featureReader->Update());
 
 
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( segmentationModule,
-    ConnectedThresholdSegmentationModule,
-    RegionGrowingSegmentationModule );
+  EXERCISE_BASIC_OBJECT_METHODS(
+    segmentationModule, ConnectedThresholdSegmentationModule, RegionGrowingSegmentationModule);
 
   using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
   using FeatureSpatialObjectType = SegmentationModuleType::FeatureSpatialObjectType;
   using OutputSpatialObjectType = SegmentationModuleType::OutputSpatialObjectType;
 
-  InputSpatialObjectType::Pointer inputObject = InputSpatialObjectType::New();
+  InputSpatialObjectType::Pointer   inputObject = InputSpatialObjectType::New();
   FeatureSpatialObjectType::Pointer featureObject = FeatureSpatialObjectType::New();
 
   FeatureImageType::Pointer featureImage = featureReader->GetOutput();
 
   featureImage->DisconnectPipeline();
 
-  featureObject->SetImage( featureImage );
+  featureObject->SetImage(featureImage);
 
-  segmentationModule->SetFeature( featureObject );
-  segmentationModule->SetInput( landmarksReader->GetOutput() );
+  segmentationModule->SetFeature(featureObject);
+  segmentationModule->SetInput(landmarksReader->GetOutput());
 
 
   double lowerThreshold = 700;
-  if( argc > 4 )
-    {
-    lowerThreshold = std::stod( argv[4] );
-    }
-  segmentationModule->SetLowerThreshold( lowerThreshold );
-  TEST_SET_GET_VALUE( lowerThreshold, segmentationModule->GetLowerThreshold() );
+  if (argc > 4)
+  {
+    lowerThreshold = std::stod(argv[4]);
+  }
+  segmentationModule->SetLowerThreshold(lowerThreshold);
+  TEST_SET_GET_VALUE(lowerThreshold, segmentationModule->GetLowerThreshold());
 
   double upperThreshold = 1000;
-  if( argc > 5 )
-    {
-    upperThreshold = std::stod( argv[5] );
-    }
-  segmentationModule->SetUpperThreshold( upperThreshold );
-  TEST_SET_GET_VALUE( upperThreshold, segmentationModule->GetUpperThreshold() );
+  if (argc > 5)
+  {
+    upperThreshold = std::stod(argv[5]);
+  }
+  segmentationModule->SetUpperThreshold(upperThreshold);
+  TEST_SET_GET_VALUE(upperThreshold, segmentationModule->GetUpperThreshold());
 
 
-  TRY_EXPECT_NO_EXCEPTION( segmentationModule->Update() );
+  TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
 
   OutputSpatialObjectType::ConstPointer outputObject =
-    dynamic_cast< const OutputSpatialObjectType * >( segmentation.GetPointer() );
+    dynamic_cast<const OutputSpatialObjectType *>(segmentation.GetPointer());
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
   OutputWriterType::Pointer writer = OutputWriterType::New();
 
-  writer->SetFileName( argv[3] );
-  writer->SetInput( outputImage );
+  writer->SetFileName(argv[3]);
+  writer->SetInput(outputImage);
 
-  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
+  TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

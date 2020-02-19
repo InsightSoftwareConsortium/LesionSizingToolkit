@@ -27,10 +27,9 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-FrangiTubularnessFeatureGenerator<NDimension>
-::FrangiTubularnessFeatureGenerator()
+FrangiTubularnessFeatureGenerator<NDimension>::FrangiTubularnessFeatureGenerator()
 {
-  this->SetNumberOfRequiredInputs( 1 );
+  this->SetNumberOfRequiredInputs(1);
 
   this->m_HessianFilter = HessianFilterType::New();
   this->m_EigenAnalysisFilter = EigenAnalysisFilterType::New();
@@ -42,9 +41,9 @@ FrangiTubularnessFeatureGenerator<NDimension>
 
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
-  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->ProcessObject::SetNthOutput(0, outputObject.GetPointer());
 
-  this->m_Sigma =  1.0;
+  this->m_Sigma = 1.0;
   this->m_SheetnessNormalization = 0.5;
   this->m_BloobinessNormalization = 2.0;
   this->m_NoiseNormalization = 1.0;
@@ -55,32 +54,27 @@ FrangiTubularnessFeatureGenerator<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-FrangiTubularnessFeatureGenerator<NDimension>
-::~FrangiTubularnessFeatureGenerator()
-{
-}
+FrangiTubularnessFeatureGenerator<NDimension>::~FrangiTubularnessFeatureGenerator()
+{}
 
 template <unsigned int NDimension>
 void
-FrangiTubularnessFeatureGenerator<NDimension>
-::SetInput( const SpatialObjectType * spatialObject )
+FrangiTubularnessFeatureGenerator<NDimension>::SetInput(const SpatialObjectType * spatialObject)
 {
   // Process object is not const-correct so the const casting is required.
-  this->SetNthInput(0, const_cast<SpatialObjectType *>( spatialObject ));
+  this->SetNthInput(0, const_cast<SpatialObjectType *>(spatialObject));
 }
 
 template <unsigned int NDimension>
 const typename FrangiTubularnessFeatureGenerator<NDimension>::SpatialObjectType *
-FrangiTubularnessFeatureGenerator<NDimension>
-::GetFeature() const
+FrangiTubularnessFeatureGenerator<NDimension>::GetFeature() const
 {
   if (this->GetNumberOfOutputs() < 1)
-    {
+  {
     return nullptr;
-    }
+  }
 
-  return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
-
+  return static_cast<const SpatialObjectType *>(this->ProcessObject::GetOutput(0));
 }
 
 
@@ -89,10 +83,9 @@ FrangiTubularnessFeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-FrangiTubularnessFeatureGenerator<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+FrangiTubularnessFeatureGenerator<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -101,40 +94,39 @@ FrangiTubularnessFeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-FrangiTubularnessFeatureGenerator<NDimension>
-::GenerateData()
+FrangiTubularnessFeatureGenerator<NDimension>::GenerateData()
 {
   // Report progress.
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( this->m_HessianFilter, .5 );
-  progress->RegisterInternalFilter( this->m_EigenAnalysisFilter, .25 );
-  progress->RegisterInternalFilter( this->m_SheetnessFilter, .25 );
+  progress->RegisterInternalFilter(this->m_HessianFilter, .5);
+  progress->RegisterInternalFilter(this->m_EigenAnalysisFilter, .25);
+  progress->RegisterInternalFilter(this->m_SheetnessFilter, .25);
 
   typename InputImageSpatialObjectType::ConstPointer inputObject =
-    dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
+    dynamic_cast<const InputImageSpatialObjectType *>(this->ProcessObject::GetInput(0));
 
-  if( !inputObject )
-    {
+  if (!inputObject)
+  {
     itkExceptionMacro("Missing input spatial object");
-    }
+  }
 
   const InputImageType * inputImage = inputObject->GetImage();
 
-  if( !inputImage )
-    {
+  if (!inputImage)
+  {
     itkExceptionMacro("Missing input image");
-    }
+  }
 
-  this->m_HessianFilter->SetInput( inputImage );
-  this->m_EigenAnalysisFilter->SetInput( this->m_HessianFilter->GetOutput() );
-  this->m_SheetnessFilter->SetInput( this->m_EigenAnalysisFilter->GetOutput() );
+  this->m_HessianFilter->SetInput(inputImage);
+  this->m_EigenAnalysisFilter->SetInput(this->m_HessianFilter->GetOutput());
+  this->m_SheetnessFilter->SetInput(this->m_EigenAnalysisFilter->GetOutput());
 
-  this->m_HessianFilter->SetSigma( this->m_Sigma );
-  this->m_EigenAnalysisFilter->SetDimension( Dimension );
-  this->m_SheetnessFilter->SetSheetnessNormalization( this->m_SheetnessNormalization );
-  this->m_SheetnessFilter->SetBloobinessNormalization( this->m_BloobinessNormalization );
-  this->m_SheetnessFilter->SetNoiseNormalization( this->m_NoiseNormalization );
+  this->m_HessianFilter->SetSigma(this->m_Sigma);
+  this->m_EigenAnalysisFilter->SetDimension(Dimension);
+  this->m_SheetnessFilter->SetSheetnessNormalization(this->m_SheetnessNormalization);
+  this->m_SheetnessFilter->SetBloobinessNormalization(this->m_BloobinessNormalization);
+  this->m_SheetnessFilter->SetNoiseNormalization(this->m_NoiseNormalization);
 
   this->m_SheetnessFilter->Update();
 
@@ -142,9 +134,9 @@ FrangiTubularnessFeatureGenerator<NDimension>
 
   outputImage->DisconnectPipeline();
 
-  auto * outputObject = dynamic_cast< OutputImageSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast<OutputImageSpatialObjectType *>(this->ProcessObject::GetOutput(0));
 
-  outputObject->SetImage( outputImage );
+  outputObject->SetImage(outputImage);
 }
 
 } // end namespace itk

@@ -24,11 +24,10 @@ namespace itk
 {
 
 template <unsigned int NDimension>
-BinaryThresholdFeatureGenerator<NDimension>
-::BinaryThresholdFeatureGenerator()
+BinaryThresholdFeatureGenerator<NDimension>::BinaryThresholdFeatureGenerator()
 {
-  this->SetNumberOfRequiredInputs( 1 );
-  this->SetNumberOfRequiredOutputs( 1 );
+  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredOutputs(1);
 
   this->m_BinaryThresholdFilter = BinaryThresholdFilterType::New();
 
@@ -36,58 +35,54 @@ BinaryThresholdFeatureGenerator<NDimension>
 
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
-  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->ProcessObject::SetNthOutput(0, outputObject.GetPointer());
 
   this->m_Threshold = 128.0;
 }
 
 
 template <unsigned int NDimension>
-BinaryThresholdFeatureGenerator<NDimension>
-::~BinaryThresholdFeatureGenerator()
+BinaryThresholdFeatureGenerator<NDimension>::~BinaryThresholdFeatureGenerator()
+{}
+
+
+template <unsigned int NDimension>
+void
+BinaryThresholdFeatureGenerator<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
+  Superclass::PrintSelf(os, indent);
 }
 
 
 template <unsigned int NDimension>
 void
-BinaryThresholdFeatureGenerator<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
-{
-  Superclass::PrintSelf( os, indent );
-}
-
-
-template <unsigned int NDimension>
-void
-BinaryThresholdFeatureGenerator<NDimension>
-::GenerateData()
+BinaryThresholdFeatureGenerator<NDimension>::GenerateData()
 {
   // Report progress.
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( this->m_BinaryThresholdFilter, 1.0 );
+  progress->RegisterInternalFilter(this->m_BinaryThresholdFilter, 1.0);
 
   typename InputImageSpatialObjectType::ConstPointer inputObject =
-    dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
+    dynamic_cast<const InputImageSpatialObjectType *>(this->ProcessObject::GetInput(0));
 
-  if( !inputObject )
-    {
+  if (!inputObject)
+  {
     itkExceptionMacro("Missing input spatial object or incorrect type");
-    }
+  }
 
   const InputImageType * inputImage = inputObject->GetImage();
 
-  if( !inputImage )
-    {
+  if (!inputImage)
+  {
     itkExceptionMacro("Missing input image");
-    }
+  }
 
-  this->m_BinaryThresholdFilter->SetInput( inputImage );
-  this->m_BinaryThresholdFilter->SetLowerThreshold( this->m_Threshold );
-  this->m_BinaryThresholdFilter->SetUpperThreshold( itk::NumericTraits< OutputPixelType >::max() );
-  this->m_BinaryThresholdFilter->SetOutsideValue( 0.0 );
-  this->m_BinaryThresholdFilter->SetInsideValue( 1.0 );
+  this->m_BinaryThresholdFilter->SetInput(inputImage);
+  this->m_BinaryThresholdFilter->SetLowerThreshold(this->m_Threshold);
+  this->m_BinaryThresholdFilter->SetUpperThreshold(itk::NumericTraits<OutputPixelType>::max());
+  this->m_BinaryThresholdFilter->SetOutsideValue(0.0);
+  this->m_BinaryThresholdFilter->SetInsideValue(1.0);
 
   this->m_BinaryThresholdFilter->Update();
 
@@ -95,9 +90,9 @@ BinaryThresholdFeatureGenerator<NDimension>
 
   outputImage->DisconnectPipeline();
 
-  auto * outputObject = dynamic_cast< OutputImageSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast<OutputImageSpatialObjectType *>(this->ProcessObject::GetOutput(0));
 
-  outputObject->SetImage( outputImage );
+  outputObject->SetImage(outputImage);
 }
 
 } // end namespace itk

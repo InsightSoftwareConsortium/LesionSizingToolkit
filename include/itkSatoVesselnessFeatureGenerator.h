@@ -64,74 +64,79 @@ public:
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
   using InputPixelType = signed short;
-  using InputImageType = Image< InputPixelType, Dimension >;
-  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageType = Image<InputPixelType, Dimension>;
+  using InputImageSpatialObjectType = ImageSpatialObject<NDimension, InputPixelType>;
   using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
   using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
-  void SetInput( const SpatialObjectType * input );
-  const SpatialObjectType * GetInput() const;
+  void
+  SetInput(const SpatialObjectType * input);
+  const SpatialObjectType *
+  GetInput() const;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
-  const SpatialObjectType * GetFeature() const;
+  const SpatialObjectType *
+  GetFeature() const;
 
   /** Sigma value to be used in the Gaussian smoothing preceding the
    * Hessian computation. */
-  itkSetMacro( Sigma, double );
-  itkGetMacro( Sigma, double );
+  itkSetMacro(Sigma, double);
+  itkGetMacro(Sigma, double);
 
   /** Alpha1 value to be used in the Sato Vesselness filter. */
-  itkSetMacro( Alpha1, double );
-  itkGetMacro( Alpha1, double );
+  itkSetMacro(Alpha1, double);
+  itkGetMacro(Alpha1, double);
 
   /** Alpha2 value to be used in the Sato Vesselness filter. */
-  itkSetMacro( Alpha2, double );
-  itkGetMacro( Alpha2, double );
+  itkSetMacro(Alpha2, double);
+  itkGetMacro(Alpha2, double);
 
   /** Use vessel enhancing diffusion ? Defaults to false. */
-  itkSetMacro( UseVesselEnhancingDiffusion, bool );
-  itkGetMacro( UseVesselEnhancingDiffusion, bool );
-  itkBooleanMacro( UseVesselEnhancingDiffusion );
+  itkSetMacro(UseVesselEnhancingDiffusion, bool);
+  itkGetMacro(UseVesselEnhancingDiffusion, bool);
+  itkBooleanMacro(UseVesselEnhancingDiffusion);
 
 protected:
   SatoVesselnessFeatureGenerator();
   ~SatoVesselnessFeatureGenerator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
 private:
   using InternalPixelType = float;
-  using InternalImageType = Image< InternalPixelType, Dimension >;
+  using InternalImageType = Image<InternalPixelType, Dimension>;
 
   using OutputPixelType = InternalPixelType;
   using OutputImageType = InternalImageType;
 
-  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputImageSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
-  using HessianFilterType = HessianRecursiveGaussianImageFilter< InputImageType >;
-  using VesselnessMeasureFilterType = Hessian3DToVesselnessMeasureImageFilter< InternalPixelType >;
-  using VesselEnhancingDiffusionFilterType = VesselEnhancingDiffusion3DImageFilter< InputPixelType, Dimension >;
+  using HessianFilterType = HessianRecursiveGaussianImageFilter<InputImageType>;
+  using VesselnessMeasureFilterType = Hessian3DToVesselnessMeasureImageFilter<InternalPixelType>;
+  using VesselEnhancingDiffusionFilterType = VesselEnhancingDiffusion3DImageFilter<InputPixelType, Dimension>;
 
-  typename HessianFilterType::Pointer                     m_HessianFilter;
-  typename VesselnessMeasureFilterType::Pointer           m_VesselnessFilter;
-  typename VesselEnhancingDiffusionFilterType::Pointer    m_VesselEnhancingDiffusionFilter;
+  typename HessianFilterType::Pointer                  m_HessianFilter;
+  typename VesselnessMeasureFilterType::Pointer        m_VesselnessFilter;
+  typename VesselEnhancingDiffusionFilterType::Pointer m_VesselEnhancingDiffusionFilter;
 
-  double      m_Sigma;
-  double      m_Alpha1;
-  double      m_Alpha2;
-  bool        m_UseVesselEnhancingDiffusion;
+  double m_Sigma;
+  double m_Alpha1;
+  double m_Alpha2;
+  bool   m_UseVesselEnhancingDiffusion;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkSatoVesselnessFeatureGenerator.hxx"
+#  include "itkSatoVesselnessFeatureGenerator.hxx"
 #endif
 
 #endif

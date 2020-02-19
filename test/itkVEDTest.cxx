@@ -24,8 +24,8 @@
 =========================================================================*/
 // Contributed by  Rashindra Manniesing from Netherlands
 
-#if defined (_MSC_VER)
-#pragma warning (disable: 4786)
+#if defined(_MSC_VER)
+#  pragma warning(disable : 4786)
 #endif
 
 #include "itkImageFileReader.h"
@@ -36,14 +36,15 @@
 
 #include <iostream>
 
-int itkVEDTest(int argc, char * argv [] )
+int
+itkVEDTest(int argc, char * argv[])
 {
   if (argc < 3)
-    {
+  {
     std::cout << argv[0] << " in out " << std::endl;
     std::cout << "missing filenames " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   using VT = itk::VesselEnhancingDiffusion3DImageFilter<short>;
   using IT = VT::ImageType;
@@ -55,22 +56,22 @@ int itkVEDTest(int argc, char * argv [] )
   r->Update();
 
   IT::SpacingType spacing = r->GetOutput()->GetSpacing();
-  double minSpacing = itk::NumericTraits< double >::max();
+  double          minSpacing = itk::NumericTraits<double>::max();
   for (unsigned int i = 0; i < IT::ImageDimension; i++)
-    {
+  {
     if (minSpacing > spacing[i])
-      {
+    {
       minSpacing = spacing[i];
-      }
     }
+  }
 
   // Scales of Sigma. Expressed in terms of the pixel spacing.
-  std::vector< VT::Precision > scales(5);
-  scales[0] = 1.0    * minSpacing;
+  std::vector<VT::Precision> scales(5);
+  scales[0] = 1.0 * minSpacing;
   scales[1] = 1.6067 * minSpacing;
   scales[2] = 2.5833 * minSpacing;
-  scales[3] = 4.15   * minSpacing;
-  scales[4] = 6.66   * minSpacing;
+  scales[3] = 4.15 * minSpacing;
+  scales[4] = 6.66 * minSpacing;
 
   VT::Pointer v = VT::New();
   v->SetInput(r->GetOutput());

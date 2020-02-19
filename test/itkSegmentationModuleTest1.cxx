@@ -21,29 +21,29 @@
 #include "itkTestingMacros.h"
 
 
-int itkSegmentationModuleTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
+int
+itkSegmentationModuleTest1(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   constexpr unsigned int Dimension = 3;
 
-  using SegmentationModuleType = itk::SegmentationModule< Dimension >;
+  using SegmentationModuleType = itk::SegmentationModule<Dimension>;
 
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( segmentationModule, SegmentationModule,
-    ProcessObject );
+  EXERCISE_BASIC_OBJECT_METHODS(segmentationModule, SegmentationModule, ProcessObject);
 
 
-  using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
+  using ImageSpatialObjectType = itk::ImageSpatialObject<Dimension>;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
 
-  segmentationModule->SetInput( inputObject );
+  segmentationModule->SetInput(inputObject);
 
   ImageSpatialObjectType::Pointer featureObject = ImageSpatialObjectType::New();
 
-  segmentationModule->SetFeature( featureObject );
+  segmentationModule->SetFeature(featureObject);
 
-  TRY_EXPECT_NO_EXCEPTION( segmentationModule->Update() );
+  TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
 
 
   std::cout << "Test finished." << std::endl;

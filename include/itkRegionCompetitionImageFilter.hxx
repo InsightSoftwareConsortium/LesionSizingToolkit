@@ -31,10 +31,9 @@ namespace itk
  * Constructor
  */
 template <typename TInputImage, typename TOutputImage>
-RegionCompetitionImageFilter<TInputImage, TOutputImage>
-::RegionCompetitionImageFilter()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::RegionCompetitionImageFilter()
 {
-  this->SetNumberOfRequiredInputs( 1 );
+  this->SetNumberOfRequiredInputs(1);
 
   this->m_MaximumNumberOfIterations = 10;
   this->m_CurrentIterationNumber = 0;
@@ -46,38 +45,37 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
   this->m_SeedArray2 = nullptr;
   this->m_SeedsNewValues = nullptr;
 
-  this->m_CurrentPixelIndex.Fill( 0 );
+  this->m_CurrentPixelIndex.Fill(0);
 
   this->m_OutputImage = nullptr;
 
   this->m_NumberOfLabels = 0;
- this->m_inputLabelsImage = nullptr;
+  this->m_inputLabelsImage = nullptr;
 }
 
 /**
  * Destructor
  */
 template <typename TInputImage, typename TOutputImage>
-RegionCompetitionImageFilter<TInputImage, TOutputImage>
-::~RegionCompetitionImageFilter()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::~RegionCompetitionImageFilter()
 {
-  if( this->m_SeedArray1 )
-    {
-    delete [] this->m_SeedArray1;
+  if (this->m_SeedArray1)
+  {
+    delete[] this->m_SeedArray1;
     this->m_SeedArray1 = nullptr;
-    }
+  }
 
-  if( this->m_SeedArray2 )
-    {
-    delete [] this->m_SeedArray2;
+  if (this->m_SeedArray2)
+  {
+    delete[] this->m_SeedArray2;
     this->m_SeedArray2 = nullptr;
-    }
+  }
 
-  if( this->m_SeedsNewValues )
-    {
-    delete [] this->m_SeedsNewValues;
+  if (this->m_SeedsNewValues)
+  {
+    delete[] this->m_SeedsNewValues;
     this->m_SeedsNewValues = nullptr;
-    }
+  }
 }
 
 
@@ -86,8 +84,7 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
  */
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage, TOutputImage>
-::PrintSelf(std::ostream& os, Indent indent) const
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
 }
@@ -98,8 +95,7 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
  */
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage, TOutputImage>
-::SetInputLabels( const TOutputImage * inputLabeledImage )
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::SetInputLabels(const TOutputImage * inputLabeledImage)
 {
   m_inputLabelsImage = inputLabeledImage;
 }
@@ -107,8 +103,7 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::GenerateData()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::GenerateData()
 {
   this->AllocateOutputImageWorkingMemory();
   this->ComputeNumberOfInputLabels();
@@ -122,108 +117,102 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::IterateFrontPropagations()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::IterateFrontPropagations()
 {
   this->m_CurrentIterationNumber = 0;
   this->m_TotalNumberOfPixelsChanged = 0;
   this->m_NumberOfPixelsChangedInLastIteration = 0;
 
-  while( this->m_CurrentIterationNumber < this->m_MaximumNumberOfIterations )
-    {
+  while (this->m_CurrentIterationNumber < this->m_MaximumNumberOfIterations)
+  {
     this->VisitAllSeedsAndTransitionTheirState();
     this->m_CurrentIterationNumber++;
-    if( this->m_NumberOfPixelsChangedInLastIteration ==  0 )
-      {
+    if (this->m_NumberOfPixelsChangedInLastIteration == 0)
+    {
       break;
-      }
     }
+  }
 }
 
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::AllocateOutputImageWorkingMemory()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::AllocateOutputImageWorkingMemory()
 {
-  this->m_OutputImage  = this->GetOutput();
-  OutputImageRegionType region =  this->m_OutputImage->GetRequestedRegion();
+  this->m_OutputImage = this->GetOutput();
+  OutputImageRegionType region = this->m_OutputImage->GetRequestedRegion();
 
   // Allocate memory for the output image itself.
-  this->m_OutputImage->SetBufferedRegion( region );
+  this->m_OutputImage->SetBufferedRegion(region);
   this->m_OutputImage->Allocate();
-  this->m_OutputImage->FillBuffer( 0 );
+  this->m_OutputImage->FillBuffer(0);
 
   this->m_SeedsMask = SeedMaskImageType::New();
-  this->m_SeedsMask->SetRegions( region );
+  this->m_SeedsMask->SetRegions(region);
   this->m_SeedsMask->Allocate();
-  this->m_SeedsMask->FillBuffer( 0 );
+  this->m_SeedsMask->FillBuffer(0);
 }
 
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::ComputeNumberOfInputLabels()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::ComputeNumberOfInputLabels()
 {
 
-  using IteratorType = itk::ImageRegionConstIterator< TOutputImage >;
+  using IteratorType = itk::ImageRegionConstIterator<TOutputImage>;
 
-  IteratorType  itr( m_inputLabelsImage,m_inputLabelsImage->GetBufferedRegion() );
+  IteratorType itr(m_inputLabelsImage, m_inputLabelsImage->GetBufferedRegion());
 
   itr.GoToBegin();
 
   this->m_NumberOfLabels = 0;
 
-  while( !itr.IsAtEnd() )
+  while (!itr.IsAtEnd())
+  {
+    if (itr.Get() > this->m_NumberOfLabels)
     {
-    if( itr.Get() > this->m_NumberOfLabels )
-      {
       this->m_NumberOfLabels = itr.Get();
-      }
-    ++itr;
     }
+    ++itr;
+  }
 }
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::AllocateFrontsWorkingMemory()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::AllocateFrontsWorkingMemory()
 {
-  this->m_SeedArray1 = new SeedArrayType[ this->m_NumberOfLabels ];
-  this->m_SeedArray2 = new SeedArrayType[ this->m_NumberOfLabels ];
-  this->m_SeedsNewValues = new SeedNewValuesArrayType[ this->m_NumberOfLabels ];
+  this->m_SeedArray1 = new SeedArrayType[this->m_NumberOfLabels];
+  this->m_SeedArray2 = new SeedArrayType[this->m_NumberOfLabels];
+  this->m_SeedsNewValues = new SeedNewValuesArrayType[this->m_NumberOfLabels];
 }
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::InitializeNeighborhood()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::InitializeNeighborhood()
 {
   InputSizeType radius;
-  radius.Fill( 1 );
-  this->m_Neighborhood.SetRadius( radius );
+  radius.Fill(1);
+  this->m_Neighborhood.SetRadius(radius);
 }
 
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::FindAllPixelsInTheBoundaryAndAddThemAsSeeds()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::FindAllPixelsInTheBoundaryAndAddThemAsSeeds()
 {
 
   OutputImageRegionType region = m_inputLabelsImage->GetRequestedRegion();
 
-  ConstNeighborhoodIterator< TOutputImage >   bit;
-  ImageRegionIterator< TOutputImage >        itr;
-  ImageRegionIterator< SeedMaskImageType >      mtr;
+  ConstNeighborhoodIterator<TOutputImage> bit;
+  ImageRegionIterator<TOutputImage>       itr;
+  ImageRegionIterator<SeedMaskImageType>  mtr;
 
   InputSizeType radius;
-  radius.Fill( 1 );
+  radius.Fill(1);
 
   // Find the data-set boundary "faces"
   typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TOutputImage>::FaceListType faceList;
-  NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TOutputImage> bC;
+  NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TOutputImage>                        bC;
   faceList = bC(m_inputLabelsImage, region, radius);
 
   typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TOutputImage>::FaceListType::iterator fit;
@@ -235,23 +224,23 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
   this->m_InternalRegion = *fit;
 
   // Mark all the pixels in the boundary of the seed image as visited
-  using ExclusionIteratorType = itk::ImageRegionExclusionIteratorWithIndex< SeedMaskImageType >;
+  using ExclusionIteratorType = itk::ImageRegionExclusionIteratorWithIndex<SeedMaskImageType>;
 
-  ExclusionIteratorType exIt( this->m_SeedsMask, region );
+  ExclusionIteratorType exIt(this->m_SeedsMask, region);
 
-  exIt.SetExclusionRegion( this->m_InternalRegion );
+  exIt.SetExclusionRegion(this->m_InternalRegion);
 
   exIt.GoToBegin();
 
-  while( !exIt.IsAtEnd() )
-    {
-    exIt.Set( 255 );
+  while (!exIt.IsAtEnd())
+  {
+    exIt.Set(255);
     ++exIt;
-    }
+  }
 
-  bit = ConstNeighborhoodIterator<TOutputImage>( radius, m_inputLabelsImage, this->m_InternalRegion );
-  itr  = ImageRegionIterator<TOutputImage>(    this->m_OutputImage, this->m_InternalRegion );
-  mtr  = ImageRegionIterator<SeedMaskImageType>(  this->m_SeedsMask,   this->m_InternalRegion );
+  bit = ConstNeighborhoodIterator<TOutputImage>(radius, m_inputLabelsImage, this->m_InternalRegion);
+  itr = ImageRegionIterator<TOutputImage>(this->m_OutputImage, this->m_InternalRegion);
+  mtr = ImageRegionIterator<SeedMaskImageType>(this->m_SeedsMask, this->m_InternalRegion);
 
   bit.GoToBegin();
   itr.GoToBegin();
@@ -259,58 +248,57 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 
   unsigned int neighborhoodSize = bit.Size();
 
-  constexpr OutputImagePixelType backgroundValue  = 0;  // no-label value.
+  constexpr OutputImagePixelType backgroundValue = 0; // no-label value.
 
-  for( unsigned int lb = 0; lb < this->m_NumberOfLabels; lb++ )
+  for (unsigned int lb = 0; lb < this->m_NumberOfLabels; lb++)
+  {
+    this->m_SeedArray1[lb].clear();
+    this->m_SeedsNewValues[lb].clear();
+  }
+
+
+  while (!bit.IsAtEnd())
+  {
+    if (bit.GetCenterPixel() != backgroundValue)
     {
-    this->m_SeedArray1[ lb ].clear();
-    this->m_SeedsNewValues[ lb ].clear();
+      itr.Set(bit.GetCenterPixel());
+      mtr.Set(255);
     }
-
-
-  while ( ! bit.IsAtEnd() )
-    {
-    if( bit.GetCenterPixel() != backgroundValue )
-      {
-      itr.Set( bit.GetCenterPixel() );
-      mtr.Set( 255 );
-      }
     else
-      {
-      itr.Set( backgroundValue );
-      mtr.Set( 0 );
+    {
+      itr.Set(backgroundValue);
+      mtr.Set(0);
 
       // Search for foreground pixels in the neighborhood
       for (unsigned int i = 0; i < neighborhoodSize; ++i)
-        {
+      {
         OutputImagePixelType value = bit.GetPixel(i);
-        if( value != backgroundValue )
-          {
-          this->m_SeedArray1[value-1].push_back( bit.GetIndex() );
+        if (value != backgroundValue)
+        {
+          this->m_SeedArray1[value - 1].push_back(bit.GetIndex());
           break;
-          }
         }
       }
+    }
     ++bit;
     ++itr;
     ++mtr;
-    }
+  }
 
 
-  for( unsigned int lb = 0; lb < this->m_NumberOfLabels; lb++ )
-    {
-    this->m_SeedsNewValues[lb].reserve( this->m_SeedArray1[lb].size() );
-    }
+  for (unsigned int lb = 0; lb < this->m_NumberOfLabels; lb++)
+  {
+    this->m_SeedsNewValues[lb].reserve(this->m_SeedArray1[lb].size());
+  }
 }
 
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::VisitAllSeedsAndTransitionTheirState()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::VisitAllSeedsAndTransitionTheirState()
 {
-  for( unsigned int lb = 0; lb < this->m_NumberOfLabels; lb++ )
-    {
+  for (unsigned int lb = 0; lb < this->m_NumberOfLabels; lb++)
+  {
     using SeedIterator = typename SeedArrayType::const_iterator;
 
     SeedIterator seedItr = this->m_SeedArray1[lb].begin();
@@ -320,25 +308,25 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
     // Clear the array of new values
     this->m_SeedsNewValues[lb].clear();
 
-    while( seedItr != this->m_SeedArray1[lb].end() )
-      {
-      this->SetCurrentPixelIndex( *seedItr );
+    while (seedItr != this->m_SeedArray1[lb].end())
+    {
+      this->SetCurrentPixelIndex(*seedItr);
 
-      if( this->TestForAvailabilityAtCurrentPixel() )
-        {
-        this->m_SeedsNewValues[lb].push_back( 255 ); // FIXME: Use label value here
+      if (this->TestForAvailabilityAtCurrentPixel())
+      {
+        this->m_SeedsNewValues[lb].push_back(255); // FIXME: Use label value here
         this->PutCurrentPixelNeighborsIntoSeedArray();
         this->m_NumberOfPixelsChangedInLastIteration++;
-        }
+      }
       else
-        {
-        this->m_SeedsNewValues[lb].push_back( 0 ); // FIXME: Use No-label value here
+      {
+        this->m_SeedsNewValues[lb].push_back(0); // FIXME: Use No-label value here
         // Keep the seed to try again in the next iteration.
-        this->m_SeedArray2->push_back( this->GetCurrentPixelIndex() );
-        }
+        this->m_SeedArray2->push_back(this->GetCurrentPixelIndex());
+      }
 
       ++seedItr;
-      }
+    }
 
     this->PasteNewSeedValuesToOutputImage();
 
@@ -347,8 +335,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
     // Now that the values have been copied to the output image, we can empty the
     // array in preparation for the next iteration
     this->m_SeedsNewValues[lb].clear();
-
-    }
+  }
 
   this->SwapSeedArrays();
   this->ClearSecondSeedArray();
@@ -357,14 +344,13 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::PasteNewSeedValuesToOutputImage()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::PasteNewSeedValuesToOutputImage()
 {
   //
   // For each one of the label values
   //
-  for( unsigned int lb = 0; lb < this->m_NumberOfLabels; lb++ )
-    {
+  for (unsigned int lb = 0; lb < this->m_NumberOfLabels; lb++)
+  {
     //
     //  Paste new values into the output image
     //
@@ -376,19 +362,18 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 
     SeedsNewValuesIterator newValueItr = this->m_SeedsNewValues[lb].begin();
 
-    while (seedItr != this->m_SeedArray1[lb].end() )
-      {
-      this->m_OutputImage->SetPixel( *seedItr, *newValueItr );
+    while (seedItr != this->m_SeedArray1[lb].end())
+    {
+      this->m_OutputImage->SetPixel(*seedItr, *newValueItr);
       ++seedItr;
       ++newValueItr;
-      }
     }
+  }
 }
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::SwapSeedArrays()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::SwapSeedArrays()
 {
   SeedArrayType * temporary = this->m_SeedArray1;
   this->m_SeedArray1 = this->m_SeedArray2;
@@ -398,21 +383,19 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::ClearSecondSeedArray()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::ClearSecondSeedArray()
 {
-  if( this->m_SeedArray2 )
-    {
-    delete [] this->m_SeedArray2;
-    }
-  this->m_SeedArray2 = new SeedArrayType[ this->m_NumberOfLabels ];
+  if (this->m_SeedArray2)
+  {
+    delete[] this->m_SeedArray2;
+  }
+  this->m_SeedArray2 = new SeedArrayType[this->m_NumberOfLabels];
 }
 
 
 template <typename TInputImage, typename TOutputImage>
 bool
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::TestForAvailabilityAtCurrentPixel() const
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::TestForAvailabilityAtCurrentPixel() const
 {
   return true; // FIXME
 }
@@ -420,13 +403,12 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::PutCurrentPixelNeighborsIntoSeedArray()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::PutCurrentPixelNeighborsIntoSeedArray()
 {
   //
   // Find the location of the current pixel in the image memory buffer
   //
-  const OffsetValueType pixelOffset = this->m_OutputImage->ComputeOffset( this->GetCurrentPixelIndex() );
+  const OffsetValueType pixelOffset = this->m_OutputImage->ComputeOffset(this->GetCurrentPixelIndex());
 
   const OutputImagePixelType * buffer = this->m_OutputImage->GetBufferPointer();
 
@@ -445,43 +427,41 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
 
   NeigborOffsetIterator neighborItr = this->m_NeighborBufferOffset.begin();
 
-  constexpr OutputImagePixelType backgroundValue  = 0;  // FIXME: replace with NO-Label.
+  constexpr OutputImagePixelType backgroundValue = 0; // FIXME: replace with NO-Label.
 
-  for( unsigned int i = 0; i < neighborhoodSize; ++i, ++neighborItr )
-    {
+  for (unsigned int i = 0; i < neighborhoodSize; ++i, ++neighborItr)
+  {
     const OutputImagePixelType * neighborPixelPointer = currentPixelPointer + *neighborItr;
 
-    if( *neighborPixelPointer == backgroundValue )
-      {
+    if (*neighborPixelPointer == backgroundValue)
+    {
       NeighborOffsetType neighborOffset = this->m_Neighborhood.GetOffset(i);
-      IndexType neighborIndex = this->GetCurrentPixelIndex() + neighborOffset;
+      IndexType          neighborIndex = this->GetCurrentPixelIndex() + neighborOffset;
 
-      //if( this->m_InternalRegion.IsInside( neighborIndex ) )
+      // if( this->m_InternalRegion.IsInside( neighborIndex ) )
+      {
+        if (this->m_SeedsMask->GetPixel(neighborIndex) == 0)
         {
-        if( this->m_SeedsMask->GetPixel( neighborIndex ) == 0 )
-          {
-          this->m_SeedArray2->push_back( neighborIndex );
-          this->m_SeedsMask->SetPixel( neighborIndex, 255 );
-          }
+          this->m_SeedArray2->push_back(neighborIndex);
+          this->m_SeedsMask->SetPixel(neighborIndex, 255);
         }
       }
     }
-
+  }
 }
 
 
 template <typename TInputImage, typename TOutputImage>
 void
-RegionCompetitionImageFilter<TInputImage,TOutputImage>
-::ComputeArrayOfNeighborhoodBufferOffsets()
+RegionCompetitionImageFilter<TInputImage, TOutputImage>::ComputeArrayOfNeighborhoodBufferOffsets()
 {
   //
   // Copy the offsets from the Input image.
   // We assume that they are the same for the output image.
   //
-  const size_t sizeOfOffsetTableInBytes = (InputImageDimension+1)*sizeof(unsigned long);
+  const size_t sizeOfOffsetTableInBytes = (InputImageDimension + 1) * sizeof(unsigned long);
 
-  memcpy( this->m_OffsetTable, this->m_OutputImage->GetOffsetTable(), sizeOfOffsetTableInBytes );
+  memcpy(this->m_OffsetTable, this->m_OutputImage->GetOffsetTable(), sizeOfOffsetTableInBytes);
 
 
   //
@@ -489,7 +469,7 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
   //
   const unsigned int neighborhoodSize = this->m_Neighborhood.Size();
 
-  this->m_NeighborBufferOffset.resize( neighborhoodSize );
+  this->m_NeighborBufferOffset.resize(neighborhoodSize);
 
 
   //
@@ -498,18 +478,18 @@ RegionCompetitionImageFilter<TInputImage,TOutputImage>
   //
   using NeighborOffsetType = typename NeighborhoodType::OffsetType;
 
-  for( unsigned int i = 0; i < neighborhoodSize; i++ )
-    {
+  for (unsigned int i = 0; i < neighborhoodSize; i++)
+  {
     NeighborOffsetType offset = this->m_Neighborhood.GetOffset(i);
 
     signed int bufferOffset = 0; // must be a signed number
 
-    for( unsigned int d = 0; d < InputImageDimension; d++ )
-      {
+    for (unsigned int d = 0; d < InputImageDimension; d++)
+    {
       bufferOffset += offset[d] * this->m_OffsetTable[d];
-      }
-    this->m_NeighborBufferOffset[i] = bufferOffset;
     }
+    this->m_NeighborBufferOffset[i] = bufferOffset;
+  }
 }
 
 

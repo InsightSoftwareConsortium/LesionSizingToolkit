@@ -22,10 +22,12 @@
 #include "itkPNGImageIOFactory.h"
 #include "itkObjectFactoryBase.h"
 
-void RegisterRequiredFactories(){
-  itk::ObjectFactoryBase::RegisterFactory( itk::MetaImageIOFactory::New() );
-  itk::ObjectFactoryBase::RegisterFactory( itk::GDCMImageIOFactory::New() );
-  itk::ObjectFactoryBase::RegisterFactory( itk::PNGImageIOFactory::New() );
+void
+RegisterRequiredFactories()
+{
+  itk::ObjectFactoryBase::RegisterFactory(itk::MetaImageIOFactory::New());
+  itk::ObjectFactoryBase::RegisterFactory(itk::GDCMImageIOFactory::New());
+  itk::ObjectFactoryBase::RegisterFactory(itk::PNGImageIOFactory::New());
 }
 
 #endif

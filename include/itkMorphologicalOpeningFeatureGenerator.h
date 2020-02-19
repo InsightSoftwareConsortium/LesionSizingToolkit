@@ -66,72 +66,73 @@ public:
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
   using InputPixelType = signed short;
-  using InputImageType = Image< InputPixelType, Dimension >;
-  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageType = Image<InputPixelType, Dimension>;
+  using InputImageSpatialObjectType = ImageSpatialObject<NDimension, InputPixelType>;
   using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
   using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
-  void SetInput( const SpatialObjectType * input );
-  const SpatialObjectType * GetInput() const;
+  void
+  SetInput(const SpatialObjectType * input);
+  const SpatialObjectType *
+  GetInput() const;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
-  const SpatialObjectType * GetFeature() const;
+  const SpatialObjectType *
+  GetFeature() const;
 
   /** Set the Hounsfield Unit value to threshold the Lung. */
-  itkSetMacro( LungThreshold, InputPixelType );
-  itkGetMacro( LungThreshold, InputPixelType );
+  itkSetMacro(LungThreshold, InputPixelType);
+  itkGetMacro(LungThreshold, InputPixelType);
 
 protected:
   MorphologicalOpeningFeatureGenerator();
   ~MorphologicalOpeningFeatureGenerator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
 private:
   using InternalPixelType = unsigned char;
-  using InternalImageType = Image< InternalPixelType, Dimension >;
+  using InternalImageType = Image<InternalPixelType, Dimension>;
 
   using OutputPixelType = float;
-  using OutputImageType = Image< OutputPixelType, Dimension >;
+  using OutputImageType = Image<OutputPixelType, Dimension>;
 
-  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputImageSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
-  using ThresholdFilterType = BinaryThresholdImageFilter<
-    InputImageType, InternalImageType >;
+  using ThresholdFilterType = BinaryThresholdImageFilter<InputImageType, InternalImageType>;
   using ThresholdFilterPointer = typename ThresholdFilterType::Pointer;
 
-  using KernelType = BinaryBallStructuringElement< InternalPixelType, Dimension >;
-  using OpenningFilterType = BinaryMorphologicalOpeningImageFilter<
-    InternalImageType, InternalImageType, KernelType >;
+  using KernelType = BinaryBallStructuringElement<InternalPixelType, Dimension>;
+  using OpenningFilterType = BinaryMorphologicalOpeningImageFilter<InternalImageType, InternalImageType, KernelType>;
   using OpenningFilterPointer = typename OpenningFilterType::Pointer;
 
-  using VotingHoleFillingFilterType = VotingBinaryHoleFillFloodingImageFilter<
-    InternalImageType, InternalImageType >;
+  using VotingHoleFillingFilterType = VotingBinaryHoleFillFloodingImageFilter<InternalImageType, InternalImageType>;
   using VotingHoleFillingFilterPointer = typename VotingHoleFillingFilterType::Pointer;
 
-  using CastingFilterType = CastImageFilter<
-    InternalImageType, OutputImageType >;
+  using CastingFilterType = CastImageFilter<InternalImageType, OutputImageType>;
   using CastingFilterPointer = typename CastingFilterType::Pointer;
 
 
-  ThresholdFilterPointer                m_ThresholdFilter;
-  OpenningFilterPointer                 m_OpenningFilter;
-  VotingHoleFillingFilterPointer        m_VotingHoleFillingFilter;
-  CastingFilterPointer                  m_CastingFilter;
+  ThresholdFilterPointer         m_ThresholdFilter;
+  OpenningFilterPointer          m_OpenningFilter;
+  VotingHoleFillingFilterPointer m_VotingHoleFillingFilter;
+  CastingFilterPointer           m_CastingFilter;
 
-  InputPixelType                        m_LungThreshold;
+  InputPixelType m_LungThreshold;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkMorphologicalOpeningFeatureGenerator.hxx"
+#  include "itkMorphologicalOpeningFeatureGenerator.hxx"
 #endif
 
 #endif

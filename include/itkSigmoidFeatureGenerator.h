@@ -63,57 +63,61 @@ public:
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
   using InputPixelType = signed short;
-  using InputImageType = Image< InputPixelType, Dimension >;
-  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageType = Image<InputPixelType, Dimension>;
+  using InputImageSpatialObjectType = ImageSpatialObject<NDimension, InputPixelType>;
   using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
   using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
-  void SetInput( const SpatialObjectType * input );
-  const SpatialObjectType * GetInput() const;
+  void
+  SetInput(const SpatialObjectType * input);
+  const SpatialObjectType *
+  GetInput() const;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
-  const SpatialObjectType * GetFeature() const;
+  const SpatialObjectType *
+  GetFeature() const;
 
   /** Alpha value to be used in the Sigmoid filter. */
-  itkSetMacro( Alpha, double );
-  itkGetMacro( Alpha, double );
+  itkSetMacro(Alpha, double);
+  itkGetMacro(Alpha, double);
 
   /** Beta value to be used in the Sigmoid filter. */
-  itkSetMacro( Beta, double );
-  itkGetMacro( Beta, double );
+  itkSetMacro(Beta, double);
+  itkGetMacro(Beta, double);
 
 protected:
   SigmoidFeatureGenerator();
   ~SigmoidFeatureGenerator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
 private:
   using OutputPixelType = float;
-  using OutputImageType = Image< OutputPixelType, Dimension >;
+  using OutputImageType = Image<OutputPixelType, Dimension>;
 
-  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputImageSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
-  using SigmoidFilterType = SigmoidImageFilter<
-    InputImageType, OutputImageType >;
+  using SigmoidFilterType = SigmoidImageFilter<InputImageType, OutputImageType>;
   using SigmoidFilterPointer = typename SigmoidFilterType::Pointer;
 
-  SigmoidFilterPointer            m_SigmoidFilter;
+  SigmoidFilterPointer m_SigmoidFilter;
 
-  double                          m_Alpha;
-  double                          m_Beta;
+  double m_Alpha;
+  double m_Beta;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkSigmoidFeatureGenerator.hxx"
+#  include "itkSigmoidFeatureGenerator.hxx"
 #endif
 
 #endif

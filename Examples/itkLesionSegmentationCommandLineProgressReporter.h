@@ -17,11 +17,11 @@
  *=========================================================================*/
 
 #ifndef itkLesionSegmentationCommandLineProgressReporter_h
-#define itkLesionSegmentatioCommandLineProgressReporter_h
+#  define itkLesionSegmentatioCommandLineProgressReporter_h
 
-#include "itkLesionSegmentationImageFilter8.h"
-#include "itkCommand.h"
-#include <string>
+#  include "itkLesionSegmentationImageFilter8.h"
+#  include "itkCommand.h"
+#  include <string>
 
 namespace itk
 {
@@ -32,8 +32,8 @@ public:
   /** Standard class type alias. */
   using Self = LesionSegmentationCommandLineProgressReporter;
   using Superclass = Object;
-  using Pointer = SmartPointer< Self >;
-  using ConstPointer = SmartPointer< const Self >;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
 
@@ -45,33 +45,37 @@ public:
   // the instance invoking the event; eid is the event id (see
   // vtkCommand.h); and calldata is information sent when the callback
   // was invoked (e.g., progress value in the vtkCommand::ProgressEvent).
-  virtual void Execute(const Object *caller, const EventObject & event);
-  virtual void Execute(Object *caller, const EventObject & event);
+  virtual void
+  Execute(const Object * caller, const EventObject & event);
+  virtual void
+  Execute(Object * caller, const EventObject & event);
 
-  void SetReportProgress(int i) { this->ReportProgress = i; }
+  void
+  SetReportProgress(int i)
+  {
+    this->ReportProgress = i;
+  }
 
 protected:
-
-  virtual void ExecuteInternal(const Object *caller, const EventObject & event);
+  virtual void
+  ExecuteInternal(const Object * caller, const EventObject & event);
 
   int ProgressValue;
   int ReportProgress;
 
-  //BTX
+  // BTX
   std::string ProgressString;
-  //ETX
+  // ETX
 
   LesionSegmentationCommandLineProgressReporter();
   ~LesionSegmentationCommandLineProgressReporter();
 
 private:
-  LesionSegmentationCommandLineProgressReporter(const Self &);        //purposely not implemented
-  void operator=(const Self &); //purposely not implemented
+  LesionSegmentationCommandLineProgressReporter(const Self &); // purposely not implemented
+  void
+  operator=(const Self &); // purposely not implemented
 };
 
-}
+} // namespace itk
 
 #endif
-
-
-

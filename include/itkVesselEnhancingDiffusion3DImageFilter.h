@@ -69,11 +69,10 @@ namespace itk
  * email: r.manniesing@erasmusmc.nl
  *
  * \ingroup LesionSizingToolkit
-*/
+ */
 template <typename PixelType = short int, unsigned int NDimension = 3>
-class ITK_TEMPLATE_EXPORT VesselEnhancingDiffusion3DImageFilter :
-    public ImageToImageFilter<Image<PixelType, NDimension> ,
-                              Image<PixelType, NDimension> >
+class ITK_TEMPLATE_EXPORT VesselEnhancingDiffusion3DImageFilter
+  : public ImageToImageFilter<Image<PixelType, NDimension>, Image<PixelType, NDimension>>
 {
 
 public:
@@ -81,10 +80,10 @@ public:
 
   using Precision = float;
   using ImageType = Image<PixelType, NDimension>;
-  using PrecisionImageType = Image<Precision,NDimension>;
+  using PrecisionImageType = Image<Precision, NDimension>;
 
   using Self = VesselEnhancingDiffusion3DImageFilter;
-  using Superclass = ImageToImageFilter<ImageType,ImageType>;
+  using Superclass = ImageToImageFilter<ImageType, ImageType>;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
@@ -103,28 +102,30 @@ public:
   itkSetMacro(Omega, Precision);
   itkSetMacro(Sensitivity, Precision);
 
-  void SetScales(const std::vector<Precision> scales)
-    {
+  void
+  SetScales(const std::vector<Precision> scales)
+  {
     m_Scales = scales;
-    }
+  }
   itkBooleanMacro(DarkObjectLightBackground);
-  itkSetMacro(DarkObjectLightBackground,bool);
+  itkSetMacro(DarkObjectLightBackground, bool);
   itkBooleanMacro(Verbose);
-  itkSetMacro(Verbose,bool);
+  itkSetMacro(Verbose, bool);
 
   // some defaults for lowdose example
   // used in the paper
-  void SetDefaultPars()
-    {
-    m_TimeStep                  = 0.001;
-    m_Iterations                = 30;
-    m_RecalculateVesselness     = 100;
-    m_Alpha                     = 0.5;
-    m_Beta                      = 0.5;
-    m_Gamma                     = 5.0;
-    m_Epsilon                   = 0.01;
-    m_Omega                     = 25.0;
-    m_Sensitivity               = 5.0;
+  void
+  SetDefaultPars()
+  {
+    m_TimeStep = 0.001;
+    m_Iterations = 30;
+    m_RecalculateVesselness = 100;
+    m_Alpha = 0.5;
+    m_Beta = 0.5;
+    m_Gamma = 5.0;
+    m_Epsilon = 0.01;
+    m_Omega = 25.0;
+    m_Sensitivity = 5.0;
 
     m_Scales.resize(5);
     m_Scales[0] = 0.300;
@@ -134,29 +135,31 @@ public:
     m_Scales[4] = 2.000;
 
     m_DarkObjectLightBackground = false;
-    m_Verbose                   = true;
-    }
+    m_Verbose = true;
+  }
 
 protected:
   VesselEnhancingDiffusion3DImageFilter();
-  ~VesselEnhancingDiffusion3DImageFilter() override {};
-  void PrintSelf(std::ostream &os, Indent indent) const override;
-  void GenerateData() override;
+  ~VesselEnhancingDiffusion3DImageFilter() override{};
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
+  void
+  GenerateData() override;
 
 private:
-  Precision                 m_TimeStep;
-  unsigned int              m_Iterations;
-  unsigned int              m_RecalculateVesselness;
-  Precision                 m_Alpha;
-  Precision                 m_Beta;
-  Precision                 m_Gamma;
-  Precision                 m_Epsilon;
-  Precision                 m_Omega;
-  Precision                 m_Sensitivity;
-  std::vector<Precision>    m_Scales;
-  bool                      m_DarkObjectLightBackground;
-  bool                      m_Verbose;
-  unsigned int              m_CurrentIteration;
+  Precision              m_TimeStep;
+  unsigned int           m_Iterations;
+  unsigned int           m_RecalculateVesselness;
+  Precision              m_Alpha;
+  Precision              m_Beta;
+  Precision              m_Gamma;
+  Precision              m_Epsilon;
+  Precision              m_Omega;
+  Precision              m_Sensitivity;
+  std::vector<Precision> m_Scales;
+  bool                   m_DarkObjectLightBackground;
+  bool                   m_Verbose;
+  unsigned int           m_CurrentIteration;
 
   // current hessian for which we have max vesselresponse
   typename PrecisionImageType::Pointer m_Dxx;
@@ -166,27 +169,29 @@ private:
   typename PrecisionImageType::Pointer m_Dyz;
   typename PrecisionImageType::Pointer m_Dzz;
 
-  void VED3DSingleIteration (typename PrecisionImageType::Pointer );
+  void VED3DSingleIteration(typename PrecisionImageType::Pointer);
 
   // Calculates maxvessel response of the range
   // of scales and stores the hessian of each voxel
   // into the member images m_Dij.
-  void MaxVesselResponse (const typename PrecisionImageType::Pointer);
+  void
+  MaxVesselResponse(const typename PrecisionImageType::Pointer);
 
   // calculates diffusion tensor
   // based on current values of hessian (for which we have
   // maximim vessel response).
-  void DiffusionTensor();
+  void
+  DiffusionTensor();
 
   // Sorted magnitude increasing
-  inline Precision VesselnessFunction3D ( Precision, Precision, Precision );
+  inline Precision VesselnessFunction3D(Precision, Precision, Precision);
 };
 
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkVesselEnhancingDiffusion3DImageFilter.hxx"
+#  include "itkVesselEnhancingDiffusion3DImageFilter.hxx"
 #endif
 
 #endif

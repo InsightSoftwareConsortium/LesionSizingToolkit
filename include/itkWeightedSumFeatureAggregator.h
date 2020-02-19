@@ -63,7 +63,7 @@ public:
 
   /** Add the weight that will be used to multiply the corresponding feature
    * when computing the weighted sum. */
-  void virtual AddWeight( double weight );
+  void virtual AddWeight(double weight);
 
   /** Type of the image and specific SpatialObject produced as output */
   using OutputPixelType = typename Superclass::OutputPixelType;
@@ -73,21 +73,22 @@ public:
 protected:
   WeightedSumFeatureAggregator();
   ~WeightedSumFeatureAggregator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  void ConsolidateFeatures() override;
+  void
+  ConsolidateFeatures() override;
 
-  using WeightsArrayType = std::vector< double >;
+  using WeightsArrayType = std::vector<double>;
 
-  WeightsArrayType                  m_Weights;
-
+  WeightsArrayType m_Weights;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkWeightedSumFeatureAggregator.hxx"
+#  include "itkWeightedSumFeatureAggregator.hxx"
 #endif
 
 #endif

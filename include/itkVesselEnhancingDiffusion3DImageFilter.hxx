@@ -33,74 +33,72 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
-#include<iostream>
+#include <iostream>
 
 namespace itk
 {
 
 // constructor
 template <typename PixelType, unsigned int NDimension>
-VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
-::VesselEnhancingDiffusion3DImageFilter():
-    m_TimeStep(NumericTraits<Precision>::Zero),
-    m_Iterations(0),
-    m_RecalculateVesselness(0),
-    m_Epsilon(0.0),
-    m_Omega(0.0),
-    m_Sensitivity(0.0),
-    m_DarkObjectLightBackground(false)
+VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::VesselEnhancingDiffusion3DImageFilter()
+  : m_TimeStep(NumericTraits<Precision>::Zero)
+  , m_Iterations(0)
+  , m_RecalculateVesselness(0)
+  , m_Epsilon(0.0)
+  , m_Omega(0.0)
+  , m_Sensitivity(0.0)
+  , m_DarkObjectLightBackground(false)
 {
   this->SetNumberOfRequiredInputs(1);
 }
 
 // printself for debugging
 template <typename PixelType, unsigned int NDimension>
-void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
-::PrintSelf(std::ostream &os, Indent indent) const
+void
+VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os << indent << "TimeStep                 : " << m_TimeStep  << std::endl;
+  Superclass::PrintSelf(os, indent);
+  os << indent << "TimeStep                 : " << m_TimeStep << std::endl;
   os << indent << "Iterations             : " << m_Iterations << std::endl;
   os << indent << "RecalculateVesselness      : " << m_RecalculateVesselness << std::endl;
   os << indent << "Scales     : ";
-  for (unsigned int i=0; i<m_Scales.size(); ++i)
-    {
+  for (unsigned int i = 0; i < m_Scales.size(); ++i)
+  {
     os << m_Scales[i] << " ";
-    }
+  }
   os << std::endl;
   os << indent << "Epsilon                 : " << m_Epsilon << std::endl;
   os << indent << "Omega                   : " << m_Omega << std::endl;
   os << indent << "Sensitivity             : " << m_Sensitivity << std::endl;
- os << indent << "DarkObjectLightBackground  : " << m_DarkObjectLightBackground << std::endl;
+  os << indent << "DarkObjectLightBackground  : " << m_DarkObjectLightBackground << std::endl;
 }
 // singleiter
 template <typename PixelType, unsigned int NDimension>
-void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
-::VED3DSingleIteration(typename PrecisionImageType::Pointer ci)
+void
+VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::VED3DSingleIteration(
+  typename PrecisionImageType::Pointer ci)
 {
   bool rec(false);
-  if (    (m_CurrentIteration == 1) ||
-          (m_RecalculateVesselness == 0) ||
-          (m_CurrentIteration % m_RecalculateVesselness == 0)
-     )
-    {
+  if ((m_CurrentIteration == 1) || (m_RecalculateVesselness == 0) ||
+      (m_CurrentIteration % m_RecalculateVesselness == 0))
+  {
     rec = true;
     if (m_Verbose)
-      {
+    {
       std::cout << "v ";
       std::cout.flush();
-      }
-    MaxVesselResponse (ci);
-    DiffusionTensor ();
     }
+    MaxVesselResponse(ci);
+    DiffusionTensor();
+  }
   if (m_Verbose)
-    {
+  {
     if (!rec)
-      {
+    {
       std::cout << ". ";
       std::cout.flush();
-      }
     }
+  }
 
 
   // calculate d = nonlineardiffusion(ci)
@@ -117,7 +115,7 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
   // shapedneighborhood iter, zeroflux boundary condition
   // division into faces and inner region
   using BT = ZeroFluxNeumannBoundaryCondition<PrecisionImageType>;
-  using NT = ConstShapedNeighborhoodIterator<PrecisionImageType,BT>;
+  using NT = ConstShapedNeighborhoodIterator<PrecisionImageType, BT>;
   using FT = typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<PrecisionImageType>;
   BT                      b;
   typename NT::RadiusType r;
@@ -125,66 +123,70 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 
 
   // offsets
-  const typename NT::OffsetType oxp = {{1,0,0}};
-  const typename NT::OffsetType oxm = {{-1,0,0}};
-  const typename NT::OffsetType oyp = {{0,1,0}};
-  const typename NT::OffsetType oym = {{0,-1,0}};
-  const typename NT::OffsetType ozp = {{0,0,1}};
-  const typename NT::OffsetType ozm = {{0,0,-1}};
+  const typename NT::OffsetType oxp = { { 1, 0, 0 } };
+  const typename NT::OffsetType oxm = { { -1, 0, 0 } };
+  const typename NT::OffsetType oyp = { { 0, 1, 0 } };
+  const typename NT::OffsetType oym = { { 0, -1, 0 } };
+  const typename NT::OffsetType ozp = { { 0, 0, 1 } };
+  const typename NT::OffsetType ozm = { { 0, 0, -1 } };
 
-  const typename NT::OffsetType oxpyp = {{1,1,0}};
-  const typename NT::OffsetType oxmym = {{-1,-1,0}};
-  const typename NT::OffsetType oxpym = {{1,-1,0}};
-  const typename NT::OffsetType oxmyp = {{-1,1,0}};
+  const typename NT::OffsetType oxpyp = { { 1, 1, 0 } };
+  const typename NT::OffsetType oxmym = { { -1, -1, 0 } };
+  const typename NT::OffsetType oxpym = { { 1, -1, 0 } };
+  const typename NT::OffsetType oxmyp = { { -1, 1, 0 } };
 
-  const typename NT::OffsetType oxpzp = {{1,0,1}};
-  const typename NT::OffsetType oxmzm = {{-1,0,-1}};
-  const typename NT::OffsetType oxpzm = {{1,0,-1}};
-  const typename NT::OffsetType oxmzp = {{-1,0,1}};
+  const typename NT::OffsetType oxpzp = { { 1, 0, 1 } };
+  const typename NT::OffsetType oxmzm = { { -1, 0, -1 } };
+  const typename NT::OffsetType oxpzm = { { 1, 0, -1 } };
+  const typename NT::OffsetType oxmzp = { { -1, 0, 1 } };
 
-  const typename NT::OffsetType oypzp = {{0,1,1}};
-  const typename NT::OffsetType oymzm = {{0,-1,-1}};
-  const typename NT::OffsetType oypzm = {{0,1,-1}};
-  const typename NT::OffsetType oymzp = {{0,-1,1}};
+  const typename NT::OffsetType oypzp = { { 0, 1, 1 } };
+  const typename NT::OffsetType oymzm = { { 0, -1, -1 } };
+  const typename NT::OffsetType oypzm = { { 0, 1, -1 } };
+  const typename NT::OffsetType oymzp = { { 0, -1, 1 } };
 
   // fixed weights (timers)
   const typename PrecisionImageType::SpacingType ispacing = ci->GetSpacing();
-  const Precision rxx = m_TimeStep / (2.0 * ispacing[0] * ispacing[0]);
-  const Precision ryy = m_TimeStep / (2.0 * ispacing[1] * ispacing[1]);
-  const Precision rzz = m_TimeStep / (2.0 * ispacing[2] * ispacing[2]);
-  const Precision rxy = m_TimeStep / (4.0 * ispacing[0] * ispacing[1]);
-  const Precision rxz = m_TimeStep / (4.0 * ispacing[0] * ispacing[2]);
-  const Precision ryz = m_TimeStep / (4.0 * ispacing[1] * ispacing[2]);
+  const Precision                                rxx = m_TimeStep / (2.0 * ispacing[0] * ispacing[0]);
+  const Precision                                ryy = m_TimeStep / (2.0 * ispacing[1] * ispacing[1]);
+  const Precision                                rzz = m_TimeStep / (2.0 * ispacing[2] * ispacing[2]);
+  const Precision                                rxy = m_TimeStep / (4.0 * ispacing[0] * ispacing[1]);
+  const Precision                                rxz = m_TimeStep / (4.0 * ispacing[0] * ispacing[2]);
+  const Precision                                ryz = m_TimeStep / (4.0 * ispacing[1] * ispacing[2]);
 
   // faces
-  FT                            fc;
-  typename FT::FaceListType     fci = fc(ci,d->GetLargestPossibleRegion(),r);
-  typename FT::FaceListType     fxx = fc(m_Dxx,d->GetLargestPossibleRegion(),r);
-  typename FT::FaceListType     fxy = fc(m_Dxy,d->GetLargestPossibleRegion(),r);
-  typename FT::FaceListType     fxz = fc(m_Dxz,d->GetLargestPossibleRegion(),r);
-  typename FT::FaceListType     fyy = fc(m_Dyy,d->GetLargestPossibleRegion(),r);
-  typename FT::FaceListType     fyz = fc(m_Dyz,d->GetLargestPossibleRegion(),r);
-  typename FT::FaceListType     fzz = fc(m_Dzz,d->GetLargestPossibleRegion(),r);
+  FT                        fc;
+  typename FT::FaceListType fci = fc(ci, d->GetLargestPossibleRegion(), r);
+  typename FT::FaceListType fxx = fc(m_Dxx, d->GetLargestPossibleRegion(), r);
+  typename FT::FaceListType fxy = fc(m_Dxy, d->GetLargestPossibleRegion(), r);
+  typename FT::FaceListType fxz = fc(m_Dxz, d->GetLargestPossibleRegion(), r);
+  typename FT::FaceListType fyy = fc(m_Dyy, d->GetLargestPossibleRegion(), r);
+  typename FT::FaceListType fyz = fc(m_Dyz, d->GetLargestPossibleRegion(), r);
+  typename FT::FaceListType fzz = fc(m_Dzz, d->GetLargestPossibleRegion(), r);
 
-  typename FT::FaceListType::iterator fitci,fitxx,fitxy,fitxz,fityy,fityz,fitzz;
+  typename FT::FaceListType::iterator fitci, fitxx, fitxy, fitxz, fityy, fityz, fitzz;
 
-  for ( fitci = fci.begin(),
-        fitxx = fxx.begin(), fitxy = fxy.begin(), fitxz = fxz.begin(),
-        fityy = fyy.begin(), fityz = fyz.begin(), fitzz = fzz.begin();
-        fitci != fci.end();
-        ++fitci, ++fitxx, ++fitxy, ++fitxz, ++fityy, ++fityz, ++fitzz)
-    {
+  for (fitci = fci.begin(),
+      fitxx = fxx.begin(),
+      fitxy = fxy.begin(),
+      fitxz = fxz.begin(),
+      fityy = fyy.begin(),
+      fityz = fyz.begin(),
+      fitzz = fzz.begin();
+       fitci != fci.end();
+       ++fitci, ++fitxx, ++fitxy, ++fitxz, ++fityy, ++fityz, ++fitzz)
+  {
     // output iter
-    ImageRegionIterator<PrecisionImageType> dit(d,*fitci);
+    ImageRegionIterator<PrecisionImageType> dit(d, *fitci);
 
     // input iters
-    NT itci (r,ci,*fitci);
-    NT itxx (r,m_Dxx,*fitxx);
-    NT itxy (r,m_Dxy,*fitxy);
-    NT itxz (r,m_Dxz,*fitxz);
-    NT ityy (r,m_Dyy,*fityy);
-    NT ityz (r,m_Dyz,*fityz);
-    NT itzz (r,m_Dzz,*fitzz);
+    NT itci(r, ci, *fitci);
+    NT itxx(r, m_Dxx, *fitxx);
+    NT itxy(r, m_Dxy, *fitxy);
+    NT itxz(r, m_Dxz, *fitxz);
+    NT ityy(r, m_Dyy, *fityy);
+    NT ityz(r, m_Dyz, *fityz);
+    NT itzz(r, m_Dzz, *fitzz);
 
     itci.OverrideBoundaryCondition(&b);
     itxx.OverrideBoundaryCondition(&b);
@@ -349,12 +351,17 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
     itzz.ActivateOffset(oymzp);
 
     // run for each face diffusion
-    for (itci.GoToBegin(), dit.GoToBegin(),
-            itxx.GoToBegin(),itxy.GoToBegin(), itxz.GoToBegin(),
-            ityy.GoToBegin(),ityz.GoToBegin(), itzz.GoToBegin();
-            !itci.IsAtEnd();
-            ++itci, ++dit, ++itxx, ++itxy, ++itxz, ++ityy, ++ityz, ++itzz)
-      {
+    for (itci.GoToBegin(),
+         dit.GoToBegin(),
+         itxx.GoToBegin(),
+         itxy.GoToBegin(),
+         itxz.GoToBegin(),
+         ityy.GoToBegin(),
+         ityz.GoToBegin(),
+         itzz.GoToBegin();
+         !itci.IsAtEnd();
+         ++itci, ++dit, ++itxx, ++itxy, ++itxz, ++ityy, ++ityz, ++itzz)
+    {
       // weights
       const Precision xp = itxx.GetPixel(oxp) + itxx.GetCenterPixel();
       const Precision xm = itxx.GetPixel(oxm) + itxx.GetCenterPixel();
@@ -365,57 +372,47 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 
       const Precision xpyp = itxy.GetPixel(oxpyp) + itxy.GetCenterPixel();
       const Precision xmym = itxy.GetPixel(oxmym) + itxy.GetCenterPixel();
-      const Precision xpym = - itxy.GetPixel(oxpym) - itxy.GetCenterPixel();
-      const Precision xmyp = - itxy.GetPixel(oxmyp) - itxy.GetCenterPixel();
+      const Precision xpym = -itxy.GetPixel(oxpym) - itxy.GetCenterPixel();
+      const Precision xmyp = -itxy.GetPixel(oxmyp) - itxy.GetCenterPixel();
 
-      const Precision xpzp =   itxz.GetPixel(oxpzp) + itxz.GetCenterPixel();
-      const Precision xmzm =   itxz.GetPixel(oxmzm) + itxz.GetCenterPixel();
-      const Precision xpzm = - itxz.GetPixel(oxpzm) - itxz.GetCenterPixel();
-      const Precision xmzp = - itxz.GetPixel(oxmzp) - itxz.GetCenterPixel();
+      const Precision xpzp = itxz.GetPixel(oxpzp) + itxz.GetCenterPixel();
+      const Precision xmzm = itxz.GetPixel(oxmzm) + itxz.GetCenterPixel();
+      const Precision xpzm = -itxz.GetPixel(oxpzm) - itxz.GetCenterPixel();
+      const Precision xmzp = -itxz.GetPixel(oxmzp) - itxz.GetCenterPixel();
 
-      const Precision ypzp =   ityz.GetPixel(oypzp) + ityz.GetCenterPixel();
-      const Precision ymzm =   ityz.GetPixel(oymzm) + ityz.GetCenterPixel();
-      const Precision ypzm = - ityz.GetPixel(oypzm) - ityz.GetCenterPixel();
-      const Precision ymzp = - ityz.GetPixel(oymzp) - ityz.GetCenterPixel();
+      const Precision ypzp = ityz.GetPixel(oypzp) + ityz.GetCenterPixel();
+      const Precision ymzm = ityz.GetPixel(oymzm) + ityz.GetCenterPixel();
+      const Precision ypzm = -ityz.GetPixel(oypzm) - ityz.GetCenterPixel();
+      const Precision ymzp = -ityz.GetPixel(oymzp) - ityz.GetCenterPixel();
 
       // evolution
       const Precision cv = itci.GetCenterPixel();
-      dit.Value() = cv +
-          + rxx * ( xp * (itci.GetPixel(oxp) - cv)
-                  + xm * (itci.GetPixel(oxm) - cv) )
-          + ryy * ( yp * (itci.GetPixel(oyp) - cv)
-                  + ym * (itci.GetPixel(oym) - cv) )
-          + rzz * ( zp * (itci.GetPixel(ozp) - cv)
-                  + zm * (itci.GetPixel(ozm) - cv) )
-          + rxy * ( xpyp * (itci.GetPixel(oxpyp) - cv)
-                  + xmym * (itci.GetPixel(oxmym) - cv)
-                  + xpym * (itci.GetPixel(oxpym) - cv)
-                  + xmyp * (itci.GetPixel(oxmyp) - cv) )
-          + rxz * ( xpzp * (itci.GetPixel(oxpzp) - cv)
-                  + xmzm * (itci.GetPixel(oxmzm) - cv)
-                  + xpzm * (itci.GetPixel(oxpzm) - cv)
-                  + xmzp * (itci.GetPixel(oxmzp) - cv) )
-          + ryz * ( ypzp * (itci.GetPixel(oypzp) - cv)
-                  + ymzm * (itci.GetPixel(oymzm) - cv)
-                  + ypzm * (itci.GetPixel(oypzm) - cv)
-                  + ymzp * (itci.GetPixel(oymzp) - cv) );
-
-      }
+      dit.Value() = cv + +rxx * (xp * (itci.GetPixel(oxp) - cv) + xm * (itci.GetPixel(oxm) - cv)) +
+                    ryy * (yp * (itci.GetPixel(oyp) - cv) + ym * (itci.GetPixel(oym) - cv)) +
+                    rzz * (zp * (itci.GetPixel(ozp) - cv) + zm * (itci.GetPixel(ozm) - cv)) +
+                    rxy * (xpyp * (itci.GetPixel(oxpyp) - cv) + xmym * (itci.GetPixel(oxmym) - cv) +
+                           xpym * (itci.GetPixel(oxpym) - cv) + xmyp * (itci.GetPixel(oxmyp) - cv)) +
+                    rxz * (xpzp * (itci.GetPixel(oxpzp) - cv) + xmzm * (itci.GetPixel(oxmzm) - cv) +
+                           xpzm * (itci.GetPixel(oxpzm) - cv) + xmzp * (itci.GetPixel(oxmzp) - cv)) +
+                    ryz * (ypzp * (itci.GetPixel(oypzp) - cv) + ymzm * (itci.GetPixel(oymzm) - cv) +
+                           ypzm * (itci.GetPixel(oypzm) - cv) + ymzp * (itci.GetPixel(oymzp) - cv));
     }
+  }
 
   // copying
-  ImageRegionConstIterator<PrecisionImageType> iti (d,d->GetLargestPossibleRegion());
-  ImageRegionIterator<PrecisionImageType>      ito (ci,ci->GetLargestPossibleRegion());
-  for (iti.GoToBegin(), ito.GoToBegin(); !iti.IsAtEnd(); ++iti,++ito)
-    {
+  ImageRegionConstIterator<PrecisionImageType> iti(d, d->GetLargestPossibleRegion());
+  ImageRegionIterator<PrecisionImageType>      ito(ci, ci->GetLargestPossibleRegion());
+  for (iti.GoToBegin(), ito.GoToBegin(); !iti.IsAtEnd(); ++iti, ++ito)
+  {
     ito.Value() = iti.Value();
-    }
+  }
 }
 
 // maxvesselresponse
 template <typename PixelType, unsigned int NDimension>
-void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
-::MaxVesselResponse(const typename PrecisionImageType::Pointer im)
+void
+VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::MaxVesselResponse(
+  const typename PrecisionImageType::Pointer im)
 {
 
   // alloc memory for hessian/tensor
@@ -479,8 +476,8 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
   vi->FillBuffer(NumericTraits<Precision>::Zero);
 
 
-  for (unsigned int i=0; i< m_Scales.size(); ++i)
-    {
+  for (unsigned int i = 0; i < m_Scales.size(); ++i)
+  {
     using HessianType = HessianRecursiveGaussianImageFilter<PrecisionImageType>;
     typename HessianType::Pointer hessian = HessianType::New();
     hessian->SetInput(im);
@@ -488,171 +485,178 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
     hessian->SetSigma(m_Scales[i]);
     hessian->Update();
 
-    ImageRegionIterator<PrecisionImageType> itxx (m_Dxx, m_Dxx->GetLargestPossibleRegion());
-    ImageRegionIterator<PrecisionImageType> itxy (m_Dxy, m_Dxy->GetLargestPossibleRegion());
-    ImageRegionIterator<PrecisionImageType> itxz (m_Dxz, m_Dxz->GetLargestPossibleRegion());
-    ImageRegionIterator<PrecisionImageType> ityy (m_Dyy, m_Dyy->GetLargestPossibleRegion());
-    ImageRegionIterator<PrecisionImageType> ityz (m_Dyz, m_Dyz->GetLargestPossibleRegion());
-    ImageRegionIterator<PrecisionImageType> itzz (m_Dzz, m_Dzz->GetLargestPossibleRegion());
+    ImageRegionIterator<PrecisionImageType> itxx(m_Dxx, m_Dxx->GetLargestPossibleRegion());
+    ImageRegionIterator<PrecisionImageType> itxy(m_Dxy, m_Dxy->GetLargestPossibleRegion());
+    ImageRegionIterator<PrecisionImageType> itxz(m_Dxz, m_Dxz->GetLargestPossibleRegion());
+    ImageRegionIterator<PrecisionImageType> ityy(m_Dyy, m_Dyy->GetLargestPossibleRegion());
+    ImageRegionIterator<PrecisionImageType> ityz(m_Dyz, m_Dyz->GetLargestPossibleRegion());
+    ImageRegionIterator<PrecisionImageType> itzz(m_Dzz, m_Dzz->GetLargestPossibleRegion());
     ImageRegionIterator<PrecisionImageType> vit(vi, vi->GetLargestPossibleRegion());
 
-    ImageRegionConstIterator<typename HessianType::OutputImageType> hit
-        (hessian->GetOutput(), hessian->GetOutput()->GetLargestPossibleRegion());
+    ImageRegionConstIterator<typename HessianType::OutputImageType> hit(
+      hessian->GetOutput(), hessian->GetOutput()->GetLargestPossibleRegion());
 
-    for (itxx.GoToBegin(), itxy.GoToBegin(), itxz.GoToBegin(),
-            ityy.GoToBegin(), ityz.GoToBegin(), itzz.GoToBegin(),
-            vit.GoToBegin(), hit.GoToBegin(); !vit.IsAtEnd();
-            ++itxx, ++itxy, ++itxz, ++ityy, ++ityz, ++itzz, ++hit, ++vit)
-      {
-      vnl_matrix<Precision> H(3,3);
+    for (itxx.GoToBegin(),
+         itxy.GoToBegin(),
+         itxz.GoToBegin(),
+         ityy.GoToBegin(),
+         ityz.GoToBegin(),
+         itzz.GoToBegin(),
+         vit.GoToBegin(),
+         hit.GoToBegin();
+         !vit.IsAtEnd();
+         ++itxx, ++itxy, ++itxz, ++ityy, ++ityz, ++itzz, ++hit, ++vit)
+    {
+      vnl_matrix<Precision> H(3, 3);
 
-      H(0,0) = hit.Value()(0,0);
-      H(0,1) = H(1,0) = hit.Value()(0,1);
-      H(0,2) = H(2,0) = hit.Value()(0,2);
-      H(1,1) = hit.Value()(1,1);
-      H(1,2) = H(2,1) = hit.Value()(1,2);
-      H(2,2) = hit.Value()(2,2);
+      H(0, 0) = hit.Value()(0, 0);
+      H(0, 1) = H(1, 0) = hit.Value()(0, 1);
+      H(0, 2) = H(2, 0) = hit.Value()(0, 2);
+      H(1, 1) = hit.Value()(1, 1);
+      H(1, 2) = H(2, 1) = hit.Value()(1, 2);
+      H(2, 2) = hit.Value()(2, 2);
 
       vnl_symmetric_eigensystem<Precision> ES(H);
-      vnl_vector<Precision> ev(3);
+      vnl_vector<Precision>                ev(3);
 
       ev[0] = ES.get_eigenvalue(0);
       ev[1] = ES.get_eigenvalue(1);
       ev[2] = ES.get_eigenvalue(2);
 
-      if ( std::abs(ev[0]) > std::abs(ev[1])  ) std::swap(ev[0], ev[1]);
-      if ( std::abs(ev[1]) > std::abs(ev[2])  ) std::swap(ev[1], ev[2]);
-      if ( std::abs(ev[0]) > std::abs(ev[1])  ) std::swap(ev[0], ev[1]);
+      if (std::abs(ev[0]) > std::abs(ev[1]))
+        std::swap(ev[0], ev[1]);
+      if (std::abs(ev[1]) > std::abs(ev[2]))
+        std::swap(ev[1], ev[2]);
+      if (std::abs(ev[0]) > std::abs(ev[1]))
+        std::swap(ev[0], ev[1]);
 
-      const Precision vesselness = VesselnessFunction3D(ev[0],ev[1],ev[2]);
+      const Precision vesselness = VesselnessFunction3D(ev[0], ev[1], ev[2]);
 
-      if ( vesselness > 0 && vesselness > vit.Value() )
-        {
+      if (vesselness > 0 && vesselness > vit.Value())
+      {
         vit.Value() = vesselness;
 
-        itxx.Value() = hit.Value()(0,0);
-        itxy.Value() = hit.Value()(0,1);
-        itxz.Value() = hit.Value()(0,2);
-        ityy.Value() = hit.Value()(1,1);
-        ityz.Value() = hit.Value()(1,2);
-        itzz.Value() = hit.Value()(2,2);
-        }
+        itxx.Value() = hit.Value()(0, 0);
+        itxy.Value() = hit.Value()(0, 1);
+        itxz.Value() = hit.Value()(0, 2);
+        ityy.Value() = hit.Value()(1, 1);
+        ityz.Value() = hit.Value()(1, 2);
+        itzz.Value() = hit.Value()(2, 2);
       }
     }
+  }
 }
 
 // vesselnessfunction
 template <typename PixelType, unsigned int NDimension>
 typename VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::Precision
-VesselEnhancingDiffusion3DImageFilter<PixelType,NDimension>
-::VesselnessFunction3D( const Precision l1, const Precision l2, const Precision l3 )
+VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::VesselnessFunction3D(const Precision l1,
+                                                                                   const Precision l2,
+                                                                                   const Precision l3)
 {
   Precision vesselness;
-  if (    (m_DarkObjectLightBackground && ((l2<=0) || (l3<=0)))
-          ||
-          (!m_DarkObjectLightBackground && ( (l2>=0) || (l3 >=0)))
-     )
-    {
+  if ((m_DarkObjectLightBackground && ((l2 <= 0) || (l3 <= 0))) ||
+      (!m_DarkObjectLightBackground && ((l2 >= 0) || (l3 >= 0))))
+  {
     vesselness = NumericTraits<Precision>::Zero;
-    }
+  }
   else
-    {
-    const Precision smoothC=1E-5;
+  {
+    const Precision smoothC = 1E-5;
 
-    const Precision va2= 2.0*m_Alpha*m_Alpha;
-    const Precision vb2= 2.0*m_Beta*m_Beta;
-    const Precision vc2= 2.0*m_Gamma*m_Gamma;
+    const Precision va2 = 2.0 * m_Alpha * m_Alpha;
+    const Precision vb2 = 2.0 * m_Beta * m_Beta;
+    const Precision vc2 = 2.0 * m_Gamma * m_Gamma;
 
-    const Precision   Ra2 = (l2 * l2) / (l3 * l3);
-    const Precision   Rb2 = (l1 * l1) / std::abs(l2 * l3);
-    const Precision   S2 =  (l1 * l1) + (l2 *l2) + (l3 * l3);
-    const Precision   T = std::exp(-(2*smoothC*smoothC)/(std::abs(l2)*l3*l3));
+    const Precision Ra2 = (l2 * l2) / (l3 * l3);
+    const Precision Rb2 = (l1 * l1) / std::abs(l2 * l3);
+    const Precision S2 = (l1 * l1) + (l2 * l2) + (l3 * l3);
+    const Precision T = std::exp(-(2 * smoothC * smoothC) / (std::abs(l2) * l3 * l3));
 
-    vesselness = T * (1.0 - std::exp( - Ra2/va2)) *
-      std::exp(-Rb2/vb2) *
-      (1.0 - std::exp(-S2/vc2));
-
-    }
+    vesselness = T * (1.0 - std::exp(-Ra2 / va2)) * std::exp(-Rb2 / vb2) * (1.0 - std::exp(-S2 / vc2));
+  }
 
   return vesselness;
 }
 
 // diffusiontensor
 template <typename PixelType, unsigned int NDimension>
-void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
-::DiffusionTensor()
+void
+VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::DiffusionTensor()
 {
-  ImageRegionIterator<PrecisionImageType> itxx (m_Dxx, m_Dxx->GetLargestPossibleRegion());
-  ImageRegionIterator<PrecisionImageType> itxy (m_Dxy, m_Dxy->GetLargestPossibleRegion());
-  ImageRegionIterator<PrecisionImageType> itxz (m_Dxz, m_Dxz->GetLargestPossibleRegion());
-  ImageRegionIterator<PrecisionImageType> ityy (m_Dyy, m_Dyy->GetLargestPossibleRegion());
-  ImageRegionIterator<PrecisionImageType> ityz (m_Dyz, m_Dyz->GetLargestPossibleRegion());
-  ImageRegionIterator<PrecisionImageType> itzz (m_Dzz, m_Dzz->GetLargestPossibleRegion());
+  ImageRegionIterator<PrecisionImageType> itxx(m_Dxx, m_Dxx->GetLargestPossibleRegion());
+  ImageRegionIterator<PrecisionImageType> itxy(m_Dxy, m_Dxy->GetLargestPossibleRegion());
+  ImageRegionIterator<PrecisionImageType> itxz(m_Dxz, m_Dxz->GetLargestPossibleRegion());
+  ImageRegionIterator<PrecisionImageType> ityy(m_Dyy, m_Dyy->GetLargestPossibleRegion());
+  ImageRegionIterator<PrecisionImageType> ityz(m_Dyz, m_Dyz->GetLargestPossibleRegion());
+  ImageRegionIterator<PrecisionImageType> itzz(m_Dzz, m_Dzz->GetLargestPossibleRegion());
 
-  for  ( itxx.GoToBegin(), itxy.GoToBegin(), itxz.GoToBegin(),
-          ityy.GoToBegin(), ityz.GoToBegin(), itzz.GoToBegin();
-          !itxx.IsAtEnd();
-          ++itxx, ++itxy, ++itxz, ++ityy, ++ityz, ++itzz)
-    {
-    vnl_matrix<Precision> H(3,3);
-    H(0,0) = itxx.Value();
-    H(0,1) = H(1,0) = itxy.Value();
-    H(0,2) = H(2,0) = itxz.Value();
-    H(1,1) = ityy.Value();
-    H(1,2) = H(2,1) = ityz.Value();
-    H(2,2) = itzz.Value();
+  for (itxx.GoToBegin(), itxy.GoToBegin(), itxz.GoToBegin(), ityy.GoToBegin(), ityz.GoToBegin(), itzz.GoToBegin();
+       !itxx.IsAtEnd();
+       ++itxx, ++itxy, ++itxz, ++ityy, ++ityz, ++itzz)
+  {
+    vnl_matrix<Precision> H(3, 3);
+    H(0, 0) = itxx.Value();
+    H(0, 1) = H(1, 0) = itxy.Value();
+    H(0, 2) = H(2, 0) = itxz.Value();
+    H(1, 1) = ityy.Value();
+    H(1, 2) = H(2, 1) = ityz.Value();
+    H(2, 2) = itzz.Value();
 
     vnl_symmetric_eigensystem<Precision> ES(H);
 
-    vnl_matrix<Precision> EV(3,3);
-    EV.set_column(0,ES.get_eigenvector(0));
-    EV.set_column(1,ES.get_eigenvector(1));
-    EV.set_column(2,ES.get_eigenvector(2));
+    vnl_matrix<Precision> EV(3, 3);
+    EV.set_column(0, ES.get_eigenvector(0));
+    EV.set_column(1, ES.get_eigenvector(1));
+    EV.set_column(2, ES.get_eigenvector(2));
 
     vnl_vector<Precision> ev(3);
     ev[0] = ES.get_eigenvalue(0);
     ev[1] = ES.get_eigenvalue(1);
     ev[2] = ES.get_eigenvalue(2);
 
-    if ( std::abs(ev[0]) > std::abs(ev[1])  ) std::swap(ev[0], ev[1]);
-    if ( std::abs(ev[1]) > std::abs(ev[2])  ) std::swap(ev[1], ev[2]);
-    if ( std::abs(ev[0]) > std::abs(ev[1])  ) std::swap(ev[0], ev[1]);
+    if (std::abs(ev[0]) > std::abs(ev[1]))
+      std::swap(ev[0], ev[1]);
+    if (std::abs(ev[1]) > std::abs(ev[2]))
+      std::swap(ev[1], ev[2]);
+    if (std::abs(ev[0]) > std::abs(ev[1]))
+      std::swap(ev[0], ev[1]);
 
-    const Precision V=VesselnessFunction3D(ev[0],ev[1],ev[2]);
+    const Precision       V = VesselnessFunction3D(ev[0], ev[1], ev[2]);
     vnl_vector<Precision> evn(3);
 
     // adjusting eigenvalues
     // static_cast required to prevent error with gcc 4.1.2
-    evn[0]   = 1.0 + (m_Epsilon - 1.0) * std::pow(V,static_cast<Precision>(1.0/m_Sensitivity));
-    evn[1]   = 1.0 + (m_Epsilon - 1.0) * std::pow(V,static_cast<Precision>(1.0/m_Sensitivity));
-    evn[2]   = 1.0 + (m_Omega - 1.0 ) * std::pow(V,static_cast<Precision>(1.0/m_Sensitivity));
+    evn[0] = 1.0 + (m_Epsilon - 1.0) * std::pow(V, static_cast<Precision>(1.0 / m_Sensitivity));
+    evn[1] = 1.0 + (m_Epsilon - 1.0) * std::pow(V, static_cast<Precision>(1.0 / m_Sensitivity));
+    evn[2] = 1.0 + (m_Omega - 1.0) * std::pow(V, static_cast<Precision>(1.0 / m_Sensitivity));
 
-    vnl_matrix<Precision> LAM(3,3);
+    vnl_matrix<Precision> LAM(3, 3);
     LAM.fill(0);
-    LAM(0,0) = evn[0];
-    LAM(1,1) = evn[1];
-    LAM(2,2) = evn[2];
+    LAM(0, 0) = evn[0];
+    LAM(1, 1) = evn[1];
+    LAM(2, 2) = evn[2];
 
     const vnl_matrix<Precision> HN = EV * LAM * EV.transpose();
 
-    itxx.Value() = HN(0,0);
-    itxy.Value() = HN(0,1);
-    itxz.Value() = HN(0,2);
-    ityy.Value() = HN(1,1);
-    ityz.Value() = HN(1,2);
-    itzz.Value() = HN(2,2);
-    }
+    itxx.Value() = HN(0, 0);
+    itxy.Value() = HN(0, 1);
+    itxz.Value() = HN(0, 2);
+    ityy.Value() = HN(1, 1);
+    ityz.Value() = HN(1, 2);
+    itzz.Value() = HN(2, 2);
+  }
 }
 
 // generatedata
 template <typename PixelType, unsigned int NDimension>
-void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
-::GenerateData()
+void
+VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::GenerateData()
 {
   if (m_Verbose)
-    {
+  {
     std::cout << std::endl << "begin vesselenhancingdiffusion3Dimagefilter ... " << std::endl;
-    }
+  }
 
   using MinMaxType = MinimumMaximumImageFilter<ImageType>;
   typename MinMaxType::Pointer minmax = MinMaxType::New();
@@ -661,40 +665,38 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
   minmax->Update();
 
   const typename ImageType::SpacingType ispacing = this->GetInput()->GetSpacing();
-  const Precision htmax = 0.5 /
-        (  1.0 / (ispacing[0] * ispacing[0])
-         + 1.0 / (ispacing[1] * ispacing[1])
-         + 1.0 / (ispacing[2] * ispacing[2]) );
+  const Precision                       htmax =
+    0.5 / (1.0 / (ispacing[0] * ispacing[0]) + 1.0 / (ispacing[1] * ispacing[1]) + 1.0 / (ispacing[2] * ispacing[2]));
 
   if (m_TimeStep == NumericTraits<Precision>::Zero)
-    {
+  {
     m_TimeStep = htmax;
-    }
+  }
 
-  if (m_TimeStep> htmax)
-    {
+  if (m_TimeStep > htmax)
+  {
     std::cerr << "the time step size is too large!" << std::endl;
     this->AllocateOutputs();
     return;
-    }
+  }
 
   if (m_Verbose)
-    {
+  {
     std::cout << "min/max             \t" << minmax->GetMinimum() << " " << minmax->GetMaximum() << std::endl;
     std::cout << "iterations/timestep \t" << m_Iterations << " " << m_TimeStep << std::endl;
     std::cout << "recalc v            \t" << m_RecalculateVesselness << std::endl;
     std::cout << "scales              \t";
-    for (unsigned int i=0; i<m_Scales.size(); ++i)
-      {
-        std::cout << m_Scales[i] << " ";
-      }
+    for (unsigned int i = 0; i < m_Scales.size(); ++i)
+    {
+      std::cout << m_Scales[i] << " ";
+    }
     std::cout << std::endl;
     std::cout << "alpha/beta/gamma    \t" << m_Alpha << " " << m_Beta << " " << m_Gamma << std::endl;
-    std::cout << "eps/omega/sens      \t" << m_Epsilon <<  " " << m_Omega << " " << m_Sensitivity << std::endl;
-    }
+    std::cout << "eps/omega/sens      \t" << m_Epsilon << " " << m_Omega << " " << m_Sensitivity << std::endl;
+  }
 
   // cast to precision
-  using CT = CastImageFilter<ImageType,PrecisionImageType>;
+  using CT = CastImageFilter<ImageType, PrecisionImageType>;
   typename CT::Pointer cast = CT::New();
   cast->SetInput(this->GetInput());
   cast->Update();
@@ -703,14 +705,14 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
 
 
   if (m_Verbose)
-    {
+  {
     std::cout << "start algorithm ... " << std::endl;
-    }
+  }
 
-  for (m_CurrentIteration=1; m_CurrentIteration<=m_Iterations; m_CurrentIteration++)
-    {
-    VED3DSingleIteration (ci);
-    }
+  for (m_CurrentIteration = 1; m_CurrentIteration <= m_Iterations; m_CurrentIteration++)
+  {
+    VED3DSingleIteration(ci);
+  }
 
   using MMT = MinimumMaximumImageFilter<PrecisionImageType>;
   typename MMT::Pointer mm = MMT::New();
@@ -718,15 +720,15 @@ void VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>
   mm->Update();
 
   if (m_Verbose)
-    {
+  {
     std::cout << std::endl;
     std::cout << "min/max             \t" << mm->GetMinimum() << " " << mm->GetMaximum() << std::endl;
     std::cout << "end vesselenhancingdiffusion3Dimagefilter" << std::endl;
-    }
+  }
 
   // cast back to pixeltype
   this->AllocateOutputs();
-  using CTI = CastImageFilter<PrecisionImageType,ImageType>;
+  using CTI = CastImageFilter<PrecisionImageType, ImageType>;
   typename CTI::Pointer casti = CTI::New();
   casti->SetInput(ci);
   casti->GraftOutput(this->GetOutput());

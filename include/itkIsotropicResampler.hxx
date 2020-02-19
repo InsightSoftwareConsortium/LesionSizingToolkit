@@ -27,85 +27,78 @@ namespace itk
 {
 
 template <unsigned int NDimension>
-IsotropicResampler<NDimension>
-::IsotropicResampler()
+IsotropicResampler<NDimension>::IsotropicResampler()
 {
-  this->SetNumberOfRequiredInputs( 1 );
-  this->SetNumberOfRequiredOutputs( 1 );
+  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredOutputs(1);
 
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
-  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->ProcessObject::SetNthOutput(0, outputObject.GetPointer());
 
-  this->m_OutputSpacing = 0.2;  // 0.2 mm
+  this->m_OutputSpacing = 0.2; // 0.2 mm
 }
 
 template <unsigned int NDimension>
-IsotropicResampler<NDimension>
-::~IsotropicResampler()
-{
-}
+IsotropicResampler<NDimension>::~IsotropicResampler()
+{}
 
 template <unsigned int NDimension>
 void
-IsotropicResampler<NDimension>
-::SetInput( const SpatialObjectType * spatialObject )
+IsotropicResampler<NDimension>::SetInput(const SpatialObjectType * spatialObject)
 {
   // Process object is not const-correct so the const casting is required.
-  this->SetNthInput(0, const_cast<SpatialObjectType *>( spatialObject ));
+  this->SetNthInput(0, const_cast<SpatialObjectType *>(spatialObject));
 }
 
 template <unsigned int NDimension>
 const typename IsotropicResampler<NDimension>::SpatialObjectType *
-IsotropicResampler<NDimension>
-::GetOutput() const
+IsotropicResampler<NDimension>::GetOutput() const
 {
-  return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
+  return static_cast<const SpatialObjectType *>(this->ProcessObject::GetOutput(0));
 }
 
 template <unsigned int NDimension>
 void
-IsotropicResampler<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+IsotropicResampler<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 template <unsigned int NDimension>
 void
-IsotropicResampler<NDimension>
-::GenerateData()
+IsotropicResampler<NDimension>::GenerateData()
 {
   // Report progress.
   typename ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
 
   typename InputImageSpatialObjectType::ConstPointer inputObject =
-    dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
+    dynamic_cast<const InputImageSpatialObjectType *>(this->ProcessObject::GetInput(0));
 
-  if( !inputObject )
-    {
+  if (!inputObject)
+  {
     itkExceptionMacro("Missing input spatial object or incorrect type");
-    }
+  }
 
   const InputImageType * inputImage = inputObject->GetImage();
 
-  if( !inputImage )
-    {
+  if (!inputImage)
+  {
     itkExceptionMacro("Missing input image");
-    }
+  }
 
 
-  using ResampleFilterType = itk::ResampleImageFilter< InputImageType, InputImageType >;
+  using ResampleFilterType = itk::ResampleImageFilter<InputImageType, InputImageType>;
 
   typename ResampleFilterType::Pointer resampler = ResampleFilterType::New();
 
-  using TransformType = itk::IdentityTransform< double, Dimension >;
+  using TransformType = itk::IdentityTransform<double, Dimension>;
 
   typename TransformType::Pointer transform = TransformType::New();
   transform->SetIdentity();
 
-  using BSplineInterpolatorType = itk::BSplineInterpolateImageFunction< InputImageType, double >;
+  using BSplineInterpolatorType = itk::BSplineInterpolateImageFunction<InputImageType, double>;
 
   typename BSplineInterpolatorType::Pointer bsplineInterpolator = BSplineInterpolatorType::New();
 
@@ -113,10 +106,10 @@ IsotropicResampler<NDimension>
   bsplineInterpolator->UseImageDirectionOn();
 #endif
 
-  bsplineInterpolator->SetSplineOrder( 3 );
-  resampler->SetTransform( transform );
-  resampler->SetInterpolator( bsplineInterpolator );
-  resampler->SetDefaultPixelValue( -1024 ); // Hounsfield Units for Air
+  bsplineInterpolator->SetSplineOrder(3);
+  resampler->SetTransform(transform);
+  resampler->SetInterpolator(bsplineInterpolator);
+  resampler->SetDefaultPixelValue(-1024); // Hounsfield Units for Air
 
   const typename InputImageType::SpacingType & inputSpacing = inputImage->GetSpacing();
 
@@ -127,10 +120,10 @@ IsotropicResampler<NDimension>
   outputSpacing[1] = this->m_OutputSpacing;
   outputSpacing[2] = this->m_OutputSpacing;
 
-  resampler->SetOutputSpacing( outputSpacing );
+  resampler->SetOutputSpacing(outputSpacing);
 
-  resampler->SetOutputOrigin( inputImage->GetOrigin() );
-  resampler->SetOutputDirection( inputImage->GetDirection() );
+  resampler->SetOutputOrigin(inputImage->GetOrigin());
+  resampler->SetOutputDirection(inputImage->GetDirection());
 
   using SizeType = typename InputImageType::SizeType;
 
@@ -140,17 +133,17 @@ IsotropicResampler<NDimension>
   const double dy = inputSize[1] * inputSpacing[1] / outputSpacing[1];
   const double dz = inputSize[2] * inputSpacing[2] / outputSpacing[2];
 
-  typename InputImageType::SizeType   finalSize;
+  typename InputImageType::SizeType finalSize;
 
-  finalSize[0] = static_cast<SizeValueType>( dx );
-  finalSize[1] = static_cast<SizeValueType>( dy );
-  finalSize[2] = static_cast<SizeValueType>( dz );
+  finalSize[0] = static_cast<SizeValueType>(dx);
+  finalSize[1] = static_cast<SizeValueType>(dy);
+  finalSize[2] = static_cast<SizeValueType>(dz);
 
-  resampler->SetSize( finalSize );
+  resampler->SetSize(finalSize);
 
-  resampler->SetInput( inputImage );
+  resampler->SetInput(inputImage);
 
-  progress->RegisterInternalFilter( resampler, 1.0 );
+  progress->RegisterInternalFilter(resampler, 1.0);
 
   resampler->Update();
 
@@ -158,9 +151,9 @@ IsotropicResampler<NDimension>
 
   outputImage->DisconnectPipeline();
 
-  auto * outputObject = dynamic_cast< OutputImageSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast<OutputImageSpatialObjectType *>(this->ProcessObject::GetOutput(0));
 
-  outputObject->SetImage( outputImage );
+  outputObject->SetImage(outputImage);
 }
 
 } // end namespace itk

@@ -33,8 +33,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_TEMPLATE_EXPORT ConfidenceConnectedSegmentationModule :
-  public RegionGrowingSegmentationModule<NDimension>
+class ITK_TEMPLATE_EXPORT ConfidenceConnectedSegmentationModule : public RegionGrowingSegmentationModule<NDimension>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(ConfidenceConnectedSegmentationModule);
@@ -62,27 +61,28 @@ public:
 
   /** Factor that will be applied to the standard deviation in order to compute
    * the intensity range from which pixel will be included in the region. */
-  itkSetMacro( SigmaMultiplier, double );
-  itkGetMacro( SigmaMultiplier, double );
+  itkSetMacro(SigmaMultiplier, double);
+  itkGetMacro(SigmaMultiplier, double);
 
 protected:
   ConfidenceConnectedSegmentationModule();
   ~ConfidenceConnectedSegmentationModule() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
 private:
-  double        m_SigmaMultiplier;
-
+  double m_SigmaMultiplier;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkConfidenceConnectedSegmentationModule.hxx"
+#  include "itkConfidenceConnectedSegmentationModule.hxx"
 #endif
 
 #endif

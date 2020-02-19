@@ -68,18 +68,19 @@ public:
 protected:
   MinimumFeatureAggregator();
   ~MinimumFeatureAggregator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
 
 private:
-  void ConsolidateFeatures() override;
-
+  void
+  ConsolidateFeatures() override;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkMinimumFeatureAggregator.hxx"
+#  include "itkMinimumFeatureAggregator.hxx"
 #endif
 
 #endif

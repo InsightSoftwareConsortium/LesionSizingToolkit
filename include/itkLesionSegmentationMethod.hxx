@@ -32,17 +32,16 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-LesionSegmentationMethod<NDimension>
-::LesionSegmentationMethod()
+LesionSegmentationMethod<NDimension>::LesionSegmentationMethod()
 {
-  this->SetNumberOfRequiredOutputs( 1 );  // for the Transform
+  this->SetNumberOfRequiredOutputs(1); // for the Transform
 
   using OutputPixelType = float;
-  using OutputSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
   typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
 
-  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->ProcessObject::SetNthOutput(0, outputObject.GetPointer());
 
   this->m_ProgressAccumulator = ProgressAccumulator::New();
   this->m_ProgressAccumulator->SetMiniPipelineFilter(this);
@@ -53,10 +52,8 @@ LesionSegmentationMethod<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-LesionSegmentationMethod<NDimension>
-::~LesionSegmentationMethod()
-{
-}
+LesionSegmentationMethod<NDimension>::~LesionSegmentationMethod()
+{}
 
 
 /**
@@ -65,10 +62,9 @@ LesionSegmentationMethod<NDimension>
  */
 template <unsigned int NDimension>
 void
-LesionSegmentationMethod<NDimension>
-::AddFeatureGenerator( FeatureGeneratorType * generator )
+LesionSegmentationMethod<NDimension>::AddFeatureGenerator(FeatureGeneratorType * generator)
 {
-  this->m_FeatureGenerators.push_back( generator );
+  this->m_FeatureGenerators.push_back(generator);
   this->Modified();
 }
 
@@ -78,10 +74,9 @@ LesionSegmentationMethod<NDimension>
  */
 template <unsigned int NDimension>
 void
-LesionSegmentationMethod<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+LesionSegmentationMethod<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
   os << "Region of Interest " << this->m_RegionOfInterest.GetPointer() << std::endl;
   os << "Initial Segmentation " << this->m_InitialSegmentation.GetPointer() << std::endl;
   os << "Segmentation Module " << this->m_SegmentationModule.GetPointer() << std::endl;
@@ -91,12 +86,11 @@ LesionSegmentationMethod<NDimension>
   auto gitr = this->m_FeatureGenerators.begin();
   auto gend = this->m_FeatureGenerators.end();
 
-  while( gitr != gend )
-    {
+  while (gitr != gend)
+  {
     os << gitr->GetPointer() << std::endl;
     ++gitr;
-    }
-
+  }
 }
 
 
@@ -105,13 +99,12 @@ LesionSegmentationMethod<NDimension>
  */
 template <unsigned int NDimension>
 void
-LesionSegmentationMethod<NDimension>
-::GenerateData()
+LesionSegmentationMethod<NDimension>::GenerateData()
 {
-  if( !this->m_SegmentationModule )
-    {
+  if (!this->m_SegmentationModule)
+  {
     itkExceptionMacro("Segmentation Module has not been connected");
-    }
+  }
 
   this->UpdateAllFeatureGenerators();
 
@@ -128,61 +121,54 @@ LesionSegmentationMethod<NDimension>
  */
 template <unsigned int NDimension>
 void
-LesionSegmentationMethod<NDimension>
-::UpdateAllFeatureGenerators()
+LesionSegmentationMethod<NDimension>::UpdateAllFeatureGenerators()
 {
   auto gitr = this->m_FeatureGenerators.begin();
   auto gend = this->m_FeatureGenerators.end();
 
-  while( gitr != gend )
-    {
-    this->m_ProgressAccumulator->RegisterInternalFilter(
-            *gitr, 0.5/this->m_FeatureGenerators.size());
+  while (gitr != gend)
+  {
+    this->m_ProgressAccumulator->RegisterInternalFilter(*gitr, 0.5 / this->m_FeatureGenerators.size());
     (*gitr)->Update();
     ++gitr;
-    }
+  }
 }
 
 
 template <unsigned int NDimension>
 void
-LesionSegmentationMethod<NDimension>
-::VerifyNumberOfAvailableFeaturesMatchedExpectations() const
+LesionSegmentationMethod<NDimension>::VerifyNumberOfAvailableFeaturesMatchedExpectations() const
 {
   const unsigned int expectedNumberOfFeatures = this->m_SegmentationModule->GetExpectedNumberOfFeatures();
   const unsigned int availableNumberOfFeatures = this->m_FeatureGenerators.size();
 
-  if( expectedNumberOfFeatures != availableNumberOfFeatures )
-    {
-    itkExceptionMacro("Expecting " << expectedNumberOfFeatures << " but only got " << availableNumberOfFeatures );
-    }
+  if (expectedNumberOfFeatures != availableNumberOfFeatures)
+  {
+    itkExceptionMacro("Expecting " << expectedNumberOfFeatures << " but only got " << availableNumberOfFeatures);
+  }
 }
 
 
 template <unsigned int NDimension>
 void
-LesionSegmentationMethod<NDimension>
-::ConnectFeaturesToSegmentationModule()
+LesionSegmentationMethod<NDimension>::ConnectFeaturesToSegmentationModule()
 {
-  if( this->m_FeatureGenerators.size() > 0 )
+  if (this->m_FeatureGenerators.size() > 0)
+  {
+    if (this->m_FeatureGenerators[0]->GetFeature())
     {
-    if( this->m_FeatureGenerators[0]->GetFeature() )
-      {
-      this->m_SegmentationModule->SetFeature(
-        this->m_FeatureGenerators[0]->GetFeature() );
-      }
+      this->m_SegmentationModule->SetFeature(this->m_FeatureGenerators[0]->GetFeature());
     }
+  }
 }
 
 
 template <unsigned int NDimension>
 void
-LesionSegmentationMethod<NDimension>
-::ExecuteSegmentationModule()
+LesionSegmentationMethod<NDimension>::ExecuteSegmentationModule()
 {
-  this->m_ProgressAccumulator->RegisterInternalFilter(
-                      this->m_SegmentationModule, 0.5);
-  this->m_SegmentationModule->SetInput( this->m_InitialSegmentation );
+  this->m_ProgressAccumulator->RegisterInternalFilter(this->m_SegmentationModule, 0.5);
+  this->m_SegmentationModule->SetInput(this->m_InitialSegmentation);
   this->m_SegmentationModule->Update();
 }
 

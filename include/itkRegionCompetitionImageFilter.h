@@ -38,15 +38,14 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <typename TInputImage, typename TOutputImage>
-class RegionCompetitionImageFilter:
-    public ImageToImageFilter<TInputImage,TOutputImage>
+class RegionCompetitionImageFilter : public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(RegionCompetitionImageFilter);
 
   /** Standard class type alias. */
   using Self = RegionCompetitionImageFilter;
-  using Superclass = ImageToImageFilter<TInputImage,TOutputImage>;
+  using Superclass = ImageToImageFilter<TInputImage, TOutputImage>;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
@@ -77,17 +76,18 @@ public:
 
   /** Set/Get the maximum number of iterations that will be applied to the
    * propagating front */
-  itkSetMacro( MaximumNumberOfIterations, unsigned int );
-  itkGetMacro( MaximumNumberOfIterations, unsigned int );
+  itkSetMacro(MaximumNumberOfIterations, unsigned int);
+  itkGetMacro(MaximumNumberOfIterations, unsigned int);
 
   /** Returned the number of iterations used so far. */
-  itkGetMacro( CurrentIterationNumber, unsigned int );
+  itkGetMacro(CurrentIterationNumber, unsigned int);
 
   /** Returned the number of pixels changed in total. */
-  itkGetMacro( TotalNumberOfPixelsChanged, unsigned int );
+  itkGetMacro(TotalNumberOfPixelsChanged, unsigned int);
 
   /** Input Labels */
-  void SetInputLabels( const TOutputImage * inputLabelImage );
+  void
+  SetInputLabels(const TOutputImage * inputLabelImage);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -104,94 +104,110 @@ protected:
   RegionCompetitionImageFilter();
   ~RegionCompetitionImageFilter() override;
 
-  void GenerateData() override;
+  void
+  GenerateData() override;
 
-  void PrintSelf ( std::ostream& os, Indent indent ) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  void AllocateOutputImageWorkingMemory();
+  void
+  AllocateOutputImageWorkingMemory();
 
-  void AllocateFrontsWorkingMemory();
+  void
+  AllocateFrontsWorkingMemory();
 
-  void ComputeNumberOfInputLabels();
+  void
+  ComputeNumberOfInputLabels();
 
-  void InitializeNeighborhood();
+  void
+  InitializeNeighborhood();
 
-  void FindAllPixelsInTheBoundaryAndAddThemAsSeeds();
+  void
+  FindAllPixelsInTheBoundaryAndAddThemAsSeeds();
 
-  void IterateFrontPropagations();
+  void
+  IterateFrontPropagations();
 
-  void VisitAllSeedsAndTransitionTheirState();
+  void
+  VisitAllSeedsAndTransitionTheirState();
 
-  void PasteNewSeedValuesToOutputImage();
+  void
+  PasteNewSeedValuesToOutputImage();
 
-  void SwapSeedArrays();
+  void
+  SwapSeedArrays();
 
-  void ClearSecondSeedArray();
+  void
+  ClearSecondSeedArray();
 
-  bool TestForAvailabilityAtCurrentPixel() const;
+  bool
+  TestForAvailabilityAtCurrentPixel() const;
 
-  void PutCurrentPixelNeighborsIntoSeedArray();
+  void
+  PutCurrentPixelNeighborsIntoSeedArray();
 
-  void ComputeArrayOfNeighborhoodBufferOffsets();
+  void
+  ComputeArrayOfNeighborhoodBufferOffsets();
 
-  void ComputeBirthThreshold();
+  void
+  ComputeBirthThreshold();
 
-  itkSetMacro( CurrentPixelIndex, IndexType );
-  itkGetConstReferenceMacro( CurrentPixelIndex, IndexType );
+  itkSetMacro(CurrentPixelIndex, IndexType);
+  itkGetConstReferenceMacro(CurrentPixelIndex, IndexType);
 
   using SeedArrayType = std::vector<IndexType>;
 
-  SeedArrayType *                   m_SeedArray1;
-  SeedArrayType *                   m_SeedArray2;
+  SeedArrayType * m_SeedArray1;
+  SeedArrayType * m_SeedArray2;
 
-  InputImageRegionType              m_InternalRegion;
+  InputImageRegionType m_InternalRegion;
 
   using SeedNewValuesArrayType = std::vector<OutputImagePixelType>;
 
-  SeedNewValuesArrayType *          m_SeedsNewValues;
+  SeedNewValuesArrayType * m_SeedsNewValues;
 
-  unsigned int                      m_CurrentIterationNumber;
-  unsigned int                      m_MaximumNumberOfIterations;
-  unsigned int                      m_NumberOfPixelsChangedInLastIteration;
-  unsigned int                      m_TotalNumberOfPixelsChanged;
+  unsigned int m_CurrentIterationNumber;
+  unsigned int m_MaximumNumberOfIterations;
+  unsigned int m_NumberOfPixelsChangedInLastIteration;
+  unsigned int m_TotalNumberOfPixelsChanged;
 
-  IndexType                         m_CurrentPixelIndex;
+  IndexType m_CurrentPixelIndex;
 
   //
   // Variables used for addressing the Neighbors.
   // This could be factorized into a helper class.
   //
-  OffsetValueType                   m_OffsetTable[ InputImageDimension + 1 ];
+  OffsetValueType m_OffsetTable[InputImageDimension + 1];
 
-  using NeighborOffsetArrayType = std::vector< OffsetValueType >;
+  using NeighborOffsetArrayType = std::vector<OffsetValueType>;
 
-  NeighborOffsetArrayType           m_NeighborBufferOffset;
+  NeighborOffsetArrayType m_NeighborBufferOffset;
 
 
   //
   // Helper cache variables
   //
-  const InputImageType *            m_InputImage;
-  const OutputImageType*       m_inputLabelsImage;
-  OutputImageType *                 m_OutputImage;
+  const InputImageType *  m_InputImage;
+  const OutputImageType * m_inputLabelsImage;
+  OutputImageType *       m_OutputImage;
 
-  using SeedMaskImageType = itk::Image< unsigned char, InputImageDimension >;
+  using SeedMaskImageType = itk::Image<unsigned char, InputImageDimension>;
   using SeedMaskImagePointer = typename SeedMaskImageType::Pointer;
 
-  SeedMaskImagePointer              m_SeedsMask;
+  SeedMaskImagePointer m_SeedsMask;
 
-  using NeighborhoodType = itk::Neighborhood< InputImagePixelType, InputImageDimension >;
+  using NeighborhoodType = itk::Neighborhood<InputImagePixelType, InputImageDimension>;
 
-  NeighborhoodType                  m_Neighborhood;
+  NeighborhoodType m_Neighborhood;
 
-  mutable unsigned int              m_NumberOfLabels;
+  mutable unsigned int m_NumberOfLabels;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkRegionCompetitionImageFilter.hxx"
+#  include "itkRegionCompetitionImageFilter.hxx"
 #endif
 
 #endif

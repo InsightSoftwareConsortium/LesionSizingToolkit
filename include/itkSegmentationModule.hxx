@@ -27,10 +27,9 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-SegmentationModule<NDimension>
-::SegmentationModule()
+SegmentationModule<NDimension>::SegmentationModule()
 {
-  this->SetNumberOfRequiredOutputs( 1 );
+  this->SetNumberOfRequiredOutputs(1);
 }
 
 
@@ -38,56 +37,49 @@ SegmentationModule<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-SegmentationModule<NDimension>
-::~SegmentationModule()
-{
-}
+SegmentationModule<NDimension>::~SegmentationModule()
+{}
 
 template <unsigned int NDimension>
 void
-SegmentationModule<NDimension>
-::SetInput( const SpatialObjectType * spatialObject )
+SegmentationModule<NDimension>::SetInput(const SpatialObjectType * spatialObject)
 {
   // Process object is not const-correct so the const casting is required.
-  this->SetNthInput(0, const_cast<SpatialObjectType *>( spatialObject ));
+  this->SetNthInput(0, const_cast<SpatialObjectType *>(spatialObject));
 }
 
 template <unsigned int NDimension>
 const typename SegmentationModule<NDimension>::SpatialObjectType *
-SegmentationModule<NDimension>
-::GetInput() const
+SegmentationModule<NDimension>::GetInput() const
 {
   // Process object is not const-correct so the const casting is required.
-  const auto * input = dynamic_cast<const SpatialObjectType *>( this->ProcessObject::GetInput(0) );
+  const auto * input = dynamic_cast<const SpatialObjectType *>(this->ProcessObject::GetInput(0));
   return input;
 }
 
 
 template <unsigned int NDimension>
 void
-SegmentationModule<NDimension>
-::SetFeature( const SpatialObjectType * spatialObject )
+SegmentationModule<NDimension>::SetFeature(const SpatialObjectType * spatialObject)
 {
   // Process object is not const-correct so the const casting is required.
-  this->SetNthInput(1, const_cast<SpatialObjectType *>( spatialObject ));
+  this->SetNthInput(1, const_cast<SpatialObjectType *>(spatialObject));
 }
 
 
 template <unsigned int NDimension>
 const typename SegmentationModule<NDimension>::SpatialObjectType *
-SegmentationModule<NDimension>
-::GetFeature() const
+SegmentationModule<NDimension>::GetFeature() const
 {
   // Process object is not const-correct so the const casting is required.
-  const auto * feature = dynamic_cast<const SpatialObjectType *>( this->ProcessObject::GetInput(1) );
+  const auto * feature = dynamic_cast<const SpatialObjectType *>(this->ProcessObject::GetInput(1));
   return feature;
 }
 
 
 template <unsigned int NDimension>
 unsigned int
-SegmentationModule<NDimension>
-::GetExpectedNumberOfFeatures() const
+SegmentationModule<NDimension>::GetExpectedNumberOfFeatures() const
 {
   return 1;
 }
@@ -95,15 +87,14 @@ SegmentationModule<NDimension>
 
 template <unsigned int NDimension>
 const typename SegmentationModule<NDimension>::SpatialObjectType *
-SegmentationModule<NDimension>
-::GetOutput() const
+SegmentationModule<NDimension>::GetOutput() const
 {
   if (this->GetNumberOfOutputs() < 1)
-    {
+  {
     return nullptr;
-    }
+  }
 
-  return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
+  return static_cast<const SpatialObjectType *>(this->ProcessObject::GetOutput(0));
 }
 
 
@@ -111,15 +102,14 @@ SegmentationModule<NDimension>
  * classes. */
 template <unsigned int NDimension>
 typename SegmentationModule<NDimension>::SpatialObjectType *
-SegmentationModule<NDimension>
-::GetInternalOutput()
+SegmentationModule<NDimension>::GetInternalOutput()
 {
   if (this->GetNumberOfOutputs() < 1)
-    {
+  {
     return 0;
-    }
+  }
 
-  return static_cast<SpatialObjectType*>(this->ProcessObject::GetOutput(0));
+  return static_cast<SpatialObjectType *>(this->ProcessObject::GetOutput(0));
 }
 
 
@@ -128,10 +118,9 @@ SegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-SegmentationModule<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+SegmentationModule<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 

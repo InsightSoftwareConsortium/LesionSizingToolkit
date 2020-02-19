@@ -22,43 +22,43 @@
 #include "itkTestingMacros.h"
 
 
-int itkBinaryThresholdFeatureGeneratorTest1( int argc, char * argv [] )
+int
+itkBinaryThresholdFeatureGeneratorTest1(int argc, char * argv[])
 {
-  if( argc < 3 )
-    {
+  if (argc < 3)
+  {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage outputImage [threshold]" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   constexpr unsigned int Dimension = 3;
 
   using InputPixelType = signed short;
   using OutputPixelType = float;
 
-  using InputImageType = itk::Image< InputPixelType,  Dimension >;
-  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
+  using InputImageType = itk::Image<InputPixelType, Dimension>;
+  using OutputImageType = itk::Image<OutputPixelType, Dimension>;
 
-  using ReaderType = itk::ImageFileReader< InputImageType >;
-  using WriterType = itk::ImageFileWriter< OutputImageType >;
+  using ReaderType = itk::ImageFileReader<InputImageType>;
+  using WriterType = itk::ImageFileWriter<OutputImageType>;
 
-  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
-  using OutputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, OutputPixelType >;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject<Dimension, InputPixelType>;
+  using OutputImageSpatialObjectType = itk::ImageSpatialObject<Dimension, OutputPixelType>;
 
   ReaderType::Pointer reader = ReaderType::New();
 
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+  TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
-  using BinaryThresholdFeatureGeneratorType = itk::BinaryThresholdFeatureGenerator< Dimension >;
+  using BinaryThresholdFeatureGeneratorType = itk::BinaryThresholdFeatureGenerator<Dimension>;
   using SpatialObjectType = BinaryThresholdFeatureGeneratorType::SpatialObjectType;
 
   BinaryThresholdFeatureGeneratorType::Pointer featureGenerator = BinaryThresholdFeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
-    BinaryThresholdFeatureGenerator, FeatureGenerator );
+  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, BinaryThresholdFeatureGenerator, FeatureGenerator);
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -67,34 +67,34 @@ int itkBinaryThresholdFeatureGeneratorTest1( int argc, char * argv [] )
 
   inputImage->DisconnectPipeline();
 
-  inputObject->SetImage( inputImage );
+  inputObject->SetImage(inputImage);
 
-  featureGenerator->SetInput( inputObject );
+  featureGenerator->SetInput(inputObject);
 
-  double threshold  = 100.0;
-  if( argc > 3 )
-    {
-    threshold = std::stod( argv[3] );
-    }
-  featureGenerator->SetThreshold( threshold );
-  TEST_SET_GET_VALUE( threshold, featureGenerator->GetThreshold() );
+  double threshold = 100.0;
+  if (argc > 3)
+  {
+    threshold = std::stod(argv[3]);
+  }
+  featureGenerator->SetThreshold(threshold);
+  TEST_SET_GET_VALUE(threshold, featureGenerator->GetThreshold());
 
-  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
+  TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
   OutputImageSpatialObjectType::ConstPointer outputObject =
-    dynamic_cast< const OutputImageSpatialObjectType * >( feature.GetPointer() );
+    dynamic_cast<const OutputImageSpatialObjectType *>(feature.GetPointer());
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetFileName( argv[2] );
-  writer->SetInput( outputImage );
+  writer->SetFileName(argv[2]);
+  writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
+  TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

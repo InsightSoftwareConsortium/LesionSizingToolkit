@@ -30,8 +30,8 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-FastMarchingAndShapeDetectionLevelSetSegmentationModule<NDimension>
-::FastMarchingAndShapeDetectionLevelSetSegmentationModule()
+FastMarchingAndShapeDetectionLevelSetSegmentationModule<
+  NDimension>::FastMarchingAndShapeDetectionLevelSetSegmentationModule()
 {
   this->m_FastMarchingModule = FastMarchingModuleType::New();
   this->m_FastMarchingModule->SetDistanceFromSeeds(1.0);
@@ -46,10 +46,9 @@ FastMarchingAndShapeDetectionLevelSetSegmentationModule<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-FastMarchingAndShapeDetectionLevelSetSegmentationModule<NDimension>
-::~FastMarchingAndShapeDetectionLevelSetSegmentationModule()
-{
-}
+FastMarchingAndShapeDetectionLevelSetSegmentationModule<
+  NDimension>::~FastMarchingAndShapeDetectionLevelSetSegmentationModule()
+{}
 
 
 /**
@@ -57,10 +56,9 @@ FastMarchingAndShapeDetectionLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-FastMarchingAndShapeDetectionLevelSetSegmentationModule<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+FastMarchingAndShapeDetectionLevelSetSegmentationModule<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -69,31 +67,28 @@ FastMarchingAndShapeDetectionLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-FastMarchingAndShapeDetectionLevelSetSegmentationModule<NDimension>
-::GenerateData()
+FastMarchingAndShapeDetectionLevelSetSegmentationModule<NDimension>::GenerateData()
 {
   // Report progress.
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( this->m_FastMarchingModule, 0.3 );
-  progress->RegisterInternalFilter(
-      this->m_ShapeDetectionLevelSetModule, 0.7 );
+  progress->RegisterInternalFilter(this->m_FastMarchingModule, 0.3);
+  progress->RegisterInternalFilter(this->m_ShapeDetectionLevelSetModule, 0.7);
 
-  this->m_FastMarchingModule->SetInput( this->GetInput() );
-  this->m_FastMarchingModule->SetFeature( this->GetFeature() );
+  this->m_FastMarchingModule->SetInput(this->GetInput());
+  this->m_FastMarchingModule->SetFeature(this->GetFeature());
   this->m_FastMarchingModule->Update();
 
-  m_ShapeDetectionLevelSetModule->SetInput( m_FastMarchingModule->GetOutput() );
-  m_ShapeDetectionLevelSetModule->SetFeature( this->GetFeature() );
-  m_ShapeDetectionLevelSetModule->SetMaximumRMSError( this->GetMaximumRMSError() );
-  m_ShapeDetectionLevelSetModule->SetMaximumNumberOfIterations( this->GetMaximumNumberOfIterations() );
-  m_ShapeDetectionLevelSetModule->SetPropagationScaling( this->GetPropagationScaling() );
-  m_ShapeDetectionLevelSetModule->SetCurvatureScaling( this->GetCurvatureScaling() );
+  m_ShapeDetectionLevelSetModule->SetInput(m_FastMarchingModule->GetOutput());
+  m_ShapeDetectionLevelSetModule->SetFeature(this->GetFeature());
+  m_ShapeDetectionLevelSetModule->SetMaximumRMSError(this->GetMaximumRMSError());
+  m_ShapeDetectionLevelSetModule->SetMaximumNumberOfIterations(this->GetMaximumNumberOfIterations());
+  m_ShapeDetectionLevelSetModule->SetPropagationScaling(this->GetPropagationScaling());
+  m_ShapeDetectionLevelSetModule->SetCurvatureScaling(this->GetCurvatureScaling());
   m_ShapeDetectionLevelSetModule->Update();
 
-  this->PackOutputImageInOutputSpatialObject( const_cast< OutputImageType * >(
-        dynamic_cast< const OutputSpatialObjectType * >(
-        m_ShapeDetectionLevelSetModule->GetOutput())->GetImage()) );
+  this->PackOutputImageInOutputSpatialObject(const_cast<OutputImageType *>(
+    dynamic_cast<const OutputSpatialObjectType *>(m_ShapeDetectionLevelSetModule->GetOutput())->GetImage()));
 }
 
 } // end namespace itk

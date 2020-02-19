@@ -15,11 +15,11 @@
 
 =========================================================================*/
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#  pragma warning(disable : 4786)
 #endif
 
 #ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
+#  define ITK_LEAN_AND_MEAN
 #endif
 
 #include "itkIncludeRequiredIOFactories.h"
@@ -29,17 +29,18 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkGradientMagnitudeImageFilter.h"
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
 
   RegisterRequiredFactories();
 
-  if( argc < 3 )
-    {
+  if (argc < 3)
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  outputImageFile " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   using InputPixelType = float;
@@ -47,38 +48,38 @@ int main( int argc, char * argv[] )
 
   constexpr unsigned int Dimension = 3;
 
-  using InputImageType = itk::Image< InputPixelType,  Dimension >;
-  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
+  using InputImageType = itk::Image<InputPixelType, Dimension>;
+  using OutputImageType = itk::Image<OutputPixelType, Dimension>;
 
 
-  using ReaderType = itk::ImageFileReader< InputImageType >;
+  using ReaderType = itk::ImageFileReader<InputImageType>;
 
-  using FilterType = itk::GradientMagnitudeImageFilter< InputImageType, OutputImageType >;
+  using FilterType = itk::GradientMagnitudeImageFilter<InputImageType, OutputImageType>;
 
 
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
   FilterType::Pointer filter = FilterType::New();
 
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
 
-  using WriterType = itk::ImageFileWriter< OutputImageType >;
+  using WriterType = itk::ImageFileWriter<OutputImageType>;
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
 
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
 
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & err )
-    {
+  }
+  catch (itk::ExceptionObject & err)
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

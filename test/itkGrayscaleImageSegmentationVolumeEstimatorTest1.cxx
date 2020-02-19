@@ -21,7 +21,8 @@
 #include "itkTestingMacros.h"
 
 
-int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
+int
+itkGrayscaleImageSegmentationVolumeEstimatorTest1(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   int testStatus = EXIT_SUCCESS;
 
@@ -31,16 +32,16 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
 
   VolumeEstimatorType::Pointer volumeEstimator = VolumeEstimatorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( volumeEstimator,
-    GrayscaleImageSegmentationVolumeEstimator, SegmentationVolumeEstimator );
+  EXERCISE_BASIC_OBJECT_METHODS(
+    volumeEstimator, GrayscaleImageSegmentationVolumeEstimator, SegmentationVolumeEstimator);
 
-  using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
+  using ImageSpatialObjectType = itk::ImageSpatialObject<Dimension>;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
 
-  volumeEstimator->SetInput( inputObject );
+  volumeEstimator->SetInput(inputObject);
 
-  TRY_EXPECT_EXCEPTION( volumeEstimator->Update() );
+  TRY_EXPECT_EXCEPTION(volumeEstimator->Update());
 
 
   using InputImageType = VolumeEstimatorType::InputImageType;
@@ -51,9 +52,9 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
 
   InputImageSpatialObjectType::Pointer inputImageSpatialObject = InputImageSpatialObjectType::New();
 
-  volumeEstimator->SetInput( inputImageSpatialObject );
+  volumeEstimator->SetInput(inputImageSpatialObject);
 
-  inputImageSpatialObject->SetImage( image );
+  inputImageSpatialObject->SetImage(image);
 
   InputImageType::SpacingType spacing;
 
@@ -61,23 +62,23 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
   spacing[1] = 0.5;
   spacing[2] = 0.8;
 
-  image->SetSpacing( spacing );
+  image->SetSpacing(spacing);
 
 
-  InputImageType::SizeType  size;
+  InputImageType::SizeType size;
   size[0] = 101;
   size[1] = 101;
   size[2] = 101;
 
   InputImageType::RegionType region;
-  region.SetSize( size );
+  region.SetSize(size);
 
-  image->SetRegions( region );
+  image->SetRegions(region);
   image->Allocate();
 
-  using IteratorType = itk::ImageRegionIterator< InputImageType >;
+  using IteratorType = itk::ImageRegionIterator<InputImageType>;
 
-  IteratorType itr( image, region );
+  IteratorType itr(image, region);
 
   itr.GoToBegin();
 
@@ -95,59 +96,59 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), cha
 
   constexpr double radius = 15.0;
 
-  while( !itr.IsAtEnd() )
-    {
+  while (!itr.IsAtEnd())
+  {
     index = itr.GetIndex();
-    image->TransformIndexToPhysicalPoint( index, point );
-    const double distance = point.EuclideanDistanceTo( center );
+    image->TransformIndexToPhysicalPoint(index, point);
+    const double distance = point.EuclideanDistanceTo(center);
 
-    if( distance > radius )
-      {
-      itr.Set( -4.0 );
-      }
+    if (distance > radius)
+    {
+      itr.Set(-4.0);
+    }
     else
-      {
-      itr.Set( 4.0 );
-      }
-
-    ++itr;
+    {
+      itr.Set(4.0);
     }
 
-  TRY_EXPECT_NO_EXCEPTION( volumeEstimator->Update() );
+    ++itr;
+  }
+
+  TRY_EXPECT_NO_EXCEPTION(volumeEstimator->Update());
 
   VolumeEstimatorType::RealType volume1 = volumeEstimator->GetVolume();
 
   const VolumeEstimatorType::RealObjectType * volumeObject = volumeEstimator->GetVolumeOutput();
 
-  if( volumeObject->Get() != volume1 )
-    {
+  if (volumeObject->Get() != volume1)
+  {
     std::cerr << "Test failed!" << std::endl;
     std::cerr << "Error in GetVolumeOutput() and/or GetVolume() " << std::endl;
     testStatus = EXIT_FAILURE;
-    }
+  }
 
-  volumeEstimator->Print( std::cout );
+  volumeEstimator->Print(std::cout);
 
-  using WriterType = itk::ImageFileWriter< InputImageType >;
+  using WriterType = itk::ImageFileWriter<InputImageType>;
   WriterType::Pointer writer = WriterType::New();
-  writer->SetInput( image );
+  writer->SetInput(image);
   writer->SetFileName("sphereForVolumeTest.mhd");
 
-  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
+  TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   const double pi = atan(1.0) * 4.0;
 
-  const double expectedVolume = ( 4.0 / 3.0 ) * pi * ( radius * radius * radius );
+  const double expectedVolume = (4.0 / 3.0) * pi * (radius * radius * radius);
 
   const double difference = volume1 - expectedVolume;
 
-  const double percentage = 100.0 * itk::Math::abs( difference ) / expectedVolume;
+  const double percentage = 100.0 * itk::Math::abs(difference) / expectedVolume;
 
   const double epsilon = 1e-6;
   const double allowedVolumePercentageError = 1e-1; // 0.1%
-  if( !itk::Math::FloatAlmostEqual( allowedVolumePercentageError, percentage, 10, epsilon ) )
+  if (!itk::Math::FloatAlmostEqual(allowedVolumePercentageError, percentage, 10, epsilon))
   {
-    std::cerr.precision( static_cast< int >( itk::Math::abs( std::log10( epsilon ) ) ) );
+    std::cerr.precision(static_cast<int>(itk::Math::abs(std::log10(epsilon))));
     std::cerr << "Test failed!" << std::endl;
     std::cerr << "Error in volume computation" << std::endl;
     std::cerr << "Expected value " << expectedVolume << std::endl;

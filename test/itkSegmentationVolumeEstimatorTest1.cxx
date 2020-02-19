@@ -33,15 +33,16 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
-  itkTypeMacro( VolumeEstimatorSurrogate, SegmentationVolumeEstimator );
+  itkTypeMacro(VolumeEstimatorSurrogate, SegmentationVolumeEstimator);
 };
 
-}
+} // namespace itk
 
 
-int itkSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
+int
+itkSegmentationVolumeEstimatorTest1(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   constexpr unsigned int Dimension = 3;
 
@@ -49,28 +50,27 @@ int itkSegmentationVolumeEstimatorTest1( int itkNotUsed(argc), char * itkNotUsed
 
   VolumeEstimatorType::Pointer volumeEstimator = VolumeEstimatorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( volumeEstimator, VolumeEstimatorSurrogate,
-    SegmentationVolumeEstimator );
+  EXERCISE_BASIC_OBJECT_METHODS(volumeEstimator, VolumeEstimatorSurrogate, SegmentationVolumeEstimator);
 
-  using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
+  using ImageSpatialObjectType = itk::ImageSpatialObject<Dimension>;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
 
-  volumeEstimator->SetInput( inputObject );
+  volumeEstimator->SetInput(inputObject);
 
-  TRY_EXPECT_NO_EXCEPTION( volumeEstimator->Update() );
+  TRY_EXPECT_NO_EXCEPTION(volumeEstimator->Update());
 
 
   VolumeEstimatorType::RealType volume1 = volumeEstimator->GetVolume();
 
   const VolumeEstimatorType::RealObjectType * volumeObject = volumeEstimator->GetVolumeOutput();
 
-  if( volumeObject->Get() != volume1 )
-    {
+  if (volumeObject->Get() != volume1)
+  {
     std::cerr << "Test failed!" << std::endl;
     std::cerr << "Error in GetVolumeOutput() and/or GetVolume() " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   std::cout << "Test finished." << std::endl;

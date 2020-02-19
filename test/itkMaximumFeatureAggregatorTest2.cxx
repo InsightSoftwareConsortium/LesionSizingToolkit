@@ -46,148 +46,148 @@ public:
   //
   // Need to make it public, to make testing possible.
   //
-  const InputFeatureType * GetInputFeature( unsigned int id ) const
-    {
-    return this->Superclass::GetInputFeature( id );
-    }
+  const InputFeatureType *
+  GetInputFeature(unsigned int id) const
+  {
+    return this->Superclass::GetInputFeature(id);
+  }
 };
 
-}
+} // namespace itk
 
-int itkMaximumFeatureAggregatorTest2( int argc, char * argv [] )
+int
+itkMaximumFeatureAggregatorTest2(int argc, char * argv[])
 {
-  if( argc < 3 )
-    {
+  if (argc < 3)
+  {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " landmarksFile inputImage outputImage ";
     std::cerr << " [lowerThreshold upperThreshold] " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   constexpr unsigned int Dimension = 3;
   using InputPixelType = signed short;
 
-  using InputImageType = itk::Image< InputPixelType, Dimension >;
+  using InputImageType = itk::Image<InputPixelType, Dimension>;
 
-  using InputImageReaderType = itk::ImageFileReader< InputImageType >;
+  using InputImageReaderType = itk::ImageFileReader<InputImageType>;
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
 
-  inputImageReader->SetFileName( argv[2] );
+  inputImageReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
+  TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
 
   using AggregatorType = itk::MaximumFeatureAggregatorSurrogage;
 
-  AggregatorType::Pointer  featureAggregator = AggregatorType::New();
+  AggregatorType::Pointer featureAggregator = AggregatorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( featureAggregator,
-    MaximumFeatureAggregatorSurrogage,
-    MaximumFeatureAggregator );
+  EXERCISE_BASIC_OBJECT_METHODS(featureAggregator, MaximumFeatureAggregatorSurrogage, MaximumFeatureAggregator);
 
-  using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator< Dimension >;
+  using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator<Dimension>;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
 
-  using LungWallGeneratorType = itk::LungWallFeatureGenerator< Dimension >;
+  using LungWallGeneratorType = itk::LungWallFeatureGenerator<Dimension>;
   LungWallGeneratorType::Pointer lungWallGenerator = LungWallGeneratorType::New();
 
-  using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator< Dimension >;
-  SigmoidFeatureGeneratorType::Pointer  sigmoidGenerator = SigmoidFeatureGeneratorType::New();
+  using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator<Dimension>;
+  SigmoidFeatureGeneratorType::Pointer sigmoidGenerator = SigmoidFeatureGeneratorType::New();
 
-  featureAggregator->AddFeatureGenerator( lungWallGenerator );
-  featureAggregator->AddFeatureGenerator( vesselnessGenerator );
-  featureAggregator->AddFeatureGenerator( sigmoidGenerator );
+  featureAggregator->AddFeatureGenerator(lungWallGenerator);
+  featureAggregator->AddFeatureGenerator(vesselnessGenerator);
+  featureAggregator->AddFeatureGenerator(sigmoidGenerator);
 
 
   using SpatialObjectType = AggregatorType::SpatialObjectType;
 
-  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject<Dimension, InputPixelType>;
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
   InputImageType::Pointer inputImage = inputImageReader->GetOutput();
 
   inputImage->DisconnectPipeline();
 
-  inputObject->SetImage( inputImage );
+  inputObject->SetImage(inputImage);
 
-  lungWallGenerator->SetInput( inputObject );
-  vesselnessGenerator->SetInput( inputObject );
-  sigmoidGenerator->SetInput( inputObject );
+  lungWallGenerator->SetInput(inputObject);
+  vesselnessGenerator->SetInput(inputObject);
+  sigmoidGenerator->SetInput(inputObject);
 
 
   LungWallGeneratorType::InputPixelType lungThreshold = -400;
-  lungWallGenerator->SetLungThreshold( lungThreshold );
-  TEST_SET_GET_VALUE( lungThreshold, lungWallGenerator->GetLungThreshold() );
+  lungWallGenerator->SetLungThreshold(lungThreshold);
+  TEST_SET_GET_VALUE(lungThreshold, lungWallGenerator->GetLungThreshold());
 
 
   double sigma = 1.0;
-  vesselnessGenerator->SetSigma( sigma );
-  TEST_SET_GET_VALUE( sigma, vesselnessGenerator->GetSigma() );
+  vesselnessGenerator->SetSigma(sigma);
+  TEST_SET_GET_VALUE(sigma, vesselnessGenerator->GetSigma());
 
   double alpha1 = 0.5;
-  vesselnessGenerator->SetAlpha1( alpha1 );
-  TEST_SET_GET_VALUE( alpha1, vesselnessGenerator->GetAlpha1() );
+  vesselnessGenerator->SetAlpha1(alpha1);
+  TEST_SET_GET_VALUE(alpha1, vesselnessGenerator->GetAlpha1());
 
   double alpha2 = 2.0;
-  vesselnessGenerator->SetAlpha2( alpha2 );
-  TEST_SET_GET_VALUE( alpha2, vesselnessGenerator->GetAlpha2() );
+  vesselnessGenerator->SetAlpha2(alpha2);
+  TEST_SET_GET_VALUE(alpha2, vesselnessGenerator->GetAlpha2());
 
   double alpha = 1.0;
-  sigmoidGenerator->SetAlpha( alpha );
-  TEST_SET_GET_VALUE( alpha, sigmoidGenerator->GetAlpha() );
+  sigmoidGenerator->SetAlpha(alpha);
+  TEST_SET_GET_VALUE(alpha, sigmoidGenerator->GetAlpha());
 
   double beta = -200.0;
-  sigmoidGenerator->SetBeta( beta );
-  TEST_SET_GET_VALUE( beta, sigmoidGenerator->GetBeta() );
+  sigmoidGenerator->SetBeta(beta);
+  TEST_SET_GET_VALUE(beta, sigmoidGenerator->GetBeta());
 
 
-  TRY_EXPECT_NO_EXCEPTION( featureAggregator->Update() );
+  TRY_EXPECT_NO_EXCEPTION(featureAggregator->Update());
 
-   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
+  SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
   using OutputImageSpatialObjectType = AggregatorType::OutputImageSpatialObjectType;
   OutputImageSpatialObjectType::ConstPointer outputObject =
-    dynamic_cast< const OutputImageSpatialObjectType * >( finalFeature.GetPointer() );
+    dynamic_cast<const OutputImageSpatialObjectType *>(finalFeature.GetPointer());
 
   using OutputImageType = AggregatorType::OutputImageType;
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
-  using OutputWriterType = itk::ImageFileWriter< OutputImageType >;
+  using OutputWriterType = itk::ImageFileWriter<OutputImageType>;
   OutputWriterType::Pointer writer = OutputWriterType::New();
 
-  writer->SetFileName( argv[3] );
-  writer->SetInput( outputImage );
+  writer->SetFileName(argv[3]);
+  writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
+  TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   //
   // Exercise GetInputFeature()
   //
-  if( featureAggregator->GetInputFeature( 0 ) != lungWallGenerator->GetFeature() )
-    {
+  if (featureAggregator->GetInputFeature(0) != lungWallGenerator->GetFeature())
+  {
     std::cerr << "Test failed!" << std::endl;
     std::cerr << "Failure to recover feature 0 with GetInputFeature()" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  if( featureAggregator->GetInputFeature( 1 ) != vesselnessGenerator->GetFeature() )
-    {
+  if (featureAggregator->GetInputFeature(1) != vesselnessGenerator->GetFeature())
+  {
     std::cerr << "Test failed!" << std::endl;
     std::cerr << "Failure to recover feature 1 with GetInputFeature()" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  if( featureAggregator->GetInputFeature( 2 ) != sigmoidGenerator->GetFeature() )
-    {
+  if (featureAggregator->GetInputFeature(2) != sigmoidGenerator->GetFeature())
+  {
     std::cerr << "Test failed!" << std::endl;
     std::cerr << "Failure to recover feature 2 with GetInputFeature()" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  TRY_EXPECT_EXCEPTION( featureAggregator->GetInputFeature(3) );
+  TRY_EXPECT_EXCEPTION(featureAggregator->GetInputFeature(3));
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

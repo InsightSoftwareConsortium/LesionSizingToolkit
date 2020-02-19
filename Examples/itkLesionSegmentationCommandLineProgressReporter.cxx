@@ -31,54 +31,50 @@ LesionSegmentationCommandLineProgressReporter::LesionSegmentationCommandLineProg
 }
 
 //----------------------------------------------------------------
-LesionSegmentationCommandLineProgressReporter::~LesionSegmentationCommandLineProgressReporter()
+LesionSegmentationCommandLineProgressReporter::~LesionSegmentationCommandLineProgressReporter() {}
+
+//----------------------------------------------------------------
+void
+LesionSegmentationCommandLineProgressReporter ::Execute(Object * caller, const EventObject & event)
 {
+  this->ExecuteInternal(caller, event);
 }
 
 //----------------------------------------------------------------
-void LesionSegmentationCommandLineProgressReporter
-::Execute( Object *caller, const EventObject &event)
+void
+LesionSegmentationCommandLineProgressReporter ::Execute(const Object * caller, const EventObject & event)
 {
-  this->ExecuteInternal( caller, event );
+  this->ExecuteInternal(caller, event);
 }
 
 //----------------------------------------------------------------
-void LesionSegmentationCommandLineProgressReporter
-::Execute( const Object *caller, const EventObject &event)
-{
-  this->ExecuteInternal( caller, event );
-}
-
-//----------------------------------------------------------------
-void LesionSegmentationCommandLineProgressReporter
-::ExecuteInternal(const Object *caller, const EventObject &event)
+void
+LesionSegmentationCommandLineProgressReporter ::ExecuteInternal(const Object * caller, const EventObject & event)
 {
   bool report = false;
-  using FilterType = LesionSegmentationImageFilter8<
-        Image< short, 3 >, Image< float, 3 > >;
-  if (const FilterType * filter
-       = dynamic_cast< const FilterType *>(caller))
+  using FilterType = LesionSegmentationImageFilter8<Image<short, 3>, Image<float, 3>>;
+  if (const FilterType * filter = dynamic_cast<const FilterType *>(caller))
+  {
+    if (typeid(event) == typeid(ProgressEvent))
     {
-    if ( typeid( event ) == typeid( ProgressEvent ) )
+      const int progressValue = static_cast<int>(filter->GetProgress() * 100.0);
+      if (const char * statusText = filter->GetStatusMessage())
       {
-      const int progressValue = static_cast< int >( filter->GetProgress() * 100.0 );
-      if (const char *statusText = filter->GetStatusMessage())
-        {
         this->ProgressString = statusText;
-        }
+      }
       if (fabs((double)(progressValue - this->ProgressValue)) >= 1.0)
-        {
-        this->ProgressValue = static_cast< int >( filter->GetProgress() * 100.0 );
+      {
+        this->ProgressValue = static_cast<int>(filter->GetProgress() * 100.0);
         report = true;
-        }
+      }
       if (report)
-        {
-        printf("%s - Progress %d%s",this->ProgressString.c_str(),this->ProgressValue,"%");
+      {
+        printf("%s - Progress %d%s", this->ProgressString.c_str(), this->ProgressValue, "%");
         printf("\r");
         fflush(stdout);
-        }
       }
     }
+  }
 }
 
-}
+} // namespace itk

@@ -62,71 +62,74 @@ public:
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
   using InputPixelType = signed short;
-  using InputImageType = Image< InputPixelType, Dimension >;
-  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageType = Image<InputPixelType, Dimension>;
+  using InputImageSpatialObjectType = ImageSpatialObject<NDimension, InputPixelType>;
   using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
   using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
-  void SetInput( const SpatialObjectType * input );
-  const SpatialObjectType * GetInput() const;
+  void
+  SetInput(const SpatialObjectType * input);
+  const SpatialObjectType *
+  GetInput() const;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
-  const SpatialObjectType * GetFeature() const;
+  const SpatialObjectType *
+  GetFeature() const;
 
   /** Sigma value to be used in the Gaussian smoothing preceeding the gradient
    * magnitude computation. */
-  itkSetMacro( Sigma, double );
-  itkGetMacro( Sigma, double );
+  itkSetMacro(Sigma, double);
+  itkGetMacro(Sigma, double);
 
   /** Alpha value to be used in the Sigmoid filter. */
-  itkSetMacro( Alpha, double );
-  itkGetMacro( Alpha, double );
+  itkSetMacro(Alpha, double);
+  itkGetMacro(Alpha, double);
 
   /** Beta value to be used in the Sigmoid filter. */
-  itkSetMacro( Beta, double );
-  itkGetMacro( Beta, double );
+  itkSetMacro(Beta, double);
+  itkGetMacro(Beta, double);
 
 protected:
   GradientMagnitudeSigmoidFeatureGenerator();
   ~GradientMagnitudeSigmoidFeatureGenerator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
 private:
   using InternalPixelType = float;
-  using InternalImageType = Image< InternalPixelType, Dimension >;
+  using InternalImageType = Image<InternalPixelType, Dimension>;
 
   using OutputPixelType = InternalPixelType;
   using OutputImageType = InternalImageType;
 
-  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputImageSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
-  using GradientFilterType = GradientMagnitudeRecursiveGaussianImageFilter<
-    InputImageType, InternalImageType >;
+  using GradientFilterType = GradientMagnitudeRecursiveGaussianImageFilter<InputImageType, InternalImageType>;
   using GradientFilterPointer = typename GradientFilterType::Pointer;
 
-  using SigmoidFilterType = SigmoidImageFilter<
-    InternalImageType, OutputImageType >;
+  using SigmoidFilterType = SigmoidImageFilter<InternalImageType, OutputImageType>;
   using SigmoidFilterPointer = typename SigmoidFilterType::Pointer;
 
-  GradientFilterPointer           m_GradientFilter;
-  SigmoidFilterPointer            m_SigmoidFilter;
+  GradientFilterPointer m_GradientFilter;
+  SigmoidFilterPointer  m_SigmoidFilter;
 
-  double                          m_Sigma;
-  double                          m_Alpha;
-  double                          m_Beta;
+  double m_Sigma;
+  double m_Alpha;
+  double m_Beta;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkGradientMagnitudeSigmoidFeatureGenerator.hxx"
+#  include "itkGradientMagnitudeSigmoidFeatureGenerator.hxx"
 #endif
 
 #endif

@@ -29,20 +29,16 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-ConfidenceConnectedSegmentationModule<NDimension>
-::ConfidenceConnectedSegmentationModule()
-{
-}
+ConfidenceConnectedSegmentationModule<NDimension>::ConfidenceConnectedSegmentationModule()
+{}
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-ConfidenceConnectedSegmentationModule<NDimension>
-::~ConfidenceConnectedSegmentationModule()
-{
-}
+ConfidenceConnectedSegmentationModule<NDimension>::~ConfidenceConnectedSegmentationModule()
+{}
 
 
 /**
@@ -50,10 +46,9 @@ ConfidenceConnectedSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-ConfidenceConnectedSegmentationModule<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+ConfidenceConnectedSegmentationModule<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -62,17 +57,15 @@ ConfidenceConnectedSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-ConfidenceConnectedSegmentationModule<NDimension>
-::GenerateData()
+ConfidenceConnectedSegmentationModule<NDimension>::GenerateData()
 {
-  using FilterType = ConfidenceConnectedImageFilter<
-    FeatureImageType, OutputImageType >;
+  using FilterType = ConfidenceConnectedImageFilter<FeatureImageType, OutputImageType>;
 
   typename FilterType::Pointer filter = FilterType::New();
 
   const FeatureImageType * featureImage = this->GetInternalFeatureImage();
 
-  filter->SetInput( featureImage );
+  filter->SetInput(featureImage);
 
   const InputSpatialObjectType * inputSeeds = this->GetInternalInputLandmarks();
 
@@ -85,26 +78,26 @@ ConfidenceConnectedSegmentationModule<NDimension>
 
   IndexType index;
 
-  for( unsigned int i=0; i < numberOfPoints; i++ )
-    {
-    featureImage->TransformPhysicalPointToIndex( points[i].GetPositionInObjectSpace(), index );
-    filter->AddSeed( index );
-    }
+  for (unsigned int i = 0; i < numberOfPoints; i++)
+  {
+    featureImage->TransformPhysicalPointToIndex(points[i].GetPositionInObjectSpace(), index);
+    filter->AddSeed(index);
+  }
 
-  filter->SetMultiplier( this->m_SigmaMultiplier );
+  filter->SetMultiplier(this->m_SigmaMultiplier);
 
-  filter->SetReplaceValue( 1.0 );
-  filter->SetNumberOfIterations( 5 );
-  filter->SetInitialNeighborhoodRadius( 2 );
+  filter->SetReplaceValue(1.0);
+  filter->SetNumberOfIterations(5);
+  filter->SetInitialNeighborhoodRadius(2);
 
   // Report progress.
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( filter, 1.0 );
+  progress->RegisterInternalFilter(filter, 1.0);
 
   filter->Update();
 
-  this->PackOutputImageInOutputSpatialObject( filter->GetOutput() );
+  this->PackOutputImageInOutputSpatialObject(filter->GetOutput());
 }
 
 } // end namespace itk

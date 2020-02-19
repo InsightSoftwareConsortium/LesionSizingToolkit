@@ -59,34 +59,39 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  using SpatialObjectType = SpatialObject< NDimension >;
+  using SpatialObjectType = SpatialObject<NDimension>;
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
-  void SetInput( const SpatialObjectType * input );
-  const SpatialObjectType * GetInput() const;
+  void
+  SetInput(const SpatialObjectType * input);
+  const SpatialObjectType *
+  GetInput() const;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
-  const SpatialObjectType * GetFeature() const;
+  const SpatialObjectType *
+  GetFeature() const;
 
 
 protected:
   FeatureGenerator();
   ~FeatureGenerator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Derived classes must implement the "void  GenerateData()" method  */
 
   /** non-const version of the method intended to be used in derived classes. */
-  SpatialObjectType * GetInternalFeature();
+  SpatialObjectType *
+  GetInternalFeature();
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkFeatureGenerator.hxx"
+#  include "itkFeatureGenerator.hxx"
 #endif
 
 #endif

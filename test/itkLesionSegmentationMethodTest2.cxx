@@ -25,50 +25,50 @@
 #include "itkTestingMacros.h"
 
 
-int itkLesionSegmentationMethodTest2( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
+int
+itkLesionSegmentationMethodTest2(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   constexpr unsigned int Dimension = 3;
 
-  using MethodType = itk::LesionSegmentationMethod< Dimension >;
+  using MethodType = itk::LesionSegmentationMethod<Dimension>;
 
   MethodType::Pointer segmentationMethod = MethodType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(  segmentationMethod, LesionSegmentationMethod,
-    LightObject );
+  EXERCISE_BASIC_OBJECT_METHODS(segmentationMethod, LesionSegmentationMethod, LightObject);
 
-  using ImageMaskSpatialObjectType = itk::ImageMaskSpatialObject< Dimension >;
+  using ImageMaskSpatialObjectType = itk::ImageMaskSpatialObject<Dimension>;
 
   ImageMaskSpatialObjectType::Pointer regionOfInterest = ImageMaskSpatialObjectType::New();
 
-  segmentationMethod->SetRegionOfInterest( regionOfInterest );
+  segmentationMethod->SetRegionOfInterest(regionOfInterest);
 
   ImageMaskSpatialObjectType::Pointer initialSegmentation = ImageMaskSpatialObjectType::New();
 
-  segmentationMethod->SetInitialSegmentation( initialSegmentation );
+  segmentationMethod->SetInitialSegmentation(initialSegmentation);
 
-  using TubularnessGeneratorType = itk::FrangiTubularnessFeatureGenerator< Dimension >;
+  using TubularnessGeneratorType = itk::FrangiTubularnessFeatureGenerator<Dimension>;
   TubularnessGeneratorType::Pointer tubularnessGenerator = TubularnessGeneratorType::New();
 
-  using SheetnessGeneratorType = itk::DescoteauxSheetnessFeatureGenerator< Dimension >;
+  using SheetnessGeneratorType = itk::DescoteauxSheetnessFeatureGenerator<Dimension>;
   SheetnessGeneratorType::Pointer sheetnessGenerator = SheetnessGeneratorType::New();
 
-  using VesselnessGeneratorType = itk::SatoVesselnessFeatureGenerator< Dimension >;
+  using VesselnessGeneratorType = itk::SatoVesselnessFeatureGenerator<Dimension>;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
 
-  using LocalStructureGeneratorType = itk::SatoLocalStructureFeatureGenerator< Dimension >;
+  using LocalStructureGeneratorType = itk::SatoLocalStructureFeatureGenerator<Dimension>;
   LocalStructureGeneratorType::Pointer localStructureGenerator = LocalStructureGeneratorType::New();
 
-  using GradientMagnitudeSigmoidGeneratorType = itk::GradientMagnitudeSigmoidFeatureGenerator< Dimension >;
+  using GradientMagnitudeSigmoidGeneratorType = itk::GradientMagnitudeSigmoidFeatureGenerator<Dimension>;
   GradientMagnitudeSigmoidGeneratorType::Pointer gradientMagnitudeSigmoidGenerator =
     GradientMagnitudeSigmoidGeneratorType::New();
 
-  segmentationMethod->AddFeatureGenerator( tubularnessGenerator );
-  segmentationMethod->AddFeatureGenerator( sheetnessGenerator );
-  segmentationMethod->AddFeatureGenerator( vesselnessGenerator );
-  segmentationMethod->AddFeatureGenerator( localStructureGenerator );
-  segmentationMethod->AddFeatureGenerator( gradientMagnitudeSigmoidGenerator );
+  segmentationMethod->AddFeatureGenerator(tubularnessGenerator);
+  segmentationMethod->AddFeatureGenerator(sheetnessGenerator);
+  segmentationMethod->AddFeatureGenerator(vesselnessGenerator);
+  segmentationMethod->AddFeatureGenerator(localStructureGenerator);
+  segmentationMethod->AddFeatureGenerator(gradientMagnitudeSigmoidGenerator);
 
-  TRY_EXPECT_EXCEPTION( segmentationMethod->Update() );
+  TRY_EXPECT_EXCEPTION(segmentationMethod->Update());
 
 
   std::cout << "Test finished." << std::endl;

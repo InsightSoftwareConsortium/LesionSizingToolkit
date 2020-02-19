@@ -28,16 +28,15 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-LandmarksReader<NDimension>
-::LandmarksReader()
+LandmarksReader<NDimension>::LandmarksReader()
 {
-  this->SetNumberOfRequiredOutputs( 1 );
+  this->SetNumberOfRequiredOutputs(1);
 
   this->m_SpatialObjectReader = SpatialObjectReaderType::New();
 
   typename SpatialObjectType::Pointer outputObject = SpatialObjectType::New();
 
-  this->ProcessObject::SetNthOutput( 0, outputObject );
+  this->ProcessObject::SetNthOutput(0, outputObject);
 }
 
 
@@ -45,34 +44,30 @@ LandmarksReader<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-LandmarksReader<NDimension>
-::~LandmarksReader()
-{
-}
+LandmarksReader<NDimension>::~LandmarksReader()
+{}
 
 template <unsigned int NDimension>
 const typename LandmarksReader<NDimension>::SpatialObjectType *
-LandmarksReader<NDimension>
-::GetOutput() const
+LandmarksReader<NDimension>::GetOutput() const
 {
-  return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
+  return static_cast<const SpatialObjectType *>(this->ProcessObject::GetOutput(0));
 }
 
 template <unsigned int NDimension>
 void
-LandmarksReader<NDimension>
-::GenerateData()
+LandmarksReader<NDimension>::GenerateData()
 {
-  this->m_SpatialObjectReader->SetFileName( this->GetFileName() );
+  this->m_SpatialObjectReader->SetFileName(this->GetFileName());
 
   this->m_SpatialObjectReader->Update();
 
   typename SpatialObjectReaderType::GroupPointer group = this->m_SpatialObjectReader->GetGroup();
 
-  if( !group )
-    {
-    itkExceptionMacro("Couldn't fine a group in file" << this->GetFileName() );
-    }
+  if (!group)
+  {
+    itkExceptionMacro("Couldn't fine a group in file" << this->GetFileName());
+  }
 
   ObjectListType * groupChildren = group->GetChildren(999999);
 
@@ -80,30 +75,29 @@ LandmarksReader<NDimension>
 
   typename SpatialObjectType::Pointer landmarkSpatialObject;
 
-  while( spatialObjectItr != groupChildren->end() )
-    {
+  while (spatialObjectItr != groupChildren->end())
+  {
     std::string objectName = (*spatialObjectItr)->GetTypeName();
-    if( objectName == "LandmarkSpatialObject" )
-      {
-      const auto * landmarkSpatialObjectRawPointer =
-        dynamic_cast< const SpatialObjectType * >( spatialObjectItr->GetPointer() );
-      landmarkSpatialObject =
-        const_cast< SpatialObjectType * >( landmarkSpatialObjectRawPointer );
-      break;
-      }
-    spatialObjectItr++;
-    }
-
-  if( landmarkSpatialObject.IsNull() )
+    if (objectName == "LandmarkSpatialObject")
     {
-    itkExceptionMacro("Input file does not contain landmarks");
+      const auto * landmarkSpatialObjectRawPointer =
+        dynamic_cast<const SpatialObjectType *>(spatialObjectItr->GetPointer());
+      landmarkSpatialObject = const_cast<SpatialObjectType *>(landmarkSpatialObjectRawPointer);
+      break;
     }
+    spatialObjectItr++;
+  }
+
+  if (landmarkSpatialObject.IsNull())
+  {
+    itkExceptionMacro("Input file does not contain landmarks");
+  }
 
   landmarkSpatialObject->DisconnectPipeline();
 
-  auto * outputObject = dynamic_cast< SpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast<SpatialObjectType *>(this->ProcessObject::GetOutput(0));
 
-  outputObject->SetPoints( landmarkSpatialObject->GetPoints() );
+  outputObject->SetPoints(landmarkSpatialObject->GetPoints());
 
   delete groupChildren;
 }
@@ -113,10 +107,9 @@ LandmarksReader<NDimension>
  */
 template <unsigned int NDimension>
 void
-LandmarksReader<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+LandmarksReader<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
   os << indent << this->m_FileName << std::endl;
 }
 

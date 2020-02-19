@@ -56,41 +56,46 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  using SpatialObjectType = SpatialObject< NDimension >;
+  using SpatialObjectType = SpatialObject<NDimension>;
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;
   using SpatialObjectConstPointer = typename SpatialObjectType::ConstPointer;
 
   /** Set the input SpatialObject representing the segmentation whose volume
    * will be estimated */
   using ProcessObject::SetInput;
-  void SetInput( const SpatialObjectType * inputSpatialObject );
+  void
+  SetInput(const SpatialObjectType * inputSpatialObject);
 
   /** Type of DataObjects used for scalar outputs */
   using RealType = double;
-  using RealObjectType = SimpleDataObjectDecorator< RealType >;
+  using RealObjectType = SimpleDataObjectDecorator<RealType>;
 
   /** Return the computed Volume. The volume units will be relative to the
- * spacing units used by the input spatial object. For example, if the input
- * spatial object is using millimeters as the units of spacing then the units
- * of the volume computed in this class will be cubic millimeters. */
-  RealType GetVolume() const;
-  const RealObjectType * GetVolumeOutput() const;
+   * spacing units used by the input spatial object. For example, if the input
+   * spatial object is using millimeters as the units of spacing then the units
+   * of the volume computed in this class will be cubic millimeters. */
+  RealType
+  GetVolume() const;
+  const RealObjectType *
+  GetVolumeOutput() const;
 
 
 protected:
   SegmentationVolumeEstimator();
   ~SegmentationVolumeEstimator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData() override;
+  void
+  GenerateData() override;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkSegmentationVolumeEstimator.hxx"
+#  include "itkSegmentationVolumeEstimator.hxx"
 #endif
 
 #endif

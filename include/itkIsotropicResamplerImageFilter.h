@@ -34,9 +34,8 @@ namespace itk
  *\ingroup LesionSizingToolkit
  * \ingroup LesionSizingToolkit
  */
-template<typename TInputImage, typename TOutputImage>
-class IsotropicResamplerImageFilter
-  : public ImageToImageFilter<TInputImage, TOutputImage>
+template <typename TInputImage, typename TOutputImage>
+class IsotropicResamplerImageFilter : public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(IsotropicResamplerImageFilter);
@@ -71,11 +70,11 @@ public:
 
   static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
-  itkSetMacro( OutputSpacing, SpacingType );
-  itkGetMacro( OutputSpacing, SpacingType );
+  itkSetMacro(OutputSpacing, SpacingType);
+  itkGetMacro(OutputSpacing, SpacingType);
 
-  itkSetMacro( DefaultPixelValue, OutputImagePixelType );
-  itkGetMacro( DefaultPixelValue, OutputImagePixelType );
+  itkSetMacro(DefaultPixelValue, OutputImagePixelType);
+  itkGetMacro(DefaultPixelValue, OutputImagePixelType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -84,36 +83,40 @@ public:
 
   /** Override the superclass implementation so as to set the flag on all the
    * filters within our lesion segmentation pipeline */
-  void SetAbortGenerateData( const bool ) override;
+  void
+  SetAbortGenerateData(const bool) override;
 
   /** ResampleImageFilter produces an image which is a different size
    * than its input.  As such, it needs to provide an implementation
    * for GenerateOutputInformation() in order to inform the pipeline
    * execution model.  The original documentation of this method is
    * below. \sa ProcessObject::GenerateOutputInformaton() */
-  void GenerateOutputInformation( void ) override;
+  void
+  GenerateOutputInformation(void) override;
 
 protected:
   IsotropicResamplerImageFilter();
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
-  void GenerateData() override;
+  void
+  GenerateData() override;
 
 private:
   ~IsotropicResamplerImageFilter() override;
 
   SpacingType m_OutputSpacing;
-  using ResampleFilterType = ResampleImageFilter< TInputImage, TOutputImage >;
+  using ResampleFilterType = ResampleImageFilter<TInputImage, TOutputImage>;
   using ResampleFilterPointer = typename ResampleFilterType::Pointer;
 
-  ResampleFilterPointer     m_ResampleFilter;
-  OutputImagePixelType      m_DefaultPixelValue;
+  ResampleFilterPointer m_ResampleFilter;
+  OutputImagePixelType  m_DefaultPixelValue;
 };
 
-} //end of namespace itk
+} // end of namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkIsotropicResamplerImageFilter.hxx"
+#  include "itkIsotropicResamplerImageFilter.hxx"
 #endif
 
 #endif

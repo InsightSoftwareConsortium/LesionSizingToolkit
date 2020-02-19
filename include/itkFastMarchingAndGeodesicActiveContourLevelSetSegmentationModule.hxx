@@ -30,12 +30,12 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>
-::FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule()
+FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<
+  NDimension>::FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule()
 {
   this->m_FastMarchingModule = FastMarchingModuleType::New();
   this->m_FastMarchingModule->SetDistanceFromSeeds(1.0);
-  this->m_FastMarchingModule->SetStoppingValue( 100.0 );
+  this->m_FastMarchingModule->SetStoppingValue(100.0);
   this->m_FastMarchingModule->InvertOutputIntensitiesOff();
   this->m_GeodesicActiveContourLevelSetModule = GeodesicActiveContourLevelSetModuleType::New();
   this->m_GeodesicActiveContourLevelSetModule->InvertOutputIntensitiesOff();
@@ -46,10 +46,9 @@ FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>
-::~FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule()
-{
-}
+FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<
+  NDimension>::~FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule()
+{}
 
 
 /**
@@ -57,10 +56,10 @@ FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>::PrintSelf(std::ostream & os,
+                                                                                      Indent         indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -69,32 +68,29 @@ FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>
-::GenerateData()
+FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<NDimension>::GenerateData()
 {
   // Report progress.
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( this->m_FastMarchingModule, 0.3 );
-  progress->RegisterInternalFilter(
-      this->m_GeodesicActiveContourLevelSetModule, 0.7 );
+  progress->RegisterInternalFilter(this->m_FastMarchingModule, 0.3);
+  progress->RegisterInternalFilter(this->m_GeodesicActiveContourLevelSetModule, 0.7);
 
-  this->m_FastMarchingModule->SetInput( this->GetInput() );
-  this->m_FastMarchingModule->SetFeature( this->GetFeature() );
+  this->m_FastMarchingModule->SetInput(this->GetInput());
+  this->m_FastMarchingModule->SetFeature(this->GetFeature());
   this->m_FastMarchingModule->Update();
 
-  m_GeodesicActiveContourLevelSetModule->SetInput( m_FastMarchingModule->GetOutput() );
-  m_GeodesicActiveContourLevelSetModule->SetFeature( this->GetFeature() );
-  m_GeodesicActiveContourLevelSetModule->SetMaximumRMSError( this->GetMaximumRMSError() );
-  m_GeodesicActiveContourLevelSetModule->SetMaximumNumberOfIterations( this->GetMaximumNumberOfIterations() );
-  m_GeodesicActiveContourLevelSetModule->SetPropagationScaling( this->GetPropagationScaling() );
-  m_GeodesicActiveContourLevelSetModule->SetCurvatureScaling( this->GetCurvatureScaling() );
-  m_GeodesicActiveContourLevelSetModule->SetAdvectionScaling( this->GetAdvectionScaling() );
+  m_GeodesicActiveContourLevelSetModule->SetInput(m_FastMarchingModule->GetOutput());
+  m_GeodesicActiveContourLevelSetModule->SetFeature(this->GetFeature());
+  m_GeodesicActiveContourLevelSetModule->SetMaximumRMSError(this->GetMaximumRMSError());
+  m_GeodesicActiveContourLevelSetModule->SetMaximumNumberOfIterations(this->GetMaximumNumberOfIterations());
+  m_GeodesicActiveContourLevelSetModule->SetPropagationScaling(this->GetPropagationScaling());
+  m_GeodesicActiveContourLevelSetModule->SetCurvatureScaling(this->GetCurvatureScaling());
+  m_GeodesicActiveContourLevelSetModule->SetAdvectionScaling(this->GetAdvectionScaling());
   m_GeodesicActiveContourLevelSetModule->Update();
 
-  this->PackOutputImageInOutputSpatialObject( const_cast< OutputImageType * >(
-        dynamic_cast< const OutputSpatialObjectType * >(
-        m_GeodesicActiveContourLevelSetModule->GetOutput())->GetImage()) );
+  this->PackOutputImageInOutputSpatialObject(const_cast<OutputImageType *>(
+    dynamic_cast<const OutputSpatialObjectType *>(m_GeodesicActiveContourLevelSetModule->GetOutput())->GetImage()));
 }
 
 } // end namespace itk
