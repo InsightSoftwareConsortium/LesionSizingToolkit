@@ -15,11 +15,11 @@
 
 =========================================================================*/
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#  pragma warning(disable : 4786)
 #endif
 
 #ifdef __BORLANDC__
-#define ITK_LEAN_AND_MEAN
+#  define ITK_LEAN_AND_MEAN
 #endif
 
 #include "itkIncludeRequiredIOFactories.h"
@@ -27,49 +27,50 @@
 #include "itkImageFileWriter.h"
 #include "itkImage.h"
 
-int main( int argc, char ** argv )
+int
+main(int argc, char ** argv)
 {
 
   RegisterRequiredFactories();
 
   // Verify the number of parameters in the command line
-  if( argc < 3 )
-    {
+  if (argc < 3)
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile  outputImageFile " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   using PixelType = unsigned char;
   constexpr unsigned int Dimension = 3;
 
-  using ImageType = itk::Image< PixelType, Dimension >;
+  using ImageType = itk::Image<PixelType, Dimension>;
 
-  using ReaderType = itk::ImageFileReader< ImageType >;
-  using WriterType = itk::ImageFileWriter< ImageType >;
+  using ReaderType = itk::ImageFileReader<ImageType>;
+  using WriterType = itk::ImageFileWriter<ImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  const char * inputFilename  = argv[1];
+  const char * inputFilename = argv[1];
   const char * outputFilename = argv[2];
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
-  writer->SetInput( reader->GetOutput() );
+  writer->SetInput(reader->GetOutput());
   writer->UseCompressionOn();
 
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & err )
-    {
+  }
+  catch (itk::ExceptionObject & err)
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

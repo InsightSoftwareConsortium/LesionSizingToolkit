@@ -22,7 +22,8 @@ const
 #include "itkTestingMacros.h"
 
 
-int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
+int
+itkRegionCompetitionImageFilterTest1(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   constexpr unsigned int Dimension = 3;
 
@@ -30,21 +31,17 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   using BinaryPixelType = unsigned char;
   using LabelPixelType = unsigned short;
 
-  using InputImageType = itk::Image< InputPixelType,  Dimension >;
-  using BinaryImageType = itk::Image< BinaryPixelType, Dimension >;
-  using LabelImageType = itk::Image< LabelPixelType,  Dimension >;
+  using InputImageType = itk::Image<InputPixelType, Dimension>;
+  using BinaryImageType = itk::Image<BinaryPixelType, Dimension>;
+  using LabelImageType = itk::Image<LabelPixelType, Dimension>;
 
-  using ThresholdFilterType = itk::BinaryThresholdImageFilter<
-    InputImageType, BinaryImageType >;
+  using ThresholdFilterType = itk::BinaryThresholdImageFilter<InputImageType, BinaryImageType>;
 
-  using ComponentsFilterType = itk::ConnectedComponentImageFilter<
-    BinaryImageType, LabelImageType >;
+  using ComponentsFilterType = itk::ConnectedComponentImageFilter<BinaryImageType, LabelImageType>;
 
-  using RelabelFilterType = itk::RelabelComponentImageFilter<
-    LabelImageType, LabelImageType >;
+  using RelabelFilterType = itk::RelabelComponentImageFilter<LabelImageType, LabelImageType>;
 
-  using CompetitionFilterType = itk::RegionCompetitionImageFilter<
-    InputImageType, LabelImageType >;
+  using CompetitionFilterType = itk::RegionCompetitionImageFilter<InputImageType, LabelImageType>;
 
 
   ThresholdFilterType::Pointer thresholderFilter = ThresholdFilterType::New();
@@ -59,7 +56,7 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   //
   // Create an input image
   //
-  InputImageType::Pointer  inputImage = InputImageType::New();
+  InputImageType::Pointer inputImage = InputImageType::New();
 
   InputImageType::RegionType itkregion;
   InputImageType::SizeType   itksize;
@@ -73,10 +70,10 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   itkindex[1] = 0;
   itkindex[2] = 0;
 
-  itkregion.SetIndex( itkindex );
-  itkregion.SetSize( itksize );
+  itkregion.SetIndex(itkindex);
+  itkregion.SetSize(itksize);
 
-  inputImage->SetRegions( itkregion );
+  inputImage->SetRegions(itkregion);
   inputImage->Allocate();
 
   InputImageType::SpacingType itkspacing;
@@ -85,15 +82,15 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   itkspacing[1] = 0.9;
   itkspacing[2] = 1.5;
 
-  inputImage->SetSpacing( itkspacing );
+  inputImage->SetSpacing(itkspacing);
 
-  InputImageType::PointType  itkorigin;
+  InputImageType::PointType itkorigin;
 
   itkorigin[0] = 129.5;
   itkorigin[1] = 137.5;
   itkorigin[2] = 159.5;
 
-  inputImage->SetOrigin( itkorigin );
+  inputImage->SetOrigin(itkorigin);
 
   //
   // Populate the pixel values in an asymmetric way to ensure that one
@@ -113,78 +110,78 @@ int itkRegionCompetitionImageFilterTest1( int itkNotUsed(argc), char * itkNotUse
   InputImageType::PointType point1;
   InputImageType::PointType point2;
 
-  inputImage->TransformIndexToPhysicalPoint( index1, point1 );
-  inputImage->TransformIndexToPhysicalPoint( index2, point2 );
+  inputImage->TransformIndexToPhysicalPoint(index1, point1);
+  inputImage->TransformIndexToPhysicalPoint(index2, point2);
 
 
-  using IteratorType = itk::ImageRegionIteratorWithIndex< InputImageType >;
+  using IteratorType = itk::ImageRegionIteratorWithIndex<InputImageType>;
 
-  IteratorType itr( inputImage, itkregion );
+  IteratorType itr(inputImage, itkregion);
 
   itr.GoToBegin();
 
   InputImageType::PointType point;
 
-  while ( !itr.IsAtEnd() )
-    {
+  while (!itr.IsAtEnd())
+  {
     const InputImageType::IndexType & index = itr.GetIndex();
-    inputImage->TransformIndexToPhysicalPoint( index, point );
-    const double distance1 = point1.EuclideanDistanceTo( point );
-    const double distance2 = point2.EuclideanDistanceTo( point );
+    inputImage->TransformIndexToPhysicalPoint(index, point);
+    const double distance1 = point1.EuclideanDistanceTo(point);
+    const double distance2 = point2.EuclideanDistanceTo(point);
     const double value1 = 1000.0 - distance1 * 50;
     const double value2 = 1000.0 - distance2 * 50;
-    if ( value1 > value2 )
-      {
-      itr.Set( static_cast< InputPixelType >( value1 ) );
-      }
-    else
-      {
-      itr.Set( static_cast< InputPixelType >( value2 ) );
-      }
-    ++itr;
+    if (value1 > value2)
+    {
+      itr.Set(static_cast<InputPixelType>(value1));
     }
+    else
+    {
+      itr.Set(static_cast<InputPixelType>(value2));
+    }
+    ++itr;
+  }
 
 
   // Just for debugging, save input image
-  using WriterType = itk::ImageFileWriter< InputImageType >;
+  using WriterType = itk::ImageFileWriter<InputImageType>;
   WriterType::Pointer writer = WriterType::New();
-  writer->SetInput( inputImage );
+  writer->SetInput(inputImage);
   writer->SetFileName("inputCompetitionImage.mha");
 
-  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
+  TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
-  thresholderFilter->SetInput( inputImage );
-  thresholderFilter->SetUpperThreshold( 2000 );
-  thresholderFilter->SetLowerThreshold(  400 );
+  thresholderFilter->SetInput(inputImage);
+  thresholderFilter->SetUpperThreshold(2000);
+  thresholderFilter->SetLowerThreshold(400);
 
-  TRY_EXPECT_NO_EXCEPTION( thresholderFilter->Update() );
+  TRY_EXPECT_NO_EXCEPTION(thresholderFilter->Update());
 
-  componentsFilter->SetInput( thresholderFilter->GetOutput() );
-  relabelerFilter->SetInput( componentsFilter->GetOutput() );
+  componentsFilter->SetInput(thresholderFilter->GetOutput());
+  relabelerFilter->SetInput(componentsFilter->GetOutput());
 
   relabelerFilter->Update();
-  LabelImageType * labelImagePt =  relabelerFilter->GetOutput();
+  LabelImageType * labelImagePt = relabelerFilter->GetOutput();
   // Just for debugging, save input image of labels
-  using LabelWriterType = itk::ImageFileWriter< LabelImageType >;
+  using LabelWriterType = itk::ImageFileWriter<LabelImageType>;
   LabelWriterType::Pointer labelWriter = LabelWriterType::New();
-  labelWriter->SetInput( relabelerFilter->GetOutput() );
+  labelWriter->SetInput(relabelerFilter->GetOutput());
   labelWriter->SetFileName("labeledImage.mha");
 
-  TRY_EXPECT_NO_EXCEPTION( labelWriter->Update() );
+  TRY_EXPECT_NO_EXCEPTION(labelWriter->Update());
 
 
-  competitionFilter->SetInput( inputImage );
-  competitionFilter->SetInputLabels( labelImagePt);
+  competitionFilter->SetInput(inputImage);
+  competitionFilter->SetInputLabels(labelImagePt);
 
-  TRY_EXPECT_NO_EXCEPTION( competitionFilter->Update() );
+  TRY_EXPECT_NO_EXCEPTION(competitionFilter->Update());
 
 
   // Write the output image
-  labelWriter->SetInput( competitionFilter->GetOutput() );
+  labelWriter->SetInput(competitionFilter->GetOutput());
   labelWriter->SetFileName("labeledSegmentedImage.mha");
 
-  TRY_EXPECT_NO_EXCEPTION( labelWriter->Update() );
+  TRY_EXPECT_NO_EXCEPTION(labelWriter->Update());
 
 
   std::cout << "Test finished." << std::endl;

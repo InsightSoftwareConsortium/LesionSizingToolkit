@@ -29,20 +29,16 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-ConnectedThresholdSegmentationModule<NDimension>
-::ConnectedThresholdSegmentationModule()
-{
-}
+ConnectedThresholdSegmentationModule<NDimension>::ConnectedThresholdSegmentationModule()
+{}
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-ConnectedThresholdSegmentationModule<NDimension>
-::~ConnectedThresholdSegmentationModule()
-{
-}
+ConnectedThresholdSegmentationModule<NDimension>::~ConnectedThresholdSegmentationModule()
+{}
 
 
 /**
@@ -50,10 +46,9 @@ ConnectedThresholdSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-ConnectedThresholdSegmentationModule<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+ConnectedThresholdSegmentationModule<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -62,17 +57,15 @@ ConnectedThresholdSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-ConnectedThresholdSegmentationModule<NDimension>
-::GenerateData()
+ConnectedThresholdSegmentationModule<NDimension>::GenerateData()
 {
-  using FilterType = ConnectedThresholdImageFilter<
-    FeatureImageType, OutputImageType >;
+  using FilterType = ConnectedThresholdImageFilter<FeatureImageType, OutputImageType>;
 
   typename FilterType::Pointer filter = FilterType::New();
 
   const FeatureImageType * featureImage = this->GetInternalFeatureImage();
 
-  filter->SetInput( featureImage );
+  filter->SetInput(featureImage);
 
   const InputSpatialObjectType * inputSeeds = this->GetInternalInputLandmarks();
 
@@ -85,24 +78,24 @@ ConnectedThresholdSegmentationModule<NDimension>
 
   IndexType index;
 
-  for( unsigned int i=0; i < numberOfPoints; i++ )
-    {
-    featureImage->TransformPhysicalPointToIndex( points[i].GetPositionInObjectSpace(), index );
-    filter->AddSeed( index );
-    }
+  for (unsigned int i = 0; i < numberOfPoints; i++)
+  {
+    featureImage->TransformPhysicalPointToIndex(points[i].GetPositionInObjectSpace(), index);
+    filter->AddSeed(index);
+  }
 
-  filter->SetLower( this->m_LowerThreshold );
-  filter->SetUpper( this->m_UpperThreshold );
-  filter->SetReplaceValue( 1.0 );
+  filter->SetLower(this->m_LowerThreshold);
+  filter->SetUpper(this->m_UpperThreshold);
+  filter->SetReplaceValue(1.0);
 
   // Report progress.
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( filter, 1.0 );
+  progress->RegisterInternalFilter(filter, 1.0);
 
   filter->Update();
 
-  this->PackOutputImageInOutputSpatialObject( filter->GetOutput() );
+  this->PackOutputImageInOutputSpatialObject(filter->GetOutput());
 }
 
 } // end namespace itk

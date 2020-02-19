@@ -63,60 +63,63 @@ public:
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
   using InputPixelType = signed short;
-  using InputImageType = Image< InputPixelType, Dimension >;
-  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageType = Image<InputPixelType, Dimension>;
+  using InputImageSpatialObjectType = ImageSpatialObject<NDimension, InputPixelType>;
   using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
   using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
-  void SetInput( const SpatialObjectType * input );
-  const SpatialObjectType * GetInput() const;
+  void
+  SetInput(const SpatialObjectType * input);
+  const SpatialObjectType *
+  GetInput() const;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
-  const SpatialObjectType * GetFeature() const;
+  const SpatialObjectType *
+  GetFeature() const;
 
   /** Set the Hounsfield Unit value to threshold the Lung. */
-  itkSetMacro( LungThreshold, InputPixelType );
-  itkGetMacro( LungThreshold, InputPixelType );
+  itkSetMacro(LungThreshold, InputPixelType);
+  itkGetMacro(LungThreshold, InputPixelType);
 
 protected:
   LungWallFeatureGenerator();
   ~LungWallFeatureGenerator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
 private:
   using InternalPixelType = float;
-  using InternalImageType = Image< InternalPixelType, Dimension >;
+  using InternalImageType = Image<InternalPixelType, Dimension>;
 
   using OutputPixelType = float;
-  using OutputImageType = Image< OutputPixelType, Dimension >;
+  using OutputImageType = Image<OutputPixelType, Dimension>;
 
-  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputImageSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
-  using ThresholdFilterType = BinaryThresholdImageFilter<
-    InputImageType, InternalImageType >;
+  using ThresholdFilterType = BinaryThresholdImageFilter<InputImageType, InternalImageType>;
   using ThresholdFilterPointer = typename ThresholdFilterType::Pointer;
 
-  using VotingHoleFillingFilterType = VotingBinaryHoleFillFloodingImageFilter<
-    InternalImageType, OutputImageType >;
+  using VotingHoleFillingFilterType = VotingBinaryHoleFillFloodingImageFilter<InternalImageType, OutputImageType>;
   using VotingHoleFillingFilterPointer = typename VotingHoleFillingFilterType::Pointer;
 
-  ThresholdFilterPointer                m_ThresholdFilter;
-  VotingHoleFillingFilterPointer        m_VotingHoleFillingFilter;
+  ThresholdFilterPointer         m_ThresholdFilter;
+  VotingHoleFillingFilterPointer m_VotingHoleFillingFilter;
 
-  InputPixelType                        m_LungThreshold;
+  InputPixelType m_LungThreshold;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkLungWallFeatureGenerator.hxx"
+#  include "itkLungWallFeatureGenerator.hxx"
 #endif
 
 #endif

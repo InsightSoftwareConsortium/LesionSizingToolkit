@@ -28,14 +28,13 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-SatoVesselnessSigmoidFeatureGenerator<NDimension>
-::SatoVesselnessSigmoidFeatureGenerator()
+SatoVesselnessSigmoidFeatureGenerator<NDimension>::SatoVesselnessSigmoidFeatureGenerator()
 {
   this->m_SigmoidFilter = SigmoidFilterType::New();
 
   this->m_SigmoidFilter->ReleaseDataFlagOn();
 
-  this->m_SigmoidAlpha =  -1.0;
+  this->m_SigmoidAlpha = -1.0;
   this->m_SigmoidBeta = 90.0;
 }
 
@@ -44,10 +43,8 @@ SatoVesselnessSigmoidFeatureGenerator<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-SatoVesselnessSigmoidFeatureGenerator<NDimension>
-::~SatoVesselnessSigmoidFeatureGenerator()
-{
-}
+SatoVesselnessSigmoidFeatureGenerator<NDimension>::~SatoVesselnessSigmoidFeatureGenerator()
+{}
 
 
 /**
@@ -55,10 +52,9 @@ SatoVesselnessSigmoidFeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-SatoVesselnessSigmoidFeatureGenerator<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+SatoVesselnessSigmoidFeatureGenerator<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
   os << indent << "Sigmoid Alpha " << this->m_SigmoidAlpha << std::endl;
   os << indent << "Sigmoid Beta " << this->m_SigmoidBeta << std::endl;
 }
@@ -69,8 +65,7 @@ SatoVesselnessSigmoidFeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-SatoVesselnessSigmoidFeatureGenerator<NDimension>
-::GenerateData()
+SatoVesselnessSigmoidFeatureGenerator<NDimension>::GenerateData()
 {
   this->Superclass::GenerateData();
 
@@ -79,23 +74,23 @@ SatoVesselnessSigmoidFeatureGenerator<NDimension>
   // from 0, but that's ok. :)
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( this->m_SigmoidFilter, 1.0 );
+  progress->RegisterInternalFilter(this->m_SigmoidFilter, 1.0);
 
   //
   // Take the output of the superclass, and do further processing on it.
   //
   typename OutputImageSpatialObjectType::Pointer outputObject =
-    dynamic_cast<OutputImageSpatialObjectType * >( this->GetInternalFeature() );
+    dynamic_cast<OutputImageSpatialObjectType *>(this->GetInternalFeature());
 
   const OutputImageType * inputImage = outputObject->GetImage();
 
-  this->m_SigmoidFilter->SetInput( inputImage );
+  this->m_SigmoidFilter->SetInput(inputImage);
 
-  this->m_SigmoidFilter->SetAlpha( this->m_SigmoidAlpha );
-  this->m_SigmoidFilter->SetBeta( this->m_SigmoidBeta );
+  this->m_SigmoidFilter->SetAlpha(this->m_SigmoidAlpha);
+  this->m_SigmoidFilter->SetBeta(this->m_SigmoidBeta);
 
-  this->m_SigmoidFilter->SetOutputMinimum( 0.0 );
-  this->m_SigmoidFilter->SetOutputMaximum( 1.0 );
+  this->m_SigmoidFilter->SetOutputMinimum(0.0);
+  this->m_SigmoidFilter->SetOutputMaximum(1.0);
 
   this->m_SigmoidFilter->Update();
 
@@ -103,7 +98,7 @@ SatoVesselnessSigmoidFeatureGenerator<NDimension>
 
   outputImage->DisconnectPipeline();
 
-  outputObject->SetImage( outputImage );
+  outputObject->SetImage(outputImage);
 }
 
 } // end namespace itk

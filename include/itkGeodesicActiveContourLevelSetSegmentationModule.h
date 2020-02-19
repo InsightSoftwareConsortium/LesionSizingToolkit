@@ -33,8 +33,8 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_TEMPLATE_EXPORT GeodesicActiveContourLevelSetSegmentationModule :
-  public SinglePhaseLevelSetSegmentationModule<NDimension>
+class ITK_TEMPLATE_EXPORT GeodesicActiveContourLevelSetSegmentationModule
+  : public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(GeodesicActiveContourLevelSetSegmentationModule);
@@ -72,17 +72,19 @@ public:
 protected:
   GeodesicActiveContourLevelSetSegmentationModule();
   ~GeodesicActiveContourLevelSetSegmentationModule() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkGeodesicActiveContourLevelSetSegmentationModule.hxx"
+#  include "itkGeodesicActiveContourLevelSetSegmentationModule.hxx"
 #endif
 
 #endif

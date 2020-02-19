@@ -58,46 +58,51 @@ public:
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
   using InputPixelType = signed short;
-  using InputImageType = Image< InputPixelType, Dimension >;
-  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageType = Image<InputPixelType, Dimension>;
+  using InputImageSpatialObjectType = ImageSpatialObject<NDimension, InputPixelType>;
   using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
-  using SpatialObjectType = SpatialObject< NDimension >;
+  using SpatialObjectType = SpatialObject<NDimension>;
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
-  void SetInput( const SpatialObjectType * input );
-  const SpatialObjectType * GetInput() const;
+  void
+  SetInput(const SpatialObjectType * input);
+  const SpatialObjectType *
+  GetInput() const;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
-  const SpatialObjectType * GetOutput() const;
+  const SpatialObjectType *
+  GetOutput() const;
 
-  itkSetMacro( OutputSpacing, double );
-  itkGetMacro( OutputSpacing, double );
+  itkSetMacro(OutputSpacing, double);
+  itkGetMacro(OutputSpacing, double);
 
 protected:
   IsotropicResampler();
   ~IsotropicResampler() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
 private:
   using OutputPixelType = signed short;
-  using OutputImageType = Image< OutputPixelType, Dimension >;
+  using OutputImageType = Image<OutputPixelType, Dimension>;
 
-  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputImageSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
-  double    m_OutputSpacing;
+  double m_OutputSpacing;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkIsotropicResampler.hxx"
+#  include "itkIsotropicResampler.hxx"
 #endif
 
 #endif

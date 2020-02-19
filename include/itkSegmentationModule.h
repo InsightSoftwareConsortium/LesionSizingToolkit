@@ -59,42 +59,50 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  using SpatialObjectType = SpatialObject< NDimension >;
+  using SpatialObjectType = SpatialObject<NDimension>;
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
-  void SetInput( const SpatialObjectType * input );
-  const SpatialObjectType * GetInput() const;
+  void
+  SetInput(const SpatialObjectType * input);
+  const SpatialObjectType *
+  GetInput() const;
 
   /** Input data that carries the feature in the form of a
    * SpatialObject. */
-  void SetFeature( const SpatialObjectType * feature );
-  const SpatialObjectType * GetFeature() const;
+  void
+  SetFeature(const SpatialObjectType * feature);
+  const SpatialObjectType *
+  GetFeature() const;
 
   /** Output segmentation represented as a SpatialObject. */
-  const SpatialObjectType * GetOutput() const;
+  const SpatialObjectType *
+  GetOutput() const;
 
   /** Returns the number of features that are expected by this Segmentation
    * Module. This method will be overloaded in derived classes. */
-  unsigned int GetExpectedNumberOfFeatures() const;
+  unsigned int
+  GetExpectedNumberOfFeatures() const;
 
 protected:
   SegmentationModule();
   ~SegmentationModule() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /* Derived classes MUST implement the "void  GenerateData ()" method */
 
   /** Output segmentation represented as a SpatialObject. Non-const version
    * only for internal use. */
-  SpatialObjectType * GetInternalOutput();
+  SpatialObjectType *
+  GetInternalOutput();
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkSegmentationModule.hxx"
+#  include "itkSegmentationModule.hxx"
 #endif
 
 #endif

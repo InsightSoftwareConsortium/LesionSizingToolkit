@@ -28,15 +28,14 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-SinglePhaseLevelSetSegmentationModule<NDimension>
-::SinglePhaseLevelSetSegmentationModule()
+SinglePhaseLevelSetSegmentationModule<NDimension>::SinglePhaseLevelSetSegmentationModule()
 {
-  this->SetNumberOfRequiredInputs( 2 );
-  this->SetNumberOfRequiredOutputs( 1 );
+  this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredOutputs(1);
 
   typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
 
-  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->ProcessObject::SetNthOutput(0, outputObject.GetPointer());
 
   this->m_MaximumNumberOfIterations = 100;
   this->m_MaximumRMSError = 0.00001;
@@ -53,10 +52,8 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-SinglePhaseLevelSetSegmentationModule<NDimension>
-::~SinglePhaseLevelSetSegmentationModule()
-{
-}
+SinglePhaseLevelSetSegmentationModule<NDimension>::~SinglePhaseLevelSetSegmentationModule()
+{}
 
 
 /**
@@ -64,10 +61,9 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-SinglePhaseLevelSetSegmentationModule<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+SinglePhaseLevelSetSegmentationModule<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
   os << indent << "PropagationScaling = " << this->m_PropagationScaling << std::endl;
   os << indent << "CurvatureScaling = " << this->m_CurvatureScaling << std::endl;
   os << indent << "AdvectionScaling = " << this->m_AdvectionScaling << std::endl;
@@ -82,21 +78,20 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 const typename SinglePhaseLevelSetSegmentationModule<NDimension>::InputImageType *
-SinglePhaseLevelSetSegmentationModule<NDimension>
-::GetInternalInputImage() const
+SinglePhaseLevelSetSegmentationModule<NDimension>::GetInternalInputImage() const
 {
-  const auto * inputObject = dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
+  const auto * inputObject = dynamic_cast<const InputSpatialObjectType *>(this->GetInput());
   if (inputObject)
-    {
+  {
     const InputImageType * inputImage = inputObject->GetImage();
-    this->m_ZeroSetInputImage = const_cast< InputImageType * >(inputImage);
+    this->m_ZeroSetInputImage = const_cast<InputImageType *>(inputImage);
     return inputImage;
-    }
+  }
 
   if (this->m_ZeroSetInputImage)
-    {
+  {
     return this->m_ZeroSetInputImage;
-    }
+  }
 
   return nullptr;
 }
@@ -108,10 +103,9 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 const typename SinglePhaseLevelSetSegmentationModule<NDimension>::FeatureImageType *
-SinglePhaseLevelSetSegmentationModule<NDimension>
-::GetInternalFeatureImage() const
+SinglePhaseLevelSetSegmentationModule<NDimension>::GetInternalFeatureImage() const
 {
-  const auto * featureObject = dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
+  const auto * featureObject = dynamic_cast<const FeatureSpatialObjectType *>(this->GetFeature());
 
   const FeatureImageType * featureImage = featureObject->GetImage();
 
@@ -125,34 +119,33 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-SinglePhaseLevelSetSegmentationModule<NDimension>
-::PackOutputImageInOutputSpatialObject( OutputImageType * image )
+SinglePhaseLevelSetSegmentationModule<NDimension>::PackOutputImageInOutputSpatialObject(OutputImageType * image)
 {
   typename OutputImageType::Pointer outputImage = image;
 
-  if( this->m_InvertOutputIntensities )
-    {
-    using CalculatorType = MinimumMaximumImageCalculator< OutputImageType >;
+  if (this->m_InvertOutputIntensities)
+  {
+    using CalculatorType = MinimumMaximumImageCalculator<OutputImageType>;
     typename CalculatorType::Pointer calculator = CalculatorType::New();
-    calculator->SetImage( outputImage );
+    calculator->SetImage(outputImage);
     calculator->Compute();
-    using RescaleFilterType = IntensityWindowingImageFilter< OutputImageType, OutputImageType >;
+    using RescaleFilterType = IntensityWindowingImageFilter<OutputImageType, OutputImageType>;
     typename RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
-    rescaler->SetInput( outputImage );
-    rescaler->SetWindowMinimum( calculator->GetMinimum() );
-    rescaler->SetWindowMaximum( calculator->GetMaximum() );
-    rescaler->SetOutputMinimum(  4.0 ); // Note that the values must be [4:-4] here to
-    rescaler->SetOutputMaximum( -4.0 ); // make sure that we invert and not just rescale.
+    rescaler->SetInput(outputImage);
+    rescaler->SetWindowMinimum(calculator->GetMinimum());
+    rescaler->SetWindowMaximum(calculator->GetMaximum());
+    rescaler->SetOutputMinimum(4.0);  // Note that the values must be [4:-4] here to
+    rescaler->SetOutputMaximum(-4.0); // make sure that we invert and not just rescale.
     rescaler->InPlaceOn();
     rescaler->Update();
     outputImage = rescaler->GetOutput();
-    }
+  }
 
   outputImage->DisconnectPipeline();
 
-  auto * outputObject = dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast<OutputSpatialObjectType *>(this->ProcessObject::GetOutput(0));
 
-  outputObject->SetImage( outputImage );
+  outputObject->SetImage(outputImage);
 }
 
 
@@ -161,11 +154,8 @@ SinglePhaseLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-SinglePhaseLevelSetSegmentationModule<NDimension>
-::GenerateData()
-{
-
-}
+SinglePhaseLevelSetSegmentationModule<NDimension>::GenerateData()
+{}
 
 } // end namespace itk
 

@@ -61,43 +61,44 @@ public:
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
   using InputPixelType = signed short;
-  using InputImageType = Image< InputPixelType, Dimension >;
-  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageType = Image<InputPixelType, Dimension>;
+  using InputImageSpatialObjectType = ImageSpatialObject<NDimension, InputPixelType>;
   using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
   using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Value to be used to threshold the image. */
-  itkSetMacro( Threshold, double );
-  itkGetMacro( Threshold, double );
+  itkSetMacro(Threshold, double);
+  itkGetMacro(Threshold, double);
 
 protected:
   BinaryThresholdFeatureGenerator();
   ~BinaryThresholdFeatureGenerator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
 private:
   using OutputPixelType = float;
-  using OutputImageType = Image< OutputPixelType, Dimension >;
+  using OutputImageType = Image<OutputPixelType, Dimension>;
 
-  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputImageSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
-  using BinaryThresholdFilterType = BinaryThresholdImageFilter<
-    InputImageType, OutputImageType >;
+  using BinaryThresholdFilterType = BinaryThresholdImageFilter<InputImageType, OutputImageType>;
   using BinaryThresholdFilterPointer = typename BinaryThresholdFilterType::Pointer;
 
-  BinaryThresholdFilterPointer    m_BinaryThresholdFilter;
+  BinaryThresholdFilterPointer m_BinaryThresholdFilter;
 
-  double                          m_Threshold;
+  double m_Threshold;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkBinaryThresholdFeatureGenerator.hxx"
+#  include "itkBinaryThresholdFeatureGenerator.hxx"
 #endif
 
 #endif

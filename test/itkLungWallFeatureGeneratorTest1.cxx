@@ -22,43 +22,43 @@
 #include "itkTestingMacros.h"
 
 
-int itkLungWallFeatureGeneratorTest1( int argc, char * argv [] )
+int
+itkLungWallFeatureGeneratorTest1(int argc, char * argv[])
 {
-  if( argc < 3 )
-    {
+  if (argc < 3)
+  {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage outputImage [lungThreshold]" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   constexpr unsigned int Dimension = 3;
 
   using InputPixelType = signed short;
   using OutputPixelType = float;
 
-  using InputImageType = itk::Image< InputPixelType,  Dimension >;
-  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
+  using InputImageType = itk::Image<InputPixelType, Dimension>;
+  using OutputImageType = itk::Image<OutputPixelType, Dimension>;
 
-  using ReaderType = itk::ImageFileReader< InputImageType >;
-  using WriterType = itk::ImageFileWriter< OutputImageType >;
+  using ReaderType = itk::ImageFileReader<InputImageType>;
+  using WriterType = itk::ImageFileWriter<OutputImageType>;
 
-  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
-  using OutputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, OutputPixelType >;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject<Dimension, InputPixelType>;
+  using OutputImageSpatialObjectType = itk::ImageSpatialObject<Dimension, OutputPixelType>;
 
   ReaderType::Pointer reader = ReaderType::New();
 
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+  TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
-  using LungWallFeatureGeneratorType = itk::LungWallFeatureGenerator< Dimension >;
+  using LungWallFeatureGeneratorType = itk::LungWallFeatureGenerator<Dimension>;
   using SpatialObjectType = LungWallFeatureGeneratorType::SpatialObjectType;
 
   LungWallFeatureGeneratorType::Pointer featureGenerator = LungWallFeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
-    LungWallFeatureGenerator, FeatureGenerator );
+  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, LungWallFeatureGenerator, FeatureGenerator);
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -67,35 +67,35 @@ int itkLungWallFeatureGeneratorTest1( int argc, char * argv [] )
 
   inputImage->DisconnectPipeline();
 
-  inputObject->SetImage( inputImage );
+  inputObject->SetImage(inputImage);
 
-  featureGenerator->SetInput( inputObject );
+  featureGenerator->SetInput(inputObject);
 
   LungWallFeatureGeneratorType::InputPixelType lungThreshold = 100;
-  if( argc > 3 )
-    {
-    lungThreshold = std::stoi( argv[3] );
-    }
-  featureGenerator->SetLungThreshold( lungThreshold );
-  TEST_SET_GET_VALUE( lungThreshold, featureGenerator->GetLungThreshold() );
+  if (argc > 3)
+  {
+    lungThreshold = std::stoi(argv[3]);
+  }
+  featureGenerator->SetLungThreshold(lungThreshold);
+  TEST_SET_GET_VALUE(lungThreshold, featureGenerator->GetLungThreshold());
 
-  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
+  TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
   OutputImageSpatialObjectType::ConstPointer outputObject =
-    dynamic_cast< const OutputImageSpatialObjectType * >( feature.GetPointer() );
+    dynamic_cast<const OutputImageSpatialObjectType *>(feature.GetPointer());
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
   writer->UseCompressionOn();
-  writer->SetInput( outputImage );
+  writer->SetInput(outputImage);
 
-  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
+  TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

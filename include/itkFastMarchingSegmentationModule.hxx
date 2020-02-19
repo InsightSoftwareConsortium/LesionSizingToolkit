@@ -30,20 +30,19 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-FastMarchingSegmentationModule<NDimension>
-::FastMarchingSegmentationModule()
+FastMarchingSegmentationModule<NDimension>::FastMarchingSegmentationModule()
 {
-  this->m_StoppingValue = static_cast<double>( static_cast<OutputPixelType>(
-                      NumericTraits<OutputPixelType>::max() / 2.0 ) );
+  this->m_StoppingValue =
+    static_cast<double>(static_cast<OutputPixelType>(NumericTraits<OutputPixelType>::max() / 2.0));
 
   this->m_DistanceFromSeeds = 0.0;
 
-  this->SetNumberOfRequiredInputs( 2 );
-  this->SetNumberOfRequiredOutputs( 1 );
+  this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredOutputs(1);
 
   typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
 
-  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->ProcessObject::SetNthOutput(0, outputObject.GetPointer());
 }
 
 
@@ -51,10 +50,8 @@ FastMarchingSegmentationModule<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-FastMarchingSegmentationModule<NDimension>
-::~FastMarchingSegmentationModule()
-{
-}
+FastMarchingSegmentationModule<NDimension>::~FastMarchingSegmentationModule()
+{}
 
 
 /**
@@ -62,10 +59,9 @@ FastMarchingSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-FastMarchingSegmentationModule<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+FastMarchingSegmentationModule<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
   os << indent << "Stopping Value = " << this->m_StoppingValue << std::endl;
   os << indent << "Distance from seeds = " << this->m_DistanceFromSeeds << std::endl;
 }
@@ -76,26 +72,25 @@ FastMarchingSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-FastMarchingSegmentationModule<NDimension>
-::GenerateData()
+FastMarchingSegmentationModule<NDimension>::GenerateData()
 {
-  using FilterType = FastMarchingImageFilter< FeatureImageType, OutputImageType >;
+  using FilterType = FastMarchingImageFilter<FeatureImageType, OutputImageType>;
 
   typename FilterType::Pointer filter = FilterType::New();
 
   const FeatureImageType * featureImage = this->GetInternalFeatureImage();
 
-  filter->SetInput( featureImage );
+  filter->SetInput(featureImage);
 
-  filter->SetStoppingValue( this->m_StoppingValue );
+  filter->SetStoppingValue(this->m_StoppingValue);
 
   // Progress reporting - forward events from the fast marching filter.
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( filter, 0.9 );
+  progress->RegisterInternalFilter(filter, 0.9);
 
   const InputSpatialObjectType * inputSeeds = this->GetInternalInputLandmarks();
-  const unsigned int numberOfPoints = inputSeeds->GetNumberOfPoints();
+  const unsigned int             numberOfPoints = inputSeeds->GetNumberOfPoints();
 
   using LandmarkPointListType = typename InputSpatialObjectType::LandmarkPointListType;
   using IndexType = typename FeatureImageType::IndexType;
@@ -109,9 +104,9 @@ FastMarchingSegmentationModule<NDimension>
 
   IndexType index;
 
-  for( unsigned int i=0; i < numberOfPoints; i++ )
-    {
-    featureImage->TransformPhysicalPointToIndex( points[i].GetPositionInObjectSpace(), index );
+  for (unsigned int i = 0; i < numberOfPoints; i++)
+  {
+    featureImage->TransformPhysicalPointToIndex(points[i].GetPositionInObjectSpace(), index);
 
     NodeType node;
 
@@ -119,29 +114,29 @@ FastMarchingSegmentationModule<NDimension>
     // the zero set will end up being placed at distance
     // = value from the seeds. That can be seen as computing
     // a distance map from the seeds.
-    node.SetValue( -this->m_DistanceFromSeeds );
+    node.SetValue(-this->m_DistanceFromSeeds);
 
-    node.SetIndex( index );
-    trialPoints->InsertElement( i, node );
-    }
+    node.SetIndex(index);
+    trialPoints->InsertElement(i, node);
+  }
 
-  filter->SetTrialPoints( trialPoints );
+  filter->SetTrialPoints(trialPoints);
   filter->Update();
 
   // Rescale the values to make the output intensity fit in the expected
   // range of [-4:4]
-  using WindowingFilterType = itk::IntensityWindowingImageFilter<  OutputImageType, OutputImageType >;
+  using WindowingFilterType = itk::IntensityWindowingImageFilter<OutputImageType, OutputImageType>;
   typename WindowingFilterType::Pointer windowing = WindowingFilterType::New();
-  windowing->SetInput( filter->GetOutput() );
-  windowing->SetWindowMinimum( -this->m_DistanceFromSeeds );
-  windowing->SetWindowMaximum(  this->m_StoppingValue );
-  windowing->SetOutputMinimum( -4.0 );
-  windowing->SetOutputMaximum(  4.0 );
+  windowing->SetInput(filter->GetOutput());
+  windowing->SetWindowMinimum(-this->m_DistanceFromSeeds);
+  windowing->SetWindowMaximum(this->m_StoppingValue);
+  windowing->SetOutputMinimum(-4.0);
+  windowing->SetOutputMaximum(4.0);
   windowing->InPlaceOn();
-  progress->RegisterInternalFilter( windowing, 0.1 );
+  progress->RegisterInternalFilter(windowing, 0.1);
   windowing->Update();
 
-  this->PackOutputImageInOutputSpatialObject( windowing->GetOutput() );
+  this->PackOutputImageInOutputSpatialObject(windowing->GetOutput());
 }
 
 
@@ -151,10 +146,9 @@ FastMarchingSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 const typename FastMarchingSegmentationModule<NDimension>::InputSpatialObjectType *
-FastMarchingSegmentationModule<NDimension>
-::GetInternalInputLandmarks() const
+FastMarchingSegmentationModule<NDimension>::GetInternalInputLandmarks() const
 {
-  const auto * inputObject = dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
+  const auto * inputObject = dynamic_cast<const InputSpatialObjectType *>(this->GetInput());
 
   return inputObject;
 }

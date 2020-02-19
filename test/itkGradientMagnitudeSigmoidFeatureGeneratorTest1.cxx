@@ -22,44 +22,45 @@
 #include "itkTestingMacros.h"
 
 
-int itkGradientMagnitudeSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
+int
+itkGradientMagnitudeSigmoidFeatureGeneratorTest1(int argc, char * argv[])
 {
-  if( argc < 3 )
-    {
+  if (argc < 3)
+  {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr  << " inputImage outputImage [sigma alpha beta]" << std::endl;
+    std::cerr << " inputImage outputImage [sigma alpha beta]" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   constexpr unsigned int Dimension = 3;
 
   using InputPixelType = signed short;
   using OutputPixelType = float;
 
-  using InputImageType = itk::Image< InputPixelType,  Dimension >;
-  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
+  using InputImageType = itk::Image<InputPixelType, Dimension>;
+  using OutputImageType = itk::Image<OutputPixelType, Dimension>;
 
-  using ReaderType = itk::ImageFileReader< InputImageType >;
-  using WriterType = itk::ImageFileWriter< OutputImageType >;
+  using ReaderType = itk::ImageFileReader<InputImageType>;
+  using WriterType = itk::ImageFileWriter<OutputImageType>;
 
-  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
-  using OutputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, OutputPixelType >;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject<Dimension, InputPixelType>;
+  using OutputImageSpatialObjectType = itk::ImageSpatialObject<Dimension, OutputPixelType>;
 
   ReaderType::Pointer reader = ReaderType::New();
 
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+  TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
 
-  using GradientMagnitudeSigmoidFeatureGeneratorType = itk::GradientMagnitudeSigmoidFeatureGenerator< Dimension >;
+  using GradientMagnitudeSigmoidFeatureGeneratorType = itk::GradientMagnitudeSigmoidFeatureGenerator<Dimension>;
   using SpatialObjectType = GradientMagnitudeSigmoidFeatureGeneratorType::SpatialObjectType;
 
-  GradientMagnitudeSigmoidFeatureGeneratorType::Pointer featureGenerator = GradientMagnitudeSigmoidFeatureGeneratorType::New();
+  GradientMagnitudeSigmoidFeatureGeneratorType::Pointer featureGenerator =
+    GradientMagnitudeSigmoidFeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
-    GradientMagnitudeSigmoidFeatureGenerator, FeatureGenerator );
+  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, GradientMagnitudeSigmoidFeatureGenerator, FeatureGenerator);
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -68,52 +69,52 @@ int itkGradientMagnitudeSigmoidFeatureGeneratorTest1( int argc, char * argv [] )
 
   inputImage->DisconnectPipeline();
 
-  inputObject->SetImage( inputImage );
+  inputObject->SetImage(inputImage);
 
-  featureGenerator->SetInput( inputObject );
+  featureGenerator->SetInput(inputObject);
 
 
   double sigma = 1.0;
-  if( argc > 3 )
-    {
-    sigma = std::stod( argv[3] );
-    }
-  featureGenerator->SetSigma( sigma );
-  TEST_SET_GET_VALUE( sigma, featureGenerator->GetSigma() );
+  if (argc > 3)
+  {
+    sigma = std::stod(argv[3]);
+  }
+  featureGenerator->SetSigma(sigma);
+  TEST_SET_GET_VALUE(sigma, featureGenerator->GetSigma());
 
   double alpha = -1.0;
-  if( argc > 4 )
-    {
-    alpha = std::stod( argv[4] );
-    }
-  featureGenerator->SetAlpha( alpha );
-  TEST_SET_GET_VALUE( alpha, featureGenerator->GetAlpha() );
+  if (argc > 4)
+  {
+    alpha = std::stod(argv[4]);
+  }
+  featureGenerator->SetAlpha(alpha);
+  TEST_SET_GET_VALUE(alpha, featureGenerator->GetAlpha());
 
   double beta = 128;
-  if( argc > 5 )
-    {
-    beta = std::stod( argv[5] );
-    }
-  featureGenerator->SetBeta( beta );
-  TEST_SET_GET_VALUE( beta, featureGenerator->GetBeta() );
+  if (argc > 5)
+  {
+    beta = std::stod(argv[5]);
+  }
+  featureGenerator->SetBeta(beta);
+  TEST_SET_GET_VALUE(beta, featureGenerator->GetBeta());
 
 
-  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
+  TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
   OutputImageSpatialObjectType::ConstPointer outputObject =
-    dynamic_cast< const OutputImageSpatialObjectType * >( feature.GetPointer() );
+    dynamic_cast<const OutputImageSpatialObjectType *>(feature.GetPointer());
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetFileName( argv[2] );
-  writer->SetInput( outputImage );
+  writer->SetFileName(argv[2]);
+  writer->SetInput(outputImage);
 
-  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
+  TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   std::cout << "Test finished." << std::endl;

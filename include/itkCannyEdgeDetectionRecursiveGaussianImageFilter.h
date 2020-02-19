@@ -41,8 +41,8 @@ class ListNode
 public:
   TValueType m_Value;
 
-  ListNode   *Next;
-  ListNode   *Previous;
+  ListNode * Next;
+  ListNode * Previous;
 };
 
 
@@ -89,7 +89,7 @@ public:
  * \sa SmoothingRecursiveGaussianImageFilter
  * \sa ZeroCrossingImageFilter
  * \sa ThresholdImageFilter */
-template<typename TInputImage, typename TOutputImage>
+template <typename TInputImage, typename TOutputImage>
 class ITK_TEMPLATE_EXPORT CannyEdgeDetectionRecursiveGaussianImageFilter
   : public ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -111,8 +111,7 @@ public:
   using OutputImagePixelType = typename TOutputImage::PixelType;
   using IndexType = typename TInputImage::IndexType;
 
-  using GaussianImageFilterType = SmoothingRecursiveGaussianImageFilter<
-        InputImageType, OutputImageType>;
+  using GaussianImageFilterType = SmoothingRecursiveGaussianImageFilter<InputImageType, OutputImageType>;
   using ScalarRealType = typename GaussianImageFilterType::ScalarRealType;
   using SigmaArrayType = typename GaussianImageFilterType::SigmaArrayType;
 
@@ -123,8 +122,7 @@ public:
   /** The type of data structure that is passed to this function object
    * to evaluate at a pixel that does not lie on a data set boundary.
    */
-  using NeighborhoodType = ConstNeighborhoodIterator<OutputImageType,
-                                    DefaultBoundaryConditionType>;
+  using NeighborhoodType = ConstNeighborhoodIterator<OutputImageType, DefaultBoundaryConditionType>;
 
   using ListNodeType = ListNode<IndexType>;
   using ListNodeStorageType = ObjectStore<ListNodeType>;
@@ -148,41 +146,48 @@ public:
   using ArrayType = FixedArray<double, itkGetStaticConstMacro(ImageDimension)>;
 
   /** Smoothing parameters for the Gaussian filter. */
-  void SetSigmaArray( const SigmaArrayType & sigmas );
-  void SetSigma( ScalarRealType sigma );
-  SigmaArrayType GetSigmaArray() const;
-  ScalarRealType GetSigma() const;
+  void
+  SetSigmaArray(const SigmaArrayType & sigmas);
+  void
+  SetSigma(ScalarRealType sigma);
+  SigmaArrayType
+  GetSigmaArray() const;
+  ScalarRealType
+  GetSigma() const;
 
   /* Set the Threshold value for detected edges. */
-  void SetThreshold(const OutputImagePixelType th)
-    {
+  void
+  SetThreshold(const OutputImagePixelType th)
+  {
     this->m_Threshold = th;
     this->m_UpperThreshold = m_Threshold;
-    this->m_LowerThreshold = m_Threshold/2.0;
+    this->m_LowerThreshold = m_Threshold / 2.0;
     itkLegacyReplaceBodyMacro(SetThreshold, 2.2, SetUpperThreshold);
-    }
+  }
 
-  OutputImagePixelType GetThreshold(OutputImagePixelType itkNotUsed(th))
-    {
+  OutputImagePixelType
+  GetThreshold(OutputImagePixelType itkNotUsed(th))
+  {
     itkLegacyReplaceBodyMacro(GetThreshold, 2.2, GetUpperThreshold);
     return this->m_Threshold;
-    }
+  }
 
   ///* Set the Threshold value for detected edges. */
-  itkSetMacro(UpperThreshold, OutputImagePixelType );
+  itkSetMacro(UpperThreshold, OutputImagePixelType);
   itkGetMacro(UpperThreshold, OutputImagePixelType);
 
-  itkSetMacro(LowerThreshold, OutputImagePixelType );
+  itkSetMacro(LowerThreshold, OutputImagePixelType);
   itkGetMacro(LowerThreshold, OutputImagePixelType);
 
   /* Set the Thresholdvalue for detected edges. */
   itkSetMacro(OutsideValue, OutputImagePixelType);
   itkGetMacro(OutsideValue, OutputImagePixelType);
 
-  OutputImageType * GetNonMaximumSuppressionImage() const
-    {
+  OutputImageType *
+  GetNonMaximumSuppressionImage() const
+  {
     return this->m_MultiplyImageFilter->GetOutput();
-    }
+  }
 
   /** CannyEdgeDetectionRecursiveGaussianImageFilter needs a larger input requested
    * region than the output requested region ( derivative operators, etc).
@@ -191,59 +196,61 @@ public:
    * pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion()  */
-  void GenerateInputRequestedRegion() throw(InvalidRequestedRegionError) override;
+  void
+  GenerateInputRequestedRegion() throw(InvalidRequestedRegionError) override;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
-  itkConceptMacro(InputHasNumericTraitsCheck,
-    (Concept::HasNumericTraits<InputImagePixelType>));
-  itkConceptMacro(OutputHasNumericTraitsCheck,
-    (Concept::HasNumericTraits<OutputImagePixelType>));
-  itkConceptMacro(SameDimensionCheck,
-    (Concept::SameDimension<ImageDimension, OutputImageDimension>));
-  itkConceptMacro(InputIsFloatingPointCheck,
-    (Concept::IsFloatingPoint<InputImagePixelType>));
-  itkConceptMacro(OutputIsFloatingPointCheck,
-    (Concept::IsFloatingPoint<OutputImagePixelType>));
+  itkConceptMacro(InputHasNumericTraitsCheck, (Concept::HasNumericTraits<InputImagePixelType>));
+  itkConceptMacro(OutputHasNumericTraitsCheck, (Concept::HasNumericTraits<OutputImagePixelType>));
+  itkConceptMacro(SameDimensionCheck, (Concept::SameDimension<ImageDimension, OutputImageDimension>));
+  itkConceptMacro(InputIsFloatingPointCheck, (Concept::IsFloatingPoint<InputImagePixelType>));
+  itkConceptMacro(OutputIsFloatingPointCheck, (Concept::IsFloatingPoint<OutputImagePixelType>));
   /** End concept checking */
 #endif
 
 protected:
   CannyEdgeDetectionRecursiveGaussianImageFilter();
-  CannyEdgeDetectionRecursiveGaussianImageFilter(const Self&) {}
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  CannyEdgeDetectionRecursiveGaussianImageFilter(const Self &) {}
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
-  void GenerateData() override;
+  void
+  GenerateData() override;
 
-  using MultiplyImageFilterType = MultiplyImageFilter< OutputImageType,
-              OutputImageType, OutputImageType>;
+  using MultiplyImageFilterType = MultiplyImageFilter<OutputImageType, OutputImageType, OutputImageType>;
 
 private:
   ~CannyEdgeDetectionRecursiveGaussianImageFilter() override{};
 
   /** Thread-Data Structure   */
   struct CannyThreadStruct
-    {
-    CannyEdgeDetectionRecursiveGaussianImageFilter *Filter;
-    };
+  {
+    CannyEdgeDetectionRecursiveGaussianImageFilter * Filter;
+  };
 
   /** This allocate storage for m_UpdateBuffer, m_UpdateBuffer1 */
-  void AllocateUpdateBuffer();
+  void
+  AllocateUpdateBuffer();
 
   /** Implement hysteresis thresholding */
-  void HysteresisThresholding();
+  void
+  HysteresisThresholding();
 
   /** Edge linking funciton */
-  void FollowEdge(IndexType index);
+  void
+  FollowEdge(IndexType index);
 
   /** Check if the index is in bounds or not */
-  bool InBounds(IndexType index);
+  bool
+  InBounds(IndexType index);
 
 
   /** Calculate the second derivative of the smoothed image, it writes the
    *  result to m_UpdateBuffer using the ThreadedCompute2ndDerivative() method
    *  and multithreading mechanism.   */
-  void Compute2ndDerivative();
+  void
+  Compute2ndDerivative();
 
   /**
    * Split the input into "num" pieces, returning region "i" as
@@ -261,53 +268,54 @@ private:
    *
    *  \sa Compute2ndDerivative
    *  \sa Compute2ndDerivativeThreaderCallBack   */
-  void ThreadedCompute2ndDerivative(const OutputImageRegionType&
-                                    outputRegionForThread, int threadId);
+  void
+  ThreadedCompute2ndDerivative(const OutputImageRegionType & outputRegionForThread, int threadId);
 
   /** This callback method uses ImageSource::SplitRequestedRegion to acquire an
    * output region that it passes to ThreadedCompute2ndDerivative for
    * processing.  */
   static ITK_THREAD_RETURN_TYPE
-  Compute2ndDerivativeThreaderCallback( void * arg );
+  Compute2ndDerivativeThreaderCallback(void * arg);
 
   /** This methos is used to calculate the 2nd derivative for
    * non-boundary pixels. It is called by the ThreadedCompute2ndDerivative
    * method. */
-  OutputImagePixelType ComputeCannyEdge(const NeighborhoodType &it,
-                                        void *globalData );
+  OutputImagePixelType
+  ComputeCannyEdge(const NeighborhoodType & it, void * globalData);
 
   /** Calculate the gradient of the second derivative of the smoothed image,
    *  it writes the result to m_UpdateBuffer1 using the
    *  ThreadedCompute2ndDerivativePos() method and multithreading mechanism.
    */
-  void Compute2ndDerivativePos();
+  void
+  Compute2ndDerivativePos();
 
   /** Does the actual work of calculating of the 2nd derivative over a region
    *  supplied by the multithreading mechanism.
    *
    *  \sa Compute2ndDerivativePos
    *  \sa Compute3ndDerivativePosThreaderCallBack   */
-  void ThreadedCompute2ndDerivativePos(const OutputImageRegionType&
-                                       outputRegionForThread, int threadId);
+  void
+  ThreadedCompute2ndDerivativePos(const OutputImageRegionType & outputRegionForThread, int threadId);
 
   /**This callback method uses ImageSource::SplitRequestedRegion to acquire an
    * output region that it passes to ThreadedCompute2ndDerivative for
    * processing.   */
   static ITK_THREAD_RETURN_TYPE
-  Compute2ndDerivativePosThreaderCallback( void *arg );
+  Compute2ndDerivativePosThreaderCallback(void * arg);
 
   /** Standard deviation of the gaussian used for smoothing */
-  SigmaArrayType                        m_Sigma;
+  SigmaArrayType m_Sigma;
 
   /** The maximum error of the gaussian blurring kernel in each dimensional
    * direction.  */
   ArrayType m_MaximumError;
 
   /** Upper threshold value for identifying edges. */
-  OutputImagePixelType m_UpperThreshold;  //should be float here?
+  OutputImagePixelType m_UpperThreshold; // should be float here?
 
   /** Lower threshold value for identifying edges. */
-  OutputImagePixelType m_LowerThreshold; //should be float here?
+  OutputImagePixelType m_LowerThreshold; // should be float here?
 
   /** Threshold value for identifying edges. */
   OutputImagePixelType m_Threshold;
@@ -316,7 +324,7 @@ private:
   OutputImagePixelType m_OutsideValue;
 
   /** Update buffers used during calculation of multiple steps */
-  typename OutputImageType::Pointer  m_UpdateBuffer1;
+  typename OutputImageType::Pointer m_UpdateBuffer1;
 
   /** Gaussian filter to smooth the input image  */
   typename GaussianImageFilterType::Pointer m_GaussianFilter;
@@ -327,25 +335,22 @@ private:
 
   /** Function objects that are used in the inner loops of derivatiVex
       calculations. */
-  DerivativeOperator<OutputImagePixelType,itkGetStaticConstMacro(ImageDimension)>
-  m_ComputeCannyEdge1stDerivativeOper;
-  DerivativeOperator<OutputImagePixelType,itkGetStaticConstMacro(ImageDimension)>
-  m_ComputeCannyEdge2ndDerivativeOper;
+  DerivativeOperator<OutputImagePixelType, itkGetStaticConstMacro(ImageDimension)> m_ComputeCannyEdge1stDerivativeOper;
+  DerivativeOperator<OutputImagePixelType, itkGetStaticConstMacro(ImageDimension)> m_ComputeCannyEdge2ndDerivativeOper;
 
-  std::slice  m_ComputeCannyEdgeSlice[ImageDimension];
+  std::slice m_ComputeCannyEdgeSlice[ImageDimension];
 
   unsigned long m_Stride[ImageDimension];
   unsigned long m_Center;
 
   typename ListNodeStorageType::Pointer m_NodeStore;
   ListPointerType                       m_NodeList;
-
 };
 
-} //end of namespace itk
+} // end of namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkCannyEdgeDetectionRecursiveGaussianImageFilter.hxx"
+#  include "itkCannyEdgeDetectionRecursiveGaussianImageFilter.hxx"
 #endif
 
 #endif

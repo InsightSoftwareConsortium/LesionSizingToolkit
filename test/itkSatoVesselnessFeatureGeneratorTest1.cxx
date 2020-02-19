@@ -22,44 +22,44 @@
 #include "itkTestingMacros.h"
 
 
-int itkSatoVesselnessFeatureGeneratorTest1( int argc, char * argv [] )
+int
+itkSatoVesselnessFeatureGeneratorTest1(int argc, char * argv[])
 {
-  if( argc < 3 )
-    {
+  if (argc < 3)
+  {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage outputImage [sigma alpha1 alpha2]" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   constexpr unsigned int Dimension = 3;
 
   using InputPixelType = signed short;
   using OutputPixelType = float;
 
-  using InputImageType = itk::Image< InputPixelType,  Dimension >;
-  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
+  using InputImageType = itk::Image<InputPixelType, Dimension>;
+  using OutputImageType = itk::Image<OutputPixelType, Dimension>;
 
-  using ReaderType = itk::ImageFileReader< InputImageType >;
-  using WriterType = itk::ImageFileWriter< OutputImageType >;
+  using ReaderType = itk::ImageFileReader<InputImageType>;
+  using WriterType = itk::ImageFileWriter<OutputImageType>;
 
-  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
-  using OutputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, OutputPixelType >;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject<Dimension, InputPixelType>;
+  using OutputImageSpatialObjectType = itk::ImageSpatialObject<Dimension, OutputPixelType>;
 
   ReaderType::Pointer reader = ReaderType::New();
 
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+  TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
 
-  using SatoVesselnessFeatureGeneratorType = itk::SatoVesselnessFeatureGenerator< Dimension >;
+  using SatoVesselnessFeatureGeneratorType = itk::SatoVesselnessFeatureGenerator<Dimension>;
   using SpatialObjectType = SatoVesselnessFeatureGeneratorType::SpatialObjectType;
 
   SatoVesselnessFeatureGeneratorType::Pointer featureGenerator = SatoVesselnessFeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
-    SatoVesselnessFeatureGenerator, FeatureGenerator );
+  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, SatoVesselnessFeatureGenerator, FeatureGenerator);
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -68,52 +68,52 @@ int itkSatoVesselnessFeatureGeneratorTest1( int argc, char * argv [] )
 
   inputImage->DisconnectPipeline();
 
-  inputObject->SetImage( inputImage );
+  inputObject->SetImage(inputImage);
 
-  featureGenerator->SetInput( inputObject );
+  featureGenerator->SetInput(inputObject);
 
 
   double sigma = 1.0;
-  if( argc > 3 )
-    {
-    sigma = std::stod( argv[3] );
-    }
-  featureGenerator->SetSigma( sigma );
-  TEST_SET_GET_VALUE( sigma, featureGenerator->GetSigma() );
+  if (argc > 3)
+  {
+    sigma = std::stod(argv[3]);
+  }
+  featureGenerator->SetSigma(sigma);
+  TEST_SET_GET_VALUE(sigma, featureGenerator->GetSigma());
 
   double alpha1 = 0.5;
-  if( argc > 4 )
-    {
-    alpha1 = std::stod( argv[4] );
-    }
-  featureGenerator->SetAlpha1( alpha1 );
-  TEST_SET_GET_VALUE( alpha1, featureGenerator->GetAlpha1() );
+  if (argc > 4)
+  {
+    alpha1 = std::stod(argv[4]);
+  }
+  featureGenerator->SetAlpha1(alpha1);
+  TEST_SET_GET_VALUE(alpha1, featureGenerator->GetAlpha1());
 
   double alpha2 = 2.0;
-  if( argc > 5 )
-    {
-    alpha2 = std::stod( argv[5] );
-    }
-  featureGenerator->SetAlpha2( alpha2 );
-  TEST_SET_GET_VALUE( alpha2, featureGenerator->GetAlpha2() );
+  if (argc > 5)
+  {
+    alpha2 = std::stod(argv[5]);
+  }
+  featureGenerator->SetAlpha2(alpha2);
+  TEST_SET_GET_VALUE(alpha2, featureGenerator->GetAlpha2());
 
 
-  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
+  TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
   OutputImageSpatialObjectType::ConstPointer outputObject =
-    dynamic_cast< const OutputImageSpatialObjectType * >( feature.GetPointer() );
+    dynamic_cast<const OutputImageSpatialObjectType *>(feature.GetPointer());
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetFileName( argv[2] );
-  writer->SetInput( outputImage );
+  writer->SetFileName(argv[2]);
+  writer->SetInput(outputImage);
 
-  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
+  TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   std::cout << "Test finished." << std::endl;

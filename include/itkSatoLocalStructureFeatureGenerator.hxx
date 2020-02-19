@@ -27,10 +27,9 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-SatoLocalStructureFeatureGenerator<NDimension>
-::SatoLocalStructureFeatureGenerator()
+SatoLocalStructureFeatureGenerator<NDimension>::SatoLocalStructureFeatureGenerator()
 {
-  this->SetNumberOfRequiredInputs( 1 );
+  this->SetNumberOfRequiredInputs(1);
 
   this->m_HessianFilter = HessianFilterType::New();
   this->m_EigenAnalysisFilter = EigenAnalysisFilterType::New();
@@ -42,7 +41,7 @@ SatoLocalStructureFeatureGenerator<NDimension>
 
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
-  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->ProcessObject::SetNthOutput(0, outputObject.GetPointer());
 
   this->m_Sigma = 1.0;
 }
@@ -52,26 +51,22 @@ SatoLocalStructureFeatureGenerator<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-SatoLocalStructureFeatureGenerator<NDimension>
-::~SatoLocalStructureFeatureGenerator()
-{
-}
+SatoLocalStructureFeatureGenerator<NDimension>::~SatoLocalStructureFeatureGenerator()
+{}
 
 template <unsigned int NDimension>
 void
-SatoLocalStructureFeatureGenerator<NDimension>
-::SetInput( const SpatialObjectType * spatialObject )
+SatoLocalStructureFeatureGenerator<NDimension>::SetInput(const SpatialObjectType * spatialObject)
 {
   // Process object is not const-correct so the const casting is required.
-  this->SetNthInput(0, const_cast<SpatialObjectType *>( spatialObject ));
+  this->SetNthInput(0, const_cast<SpatialObjectType *>(spatialObject));
 }
 
 template <unsigned int NDimension>
 const typename SatoLocalStructureFeatureGenerator<NDimension>::SpatialObjectType *
-SatoLocalStructureFeatureGenerator<NDimension>
-::GetFeature() const
+SatoLocalStructureFeatureGenerator<NDimension>::GetFeature() const
 {
-  return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
+  return static_cast<const SpatialObjectType *>(this->ProcessObject::GetOutput(0));
 }
 
 
@@ -80,10 +75,9 @@ SatoLocalStructureFeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-SatoLocalStructureFeatureGenerator<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+SatoLocalStructureFeatureGenerator<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -92,32 +86,31 @@ SatoLocalStructureFeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-SatoLocalStructureFeatureGenerator<NDimension>
-::GenerateData()
+SatoLocalStructureFeatureGenerator<NDimension>::GenerateData()
 {
   typename InputImageSpatialObjectType::ConstPointer inputObject =
-    dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
+    dynamic_cast<const InputImageSpatialObjectType *>(this->ProcessObject::GetInput(0));
 
-  if( !inputObject )
-    {
+  if (!inputObject)
+  {
     itkExceptionMacro("Missing input spatial object or incorrect type");
-    }
+  }
 
   const InputImageType * inputImage = inputObject->GetImage();
 
-  if( !inputImage )
-    {
+  if (!inputImage)
+  {
     itkExceptionMacro("Missing input image");
-    }
+  }
 
-  this->m_HessianFilter->SetInput( inputImage );
-  this->m_EigenAnalysisFilter->SetInput( this->m_HessianFilter->GetOutput() );
-  this->m_LocalStructureFilter->SetInput( this->m_EigenAnalysisFilter->GetOutput() );
+  this->m_HessianFilter->SetInput(inputImage);
+  this->m_EigenAnalysisFilter->SetInput(this->m_HessianFilter->GetOutput());
+  this->m_LocalStructureFilter->SetInput(this->m_EigenAnalysisFilter->GetOutput());
 
-  this->m_HessianFilter->SetSigma( this->m_Sigma );
-  this->m_EigenAnalysisFilter->SetDimension( Dimension );
-  this->m_LocalStructureFilter->SetAlpha( this->m_Alpha );
-  this->m_LocalStructureFilter->SetGamma( this->m_Gamma );
+  this->m_HessianFilter->SetSigma(this->m_Sigma);
+  this->m_EigenAnalysisFilter->SetDimension(Dimension);
+  this->m_LocalStructureFilter->SetAlpha(this->m_Alpha);
+  this->m_LocalStructureFilter->SetGamma(this->m_Gamma);
 
   this->m_LocalStructureFilter->Update();
 
@@ -125,9 +118,9 @@ SatoLocalStructureFeatureGenerator<NDimension>
 
   outputImage->DisconnectPipeline();
 
-  auto * outputObject = dynamic_cast< OutputImageSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast<OutputImageSpatialObjectType *>(this->ProcessObject::GetOutput(0));
 
-  outputObject->SetImage( outputImage );
+  outputObject->SetImage(outputImage);
 }
 
 } // end namespace itk

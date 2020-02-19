@@ -62,75 +62,80 @@ public:
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
   using InputPixelType = signed short;
-  using InputImageType = Image< InputPixelType, Dimension >;
-  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageType = Image<InputPixelType, Dimension>;
+  using InputImageSpatialObjectType = ImageSpatialObject<NDimension, InputPixelType>;
   using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
   using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
-  void SetInput( const SpatialObjectType * input );
-  const SpatialObjectType * GetInput() const;
+  void
+  SetInput(const SpatialObjectType * input);
+  const SpatialObjectType *
+  GetInput() const;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
-  const SpatialObjectType * GetFeature() const;
+  const SpatialObjectType *
+  GetFeature() const;
 
   /** Sigma value to be used in the Gaussian smoothing preceding the
    * Hessian computation. */
-  itkSetMacro( Sigma, double );
-  itkGetMacro( Sigma, double );
+  itkSetMacro(Sigma, double);
+  itkGetMacro(Sigma, double);
 
   /** Alpha value to be used in the Sato Vesselness filter. */
-  itkSetMacro( Alpha, double );
-  itkGetMacro( Alpha, double );
+  itkSetMacro(Alpha, double);
+  itkGetMacro(Alpha, double);
 
   /** Gamma value to be used in the Sato Vesselness filter. */
-  itkSetMacro( Gamma, double );
-  itkGetMacro( Gamma, double );
+  itkSetMacro(Gamma, double);
+  itkGetMacro(Gamma, double);
 
 protected:
   SatoLocalStructureFeatureGenerator();
   ~SatoLocalStructureFeatureGenerator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
 private:
   using InternalPixelType = float;
-  using InternalImageType = Image< InternalPixelType, Dimension >;
+  using InternalImageType = Image<InternalPixelType, Dimension>;
 
   using OutputPixelType = InternalPixelType;
   using OutputImageType = InternalImageType;
 
-  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputImageSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
-  using HessianFilterType = HessianRecursiveGaussianImageFilter< InputImageType >;
+  using HessianFilterType = HessianRecursiveGaussianImageFilter<InputImageType>;
   using HessianImageType = typename HessianFilterType::OutputImageType;
   using HessianPixelType = typename HessianImageType::PixelType;
 
-  using EigenValueArrayType = FixedArray< double, HessianPixelType::Dimension >;
-  using EigenValueImageType = Image< EigenValueArrayType, Dimension >;
+  using EigenValueArrayType = FixedArray<double, HessianPixelType::Dimension>;
+  using EigenValueImageType = Image<EigenValueArrayType, Dimension>;
 
-  using EigenAnalysisFilterType = SymmetricEigenAnalysisImageFilter< HessianImageType, EigenValueImageType >;
+  using EigenAnalysisFilterType = SymmetricEigenAnalysisImageFilter<HessianImageType, EigenValueImageType>;
 
-  using LocalStructureFilterType = LocalStructureImageFilter< EigenValueImageType, OutputImageType >;
+  using LocalStructureFilterType = LocalStructureImageFilter<EigenValueImageType, OutputImageType>;
 
-  typename HessianFilterType::Pointer             m_HessianFilter;
-  typename EigenAnalysisFilterType::Pointer       m_EigenAnalysisFilter;
-  typename LocalStructureFilterType::Pointer      m_LocalStructureFilter;
+  typename HessianFilterType::Pointer        m_HessianFilter;
+  typename EigenAnalysisFilterType::Pointer  m_EigenAnalysisFilter;
+  typename LocalStructureFilterType::Pointer m_LocalStructureFilter;
 
-  double      m_Sigma;
-  double      m_Alpha;
-  double      m_Gamma;
+  double m_Sigma;
+  double m_Alpha;
+  double m_Gamma;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkSatoLocalStructureFeatureGenerator.hxx"
+#  include "itkSatoLocalStructureFeatureGenerator.hxx"
 #endif
 
 #endif

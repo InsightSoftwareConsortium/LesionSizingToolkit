@@ -28,8 +28,7 @@ namespace itk
 {
 
 template <typename TInputImage, typename TOutputImage>
-LesionSegmentationImageFilter8<TInputImage, TOutputImage>::
-LesionSegmentationImageFilter8()
+LesionSegmentationImageFilter8<TInputImage, TOutputImage>::LesionSegmentationImageFilter8()
 {
   m_CannyEdgesFeatureGenerator = CannyEdgesFeatureGeneratorType::New();
   m_LesionSegmentationMethod = LesionSegmentationMethodType::New();
@@ -43,48 +42,40 @@ LesionSegmentationImageFilter8()
   m_InputSpatialObject = InputImageSpatialObjectType::New();
 
   // Report progress.
-  m_CommandObserver    = CommandType::New();
-  m_CommandObserver->SetCallbackFunction(
-    this, &Self::ProgressUpdate );
-  m_LungWallFeatureGenerator->AddObserver(
-      itk::ProgressEvent(), m_CommandObserver );
-  m_SigmoidFeatureGenerator->AddObserver(
-      itk::ProgressEvent(), m_CommandObserver );
-  m_VesselnessFeatureGenerator->AddObserver(
-      itk::ProgressEvent(), m_CommandObserver );
-  m_CannyEdgesFeatureGenerator->AddObserver(
-      itk::ProgressEvent(), m_CommandObserver );
-  m_SegmentationModule->AddObserver(
-      itk::ProgressEvent(), m_CommandObserver );
-  m_CropFilter->AddObserver(
-      itk::ProgressEvent(), m_CommandObserver );
-  m_IsotropicResampler->AddObserver(
-      itk::ProgressEvent(), m_CommandObserver );
+  m_CommandObserver = CommandType::New();
+  m_CommandObserver->SetCallbackFunction(this, &Self::ProgressUpdate);
+  m_LungWallFeatureGenerator->AddObserver(itk::ProgressEvent(), m_CommandObserver);
+  m_SigmoidFeatureGenerator->AddObserver(itk::ProgressEvent(), m_CommandObserver);
+  m_VesselnessFeatureGenerator->AddObserver(itk::ProgressEvent(), m_CommandObserver);
+  m_CannyEdgesFeatureGenerator->AddObserver(itk::ProgressEvent(), m_CommandObserver);
+  m_SegmentationModule->AddObserver(itk::ProgressEvent(), m_CommandObserver);
+  m_CropFilter->AddObserver(itk::ProgressEvent(), m_CommandObserver);
+  m_IsotropicResampler->AddObserver(itk::ProgressEvent(), m_CommandObserver);
 
   // Connect pipeline
-  m_LungWallFeatureGenerator->SetInput( m_InputSpatialObject );
-  m_SigmoidFeatureGenerator->SetInput( m_InputSpatialObject );
-  m_VesselnessFeatureGenerator->SetInput( m_InputSpatialObject );
-  m_CannyEdgesFeatureGenerator->SetInput( m_InputSpatialObject );
-  m_FeatureAggregator->AddFeatureGenerator( m_LungWallFeatureGenerator );
-  m_FeatureAggregator->AddFeatureGenerator( m_VesselnessFeatureGenerator );
-  m_FeatureAggregator->AddFeatureGenerator( m_SigmoidFeatureGenerator );
-  m_FeatureAggregator->AddFeatureGenerator( m_CannyEdgesFeatureGenerator );
-  m_LesionSegmentationMethod->AddFeatureGenerator( m_FeatureAggregator );
-  m_LesionSegmentationMethod->SetSegmentationModule( m_SegmentationModule );
+  m_LungWallFeatureGenerator->SetInput(m_InputSpatialObject);
+  m_SigmoidFeatureGenerator->SetInput(m_InputSpatialObject);
+  m_VesselnessFeatureGenerator->SetInput(m_InputSpatialObject);
+  m_CannyEdgesFeatureGenerator->SetInput(m_InputSpatialObject);
+  m_FeatureAggregator->AddFeatureGenerator(m_LungWallFeatureGenerator);
+  m_FeatureAggregator->AddFeatureGenerator(m_VesselnessFeatureGenerator);
+  m_FeatureAggregator->AddFeatureGenerator(m_SigmoidFeatureGenerator);
+  m_FeatureAggregator->AddFeatureGenerator(m_CannyEdgesFeatureGenerator);
+  m_LesionSegmentationMethod->AddFeatureGenerator(m_FeatureAggregator);
+  m_LesionSegmentationMethod->SetSegmentationModule(m_SegmentationModule);
 
   // Populate some parameters
-  m_LungWallFeatureGenerator->SetLungThreshold( -400 );
-  m_VesselnessFeatureGenerator->SetSigma( 1.0 );
-  m_VesselnessFeatureGenerator->SetAlpha1( 0.1 );
-  m_VesselnessFeatureGenerator->SetAlpha2( 2.0 );
-  m_VesselnessFeatureGenerator->SetSigmoidAlpha( -10.0 );
-  m_VesselnessFeatureGenerator->SetSigmoidBeta( 40.0 );
-  m_SigmoidFeatureGenerator->SetAlpha( 100.0 );
-  m_SigmoidFeatureGenerator->SetBeta( -500.0 );
+  m_LungWallFeatureGenerator->SetLungThreshold(-400);
+  m_VesselnessFeatureGenerator->SetSigma(1.0);
+  m_VesselnessFeatureGenerator->SetAlpha1(0.1);
+  m_VesselnessFeatureGenerator->SetAlpha2(2.0);
+  m_VesselnessFeatureGenerator->SetSigmoidAlpha(-10.0);
+  m_VesselnessFeatureGenerator->SetSigmoidBeta(40.0);
+  m_SigmoidFeatureGenerator->SetAlpha(100.0);
+  m_SigmoidFeatureGenerator->SetBeta(-500.0);
   m_CannyEdgesFeatureGenerator->SetSigma(1.0);
-  m_CannyEdgesFeatureGenerator->SetUpperThreshold( 150.0 );
-  m_CannyEdgesFeatureGenerator->SetLowerThreshold( 75.0 );
+  m_CannyEdgesFeatureGenerator->SetUpperThreshold(150.0);
+  m_CannyEdgesFeatureGenerator->SetLowerThreshold(75.0);
   m_FastMarchingStoppingTime = 5.0;
   m_FastMarchingDistanceFromSeeds = 0.5;
   m_SigmoidBeta = -500.0;
@@ -101,26 +92,24 @@ LesionSegmentationImageFilter8()
 
 template <typename TInputImage, typename TOutputImage>
 void
-LesionSegmentationImageFilter8<TInputImage,TOutputImage>
-::GenerateInputRequestedRegion() throw(InvalidRequestedRegionError)
+LesionSegmentationImageFilter8<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw(
+  InvalidRequestedRegionError)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
-  if ( !this->GetInput() )
-    {
-    typename InputImageType::Pointer inputPtr  =
-      const_cast< TInputImage *>( this->GetInput() );
+  if (!this->GetInput())
+  {
+    typename InputImageType::Pointer inputPtr = const_cast<TInputImage *>(this->GetInput());
 
     // Request the entire input image
     inputPtr->SetRequestedRegion(inputPtr->GetLargestPossibleRegion());
-    }
+  }
 }
 
 template <typename TInputImage, typename TOutputImage>
 void
-LesionSegmentationImageFilter8<TInputImage,TOutputImage>
-::SetSigma( SigmaArrayType s )
+LesionSegmentationImageFilter8<TInputImage, TOutputImage>::SetSigma(SigmaArrayType s)
 {
   this->m_UserSpecifiedSigmas = true;
   m_CannyEdgesFeatureGenerator->SetSigmaArray(s);
@@ -128,16 +117,15 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
 
 template <typename TInputImage, typename TOutputImage>
 void
-LesionSegmentationImageFilter8<TInputImage,TOutputImage>
-::GenerateOutputInformation()
+LesionSegmentationImageFilter8<TInputImage, TOutputImage>::GenerateOutputInformation()
 {
   // get pointers to the input and output
-  typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
-  typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
-  if ( !outputPtr || !inputPtr)
-    {
+  typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
+  typename Superclass::InputImageConstPointer inputPtr = this->GetInput();
+  if (!outputPtr || !inputPtr)
+  {
     return;
-    }
+  }
 
   // Minipipeline is :
   //   Input -> Crop -> Resample_if_too_anisotropic -> Segment
@@ -146,66 +134,64 @@ LesionSegmentationImageFilter8<TInputImage,TOutputImage>
   m_CropFilter->SetRegionOfInterest(m_RegionOfInterest);
 
   // Compute the spacing after isotropic resampling.
-  double minSpacing = NumericTraits< double >::max();
+  double minSpacing = NumericTraits<double>::max();
   for (unsigned int i = 0; i < ImageDimension; i++)
-    {
-    minSpacing = (minSpacing > inputPtr->GetSpacing()[i] ?
-                  inputPtr->GetSpacing()[i] : minSpacing);
-    }
+  {
+    minSpacing = (minSpacing > inputPtr->GetSpacing()[i] ? inputPtr->GetSpacing()[i] : minSpacing);
+  }
 
   // Try and reduce the anisotropy.
   SpacingType outputSpacing = inputPtr->GetSpacing();
   for (unsigned int i = 0; i < ImageDimension; i++)
+  {
+    if (outputSpacing[i] / minSpacing > m_AnisotropyThreshold && m_ResampleThickSliceData)
     {
-    if (outputSpacing[i]/minSpacing > m_AnisotropyThreshold && m_ResampleThickSliceData)
-      {
       outputSpacing[i] = minSpacing * m_AnisotropyThreshold;
-      }
     }
+  }
 
   if (m_ResampleThickSliceData)
-    {
-    m_IsotropicResampler->SetInput( m_CropFilter->GetOutput() );
-    m_IsotropicResampler->SetOutputSpacing( outputSpacing );
+  {
+    m_IsotropicResampler->SetInput(m_CropFilter->GetOutput());
+    m_IsotropicResampler->SetOutputSpacing(outputSpacing);
     m_IsotropicResampler->GenerateOutputInformation();
-    outputPtr->CopyInformation( m_IsotropicResampler->GetOutput() );
-    }
+    outputPtr->CopyInformation(m_IsotropicResampler->GetOutput());
+  }
   else
-    {
-    outputPtr->CopyInformation( m_CropFilter->GetOutput() );
-    }
+  {
+    outputPtr->CopyInformation(m_CropFilter->GetOutput());
+  }
 }
 
 
-template< typename TInputImage, typename TOutputImage >
+template <typename TInputImage, typename TOutputImage>
 void
-LesionSegmentationImageFilter8< TInputImage, TOutputImage >
-::GenerateData()
+LesionSegmentationImageFilter8<TInputImage, TOutputImage>::GenerateData()
 {
-  m_SigmoidFeatureGenerator->SetBeta( m_SigmoidBeta );
+  m_SigmoidFeatureGenerator->SetBeta(m_SigmoidBeta);
   m_SegmentationModule->SetDistanceFromSeeds(m_FastMarchingDistanceFromSeeds);
   m_SegmentationModule->SetStoppingValue(m_FastMarchingStoppingTime);
 
   // Allocate the output
-  this->GetOutput()->SetBufferedRegion( this->GetOutput()->GetRequestedRegion() );
+  this->GetOutput()->SetBufferedRegion(this->GetOutput()->GetRequestedRegion());
   this->GetOutput()->Allocate();
 
   // Get the input image
-  typename InputImageType::ConstPointer  input  = this->GetInput();
+  typename InputImageType::ConstPointer input = this->GetInput();
 
   // Crop and perform thin slice resampling (done only if necessary)
   m_CropFilter->Update();
 
   typename InputImageType::Pointer inputImage = nullptr;
   if (m_ResampleThickSliceData)
-    {
+  {
     m_IsotropicResampler->Update();
     inputImage = this->m_IsotropicResampler->GetOutput();
-    }
+  }
   else
-    {
+  {
     inputImage = m_CropFilter->GetOutput();
-    }
+  }
 
   // Convert the output of resampling (or cropping based on
   // m_ResampleThickSliceData) to a spatial object that can be fed into
@@ -218,20 +204,18 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   // resampling)
 
   if (m_UserSpecifiedSigmas == false)
-    {
-    double maxSpacing = NumericTraits< double >::min();
+  {
+    double maxSpacing = NumericTraits<double>::min();
     for (unsigned int i = 0; i < ImageDimension; i++)
-      {
-      maxSpacing = (maxSpacing < input->GetSpacing()[i] ?
-                      input->GetSpacing()[i] : maxSpacing);
-      }
-    m_CannyEdgesFeatureGenerator->SetSigma( maxSpacing );
+    {
+      maxSpacing = (maxSpacing < input->GetSpacing()[i] ? input->GetSpacing()[i] : maxSpacing);
     }
+    m_CannyEdgesFeatureGenerator->SetSigma(maxSpacing);
+  }
 
   // Seeds
 
-  typename SeedSpatialObjectType::Pointer seedSpatialObject =
-    SeedSpatialObjectType::New();
+  typename SeedSpatialObjectType::Pointer seedSpatialObject = SeedSpatialObjectType::New();
   seedSpatialObject->SetPoints(m_Seeds);
   m_LesionSegmentationMethod->SetInitialSegmentation(seedSpatialObject);
 
@@ -239,12 +223,10 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
   m_LesionSegmentationMethod->Update();
 
   // Graft the output.
-  typename SpatialObjectType::Pointer segmentation =
-    const_cast< SpatialObjectType * >(m_SegmentationModule->GetOutput());
+  typename SpatialObjectType::Pointer segmentation = const_cast<SpatialObjectType *>(m_SegmentationModule->GetOutput());
   typename OutputSpatialObjectType::Pointer outputObject =
-    dynamic_cast< OutputSpatialObjectType * >( segmentation.GetPointer() );
-  typename OutputImageType::Pointer outputImage =
-    const_cast< OutputImageType * >(outputObject->GetImage());
+    dynamic_cast<OutputSpatialObjectType *>(segmentation.GetPointer());
+  typename OutputImageType::Pointer outputImage = const_cast<OutputImageType *>(outputObject->GetImage());
   outputImage->DisconnectPipeline();
   this->GraftOutput(outputImage);
 
@@ -259,61 +241,59 @@ LesionSegmentationImageFilter8< TInputImage, TOutputImage >
 
 
 template <typename TInputImage, typename TOutputImage>
-void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
-::ProgressUpdate( Object * caller,
-                  const EventObject & e )
+void
+LesionSegmentationImageFilter8<TInputImage, TOutputImage>::ProgressUpdate(Object * caller, const EventObject & e)
 {
-  if( typeid( itk::ProgressEvent ) == typeid( e ) )
+  if (typeid(itk::ProgressEvent) == typeid(e))
+  {
+    if (dynamic_cast<CropFilterType *>(caller))
     {
-    if (dynamic_cast< CropFilterType * >(caller))
-      {
       this->m_StatusMessage = "Cropping data..";
-      this->UpdateProgress( m_CropFilter->GetProgress() );
-      }
+      this->UpdateProgress(m_CropFilter->GetProgress());
+    }
 
-    if (dynamic_cast< IsotropicResamplerType * >(caller))
-      {
+    if (dynamic_cast<IsotropicResamplerType *>(caller))
+    {
       this->m_StatusMessage = "Isotropic resampling of data using BSpline interpolation..";
-      this->UpdateProgress( m_IsotropicResampler->GetProgress() );
-      }
+      this->UpdateProgress(m_IsotropicResampler->GetProgress());
+    }
 
-    else if (dynamic_cast< LungWallGeneratorType * >(caller))
-      {
+    else if (dynamic_cast<LungWallGeneratorType *>(caller))
+    {
       // Given its iterative nature.. a cranky heuristic here.
       this->m_StatusMessage = "Generating lung wall feature by front propagation..";
-      this->UpdateProgress( ((double)(((int)(
-        m_LungWallFeatureGenerator->GetProgress()*500))%100))/100.0 );
-      }
-
-    else if (dynamic_cast< SigmoidFeatureGeneratorType * >(caller))
-      {
-      this->m_StatusMessage = "Generating intensity feature..";
-      this->UpdateProgress( m_SigmoidFeatureGenerator->GetProgress() );
-      }
-
-    else if (dynamic_cast< CannyEdgesFeatureGeneratorType * >(caller))
-      {
-      m_StatusMessage = "Generating canny edge feature..";
-      this->UpdateProgress( m_CannyEdgesFeatureGenerator->GetProgress());
-      }
-
-    else if (dynamic_cast< VesselnessGeneratorType * >(caller))
-      {
-      m_StatusMessage = "Generating vesselness feature (Sato et al.)..";
-      this->UpdateProgress( m_LungWallFeatureGenerator->GetProgress() );
-      }
-
-    else if (dynamic_cast< SegmentationModuleType * >(caller))
-      {
-      m_StatusMessage = "Segmenting using level sets..";
-      this->UpdateProgress( m_SegmentationModule->GetProgress() );
-      }
+      this->UpdateProgress(((double)(((int)(m_LungWallFeatureGenerator->GetProgress() * 500)) % 100)) / 100.0);
     }
+
+    else if (dynamic_cast<SigmoidFeatureGeneratorType *>(caller))
+    {
+      this->m_StatusMessage = "Generating intensity feature..";
+      this->UpdateProgress(m_SigmoidFeatureGenerator->GetProgress());
+    }
+
+    else if (dynamic_cast<CannyEdgesFeatureGeneratorType *>(caller))
+    {
+      m_StatusMessage = "Generating canny edge feature..";
+      this->UpdateProgress(m_CannyEdgesFeatureGenerator->GetProgress());
+    }
+
+    else if (dynamic_cast<VesselnessGeneratorType *>(caller))
+    {
+      m_StatusMessage = "Generating vesselness feature (Sato et al.)..";
+      this->UpdateProgress(m_LungWallFeatureGenerator->GetProgress());
+    }
+
+    else if (dynamic_cast<SegmentationModuleType *>(caller))
+    {
+      m_StatusMessage = "Segmenting using level sets..";
+      this->UpdateProgress(m_SegmentationModule->GetProgress());
+    }
+  }
 }
 
 template <typename TInputImage, typename TOutputImage>
-void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
-::SetAbortGenerateData( bool abort )
+void
+LesionSegmentationImageFilter8<TInputImage, TOutputImage>::SetAbortGenerateData(bool abort)
 {
   this->Superclass::SetAbortGenerateData(abort);
   this->m_CropFilter->SetAbortGenerateData(abort);
@@ -322,20 +302,19 @@ void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
 }
 
 template <typename TInputImage, typename TOutputImage>
-void LesionSegmentationImageFilter8< TInputImage,TOutputImage >
-::SetUseVesselEnhancingDiffusion( bool b )
+void
+LesionSegmentationImageFilter8<TInputImage, TOutputImage>::SetUseVesselEnhancingDiffusion(bool b)
 {
   this->m_VesselnessFeatureGenerator->SetUseVesselEnhancingDiffusion(b);
 }
 
 template <typename TInputImage, typename TOutputImage>
 void
-LesionSegmentationImageFilter8<TInputImage,TOutputImage>
-::PrintSelf(std::ostream& os, Indent indent) const
+LesionSegmentationImageFilter8<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
-}//end of itk namespace
+} // namespace itk
 
 #endif

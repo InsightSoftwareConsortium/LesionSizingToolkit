@@ -64,90 +64,95 @@ public:
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
   using InputPixelType = signed short;
-  using InputImageType = Image< InputPixelType, Dimension >;
-  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageType = Image<InputPixelType, Dimension>;
+  using InputImageSpatialObjectType = ImageSpatialObject<NDimension, InputPixelType>;
   using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
   using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
-  void SetInput( const SpatialObjectType * input );
-  const SpatialObjectType * GetInput() const;
+  void
+  SetInput(const SpatialObjectType * input);
+  const SpatialObjectType *
+  GetInput() const;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
-  const SpatialObjectType * GetFeature() const;
+  const SpatialObjectType *
+  GetFeature() const;
 
   /** Sigma value to be used in the Gaussian smoothing preceding the
    * Hessian computation. */
-  itkSetMacro( Sigma, double );
-  itkGetMacro( Sigma, double );
+  itkSetMacro(Sigma, double);
+  itkGetMacro(Sigma, double);
 
   /** Sheetness normalization value to be used in the Descoteaux sheetness filter. */
-  itkSetMacro( SheetnessNormalization, double );
-  itkGetMacro( SheetnessNormalization, double );
+  itkSetMacro(SheetnessNormalization, double);
+  itkGetMacro(SheetnessNormalization, double);
 
   /** Bloobiness normalization value to be used in the Descoteaux sheetness filter. */
-  itkSetMacro( BloobinessNormalization, double );
-  itkGetMacro( BloobinessNormalization, double );
+  itkSetMacro(BloobinessNormalization, double);
+  itkGetMacro(BloobinessNormalization, double);
 
   /** Noise normalization value to be used in the Descoteaux sheetness filter. */
-  itkSetMacro( NoiseNormalization, double );
-  itkGetMacro( NoiseNormalization, double );
+  itkSetMacro(NoiseNormalization, double);
+  itkGetMacro(NoiseNormalization, double);
 
   /** Defines whether the filter will look for Bright sheets over a Dark
    * background or for Dark sheets over a Bright background. */
-  itkSetMacro( DetectBrightSheets, bool );
-  itkGetMacro( DetectBrightSheets, bool );
-  itkBooleanMacro( DetectBrightSheets );
+  itkSetMacro(DetectBrightSheets, bool);
+  itkGetMacro(DetectBrightSheets, bool);
+  itkBooleanMacro(DetectBrightSheets);
 
 protected:
   DescoteauxSheetnessFeatureGenerator();
   ~DescoteauxSheetnessFeatureGenerator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
 private:
   using InternalPixelType = float;
-  using InternalImageType = Image< InternalPixelType, Dimension >;
+  using InternalImageType = Image<InternalPixelType, Dimension>;
 
   using OutputPixelType = InternalPixelType;
   using OutputImageType = InternalImageType;
 
-  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputImageSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
-  using HessianFilterType = HessianRecursiveGaussianImageFilter< InputImageType >;
+  using HessianFilterType = HessianRecursiveGaussianImageFilter<InputImageType>;
   using HessianImageType = typename HessianFilterType::OutputImageType;
   using HessianPixelType = typename HessianImageType::PixelType;
 
-  using EigenValueArrayType = FixedArray< double, HessianPixelType::Dimension >;
-  using EigenValueImageType = Image< EigenValueArrayType, Dimension >;
+  using EigenValueArrayType = FixedArray<double, HessianPixelType::Dimension>;
+  using EigenValueImageType = Image<EigenValueArrayType, Dimension>;
 
-  using EigenAnalysisFilterType = SymmetricEigenAnalysisImageFilter< HessianImageType, EigenValueImageType >;
+  using EigenAnalysisFilterType = SymmetricEigenAnalysisImageFilter<HessianImageType, EigenValueImageType>;
 
-  using SheetnessFilterType = DescoteauxSheetnessImageFilter< EigenValueImageType, OutputImageType >;
+  using SheetnessFilterType = DescoteauxSheetnessImageFilter<EigenValueImageType, OutputImageType>;
 
-  using RescaleFilterType = RescaleIntensityImageFilter< OutputImageType, OutputImageType >;
+  using RescaleFilterType = RescaleIntensityImageFilter<OutputImageType, OutputImageType>;
 
-  typename HessianFilterType::Pointer             m_HessianFilter;
-  typename EigenAnalysisFilterType::Pointer       m_EigenAnalysisFilter;
-  typename SheetnessFilterType::Pointer           m_SheetnessFilter;
-  typename RescaleFilterType::Pointer             m_RescaleFilter;
+  typename HessianFilterType::Pointer       m_HessianFilter;
+  typename EigenAnalysisFilterType::Pointer m_EigenAnalysisFilter;
+  typename SheetnessFilterType::Pointer     m_SheetnessFilter;
+  typename RescaleFilterType::Pointer       m_RescaleFilter;
 
-  double      m_Sigma;
-  double      m_SheetnessNormalization;
-  double      m_BloobinessNormalization;
-  double      m_NoiseNormalization;
-  bool        m_DetectBrightSheets;
+  double m_Sigma;
+  double m_SheetnessNormalization;
+  double m_BloobinessNormalization;
+  double m_NoiseNormalization;
+  bool   m_DetectBrightSheets;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkDescoteauxSheetnessFeatureGenerator.hxx"
+#  include "itkDescoteauxSheetnessFeatureGenerator.hxx"
 #endif
 
 #endif

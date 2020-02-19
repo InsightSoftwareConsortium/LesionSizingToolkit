@@ -30,20 +30,16 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-MaximumFeatureAggregator<NDimension>
-::MaximumFeatureAggregator()
-{
-}
+MaximumFeatureAggregator<NDimension>::MaximumFeatureAggregator()
+{}
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-MaximumFeatureAggregator<NDimension>
-::~MaximumFeatureAggregator()
-{
-}
+MaximumFeatureAggregator<NDimension>::~MaximumFeatureAggregator()
+{}
 
 
 /**
@@ -51,64 +47,62 @@ MaximumFeatureAggregator<NDimension>
  */
 template <unsigned int NDimension>
 void
-MaximumFeatureAggregator<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+MaximumFeatureAggregator<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
 template <unsigned int NDimension>
 void
-MaximumFeatureAggregator<NDimension>
-::ConsolidateFeatures()
+MaximumFeatureAggregator<NDimension>::ConsolidateFeatures()
 {
   using FeaturePixelType = float;
-  using FeatureImageType = Image< FeaturePixelType, NDimension >;
-  using FeatureSpatialObjectType = ImageSpatialObject< NDimension, FeaturePixelType >;
+  using FeatureImageType = Image<FeaturePixelType, NDimension>;
+  using FeatureSpatialObjectType = ImageSpatialObject<NDimension, FeaturePixelType>;
 
-  const auto * firstFeatureObject = dynamic_cast< const FeatureSpatialObjectType * >( this->GetInputFeature(0) );
+  const auto * firstFeatureObject = dynamic_cast<const FeatureSpatialObjectType *>(this->GetInputFeature(0));
 
   const FeatureImageType * firstFeatureImage = firstFeatureObject->GetImage();
 
   typename FeatureImageType::Pointer consolidatedFeatureImage = FeatureImageType::New();
 
-  consolidatedFeatureImage->CopyInformation( firstFeatureImage );
-  consolidatedFeatureImage->SetRegions( firstFeatureImage->GetBufferedRegion() );
+  consolidatedFeatureImage->CopyInformation(firstFeatureImage);
+  consolidatedFeatureImage->SetRegions(firstFeatureImage->GetBufferedRegion());
   consolidatedFeatureImage->Allocate();
-  consolidatedFeatureImage->FillBuffer( NumericTraits< FeaturePixelType >::NonpositiveMin() );
+  consolidatedFeatureImage->FillBuffer(NumericTraits<FeaturePixelType>::NonpositiveMin());
 
   const unsigned int numberOfFeatures = this->GetNumberOfInputFeatures();
 
-  for( unsigned int i = 0; i < numberOfFeatures; i++ )
-    {
-    const auto * featureObject = dynamic_cast< const FeatureSpatialObjectType * >( this->GetInputFeature(i) );
+  for (unsigned int i = 0; i < numberOfFeatures; i++)
+  {
+    const auto * featureObject = dynamic_cast<const FeatureSpatialObjectType *>(this->GetInputFeature(i));
 
     const FeatureImageType * featureImage = featureObject->GetImage();
 
-    using FeatureIterator = ImageRegionIterator< FeatureImageType >;
-    using FeatureConstIterator = ImageRegionConstIterator< FeatureImageType >;
+    using FeatureIterator = ImageRegionIterator<FeatureImageType>;
+    using FeatureConstIterator = ImageRegionConstIterator<FeatureImageType>;
 
-    FeatureIterator       dstitr( consolidatedFeatureImage, consolidatedFeatureImage->GetBufferedRegion() );
-    FeatureConstIterator  srcitr( featureImage, featureImage->GetBufferedRegion() );
+    FeatureIterator      dstitr(consolidatedFeatureImage, consolidatedFeatureImage->GetBufferedRegion());
+    FeatureConstIterator srcitr(featureImage, featureImage->GetBufferedRegion());
 
     dstitr.GoToBegin();
     srcitr.GoToBegin();
 
-    while( !srcitr.IsAtEnd() )
+    while (!srcitr.IsAtEnd())
+    {
+      if (dstitr.Get() < srcitr.Get())
       {
-      if( dstitr.Get() < srcitr.Get() )
-        {
-        dstitr.Set( srcitr.Get() );
-        }
+        dstitr.Set(srcitr.Get());
+      }
       ++srcitr;
       ++dstitr;
-      }
     }
+  }
 
-  auto * outputObject = dynamic_cast< FeatureSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast<FeatureSpatialObjectType *>(this->ProcessObject::GetOutput(0));
 
-  outputObject->SetImage( consolidatedFeatureImage );
+  outputObject->SetImage(consolidatedFeatureImage);
 }
 
 } // end namespace itk

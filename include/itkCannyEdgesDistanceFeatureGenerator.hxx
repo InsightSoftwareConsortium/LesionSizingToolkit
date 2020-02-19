@@ -27,23 +27,21 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-CannyEdgesDistanceFeatureGenerator<NDimension>
-::CannyEdgesDistanceFeatureGenerator()
+CannyEdgesDistanceFeatureGenerator<NDimension>::CannyEdgesDistanceFeatureGenerator()
 {
-  this->SetNumberOfRequiredInputs( 1 );
+  this->SetNumberOfRequiredInputs(1);
 
-  this->m_CastFilter        = CastFilterType::New();
+  this->m_CastFilter = CastFilterType::New();
   this->m_DistanceMapFilter = DistanceMapFilterType::New();
-  this->m_CannyFilter       = CannyEdgeFilterType::New();
+  this->m_CannyFilter = CannyEdgeFilterType::New();
 
-  typename OutputImageSpatialObjectType::Pointer
-    outputObject = OutputImageSpatialObjectType::New();
+  typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
-  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->ProcessObject::SetNthOutput(0, outputObject.GetPointer());
 
-  this->m_Sigma.Fill( 1.0 );
-  this->m_UpperThreshold = NumericTraits< InternalPixelType >::max();
-  this->m_LowerThreshold = NumericTraits< InternalPixelType >::min();
+  this->m_Sigma.Fill(1.0);
+  this->m_UpperThreshold = NumericTraits<InternalPixelType>::max();
+  this->m_LowerThreshold = NumericTraits<InternalPixelType>::min();
 }
 
 
@@ -51,26 +49,22 @@ CannyEdgesDistanceFeatureGenerator<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-CannyEdgesDistanceFeatureGenerator<NDimension>
-::~CannyEdgesDistanceFeatureGenerator()
-{
-}
+CannyEdgesDistanceFeatureGenerator<NDimension>::~CannyEdgesDistanceFeatureGenerator()
+{}
 
 template <unsigned int NDimension>
 void
-CannyEdgesDistanceFeatureGenerator<NDimension>
-::SetInput( const SpatialObjectType * spatialObject )
+CannyEdgesDistanceFeatureGenerator<NDimension>::SetInput(const SpatialObjectType * spatialObject)
 {
   // Process object is not const-correct so the const casting is required.
-  this->SetNthInput(0, const_cast<SpatialObjectType *>( spatialObject ));
+  this->SetNthInput(0, const_cast<SpatialObjectType *>(spatialObject));
 }
 
 template <unsigned int NDimension>
 const typename CannyEdgesDistanceFeatureGenerator<NDimension>::SpatialObjectType *
-CannyEdgesDistanceFeatureGenerator<NDimension>
-::GetFeature() const
+CannyEdgesDistanceFeatureGenerator<NDimension>::GetFeature() const
 {
-  return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
+  return static_cast<const SpatialObjectType *>(this->ProcessObject::GetOutput(0));
 }
 
 
@@ -79,10 +73,9 @@ CannyEdgesDistanceFeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-CannyEdgesDistanceFeatureGenerator<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+CannyEdgesDistanceFeatureGenerator<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -91,31 +84,30 @@ CannyEdgesDistanceFeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-CannyEdgesDistanceFeatureGenerator<NDimension>
-::GenerateData()
+CannyEdgesDistanceFeatureGenerator<NDimension>::GenerateData()
 {
   typename InputImageSpatialObjectType::ConstPointer inputObject =
-    dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
+    dynamic_cast<const InputImageSpatialObjectType *>(this->ProcessObject::GetInput(0));
 
-  if( !inputObject )
-    {
+  if (!inputObject)
+  {
     itkExceptionMacro("Missing input spatial object or incorrect type");
-    }
+  }
 
   const InputImageType * inputImage = inputObject->GetImage();
 
-  if( !inputImage )
-    {
+  if (!inputImage)
+  {
     itkExceptionMacro("Missing input image");
-    }
+  }
 
-  this->m_CastFilter->SetInput( inputImage );
-  this->m_CannyFilter->SetInput( this->m_CastFilter->GetOutput() );
-  this->m_DistanceMapFilter->SetInput( this->m_CannyFilter->GetOutput() );
+  this->m_CastFilter->SetInput(inputImage);
+  this->m_CannyFilter->SetInput(this->m_CastFilter->GetOutput());
+  this->m_DistanceMapFilter->SetInput(this->m_CannyFilter->GetOutput());
 
-  this->m_CannyFilter->SetSigmaArray( this->m_Sigma );
-  this->m_CannyFilter->SetUpperThreshold( this->m_UpperThreshold );
-  this->m_CannyFilter->SetLowerThreshold( this->m_LowerThreshold );
+  this->m_CannyFilter->SetSigmaArray(this->m_Sigma);
+  this->m_CannyFilter->SetUpperThreshold(this->m_UpperThreshold);
+  this->m_CannyFilter->SetLowerThreshold(this->m_LowerThreshold);
   this->m_CannyFilter->SetOutsideValue(NumericTraits<InternalPixelType>::Zero);
 
   this->m_DistanceMapFilter->Update();
@@ -124,17 +116,16 @@ CannyEdgesDistanceFeatureGenerator<NDimension>
 
   outputImage->DisconnectPipeline();
 
-  auto * outputObject = dynamic_cast< OutputImageSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast<OutputImageSpatialObjectType *>(this->ProcessObject::GetOutput(0));
 
-  outputObject->SetImage( outputImage );
+  outputObject->SetImage(outputImage);
 }
 
 // Set value of Sigma (isotropic)
 
 template <unsigned int NDimension>
 void
-CannyEdgesDistanceFeatureGenerator<NDimension>
-::SetSigma( ScalarRealType sigma )
+CannyEdgesDistanceFeatureGenerator<NDimension>::SetSigma(ScalarRealType sigma)
 {
   SigmaArrayType sigmas(sigma);
   this->SetSigmaArray(sigmas);
@@ -145,22 +136,20 @@ CannyEdgesDistanceFeatureGenerator<NDimension>
 
 template <unsigned int NDimension>
 void
-CannyEdgesDistanceFeatureGenerator<NDimension>
-::SetSigmaArray( const SigmaArrayType & sigma )
+CannyEdgesDistanceFeatureGenerator<NDimension>::SetSigmaArray(const SigmaArrayType & sigma)
 {
   if (this->m_Sigma != sigma)
-    {
+  {
     this->m_Sigma = sigma;
     this->Modified();
-    }
+  }
 }
 
 
 // Get the sigma array.
 template <unsigned int NDimension>
 typename CannyEdgesDistanceFeatureGenerator<NDimension>::SigmaArrayType
-CannyEdgesDistanceFeatureGenerator<NDimension>
-::GetSigmaArray() const
+CannyEdgesDistanceFeatureGenerator<NDimension>::GetSigmaArray() const
 {
   return m_Sigma;
 }
@@ -170,8 +159,7 @@ CannyEdgesDistanceFeatureGenerator<NDimension>
 // return the sigma along the first dimension.
 template <unsigned int NDimension>
 typename CannyEdgesDistanceFeatureGenerator<NDimension>::ScalarRealType
-CannyEdgesDistanceFeatureGenerator<NDimension>
-::GetSigma() const
+CannyEdgesDistanceFeatureGenerator<NDimension>::GetSigma() const
 {
   return m_Sigma[0];
 }

@@ -56,38 +56,41 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  using SpatialObjectType = LandmarkSpatialObject< NDimension >;
+  using SpatialObjectType = LandmarkSpatialObject<NDimension>;
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
-  const SpatialObjectType * GetOutput() const;
+  const SpatialObjectType *
+  GetOutput() const;
 
   /** Set / Get the input filename */
-  itkSetStringMacro( FileName );
-  itkGetStringMacro( FileName );
+  itkSetStringMacro(FileName);
+  itkGetStringMacro(FileName);
 
 protected:
   LandmarksReader();
   ~LandmarksReader() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
-  void GenerateData() override;
+  void
+  GenerateData() override;
 
 private:
-  using SpatialObjectReaderType = SpatialObjectReader< NDimension, unsigned short >;
+  using SpatialObjectReaderType = SpatialObjectReader<NDimension, unsigned short>;
   using SpatialObjectReaderPointer = typename SpatialObjectReaderType::Pointer;
   using GroupType = typename SpatialObjectReaderType::GroupType;
   using ObjectListType = typename GroupType::ObjectListType;
 
-  std::string                     m_FileName;
-  SpatialObjectReaderPointer      m_SpatialObjectReader;
+  std::string                m_FileName;
+  SpatialObjectReaderPointer m_SpatialObjectReader;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkLandmarksReader.hxx"
+#  include "itkLandmarksReader.hxx"
 #endif
 
 #endif

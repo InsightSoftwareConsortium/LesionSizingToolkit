@@ -89,80 +89,78 @@ public:
   /** Type of spatialObject that will be passed as input to this
    * feature generator. */
   using InputPixelType = signed short;
-  using InputImageType = Image< InputPixelType, Dimension >;
-  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
+  using InputImageType = Image<InputPixelType, Dimension>;
+  using InputImageSpatialObjectType = ImageSpatialObject<NDimension, InputPixelType>;
   using InputImageSpatialObjectPointer = typename InputImageSpatialObjectType::Pointer;
   using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
-  void SetInput( const SpatialObjectType * input );
-  const SpatialObjectType * GetInput() const;
+  void
+  SetInput(const SpatialObjectType * input);
+  const SpatialObjectType *
+  GetInput() const;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */
-  const SpatialObjectType * GetFeature() const;
+  const SpatialObjectType *
+  GetFeature() const;
 
-  itkSetMacro( Sigma, double );
-  itkGetMacro( Sigma, double );
-  itkSetMacro( UpperThreshold, double );
-  itkGetMacro( UpperThreshold, double );
-  itkSetMacro( LowerThreshold, double );
-  itkGetMacro( LowerThreshold, double );
+  itkSetMacro(Sigma, double);
+  itkGetMacro(Sigma, double);
+  itkSetMacro(UpperThreshold, double);
+  itkGetMacro(UpperThreshold, double);
+  itkSetMacro(LowerThreshold, double);
+  itkGetMacro(LowerThreshold, double);
 
 protected:
   CannyEdgesDistanceAdvectionFieldFeatureGenerator();
   ~CannyEdgesDistanceAdvectionFieldFeatureGenerator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
 private:
-  using InternalImageType = Image< InternalPixelType, Dimension >;
+  using InternalImageType = Image<InternalPixelType, Dimension>;
 
-  using CastFilterType = CastImageFilter<
-    InputImageType, InternalImageType >;
+  using CastFilterType = CastImageFilter<InputImageType, InternalImageType>;
   using CastFilterPointer = typename CastFilterType::Pointer;
-  using CannyEdgeFilterType = CannyEdgeDetectionRecursiveGaussianImageFilter<
-    InternalImageType, InternalImageType >;
+  using CannyEdgeFilterType = CannyEdgeDetectionRecursiveGaussianImageFilter<InternalImageType, InternalImageType>;
   using CannyEdgeFilterPointer = typename CannyEdgeFilterType::Pointer;
 
-  using DistanceMapFilterType = SignedMaurerDistanceMapImageFilter<
-    InternalImageType, InternalImageType >;
+  using DistanceMapFilterType = SignedMaurerDistanceMapImageFilter<InternalImageType, InternalImageType>;
   using DistanceMapFilterPointer = typename DistanceMapFilterType::Pointer;
 
-  using GradientFilterType = GradientImageFilter< InternalImageType,
-          InternalPixelType, InternalPixelType >;
+  using GradientFilterType = GradientImageFilter<InternalImageType, InternalPixelType, InternalPixelType>;
   using GradientFilterPointer = typename GradientFilterType::Pointer;
   using CovariantVectorImageType = typename GradientFilterType::OutputImageType;
 
   using OutputPixelType = typename CovariantVectorImageType::PixelType;
-  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
-  using OutputImageType = Image< OutputPixelType, Dimension >;
+  using OutputImageSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
+  using OutputImageType = Image<OutputPixelType, Dimension>;
 
-  using MultiplyFilterType = MultiplyImageFilter<
-    CovariantVectorImageType, InternalImageType,
-                     CovariantVectorImageType >;
+  using MultiplyFilterType = MultiplyImageFilter<CovariantVectorImageType, InternalImageType, CovariantVectorImageType>;
   using MultiplyFilterPointer = typename MultiplyFilterType::Pointer;
 
-  CastFilterPointer                                   m_CastFilter;
-  DistanceMapFilterPointer                            m_DistanceMapFilter;
-  CannyEdgeFilterPointer                              m_CannyFilter;
-  GradientFilterPointer                               m_GradientFilter;
-  MultiplyFilterPointer                               m_MultiplyFilter;
+  CastFilterPointer        m_CastFilter;
+  DistanceMapFilterPointer m_DistanceMapFilter;
+  CannyEdgeFilterPointer   m_CannyFilter;
+  GradientFilterPointer    m_GradientFilter;
+  MultiplyFilterPointer    m_MultiplyFilter;
 
-  double                                              m_UpperThreshold;
-  double                                              m_LowerThreshold;
-  double                                              m_Sigma;
-
+  double m_UpperThreshold;
+  double m_LowerThreshold;
+  double m_Sigma;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkCannyEdgesDistanceAdvectionFieldFeatureGenerator.hxx"
+#  include "itkCannyEdgesDistanceAdvectionFieldFeatureGenerator.hxx"
 #endif
 
 #endif

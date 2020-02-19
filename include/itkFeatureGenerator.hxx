@@ -27,10 +27,9 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-FeatureGenerator<NDimension>
-::FeatureGenerator()
+FeatureGenerator<NDimension>::FeatureGenerator()
 {
-  this->SetNumberOfRequiredOutputs( 1 );
+  this->SetNumberOfRequiredOutputs(1);
 }
 
 
@@ -38,45 +37,39 @@ FeatureGenerator<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-FeatureGenerator<NDimension>
-::~FeatureGenerator()
-{
-}
+FeatureGenerator<NDimension>::~FeatureGenerator()
+{}
 
 template <unsigned int NDimension>
 void
-FeatureGenerator<NDimension>
-::SetInput( const SpatialObjectType * spatialObject )
+FeatureGenerator<NDimension>::SetInput(const SpatialObjectType * spatialObject)
 {
   // Process object is not const-correct so the const casting is required.
-  this->SetNthInput(0, const_cast<SpatialObjectType *>( spatialObject ));
+  this->SetNthInput(0, const_cast<SpatialObjectType *>(spatialObject));
 }
 
 template <unsigned int NDimension>
 const typename FeatureGenerator<NDimension>::SpatialObjectType *
-FeatureGenerator<NDimension>
-::GetFeature() const
+FeatureGenerator<NDimension>::GetFeature() const
 {
   if (this->GetNumberOfOutputs() < 1)
-    {
+  {
     return nullptr;
-    }
+  }
 
-  return static_cast<const SpatialObjectType*>(this->ProcessObject::GetOutput(0));
-
+  return static_cast<const SpatialObjectType *>(this->ProcessObject::GetOutput(0));
 }
 
 template <unsigned int NDimension>
 typename FeatureGenerator<NDimension>::SpatialObjectType *
-FeatureGenerator<NDimension>
-::GetInternalFeature()
+FeatureGenerator<NDimension>::GetInternalFeature()
 {
   if (this->GetNumberOfOutputs() < 1)
-    {
+  {
     return nullptr;
-    }
+  }
 
-  return static_cast<SpatialObjectType*>(this->ProcessObject::GetOutput(0));
+  return static_cast<SpatialObjectType *>(this->ProcessObject::GetOutput(0));
 }
 
 
@@ -85,10 +78,9 @@ FeatureGenerator<NDimension>
  */
 template <unsigned int NDimension>
 void
-FeatureGenerator<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+FeatureGenerator<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 

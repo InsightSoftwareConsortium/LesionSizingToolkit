@@ -29,14 +29,13 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-FeatureAggregator<NDimension>
-::FeatureAggregator()
+FeatureAggregator<NDimension>::FeatureAggregator()
 {
-  this->SetNumberOfRequiredOutputs( 1 );
+  this->SetNumberOfRequiredOutputs(1);
 
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
-  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->ProcessObject::SetNthOutput(0, outputObject.GetPointer());
 
   this->m_ProgressAccumulator = ProgressAccumulator::New();
   this->m_ProgressAccumulator->SetMiniPipelineFilter(this);
@@ -47,10 +46,8 @@ FeatureAggregator<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-FeatureAggregator<NDimension>
-::~FeatureAggregator()
-{
-}
+FeatureAggregator<NDimension>::~FeatureAggregator()
+{}
 
 
 /**
@@ -59,17 +56,15 @@ FeatureAggregator<NDimension>
  */
 template <unsigned int NDimension>
 void
-FeatureAggregator<NDimension>
-::AddFeatureGenerator( FeatureGeneratorType * generator )
+FeatureAggregator<NDimension>::AddFeatureGenerator(FeatureGeneratorType * generator)
 {
-  this->m_FeatureGenerators.push_back( generator );
+  this->m_FeatureGenerators.push_back(generator);
 }
 
 
 template <unsigned int NDimension>
 unsigned int
-FeatureAggregator<NDimension>
-::GetNumberOfInputFeatures() const
+FeatureAggregator<NDimension>::GetNumberOfInputFeatures() const
 {
   return this->m_FeatureGenerators.size();
 }
@@ -77,13 +72,12 @@ FeatureAggregator<NDimension>
 
 template <unsigned int NDimension>
 const typename FeatureAggregator<NDimension>::InputFeatureType *
-FeatureAggregator<NDimension>
-::GetInputFeature( unsigned int featureId ) const
+FeatureAggregator<NDimension>::GetInputFeature(unsigned int featureId) const
 {
-  if( featureId >= this->GetNumberOfInputFeatures() )
-    {
+  if (featureId >= this->GetNumberOfInputFeatures())
+  {
     itkExceptionMacro("Feature Id" << featureId << " doesn't exist");
-    }
+  }
   return this->m_FeatureGenerators[featureId]->GetFeature();
 }
 
@@ -93,22 +87,20 @@ FeatureAggregator<NDimension>
  */
 template <unsigned int NDimension>
 void
-FeatureAggregator<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+FeatureAggregator<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 
   os << indent << "Feature generators = ";
 
   auto gitr = this->m_FeatureGenerators.begin();
   auto gend = this->m_FeatureGenerators.end();
 
-  while( gitr != gend )
-    {
+  while (gitr != gend)
+  {
     os << indent << gitr->GetPointer() << std::endl;
     ++gitr;
-    }
-
+  }
 }
 
 
@@ -117,8 +109,7 @@ FeatureAggregator<NDimension>
  */
 template <unsigned int NDimension>
 void
-FeatureAggregator<NDimension>
-::GenerateData()
+FeatureAggregator<NDimension>::GenerateData()
 {
   this->UpdateAllFeatureGenerators();
   this->ConsolidateFeatures();
@@ -126,22 +117,21 @@ FeatureAggregator<NDimension>
 
 template <unsigned int NDimension>
 ModifiedTimeType
-FeatureAggregator<NDimension>
-::GetMTime() const
+FeatureAggregator<NDimension>::GetMTime() const
 {
   // MTime is the max of mtime of all feature generators.
-  ModifiedTimeType  mtime = this->Superclass::GetMTime();
-  auto gitr = this->m_FeatureGenerators.begin();
-  auto gend = this->m_FeatureGenerators.end();
-  while( gitr != gend )
-    {
-    const ModifiedTimeType  t = (*gitr)->GetMTime();
+  ModifiedTimeType mtime = this->Superclass::GetMTime();
+  auto             gitr = this->m_FeatureGenerators.begin();
+  auto             gend = this->m_FeatureGenerators.end();
+  while (gitr != gend)
+  {
+    const ModifiedTimeType t = (*gitr)->GetMTime();
     if (t > mtime)
-      {
+    {
       mtime = t;
-      }
-    ++gitr;
     }
+    ++gitr;
+  }
 
   return mtime;
 }
@@ -152,21 +142,20 @@ FeatureAggregator<NDimension>
  */
 template <unsigned int NDimension>
 void
-FeatureAggregator<NDimension>
-::UpdateAllFeatureGenerators()
+FeatureAggregator<NDimension>::UpdateAllFeatureGenerators()
 {
   auto gitr = this->m_FeatureGenerators.begin();
   auto gend = this->m_FeatureGenerators.end();
 
-  while( gitr != gend )
-    {
+  while (gitr != gend)
+  {
     // Assuming that most of the time is spent in generating the features and
     // hardly negligible time is spent in consolidating the features
-    this->m_ProgressAccumulator->RegisterInternalFilter( *gitr, 1.0/this->m_FeatureGenerators.size());
+    this->m_ProgressAccumulator->RegisterInternalFilter(*gitr, 1.0 / this->m_FeatureGenerators.size());
 
     (*gitr)->Update();
     ++gitr;
-    }
+  }
 }
 
 } // end namespace itk

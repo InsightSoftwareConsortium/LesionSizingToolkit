@@ -63,37 +63,40 @@ public:
   /** Types of the input feature image and the output image */
   using OutputPixelType = float;
   using FeaturePixelType = float;
-  using FeatureImageType = Image< FeaturePixelType, NDimension >;
-  using OutputImageType = Image< OutputPixelType, NDimension >;
+  using FeatureImageType = Image<FeaturePixelType, NDimension>;
+  using OutputImageType = Image<OutputPixelType, NDimension>;
 
   /** Types of the Spatial objects used for the input feature image and the output image. */
-  using FeatureSpatialObjectType = ImageSpatialObject< NDimension, FeaturePixelType >;
-  using OutputSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using FeatureSpatialObjectType = ImageSpatialObject<NDimension, FeaturePixelType>;
+  using OutputSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
   /** Type of the input set of seed points. They are stored in a Landmark Spatial Object. */
-  using InputSpatialObjectType = LandmarkSpatialObject< NDimension >;
+  using InputSpatialObjectType = LandmarkSpatialObject<NDimension>;
 
   /** Set the Fast Marching algorithm Stopping Value. The Fast Marching
    * algorithm is terminated when the value of the smallest trial point
    * is greater than the stopping value. */
-  itkSetMacro( StoppingValue, double );
-  itkGetMacro( StoppingValue, double );
+  itkSetMacro(StoppingValue, double);
+  itkGetMacro(StoppingValue, double);
 
   /** Set the Fast Marching algorithm distance from seeds. */
-  itkSetMacro( DistanceFromSeeds, double );
-  itkGetMacro( DistanceFromSeeds, double );
+  itkSetMacro(DistanceFromSeeds, double);
+  itkGetMacro(DistanceFromSeeds, double);
 
 protected:
   FastMarchingSegmentationModule();
   ~FastMarchingSegmentationModule() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
   /** Extract the input set of landmark points to be used as seeds. */
-  const InputSpatialObjectType * GetInternalInputLandmarks() const;
+  const InputSpatialObjectType *
+  GetInternalInputLandmarks() const;
 
   double m_StoppingValue;
   double m_DistanceFromSeeds;
@@ -102,7 +105,7 @@ protected:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkFastMarchingSegmentationModule.hxx"
+#  include "itkFastMarchingSegmentationModule.hxx"
 #endif
 
 #endif

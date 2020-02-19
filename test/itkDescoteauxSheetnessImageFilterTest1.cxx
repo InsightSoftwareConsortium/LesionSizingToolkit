@@ -22,112 +22,110 @@
 #include "itkTestingMacros.h"
 
 
-int itkDescoteauxSheetnessImageFilterTest1( int argc, char * argv [] )
+int
+itkDescoteauxSheetnessImageFilterTest1(int argc, char * argv[])
 {
-  if( argc < 3 )
-    {
+  if (argc < 3)
+  {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage outputImage [(bright1/dark:0) sigma sheetness bloobiness noise]" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   constexpr unsigned int Dimension = 3;
 
   using InputPixelType = signed short;
   using OutputPixelType = float;
 
-  using InputImageType = itk::Image< InputPixelType,  Dimension >;
-  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
+  using InputImageType = itk::Image<InputPixelType, Dimension>;
+  using OutputImageType = itk::Image<OutputPixelType, Dimension>;
 
-  using HessianFilterType = itk::HessianRecursiveGaussianImageFilter< InputImageType >;
+  using HessianFilterType = itk::HessianRecursiveGaussianImageFilter<InputImageType>;
   using HessianImageType = HessianFilterType::OutputImageType;
   using HessianPixelType = HessianImageType::PixelType;
 
-  using EigenValueArrayType = itk::FixedArray< double, HessianPixelType::Dimension >;
-  using EigenValueImageType = itk::Image< EigenValueArrayType, Dimension >;
+  using EigenValueArrayType = itk::FixedArray<double, HessianPixelType::Dimension>;
+  using EigenValueImageType = itk::Image<EigenValueArrayType, Dimension>;
 
-  using EigenAnalysisFilterType = itk::SymmetricEigenAnalysisImageFilter<
-    HessianImageType, EigenValueImageType >;
+  using EigenAnalysisFilterType = itk::SymmetricEigenAnalysisImageFilter<HessianImageType, EigenValueImageType>;
 
-  using ReaderType = itk::ImageFileReader< InputImageType >;
-  using WriterType = itk::ImageFileWriter< OutputImageType >;
+  using ReaderType = itk::ImageFileReader<InputImageType>;
+  using WriterType = itk::ImageFileWriter<OutputImageType>;
 
-  HessianFilterType::Pointer hessian = HessianFilterType::New();
+  HessianFilterType::Pointer       hessian = HessianFilterType::New();
   EigenAnalysisFilterType::Pointer eigen = EigenAnalysisFilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer              reader = ReaderType::New();
 
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+  TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
 
-  using FilterType = itk::DescoteauxSheetnessImageFilter< EigenValueImageType, OutputImageType >;
+  using FilterType = itk::DescoteauxSheetnessImageFilter<EigenValueImageType, OutputImageType>;
 
   FilterType::Pointer sheetnessFilter = FilterType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( sheetnessFilter,
-    DescoteauxSheetnessImageFilter,
-    UnaryFunctorImageFilter );
+  EXERCISE_BASIC_OBJECT_METHODS(sheetnessFilter, DescoteauxSheetnessImageFilter, UnaryFunctorImageFilter);
 
-  hessian->SetInput( reader->GetOutput() );
-  eigen->SetInput( hessian->GetOutput() );
-  sheetnessFilter->SetInput( eigen->GetOutput() );
+  hessian->SetInput(reader->GetOutput());
+  eigen->SetInput(hessian->GetOutput());
+  sheetnessFilter->SetInput(eigen->GetOutput());
 
 
   bool detectBrightSheets = true;
-  if( argc > 3 )
-    {
-    detectBrightSheets = std::stoi( argv[3] );
-    }
-  sheetnessFilter->SetDetectBrightSheets( detectBrightSheets );
-  //TEST_SET_GET_BOOLEAN( sheetnessFilter, DetectBrightSheets, detectBrightSheets );
+  if (argc > 3)
+  {
+    detectBrightSheets = std::stoi(argv[3]);
+  }
+  sheetnessFilter->SetDetectBrightSheets(detectBrightSheets);
+  // TEST_SET_GET_BOOLEAN( sheetnessFilter, DetectBrightSheets, detectBrightSheets );
 
   double sigma = 1.0;
-  if( argc > 4 )
-    {
-    hessian->SetSigma( std::stod( argv[4] ) );
-    }
-  hessian->SetSigma( sigma );
-  TEST_SET_GET_VALUE( sigma, hessian->GetSigma() );
+  if (argc > 4)
+  {
+    hessian->SetSigma(std::stod(argv[4]));
+  }
+  hessian->SetSigma(sigma);
+  TEST_SET_GET_VALUE(sigma, hessian->GetSigma());
 
   double sheetnessNormalization = 0.5;
-  if( argc > 5 )
-    {
-    sheetnessNormalization = std::stod( argv[5] );
-    }
-  sheetnessFilter->SetSheetnessNormalization( sheetnessNormalization );
-  //TEST_SET_GET_VALUE( sheetnessNormalization, sheetnessFilter->GetSheetnessNormalization() );
+  if (argc > 5)
+  {
+    sheetnessNormalization = std::stod(argv[5]);
+  }
+  sheetnessFilter->SetSheetnessNormalization(sheetnessNormalization);
+  // TEST_SET_GET_VALUE( sheetnessNormalization, sheetnessFilter->GetSheetnessNormalization() );
 
   double bloobinessNormalization = 2.0;
-  if( argc > 6 )
-    {
-    bloobinessNormalization = std::stod( argv[6] );
-    }
-  sheetnessFilter->SetBloobinessNormalization( bloobinessNormalization );
-  //TEST_SET_GET_VALUE( bloobinessNormalization, sheetnessFilter->GetBloobinessNormalization() );
+  if (argc > 6)
+  {
+    bloobinessNormalization = std::stod(argv[6]);
+  }
+  sheetnessFilter->SetBloobinessNormalization(bloobinessNormalization);
+  // TEST_SET_GET_VALUE( bloobinessNormalization, sheetnessFilter->GetBloobinessNormalization() );
 
   double noiseNormalization = 1.0;
-  if( argc > 7 )
-    {
-    noiseNormalization = std::stod( argv[7] );
-    }
-  sheetnessFilter->SetNoiseNormalization( noiseNormalization );
-  //TEST_SET_GET_VALUE( noiseNormalization, sheetnessFilter->GetNoiseNormalization() );
+  if (argc > 7)
+  {
+    noiseNormalization = std::stod(argv[7]);
+  }
+  sheetnessFilter->SetNoiseNormalization(noiseNormalization);
+  // TEST_SET_GET_VALUE( noiseNormalization, sheetnessFilter->GetNoiseNormalization() );
 
 
-  eigen->SetDimension( Dimension );
+  eigen->SetDimension(Dimension);
 
 
-  TRY_EXPECT_NO_EXCEPTION( sheetnessFilter->Update() );
+  TRY_EXPECT_NO_EXCEPTION(sheetnessFilter->Update());
 
 
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetFileName( argv[2] );
-  writer->SetInput( sheetnessFilter->GetOutput() );
+  writer->SetFileName(argv[2]);
+  writer->SetInput(sheetnessFilter->GetOutput());
 
-  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
+  TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

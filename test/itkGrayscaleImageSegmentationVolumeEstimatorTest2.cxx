@@ -22,41 +22,42 @@
 #include "itkTestingMacros.h"
 
 
-int itkGrayscaleImageSegmentationVolumeEstimatorTest2( int argc, char * argv [] )
+int
+itkGrayscaleImageSegmentationVolumeEstimatorTest2(int argc, char * argv[])
 {
-  if( argc < 6 )
-    {
+  if (argc < 6)
+  {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputSegmentationImage MethodID DatasetID ExpectedVolume ouputTextFile " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   constexpr unsigned int Dimension = 3;
 
   using VolumeEstimatorType = itk::GrayscaleImageSegmentationVolumeEstimator<Dimension>;
   using InputSpatialObjectType = VolumeEstimatorType::InputImageSpatialObjectType;
   using InputImageType = VolumeEstimatorType::InputImageType;
-  using InputImageReaderType = itk::ImageFileReader< InputImageType >;
+  using InputImageReaderType = itk::ImageFileReader<InputImageType>;
 
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
-  inputImageReader->SetFileName( argv[1] );
+  inputImageReader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION( inputImageReader->Update() );
+  TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
 
   InputImageType::Pointer inputImage = inputImageReader->GetOutput();
   inputImage->DisconnectPipeline();
 
   InputSpatialObjectType::Pointer inputImageSpatialObject = InputSpatialObjectType::New();
-  inputImageSpatialObject->SetImage( inputImage );
+  inputImageSpatialObject->SetImage(inputImage);
 
   VolumeEstimatorType::Pointer volumeEstimator = VolumeEstimatorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( volumeEstimator,
-    GrayscaleImageSegmentationVolumeEstimator, SegmentationVolumeEstimator );
+  EXERCISE_BASIC_OBJECT_METHODS(
+    volumeEstimator, GrayscaleImageSegmentationVolumeEstimator, SegmentationVolumeEstimator);
 
 
-  volumeEstimator->SetInput( inputImageSpatialObject );
+  volumeEstimator->SetInput(inputImageSpatialObject);
   volumeEstimator->Update();
 
   const VolumeEstimatorType::RealType volume = volumeEstimator->GetVolume();
@@ -64,13 +65,13 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest2( int argc, char * argv [] 
   //
   // Compute the radius of the equivalent-volume sphere
   //
-  const double radius3 = ( ( volume * 3.0 ) / ( 4.0 * itk::Math::pi ) );
-  const double radius = std::cbrt( radius3 );
+  const double radius3 = ((volume * 3.0) / (4.0 * itk::Math::pi));
+  const double radius = std::cbrt(radius3);
 
 
   const std::string segmentationMethodID = argv[2];
   const std::string datasetID = argv[3];
-  const double expectedVolume = std::stod( argv[4] );
+  const double      expectedVolume = std::stod(argv[4]);
   const std::string outpuFileName = argv[5];
 
   const double volumeDifference = volume - expectedVolume;
@@ -84,17 +85,16 @@ int itkGrayscaleImageSegmentationVolumeEstimatorTest2( int argc, char * argv [] 
 
   // Check if the file exists. If it does not, let's print out the axis labels
   // right at the top of the file.
-  const bool fileExists =
-      itksys::SystemTools::FileExists( outpuFileName.c_str() );
+  const bool fileExists = itksys::SystemTools::FileExists(outpuFileName.c_str());
 
-  ouputFile.open( outpuFileName.c_str(), std::ios_base::app );
+  ouputFile.open(outpuFileName.c_str(), std::ios_base::app);
 
   if (!fileExists)
-    {
+  {
     ouputFile << "SegmentationMethodID DatasetID ExpectedVolume ComputedVolume "
-               << "PercentError RatioOfComputedVolumeToExpectedVolume "
-               << "ComputedRadius " << std::endl;
-    }
+              << "PercentError RatioOfComputedVolumeToExpectedVolume "
+              << "ComputedRadius " << std::endl;
+  }
 
   ouputFile << segmentationMethodID << "  ";
   ouputFile << datasetID << "  ";

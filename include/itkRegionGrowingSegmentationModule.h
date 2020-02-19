@@ -61,42 +61,48 @@ public:
   /** Types of the input feature image and the output image */
   using OutputPixelType = float;
   using FeaturePixelType = float;
-  using FeatureImageType = Image< FeaturePixelType, NDimension >;
-  using OutputImageType = Image< OutputPixelType, NDimension >;
+  using FeatureImageType = Image<FeaturePixelType, NDimension>;
+  using OutputImageType = Image<OutputPixelType, NDimension>;
 
   /** Types of the Spatial objects used for the input feature image and the output image. */
-  using FeatureSpatialObjectType = ImageSpatialObject< NDimension, FeaturePixelType >;
-  using OutputSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using FeatureSpatialObjectType = ImageSpatialObject<NDimension, FeaturePixelType>;
+  using OutputSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
   /** Type of the input set of seed points. They are stored in a Landmark Spatial Object. */
-  using InputSpatialObjectType = LandmarkSpatialObject< NDimension >;
+  using InputSpatialObjectType = LandmarkSpatialObject<NDimension>;
 
 protected:
   RegionGrowingSegmentationModule();
   ~RegionGrowingSegmentationModule() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
   /** Set the output image as cargo of the output SpatialObject. */
-  void PackOutputImageInOutputSpatialObject( OutputImageType * outputImage );
+  void
+  PackOutputImageInOutputSpatialObject(OutputImageType * outputImage);
 
   /** Extract the input set of landmark points to be used as seeds. */
-  const InputSpatialObjectType * GetInternalInputLandmarks() const;
+  const InputSpatialObjectType *
+  GetInternalInputLandmarks() const;
 
   /** Extract the input feature image from the input feature spatial object. */
-  const FeatureImageType * GetInternalFeatureImage() const;
+  const FeatureImageType *
+  GetInternalFeatureImage() const;
 
 private:
-  void ConvertIntensitiesToCenteredRange( OutputImageType * outputImage );
+  void
+  ConvertIntensitiesToCenteredRange(OutputImageType * outputImage);
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkRegionGrowingSegmentationModule.hxx"
+#  include "itkRegionGrowingSegmentationModule.hxx"
 #endif
 
 #endif

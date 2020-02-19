@@ -37,15 +37,15 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <typename TInputImage, typename TOutputImage>
-class ITK_TEMPLATE_EXPORT VotingBinaryHoleFillFloodingImageFilter:
-    public VotingBinaryImageFilter<TInputImage,TOutputImage>
+class ITK_TEMPLATE_EXPORT VotingBinaryHoleFillFloodingImageFilter
+  : public VotingBinaryImageFilter<TInputImage, TOutputImage>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(VotingBinaryHoleFillFloodingImageFilter);
 
   /** Standard class type alias. */
   using Self = VotingBinaryHoleFillFloodingImageFilter;
-  using Superclass = VotingBinaryImageFilter<TInputImage,TOutputImage>;
+  using Superclass = VotingBinaryImageFilter<TInputImage, TOutputImage>;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
@@ -80,19 +80,19 @@ public:
    * 62, and if you set upd a Majority threshold of 5, that means that the
    * filter will require 67 or more neighbor pixels to be ON in order to switch
    * the current OFF pixel to ON. The default value is 1. */
-  itkGetConstReferenceMacro( MajorityThreshold, unsigned int );
-  itkSetMacro( MajorityThreshold, unsigned int );
+  itkGetConstReferenceMacro(MajorityThreshold, unsigned int);
+  itkSetMacro(MajorityThreshold, unsigned int);
 
   /** Set/Get the maximum number of iterations that will be applied to the
    * propagating front */
-  itkSetMacro( MaximumNumberOfIterations, unsigned int );
-  itkGetMacro( MaximumNumberOfIterations, unsigned int );
+  itkSetMacro(MaximumNumberOfIterations, unsigned int);
+  itkGetMacro(MaximumNumberOfIterations, unsigned int);
 
   /** Returned the number of iterations used so far. */
-  itkGetMacro( CurrentIterationNumber, unsigned int );
+  itkGetMacro(CurrentIterationNumber, unsigned int);
 
   /** Returned the number of pixels changed in total. */
-  itkGetMacro( TotalNumberOfPixelsChanged, unsigned int );
+  itkGetMacro(TotalNumberOfPixelsChanged, unsigned int);
 
 
 #ifdef ITK_USE_CONCEPT_CHECKING
@@ -110,91 +110,106 @@ protected:
   VotingBinaryHoleFillFloodingImageFilter();
   ~VotingBinaryHoleFillFloodingImageFilter() override;
 
-  void GenerateData() override;
+  void
+  GenerateData() override;
 
-  void PrintSelf ( std::ostream& os, Indent indent ) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  void AllocateOutputImageWorkingMemory();
+  void
+  AllocateOutputImageWorkingMemory();
 
-  void InitializeNeighborhood();
+  void
+  InitializeNeighborhood();
 
-  void FindAllPixelsInTheBoundaryAndAddThemAsSeeds();
+  void
+  FindAllPixelsInTheBoundaryAndAddThemAsSeeds();
 
-  void IterateFrontPropagations();
+  void
+  IterateFrontPropagations();
 
-  void VisitAllSeedsAndTransitionTheirState();
+  void
+  VisitAllSeedsAndTransitionTheirState();
 
-  void PasteNewSeedValuesToOutputImage();
+  void
+  PasteNewSeedValuesToOutputImage();
 
-  void SwapSeedArrays();
+  void
+  SwapSeedArrays();
 
-  void ClearSecondSeedArray();
+  void
+  ClearSecondSeedArray();
 
-  bool TestForQuorumAtCurrentPixel() const;
+  bool
+  TestForQuorumAtCurrentPixel() const;
 
-  void PutCurrentPixelNeighborsIntoSeedArray();
+  void
+  PutCurrentPixelNeighborsIntoSeedArray();
 
-  void ComputeArrayOfNeighborhoodBufferOffsets();
+  void
+  ComputeArrayOfNeighborhoodBufferOffsets();
 
-  void ComputeBirthThreshold();
+  void
+  ComputeBirthThreshold();
 
-  unsigned int GetNeighborhoodSize() const;
+  unsigned int
+  GetNeighborhoodSize() const;
 
-  itkSetMacro( CurrentPixelIndex, IndexType );
-  itkGetConstReferenceMacro( CurrentPixelIndex, IndexType );
+  itkSetMacro(CurrentPixelIndex, IndexType);
+  itkGetConstReferenceMacro(CurrentPixelIndex, IndexType);
 
-  unsigned int                      m_MajorityThreshold;
+  unsigned int m_MajorityThreshold;
 
   using SeedArrayType = std::vector<IndexType>;
 
-  SeedArrayType *                   m_SeedArray1;
-  SeedArrayType *                   m_SeedArray2;
+  SeedArrayType * m_SeedArray1;
+  SeedArrayType * m_SeedArray2;
 
-  InputImageRegionType              m_InternalRegion;
+  InputImageRegionType m_InternalRegion;
 
   using SeedNewValuesArrayType = std::vector<OutputImagePixelType>;
 
-  SeedNewValuesArrayType            m_SeedsNewValues;
+  SeedNewValuesArrayType m_SeedsNewValues;
 
-  unsigned int                      m_CurrentIterationNumber;
-  unsigned int                      m_MaximumNumberOfIterations;
-  unsigned int                      m_NumberOfPixelsChangedInLastIteration;
-  unsigned int                      m_TotalNumberOfPixelsChanged;
+  unsigned int m_CurrentIterationNumber;
+  unsigned int m_MaximumNumberOfIterations;
+  unsigned int m_NumberOfPixelsChangedInLastIteration;
+  unsigned int m_TotalNumberOfPixelsChanged;
 
-  IndexType                         m_CurrentPixelIndex;
+  IndexType m_CurrentPixelIndex;
 
   //
   // Variables used for addressing the Neighbors.
   // This could be factorized into a helper class.
   //
-  OffsetValueType                   m_OffsetTable[ InputImageDimension + 1 ];
+  OffsetValueType m_OffsetTable[InputImageDimension + 1];
 
-  using NeighborOffsetArrayType = std::vector< OffsetValueType >;
+  using NeighborOffsetArrayType = std::vector<OffsetValueType>;
 
-  NeighborOffsetArrayType           m_NeighborBufferOffset;
+  NeighborOffsetArrayType m_NeighborBufferOffset;
 
 
   //
   // Helper cache variables
   //
-  const InputImageType *            m_InputImage;
-  OutputImageType *                 m_OutputImage;
+  const InputImageType * m_InputImage;
+  OutputImageType *      m_OutputImage;
 
-  using SeedMaskImageType = itk::Image< unsigned char, InputImageDimension >;
+  using SeedMaskImageType = itk::Image<unsigned char, InputImageDimension>;
   using SeedMaskImagePointer = typename SeedMaskImageType::Pointer;
 
-  SeedMaskImagePointer              m_SeedsMask;
+  SeedMaskImagePointer m_SeedsMask;
 
-  using NeighborhoodType = itk::Neighborhood< InputImagePixelType, InputImageDimension >;
+  using NeighborhoodType = itk::Neighborhood<InputImagePixelType, InputImageDimension>;
 
-  NeighborhoodType                  m_Neighborhood;
+  NeighborhoodType m_Neighborhood;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkVotingBinaryHoleFillFloodingImageFilter.hxx"
+#  include "itkVotingBinaryHoleFillFloodingImageFilter.hxx"
 #endif
 
 #endif

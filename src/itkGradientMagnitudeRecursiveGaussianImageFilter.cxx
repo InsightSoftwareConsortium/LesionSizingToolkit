@@ -15,7 +15,7 @@
 
 =========================================================================*/
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#  pragma warning(disable : 4786)
 #endif
 
 
@@ -28,65 +28,65 @@
 #include <string>
 
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
 
   RegisterRequiredFactories();
 
-  if( argc < 4 )
-    {
+  if (argc < 4)
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile   outputImageFile   sigma" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   using InputPixelType = float;
   using OutputPixelType = float;
 
-  constexpr unsigned Dimension  = 3;
+  constexpr unsigned Dimension = 3;
 
-  using InputImageType = itk::Image< InputPixelType,  Dimension >;
-  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
-
-
-  using ReaderType = itk::ImageFileReader< InputImageType >;
+  using InputImageType = itk::Image<InputPixelType, Dimension>;
+  using OutputImageType = itk::Image<OutputPixelType, Dimension>;
 
 
-  using FilterType = itk::GradientMagnitudeRecursiveGaussianImageFilter<
-                        InputImageType, OutputImageType >;
+  using ReaderType = itk::ImageFileReader<InputImageType>;
+
+
+  using FilterType = itk::GradientMagnitudeRecursiveGaussianImageFilter<InputImageType, OutputImageType>;
 
 
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
   FilterType::Pointer filter = FilterType::New();
 
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
 
-  const double sigma = std::stod( argv[3] );
+  const double sigma = std::stod(argv[3]);
 
-  filter->SetSigma( sigma );
+  filter->SetSigma(sigma);
 
   filter->Update();
 
-  using WriterType = itk::ImageFileWriter< OutputImageType >;
+  using WriterType = itk::ImageFileWriter<OutputImageType>;
 
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
 
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
 
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
+  }
+  catch (itk::ExceptionObject & excp)
+  {
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

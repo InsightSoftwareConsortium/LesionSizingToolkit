@@ -18,26 +18,27 @@
 #include "itkSpatialObject.h"
 #include "itkImageSpatialObject.h"
 
-int itkFeatureGeneratorTest1( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
+int
+itkFeatureGeneratorTest1(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   constexpr unsigned int Dimension = 3;
 
-  using FeatureGeneratorType = itk::FeatureGenerator< Dimension >;
+  using FeatureGeneratorType = itk::FeatureGenerator<Dimension>;
   using SpatialObjectType = FeatureGeneratorType::SpatialObjectType;
 
-  FeatureGeneratorType::Pointer  featureGenerator = FeatureGeneratorType::New();
+  FeatureGeneratorType::Pointer featureGenerator = FeatureGeneratorType::New();
 
-  using ImageSpatialObjectType = itk::ImageSpatialObject< Dimension >;
+  using ImageSpatialObjectType = itk::ImageSpatialObject<Dimension>;
 
   ImageSpatialObjectType::Pointer inputObject = ImageSpatialObjectType::New();
 
-  featureGenerator->SetInput( inputObject );
+  featureGenerator->SetInput(inputObject);
 
   featureGenerator->Update();
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
-  featureGenerator->Print( std::cout );
+  featureGenerator->Print(std::cout);
 
 
   return EXIT_SUCCESS;

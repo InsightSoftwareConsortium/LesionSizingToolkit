@@ -58,63 +58,69 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  using SpatialObjectType = SpatialObject< NDimension >;
+  using SpatialObjectType = SpatialObject<NDimension>;
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;
   using SpatialObjectConstPointer = typename SpatialObjectType::ConstPointer;
 
   /** Type of the image and specific SpatialObject produced as output */
   using OutputPixelType = float;
-  using OutputImageType = Image< OutputPixelType, NDimension >;
-  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputImageType = Image<OutputPixelType, NDimension>;
+  using OutputImageSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
   /** Type of the class that will generate input features in the form of
    * spatial objects. */
-  using FeatureGeneratorType = FeatureGenerator< Dimension >;
+  using FeatureGeneratorType = FeatureGenerator<Dimension>;
 
   /**
    * Method for adding a feature generator that will compute the Nth feature to
    * be passed to the segmentation module.
    */
-  void AddFeatureGenerator( FeatureGeneratorType * generator );
+  void
+  AddFeatureGenerator(FeatureGeneratorType * generator);
 
   /** Check all feature generators and return consolidate MTime */
-  ModifiedTimeType GetMTime() const override;
+  ModifiedTimeType
+  GetMTime() const override;
 
 protected:
   FeatureAggregator();
   ~FeatureAggregator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData() override;
+  void
+  GenerateData() override;
 
-  unsigned int GetNumberOfInputFeatures() const;
+  unsigned int
+  GetNumberOfInputFeatures() const;
 
   using InputFeatureType = typename FeatureGeneratorType::SpatialObjectType;
 
-  const InputFeatureType * GetInputFeature( unsigned int featureId ) const;
+  const InputFeatureType *
+  GetInputFeature(unsigned int featureId) const;
 
-  ProgressAccumulator::Pointer              m_ProgressAccumulator;
+  ProgressAccumulator::Pointer m_ProgressAccumulator;
 
 private:
   using FeatureGeneratorPointer = typename FeatureGeneratorType::Pointer;
-  using FeatureGeneratorArrayType = std::vector< FeatureGeneratorPointer >;
+  using FeatureGeneratorArrayType = std::vector<FeatureGeneratorPointer>;
   using FeatureGeneratorIterator = typename FeatureGeneratorArrayType::iterator;
   using FeatureGeneratorConstIterator = typename FeatureGeneratorArrayType::const_iterator;
 
-  FeatureGeneratorArrayType                 m_FeatureGenerators;
+  FeatureGeneratorArrayType m_FeatureGenerators;
 
-  void UpdateAllFeatureGenerators();
+  void
+  UpdateAllFeatureGenerators();
 
   void virtual ConsolidateFeatures() = 0;
-
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkFeatureAggregator.hxx"
+#  include "itkFeatureAggregator.hxx"
 #endif
 
 #endif

@@ -28,15 +28,14 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-RegionGrowingSegmentationModule<NDimension>
-::RegionGrowingSegmentationModule()
+RegionGrowingSegmentationModule<NDimension>::RegionGrowingSegmentationModule()
 {
-  this->SetNumberOfRequiredInputs( 2 );
-  this->SetNumberOfRequiredOutputs( 1 );
+  this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredOutputs(1);
 
   typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
 
-  this->ProcessObject::SetNthOutput( 0, outputObject.GetPointer() );
+  this->ProcessObject::SetNthOutput(0, outputObject.GetPointer());
 }
 
 
@@ -44,10 +43,8 @@ RegionGrowingSegmentationModule<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-RegionGrowingSegmentationModule<NDimension>
-::~RegionGrowingSegmentationModule()
-{
-}
+RegionGrowingSegmentationModule<NDimension>::~RegionGrowingSegmentationModule()
+{}
 
 
 /**
@@ -55,10 +52,9 @@ RegionGrowingSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-RegionGrowingSegmentationModule<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+RegionGrowingSegmentationModule<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -67,11 +63,8 @@ RegionGrowingSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-RegionGrowingSegmentationModule<NDimension>
-::GenerateData()
-{
-
-}
+RegionGrowingSegmentationModule<NDimension>::GenerateData()
+{}
 
 
 /**
@@ -80,10 +73,9 @@ RegionGrowingSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 const typename RegionGrowingSegmentationModule<NDimension>::InputSpatialObjectType *
-RegionGrowingSegmentationModule<NDimension>
-::GetInternalInputLandmarks() const
+RegionGrowingSegmentationModule<NDimension>::GetInternalInputLandmarks() const
 {
-  const auto * inputObject = dynamic_cast< const InputSpatialObjectType * >( this->GetInput() );
+  const auto * inputObject = dynamic_cast<const InputSpatialObjectType *>(this->GetInput());
 
   return inputObject;
 }
@@ -95,10 +87,9 @@ RegionGrowingSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 const typename RegionGrowingSegmentationModule<NDimension>::FeatureImageType *
-RegionGrowingSegmentationModule<NDimension>
-::GetInternalFeatureImage() const
+RegionGrowingSegmentationModule<NDimension>::GetInternalFeatureImage() const
 {
-  const auto * featureObject = dynamic_cast< const FeatureSpatialObjectType * >( this->GetFeature() );
+  const auto * featureObject = dynamic_cast<const FeatureSpatialObjectType *>(this->GetFeature());
 
   const FeatureImageType * featureImage = featureObject->GetImage();
 
@@ -112,18 +103,17 @@ RegionGrowingSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-RegionGrowingSegmentationModule<NDimension>
-::PackOutputImageInOutputSpatialObject( OutputImageType * image )
+RegionGrowingSegmentationModule<NDimension>::PackOutputImageInOutputSpatialObject(OutputImageType * image)
 {
   typename OutputImageType::Pointer outputImage = image;
 
   outputImage->DisconnectPipeline();
 
-  this->ConvertIntensitiesToCenteredRange( outputImage );
+  this->ConvertIntensitiesToCenteredRange(outputImage);
 
-  auto * outputObject = dynamic_cast< OutputSpatialObjectType * >(this->ProcessObject::GetOutput(0));
+  auto * outputObject = dynamic_cast<OutputSpatialObjectType *>(this->ProcessObject::GetOutput(0));
 
-  outputObject->SetImage( outputImage );
+  outputObject->SetImage(outputImage);
 }
 
 /**
@@ -132,30 +122,29 @@ RegionGrowingSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-RegionGrowingSegmentationModule<NDimension>
-::ConvertIntensitiesToCenteredRange( OutputImageType * image )
+RegionGrowingSegmentationModule<NDimension>::ConvertIntensitiesToCenteredRange(OutputImageType * image)
 {
-  using IteratorType = ImageRegionIterator< OutputImageType >;
+  using IteratorType = ImageRegionIterator<OutputImageType>;
 
-  IteratorType itr( image, image->GetBufferedRegion() );
+  IteratorType itr(image, image->GetBufferedRegion());
 
   itr.GoToBegin();
 
   //
   // Convert intensities to centered range
   //
-  while( !itr.IsAtEnd() )
+  while (!itr.IsAtEnd())
+  {
+    if (itr.Get())
     {
-    if( itr.Get() )
-      {
-      itr.Set( 4.0 );
-      }
-    else
-      {
-      itr.Set( -4.0 );
-      }
-    ++itr;
+      itr.Set(4.0);
     }
+    else
+    {
+      itr.Set(-4.0);
+    }
+    ++itr;
+  }
 }
 
 

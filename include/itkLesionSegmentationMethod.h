@@ -62,33 +62,34 @@ public:
 
   /** Type of spatialObject that will be passed as input and output of this
    * segmentation method. */
-  using SpatialObjectType = SpatialObject< NDimension >;
+  using SpatialObjectType = SpatialObject<NDimension>;
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;
   using SpatialObjectConstPointer = typename SpatialObjectType::ConstPointer;
 
   /** SpatialObject that defines the Region of Interest in the input data */
-  itkSetObjectMacro( RegionOfInterest, SpatialObjectType );
-  itkGetConstObjectMacro( RegionOfInterest, SpatialObjectType );
+  itkSetObjectMacro(RegionOfInterest, SpatialObjectType);
+  itkGetConstObjectMacro(RegionOfInterest, SpatialObjectType);
 
   /** SpatialObject that defines the initial segmentation. This will be
    * used to initialize the segmentation process driven by the
    * LesionSegmentationMethod. */
-  itkSetConstObjectMacro( InitialSegmentation, SpatialObjectType );
-  itkGetConstObjectMacro( InitialSegmentation, SpatialObjectType );
+  itkSetConstObjectMacro(InitialSegmentation, SpatialObjectType);
+  itkGetConstObjectMacro(InitialSegmentation, SpatialObjectType);
 
   /** Type of the class that will generate input features in the form of
    * spatial objects. */
-  using FeatureGeneratorType = FeatureGenerator< Dimension >;
+  using FeatureGeneratorType = FeatureGenerator<Dimension>;
 
   /**
    * Method for adding a feature generator that will compute the Nth feature to
    * be passed to the segmentation module.
    */
-  void AddFeatureGenerator( FeatureGeneratorType * generator );
+  void
+  AddFeatureGenerator(FeatureGeneratorType * generator);
 
   /** Type of the segmentation module that encapsulate the actual segmentation
    * algorithm. */
-  using SegmentationModuleType = SegmentationModule< Dimension >;
+  using SegmentationModuleType = SegmentationModule<Dimension>;
   using SegmentationModulePointer = typename SegmentationModuleType::Pointer;
 
 
@@ -96,53 +97,58 @@ public:
    * Method for setting the class that encapsulates the actual segmentation
    * algorithm.
    */
-  itkSetObjectMacro( SegmentationModule, SegmentationModuleType );
+  itkSetObjectMacro(SegmentationModule, SegmentationModuleType);
 
 
 protected:
   LesionSegmentationMethod();
   ~LesionSegmentationMethod() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData() override;
+  void
+  GenerateData() override;
 
 private:
-  SpatialObjectConstPointer                 m_RegionOfInterest;
-  SpatialObjectConstPointer                 m_InitialSegmentation;
+  SpatialObjectConstPointer m_RegionOfInterest;
+  SpatialObjectConstPointer m_InitialSegmentation;
 
   using FeatureGeneratorPointer = typename FeatureGeneratorType::Pointer;
-  using FeatureGeneratorArrayType = std::vector< FeatureGeneratorPointer >;
+  using FeatureGeneratorArrayType = std::vector<FeatureGeneratorPointer>;
   using FeatureGeneratorIterator = typename FeatureGeneratorArrayType::iterator;
   using FeatureGeneratorConstIterator = typename FeatureGeneratorArrayType::const_iterator;
 
-  FeatureGeneratorArrayType                 m_FeatureGenerators;
+  FeatureGeneratorArrayType m_FeatureGenerators;
 
-  SegmentationModulePointer                 m_SegmentationModule;
+  SegmentationModulePointer m_SegmentationModule;
 
-  ProgressAccumulator::Pointer              m_ProgressAccumulator;
+  ProgressAccumulator::Pointer m_ProgressAccumulator;
 
 
   /** This method calls the Update() method of each one of the feature generators */
-  void UpdateAllFeatureGenerators();
+  void
+  UpdateAllFeatureGenerators();
 
   /** This method compares the number of available features against the number
    * of expected features, and it will throw an exception if they do not match.
    */
-  void VerifyNumberOfAvailableFeaturesMatchedExpectations() const;
+  void
+  VerifyNumberOfAvailableFeaturesMatchedExpectations() const;
 
   /** Connect the outputs of feature generators as input to the segmentation module */
-  void ConnectFeaturesToSegmentationModule();
+  void
+  ConnectFeaturesToSegmentationModule();
 
-  void ExecuteSegmentationModule();
-
+  void
+  ExecuteSegmentationModule();
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkLesionSegmentationMethod.hxx"
+#  include "itkLesionSegmentationMethod.hxx"
 #endif
 
 #endif

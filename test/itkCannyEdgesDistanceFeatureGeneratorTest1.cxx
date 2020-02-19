@@ -22,44 +22,43 @@
 #include "itkTestingMacros.h"
 
 
-int itkCannyEdgesDistanceFeatureGeneratorTest1( int argc, char * argv [] )
+int
+itkCannyEdgesDistanceFeatureGeneratorTest1(int argc, char * argv[])
 {
-  if( argc < 3 )
-    {
+  if (argc < 3)
+  {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage outputImage [sigma upperthreshold lowerthreshold]" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   constexpr unsigned int Dimension = 3;
   using InputPixelType = signed short;
   using OutputPixelType = float;
 
-  using InputImageType = itk::Image< InputPixelType,  Dimension >;
-  using OutputImageType = itk::Image< OutputPixelType, Dimension >;
+  using InputImageType = itk::Image<InputPixelType, Dimension>;
+  using OutputImageType = itk::Image<OutputPixelType, Dimension>;
 
-  using ReaderType = itk::ImageFileReader< InputImageType >;
-  using WriterType = itk::ImageFileWriter< OutputImageType >;
+  using ReaderType = itk::ImageFileReader<InputImageType>;
+  using WriterType = itk::ImageFileWriter<OutputImageType>;
 
-  using InputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, InputPixelType  >;
-  using OutputImageSpatialObjectType = itk::ImageSpatialObject< Dimension, OutputPixelType >;
+  using InputImageSpatialObjectType = itk::ImageSpatialObject<Dimension, InputPixelType>;
+  using OutputImageSpatialObjectType = itk::ImageSpatialObject<Dimension, OutputPixelType>;
 
   ReaderType::Pointer reader = ReaderType::New();
 
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+  TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
 
-  using CannyEdgesDistanceFeatureGeneratorType = itk::CannyEdgesDistanceFeatureGenerator< Dimension >;
+  using CannyEdgesDistanceFeatureGeneratorType = itk::CannyEdgesDistanceFeatureGenerator<Dimension>;
   using SpatialObjectType = CannyEdgesDistanceFeatureGeneratorType::SpatialObjectType;
 
-  CannyEdgesDistanceFeatureGeneratorType::Pointer  featureGenerator = CannyEdgesDistanceFeatureGeneratorType::New();
+  CannyEdgesDistanceFeatureGeneratorType::Pointer featureGenerator = CannyEdgesDistanceFeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( featureGenerator,
-    CannyEdgesDistanceFeatureGenerator,
-    FeatureGenerator );
+  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, CannyEdgesDistanceFeatureGenerator, FeatureGenerator);
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -67,51 +66,51 @@ int itkCannyEdgesDistanceFeatureGeneratorTest1( int argc, char * argv [] )
 
   inputImage->DisconnectPipeline();
 
-  inputObject->SetImage( inputImage );
+  inputObject->SetImage(inputImage);
 
-  featureGenerator->SetInput( inputObject );
+  featureGenerator->SetInput(inputObject);
 
   double sigma = 1.0;
-  if( argc > 3 )
-    {
-    sigma = std::stod( argv[3] );
-    }
-  featureGenerator->SetSigma( sigma );
-  TEST_SET_GET_VALUE( sigma, featureGenerator->GetSigma() );
+  if (argc > 3)
+  {
+    sigma = std::stod(argv[3]);
+  }
+  featureGenerator->SetSigma(sigma);
+  TEST_SET_GET_VALUE(sigma, featureGenerator->GetSigma());
 
   double upperThreshold = 200;
-  if( argc > 4 )
-    {
-    upperThreshold = std::stod( argv[4] );
-    }
-  featureGenerator->SetUpperThreshold( upperThreshold );
-  TEST_SET_GET_VALUE( upperThreshold, featureGenerator->GetUpperThreshold() );
+  if (argc > 4)
+  {
+    upperThreshold = std::stod(argv[4]);
+  }
+  featureGenerator->SetUpperThreshold(upperThreshold);
+  TEST_SET_GET_VALUE(upperThreshold, featureGenerator->GetUpperThreshold());
 
   double lowerThreshold = 100;
-  if( argc > 5 )
-    {
-    lowerThreshold = std::stod( argv[5] );
-    }
-  featureGenerator->SetLowerThreshold( lowerThreshold );
-  TEST_SET_GET_VALUE( lowerThreshold, featureGenerator->GetLowerThreshold() );
+  if (argc > 5)
+  {
+    lowerThreshold = std::stod(argv[5]);
+  }
+  featureGenerator->SetLowerThreshold(lowerThreshold);
+  TEST_SET_GET_VALUE(lowerThreshold, featureGenerator->GetLowerThreshold());
 
-  TRY_EXPECT_NO_EXCEPTION( featureGenerator->Update() );
+  TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
   OutputImageSpatialObjectType::ConstPointer outputObject =
-    dynamic_cast< const OutputImageSpatialObjectType * >( feature.GetPointer() );
+    dynamic_cast<const OutputImageSpatialObjectType *>(feature.GetPointer());
 
   OutputImageType::ConstPointer outputImage = outputObject->GetImage();
 
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetFileName( argv[2] );
-  writer->SetInput( outputImage );
+  writer->SetFileName(argv[2]);
+  writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION( writer->Update() );
+  TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   std::cout << "Test finished." << std::endl;

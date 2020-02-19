@@ -30,20 +30,16 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-GeodesicActiveContourLevelSetSegmentationModule<NDimension>
-::GeodesicActiveContourLevelSetSegmentationModule()
-{
-}
+GeodesicActiveContourLevelSetSegmentationModule<NDimension>::GeodesicActiveContourLevelSetSegmentationModule()
+{}
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-GeodesicActiveContourLevelSetSegmentationModule<NDimension>
-::~GeodesicActiveContourLevelSetSegmentationModule()
-{
-}
+GeodesicActiveContourLevelSetSegmentationModule<NDimension>::~GeodesicActiveContourLevelSetSegmentationModule()
+{}
 
 
 /**
@@ -51,10 +47,9 @@ GeodesicActiveContourLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-GeodesicActiveContourLevelSetSegmentationModule<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+GeodesicActiveContourLevelSetSegmentationModule<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -63,28 +58,26 @@ GeodesicActiveContourLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-GeodesicActiveContourLevelSetSegmentationModule<NDimension>
-::GenerateData()
+GeodesicActiveContourLevelSetSegmentationModule<NDimension>::GenerateData()
 {
-  using FilterType = GeodesicActiveContourLevelSetImageFilter<
-    InputImageType, FeatureImageType, OutputPixelType >;
+  using FilterType = GeodesicActiveContourLevelSetImageFilter<InputImageType, FeatureImageType, OutputPixelType>;
 
   typename FilterType::Pointer filter = FilterType::New();
 
-  filter->SetInput( this->GetInternalInputImage() );
-  filter->SetFeatureImage( this->GetInternalFeatureImage() );
+  filter->SetInput(this->GetInternalInputImage());
+  filter->SetFeatureImage(this->GetInternalFeatureImage());
 
-  filter->SetMaximumRMSError( this->GetMaximumRMSError() );
-  filter->SetNumberOfIterations( this->GetMaximumNumberOfIterations() );
-  filter->SetPropagationScaling( this->GetPropagationScaling() );
-  filter->SetCurvatureScaling( this->GetCurvatureScaling() );
-  filter->SetAdvectionScaling( this->GetAdvectionScaling() );
+  filter->SetMaximumRMSError(this->GetMaximumRMSError());
+  filter->SetNumberOfIterations(this->GetMaximumNumberOfIterations());
+  filter->SetPropagationScaling(this->GetPropagationScaling());
+  filter->SetCurvatureScaling(this->GetCurvatureScaling());
+  filter->SetAdvectionScaling(this->GetAdvectionScaling());
   filter->UseImageSpacingOn();
 
   // Progress reporting - forward events from the fast marching filter.
   ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-  progress->RegisterInternalFilter( filter, 1.0 );
+  progress->RegisterInternalFilter(filter, 1.0);
 
   filter->Update();
 
@@ -95,7 +88,7 @@ GeodesicActiveContourLevelSetSegmentationModule<NDimension>
   std::cout << "No. elpased iterations: " << filter->GetElapsedIterations() << std::endl;
   std::cout << "RMS change: " << filter->GetRMSChange() << std::endl;
 
-  this->PackOutputImageInOutputSpatialObject( filter->GetOutput() );
+  this->PackOutputImageInOutputSpatialObject(filter->GetOutput());
 }
 
 } // end namespace itk

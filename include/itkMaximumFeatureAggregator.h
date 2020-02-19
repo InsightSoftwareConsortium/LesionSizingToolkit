@@ -68,18 +68,19 @@ public:
 protected:
   MaximumFeatureAggregator();
   ~MaximumFeatureAggregator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
 
 private:
-  void ConsolidateFeatures() override;
-
+  void
+  ConsolidateFeatures() override;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkMaximumFeatureAggregator.hxx"
+#  include "itkMaximumFeatureAggregator.hxx"
 #endif
 
 #endif

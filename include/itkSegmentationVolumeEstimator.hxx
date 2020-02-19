@@ -29,14 +29,13 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-SegmentationVolumeEstimator<NDimension>
-::SegmentationVolumeEstimator()
+SegmentationVolumeEstimator<NDimension>::SegmentationVolumeEstimator()
 {
-  this->SetNumberOfRequiredInputs( 1 );   // for the segmentation Spatial Object
-  this->SetNumberOfRequiredOutputs( 1 );  // for the Volume
+  this->SetNumberOfRequiredInputs(1);  // for the segmentation Spatial Object
+  this->SetNumberOfRequiredOutputs(1); // for the Volume
 
   RealObjectType::Pointer output = RealObjectType::New();
-  this->ProcessObject::SetNthOutput( 0, output.GetPointer() );
+  this->ProcessObject::SetNthOutput(0, output.GetPointer());
 }
 
 
@@ -44,10 +43,8 @@ SegmentationVolumeEstimator<NDimension>
  * Destructor
  */
 template <unsigned int NDimension>
-SegmentationVolumeEstimator<NDimension>
-::~SegmentationVolumeEstimator()
-{
-}
+SegmentationVolumeEstimator<NDimension>::~SegmentationVolumeEstimator()
+{}
 
 
 /**
@@ -55,8 +52,7 @@ SegmentationVolumeEstimator<NDimension>
  */
 template <unsigned int NDimension>
 typename SegmentationVolumeEstimator<NDimension>::RealType
-SegmentationVolumeEstimator<NDimension>
-::GetVolume() const
+SegmentationVolumeEstimator<NDimension>::GetVolume() const
 {
   return this->GetVolumeOutput()->Get();
 }
@@ -68,10 +64,9 @@ SegmentationVolumeEstimator<NDimension>
  */
 template <unsigned int NDimension>
 const typename SegmentationVolumeEstimator<NDimension>::RealObjectType *
-SegmentationVolumeEstimator<NDimension>
-::GetVolumeOutput() const
+SegmentationVolumeEstimator<NDimension>::GetVolumeOutput() const
 {
-  return static_cast<const RealObjectType*>(this->ProcessObject::GetOutput(0));
+  return static_cast<const RealObjectType *>(this->ProcessObject::GetOutput(0));
 }
 
 
@@ -81,10 +76,9 @@ SegmentationVolumeEstimator<NDimension>
  */
 template <unsigned int NDimension>
 void
-SegmentationVolumeEstimator<NDimension>
-::SetInput( const SpatialObjectType * inputSpatialObject )
+SegmentationVolumeEstimator<NDimension>::SetInput(const SpatialObjectType * inputSpatialObject)
 {
-  this->SetNthInput(0, const_cast<SpatialObjectType *>( inputSpatialObject ));
+  this->SetNthInput(0, const_cast<SpatialObjectType *>(inputSpatialObject));
 }
 
 
@@ -93,10 +87,9 @@ SegmentationVolumeEstimator<NDimension>
  */
 template <unsigned int NDimension>
 void
-SegmentationVolumeEstimator<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+SegmentationVolumeEstimator<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -105,8 +98,7 @@ SegmentationVolumeEstimator<NDimension>
  */
 template <unsigned int NDimension>
 void
-SegmentationVolumeEstimator<NDimension>
-::GenerateData()
+SegmentationVolumeEstimator<NDimension>::GenerateData()
 {
   // This method is intended to be overridden by derived classes
 }

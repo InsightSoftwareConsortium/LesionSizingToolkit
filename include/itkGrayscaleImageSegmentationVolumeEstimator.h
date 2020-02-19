@@ -40,8 +40,7 @@ namespace itk
  * \ingroup LesionSizingToolkit
  */
 template <unsigned int NDimension>
-class ITK_TEMPLATE_EXPORT GrayscaleImageSegmentationVolumeEstimator :
- public SegmentationVolumeEstimator<NDimension>
+class ITK_TEMPLATE_EXPORT GrayscaleImageSegmentationVolumeEstimator : public SegmentationVolumeEstimator<NDimension>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(GrayscaleImageSegmentationVolumeEstimator);
@@ -54,7 +53,7 @@ public:
   using RealObjectType = typename Superclass::RealObjectType;
 
   /** Method for constructing new instances of this class. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(GrayscaleImageSegmentationVolumeEstimator, SegmentationVolumeEstimator);
@@ -70,24 +69,26 @@ public:
 
   /** Required type of the input */
   using InputPixelType = float;
-  using InputImageSpatialObjectType = ImageSpatialObject< NDimension, InputPixelType >;
-  using InputImageType = Image< InputPixelType, NDimension >;
+  using InputImageSpatialObjectType = ImageSpatialObject<NDimension, InputPixelType>;
+  using InputImageType = Image<InputPixelType, NDimension>;
 
 protected:
   GrayscaleImageSegmentationVolumeEstimator();
   ~GrayscaleImageSegmentationVolumeEstimator() override;
 
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData() override;
+  void
+  GenerateData() override;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkGrayscaleImageSegmentationVolumeEstimator.hxx"
+#  include "itkGrayscaleImageSegmentationVolumeEstimator.hxx"
 #endif
 
 #endif

@@ -60,44 +60,46 @@ public:
    * negative number if the feature is going to be used to exclude vessels, and
    * it should be a positive number if the feature is intended to include
    * vessels. */
-  itkSetMacro( SigmoidAlpha, double );
-  itkGetMacro( SigmoidAlpha, double );
+  itkSetMacro(SigmoidAlpha, double);
+  itkGetMacro(SigmoidAlpha, double);
 
   /** Beta value to be used in the Sigmoid transformation. It should be close
    * to the Vesselness value that is considered to be a threshold in Vesselness. */
-  itkSetMacro( SigmoidBeta, double );
-  itkGetMacro( SigmoidBeta, double );
+  itkSetMacro(SigmoidBeta, double);
+  itkGetMacro(SigmoidBeta, double);
 
 protected:
   SatoVesselnessSigmoidFeatureGenerator();
   ~SatoVesselnessSigmoidFeatureGenerator() override;
-  void PrintSelf(std::ostream& os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Method invoked by the pipeline in order to trigger the computation of
    * the segmentation. */
-  void  GenerateData () override;
+  void
+  GenerateData() override;
 
 private:
   using InternalPixelType = float;
-  using InternalImageType = Image< InternalPixelType, Dimension >;
+  using InternalImageType = Image<InternalPixelType, Dimension>;
 
   using OutputPixelType = InternalPixelType;
   using OutputImageType = InternalImageType;
 
-  using OutputImageSpatialObjectType = ImageSpatialObject< NDimension, OutputPixelType >;
+  using OutputImageSpatialObjectType = ImageSpatialObject<NDimension, OutputPixelType>;
 
-  using SigmoidFilterType = SigmoidImageFilter< InternalImageType, InternalImageType >;
+  using SigmoidFilterType = SigmoidImageFilter<InternalImageType, InternalImageType>;
 
-  typename SigmoidFilterType::Pointer                 m_SigmoidFilter;
+  typename SigmoidFilterType::Pointer m_SigmoidFilter;
 
-  double      m_SigmoidAlpha;
-  double      m_SigmoidBeta;
+  double m_SigmoidAlpha;
+  double m_SigmoidBeta;
 };
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "itkSatoVesselnessSigmoidFeatureGenerator.hxx"
+#  include "itkSatoVesselnessSigmoidFeatureGenerator.hxx"
 #endif
 
 #endif

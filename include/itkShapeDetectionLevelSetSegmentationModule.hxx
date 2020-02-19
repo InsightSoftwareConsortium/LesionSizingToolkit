@@ -29,20 +29,16 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-ShapeDetectionLevelSetSegmentationModule<NDimension>
-::ShapeDetectionLevelSetSegmentationModule()
-{
-}
+ShapeDetectionLevelSetSegmentationModule<NDimension>::ShapeDetectionLevelSetSegmentationModule()
+{}
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-ShapeDetectionLevelSetSegmentationModule<NDimension>
-::~ShapeDetectionLevelSetSegmentationModule()
-{
-}
+ShapeDetectionLevelSetSegmentationModule<NDimension>::~ShapeDetectionLevelSetSegmentationModule()
+{}
 
 
 /**
@@ -50,10 +46,9 @@ ShapeDetectionLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-ShapeDetectionLevelSetSegmentationModule<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+ShapeDetectionLevelSetSegmentationModule<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -62,23 +57,21 @@ ShapeDetectionLevelSetSegmentationModule<NDimension>
  */
 template <unsigned int NDimension>
 void
-ShapeDetectionLevelSetSegmentationModule<NDimension>
-::GenerateData()
+ShapeDetectionLevelSetSegmentationModule<NDimension>::GenerateData()
 {
-  using FilterType = ShapeDetectionLevelSetImageFilter<
-    InputImageType, FeatureImageType, OutputPixelType >;
+  using FilterType = ShapeDetectionLevelSetImageFilter<InputImageType, FeatureImageType, OutputPixelType>;
 
   typename FilterType::Pointer filter = FilterType::New();
 
-  filter->SetInput( this->GetInternalInputImage() );
-  filter->SetIsoSurfaceValue( 0.0 ); // Zero Set value
-  filter->SetFeatureImage( this->GetInternalFeatureImage() );
+  filter->SetInput(this->GetInternalInputImage());
+  filter->SetIsoSurfaceValue(0.0); // Zero Set value
+  filter->SetFeatureImage(this->GetInternalFeatureImage());
 
-  filter->SetMaximumRMSError( this->GetMaximumRMSError() );
-  filter->SetNumberOfIterations( this->GetMaximumNumberOfIterations() );
-  filter->SetPropagationScaling( this->GetPropagationScaling() );
-  filter->SetCurvatureScaling( this->GetCurvatureScaling() );
-  filter->SetAdvectionScaling( 0.0 );
+  filter->SetMaximumRMSError(this->GetMaximumRMSError());
+  filter->SetNumberOfIterations(this->GetMaximumNumberOfIterations());
+  filter->SetPropagationScaling(this->GetPropagationScaling());
+  filter->SetCurvatureScaling(this->GetCurvatureScaling());
+  filter->SetAdvectionScaling(0.0);
   filter->UseImageSpacingOn();
 
   std::cout << "Propagation Scaling = " << this->GetPropagationScaling() << std::endl;
@@ -91,7 +84,7 @@ ShapeDetectionLevelSetSegmentationModule<NDimension>
   std::cout << "No. elpased iterations: " << filter->GetElapsedIterations() << std::endl;
   std::cout << "RMS change: " << filter->GetRMSChange() << std::endl;
 
-  this->PackOutputImageInOutputSpatialObject( filter->GetOutput() );
+  this->PackOutputImageInOutputSpatialObject(filter->GetOutput());
 }
 
 } // end namespace itk

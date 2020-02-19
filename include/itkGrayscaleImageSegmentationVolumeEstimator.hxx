@@ -29,20 +29,16 @@ namespace itk
  * Constructor
  */
 template <unsigned int NDimension>
-GrayscaleImageSegmentationVolumeEstimator<NDimension>
-::GrayscaleImageSegmentationVolumeEstimator()
-{
-}
+GrayscaleImageSegmentationVolumeEstimator<NDimension>::GrayscaleImageSegmentationVolumeEstimator()
+{}
 
 
 /**
  * Destructor
  */
 template <unsigned int NDimension>
-GrayscaleImageSegmentationVolumeEstimator<NDimension>
-::~GrayscaleImageSegmentationVolumeEstimator()
-{
-}
+GrayscaleImageSegmentationVolumeEstimator<NDimension>::~GrayscaleImageSegmentationVolumeEstimator()
+{}
 
 
 /**
@@ -50,10 +46,9 @@ GrayscaleImageSegmentationVolumeEstimator<NDimension>
  */
 template <unsigned int NDimension>
 void
-GrayscaleImageSegmentationVolumeEstimator<NDimension>
-::PrintSelf(std::ostream& os, Indent indent) const
+GrayscaleImageSegmentationVolumeEstimator<NDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -62,51 +57,50 @@ GrayscaleImageSegmentationVolumeEstimator<NDimension>
  */
 template <unsigned int NDimension>
 void
-GrayscaleImageSegmentationVolumeEstimator<NDimension>
-::GenerateData()
+GrayscaleImageSegmentationVolumeEstimator<NDimension>::GenerateData()
 {
   typename InputImageSpatialObjectType::ConstPointer inputObject =
-    dynamic_cast<const InputImageSpatialObjectType * >( this->ProcessObject::GetInput(0) );
+    dynamic_cast<const InputImageSpatialObjectType *>(this->ProcessObject::GetInput(0));
 
-  if( !inputObject )
-    {
+  if (!inputObject)
+  {
     itkExceptionMacro("Missing input spatial object or incorrect type");
-    }
+  }
 
   const InputImageType * inputImage = inputObject->GetImage();
 
   double sumOfIntensities = 0.0;
 
-  double minimumIntensity = NumericTraits< double >::max();
-  double maximumIntensity = NumericTraits< double >::NonpositiveMin();
+  double minimumIntensity = NumericTraits<double>::max();
+  double maximumIntensity = NumericTraits<double>::NonpositiveMin();
 
-  using IteratorType = ImageRegionConstIterator< InputImageType >;
+  using IteratorType = ImageRegionConstIterator<InputImageType>;
 
   using ImageRegionType = typename InputImageType::RegionType;
 
   const ImageRegionType region = inputImage->GetBufferedRegion();
 
-  IteratorType itr( inputImage, region );
+  IteratorType itr(inputImage, region);
 
   itr.GoToBegin();
 
-  while( !itr.IsAtEnd() )
-    {
+  while (!itr.IsAtEnd())
+  {
     const double pixelValue = itr.Get();
 
-    if( pixelValue < minimumIntensity )
-      {
+    if (pixelValue < minimumIntensity)
+    {
       minimumIntensity = pixelValue;
-      }
+    }
 
-    if( pixelValue > maximumIntensity )
-      {
+    if (pixelValue > maximumIntensity)
+    {
       maximumIntensity = pixelValue;
-      }
+    }
 
     sumOfIntensities += pixelValue;
     ++itr;
-    }
+  }
 
   const unsigned int long numberOfPixels = region.GetNumberOfPixels();
 
@@ -121,24 +115,23 @@ GrayscaleImageSegmentationVolumeEstimator<NDimension>
   //
   // Deal with eventual cases of negative spacing
   //
-  if( pixelVolume < 0.0 )
-    {
+  if (pixelVolume < 0.0)
+  {
     pixelVolume = -pixelVolume;
-    }
+  }
 
-  const double intensityRange =  (maximumIntensity - minimumIntensity);
+  const double intensityRange = (maximumIntensity - minimumIntensity);
 
   double volumeEstimation = 0.0;
 
-  if( intensityRange > 1e-6 )
-    {
+  if (intensityRange > 1e-6)
+  {
     volumeEstimation = pixelVolume * sumOfIntensities / intensityRange;
-    }
+  }
 
-  auto * outputCarrier = static_cast<RealObjectType*>(this->ProcessObject::GetOutput(0));
+  auto * outputCarrier = static_cast<RealObjectType *>(this->ProcessObject::GetOutput(0));
 
-  outputCarrier->Set( volumeEstimation );
-
+  outputCarrier->Set(volumeEstimation);
 }
 
 } // end namespace itk
