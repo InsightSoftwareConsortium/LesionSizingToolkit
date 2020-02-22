@@ -7,12 +7,12 @@ set(WRAPPER_SUBMODULE_ORDER
    itkCannyEdgesDistanceFeatureGenerator
    itkCannyEdgesFeatureGenerator
    itkConfidenceConnectedSegmentationModule
-   itkConnectedreoldSegmentationModule
-   itkDescoteauxeetnessFeatureGenerator
-   itkDescoteauxeetnessImageFilter
-   itkFastMaringAndGeodesicActiveContourLevelSetSegmentationModule
-   itkFastMaringAndapeDetectionLevelSetSegmentationModule
-   itkFastMaringSegmentationModule
+   itkConnectedThresholdSegmentationModule
+   itkDescoteauxSheetnessFeatureGenerator
+   itkDescoteauxSheetnessImageFilter
+   itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule
+   itkFastMarchingAndShapeDetectionLevelSetSegmentationModule
+   itkFastMarchingSegmentationModule
    itkFeatureAggregator
    itkFeatureGenerator
    itkFrangiTubularnessFeatureGenerator
@@ -24,12 +24,12 @@ set(WRAPPER_SUBMODULE_ORDER
    itkIsotropicResamplerImageFilter
    itkLandmarksReader
    itkLesionSegmentationImageFilter8
-   itkLesionSegmentationMeod
+   itkLesionSegmentationMethod
    itkLocalStructureImageFilter
    itkLungWallFeatureGenerator
    itkMaximumFeatureAggregator
    itkMinimumFeatureAggregator
-   itkMorologicalOpenningFeatureGenerator
+   itkMorphologicalOpeningFeatureGenerator
    itkRegionCompetitionImageFilter
    itkRegionGrowingSegmentationModule
    itkSatoLocalStructureFeatureGenerator
@@ -37,12 +37,13 @@ set(WRAPPER_SUBMODULE_ORDER
    itkSatoVesselnessSigmoidFeatureGenerator
    itkSegmentationModule
    itkSegmentationVolumeEstimator
-   itkapeDetectionLevelSetSegmentationModule
+   itkShapeDetectionLevelSetSegmentationModule
    itkSigmoidFeatureGenerator
-   itkSingleaseLevelSetSegmentationModule
-   itkVesselEancingDiffusion3DImageFilter
-   itkVotingBinaroleFillFloodingImageFilter
-   itkWeitedSumFeatureAggregator)
+   itkSinglePhaseLevelSetSegmentationModule
+   itkVesselEnhancingDiffusion3DImageFilter
+   itkVotingBinaryHoleFillFloodingImageFilter
+   itkWeightedSumFeatureAggregator
+   )
 
 itk_auto_load_submodules()
 itk_end_wrap_module()
