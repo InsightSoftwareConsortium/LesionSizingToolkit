@@ -25,7 +25,8 @@ itk_module(LesionSizingToolkit
     ITKIOMeta
   TEST_DEPENDS
     ITKTestKernel
-  EXCLUDE_FROM_DEFAULT
   DESCRIPTION
     "${DOCUMENTATION}"
+  EXCLUDE_FROM_DEFAULT
+  # Header only libraries do not use ENABLE_SHARED
 )
