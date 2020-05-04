@@ -144,11 +144,11 @@ itkGrayscaleImageSegmentationVolumeEstimatorTest1(int itkNotUsed(argc), char * i
 
   const double percentage = 100.0 * itk::Math::abs(difference) / expectedVolume;
 
-  const double epsilon = 1e-6;
   const double allowedVolumePercentageError = 1e-1; // 0.1%
-  if (!itk::Math::FloatAlmostEqual(allowedVolumePercentageError, percentage, 10, epsilon))
+
+  if (!itk::Math::FloatAlmostEqual(percentage, 0.0, 10, allowedVolumePercentageError))
   {
-    std::cerr.precision(static_cast<int>(itk::Math::abs(std::log10(epsilon))));
+    std::cerr.precision(1 + static_cast<int>(itk::Math::abs(std::log10(allowedVolumePercentageError))));
     std::cerr << "Test failed!" << std::endl;
     std::cerr << "Error in volume computation" << std::endl;
     std::cerr << "Expected value " << expectedVolume << std::endl;
