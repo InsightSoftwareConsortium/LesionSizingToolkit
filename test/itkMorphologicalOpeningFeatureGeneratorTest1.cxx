@@ -59,7 +59,7 @@ itkMorphologicalOpeningFeatureGeneratorTest1(int argc, char * argv[])
 
   FeatureGeneratorType::Pointer featureGenerator = FeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, MorphologicalOpenningFeatureGenerator, FeatureGenerator);
+  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, MorphologicalOpeningFeatureGenerator, FeatureGenerator);
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
