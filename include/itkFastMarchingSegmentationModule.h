@@ -39,7 +39,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT FastMarchingSegmentationModule : public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(FastMarchingSegmentationModule);
+  ITK_DISALLOW_COPY_AND_MOVE(FastMarchingSegmentationModule);
 
   /** Standard class type alias. */
   using Self = FastMarchingSegmentationModule;

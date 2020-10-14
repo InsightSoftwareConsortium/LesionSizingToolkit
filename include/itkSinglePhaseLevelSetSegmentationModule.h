@@ -36,7 +36,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT SinglePhaseLevelSetSegmentationModule : public SegmentationModule<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(SinglePhaseLevelSetSegmentationModule);
+  ITK_DISALLOW_COPY_AND_MOVE(SinglePhaseLevelSetSegmentationModule);
 
   /** Standard class type alias. */
   using Self = SinglePhaseLevelSetSegmentationModule;

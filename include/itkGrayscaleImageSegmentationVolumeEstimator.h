@@ -44,7 +44,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT GrayscaleImageSegmentationVolumeEstimator : public SegmentationVolumeEstimator<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(GrayscaleImageSegmentationVolumeEstimator);
+  ITK_DISALLOW_COPY_AND_MOVE(GrayscaleImageSegmentationVolumeEstimator);
 
   /** Standard class type alias. */
   using Self = GrayscaleImageSegmentationVolumeEstimator;

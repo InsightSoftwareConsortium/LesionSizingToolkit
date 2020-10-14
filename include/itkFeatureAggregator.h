@@ -41,7 +41,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT FeatureAggregator : public FeatureGenerator<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(FeatureAggregator);
+  ITK_DISALLOW_COPY_AND_MOVE(FeatureAggregator);
 
   /** Standard class type alias. */
   using Self = FeatureAggregator;

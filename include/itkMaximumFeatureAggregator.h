@@ -43,7 +43,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT MaximumFeatureAggregator : public FeatureAggregator<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(MaximumFeatureAggregator);
+  ITK_DISALLOW_COPY_AND_MOVE(MaximumFeatureAggregator);
 
   /** Standard class type alias. */
   using Self = MaximumFeatureAggregator;

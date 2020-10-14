@@ -63,7 +63,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT CannyEdgesDistanceFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(CannyEdgesDistanceFeatureGenerator);
+  ITK_DISALLOW_COPY_AND_MOVE(CannyEdgesDistanceFeatureGenerator);
 
   /** Standard class type alias. */
   using Self = CannyEdgesDistanceFeatureGenerator;

@@ -40,7 +40,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT SatoVesselnessSigmoidFeatureGenerator : public SatoVesselnessFeatureGenerator<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(SatoVesselnessSigmoidFeatureGenerator);
+  ITK_DISALLOW_COPY_AND_MOVE(SatoVesselnessSigmoidFeatureGenerator);
 
   /** Standard class type alias. */
   using Self = SatoVesselnessSigmoidFeatureGenerator;

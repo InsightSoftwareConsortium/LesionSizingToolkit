@@ -40,7 +40,7 @@ class ITK_TEMPLATE_EXPORT FastMarchingAndShapeDetectionLevelSetSegmentationModul
   : public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(FastMarchingAndShapeDetectionLevelSetSegmentationModule);
+  ITK_DISALLOW_COPY_AND_MOVE(FastMarchingAndShapeDetectionLevelSetSegmentationModule);
 
   /** Standard class type alias. */
   using Self = FastMarchingAndShapeDetectionLevelSetSegmentationModule;

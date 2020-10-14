@@ -41,7 +41,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT FeatureGenerator : public ProcessObject
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(FeatureGenerator);
+  ITK_DISALLOW_COPY_AND_MOVE(FeatureGenerator);
 
   /** Standard class type alias. */
   using Self = FeatureGenerator;

@@ -45,7 +45,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT SatoVesselnessFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(SatoVesselnessFeatureGenerator);
+  ITK_DISALLOW_COPY_AND_MOVE(SatoVesselnessFeatureGenerator);
 
   /** Standard class type alias. */
   using Self = SatoVesselnessFeatureGenerator;

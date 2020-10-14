@@ -41,7 +41,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT SegmentationModule : public ProcessObject
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(SegmentationModule);
+  ITK_DISALLOW_COPY_AND_MOVE(SegmentationModule);
 
   /** Standard class type alias. */
   using Self = SegmentationModule;

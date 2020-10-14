@@ -37,7 +37,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT RegionGrowingSegmentationModule : public SegmentationModule<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(RegionGrowingSegmentationModule);
+  ITK_DISALLOW_COPY_AND_MOVE(RegionGrowingSegmentationModule);
 
   /** Standard class type alias. */
   using Self = RegionGrowingSegmentationModule;

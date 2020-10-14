@@ -38,7 +38,7 @@ class ITK_TEMPLATE_EXPORT ShapeDetectionLevelSetSegmentationModule
   : public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(ShapeDetectionLevelSetSegmentationModule);
+  ITK_DISALLOW_COPY_AND_MOVE(ShapeDetectionLevelSetSegmentationModule);
 
   /** Standard class type alias. */
   using Self = ShapeDetectionLevelSetSegmentationModule;

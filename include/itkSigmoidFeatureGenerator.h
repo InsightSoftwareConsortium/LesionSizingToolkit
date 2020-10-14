@@ -44,7 +44,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT SigmoidFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(SigmoidFeatureGenerator);
+  ITK_DISALLOW_COPY_AND_MOVE(SigmoidFeatureGenerator);
 
   /** Standard class type alias. */
   using Self = SigmoidFeatureGenerator;
