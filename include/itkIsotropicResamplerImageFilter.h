@@ -39,7 +39,7 @@ template <typename TInputImage, typename TOutputImage>
 class IsotropicResamplerImageFilter : public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(IsotropicResamplerImageFilter);
+  ITK_DISALLOW_COPY_AND_MOVE(IsotropicResamplerImageFilter);
 
   /** Standard "Self" & Superclass type alias.  */
   using Self = IsotropicResamplerImageFilter;

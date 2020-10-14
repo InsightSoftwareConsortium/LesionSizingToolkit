@@ -77,7 +77,7 @@ class ITK_TEMPLATE_EXPORT VesselEnhancingDiffusion3DImageFilter
 {
 
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(VesselEnhancingDiffusion3DImageFilter);
+  ITK_DISALLOW_COPY_AND_MOVE(VesselEnhancingDiffusion3DImageFilter);
 
   using Precision = float;
   using ImageType = Image<PixelType, NDimension>;

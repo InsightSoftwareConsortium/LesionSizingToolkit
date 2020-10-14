@@ -42,7 +42,7 @@ template <unsigned int NDimension>
 class BinaryThresholdFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(BinaryThresholdFeatureGenerator);
+  ITK_DISALLOW_COPY_AND_MOVE(BinaryThresholdFeatureGenerator);
 
   /** Standard class type alias. */
   using Self = BinaryThresholdFeatureGenerator;

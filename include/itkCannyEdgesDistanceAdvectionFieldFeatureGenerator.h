@@ -68,7 +68,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT CannyEdgesDistanceAdvectionFieldFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(CannyEdgesDistanceAdvectionFieldFeatureGenerator);
+  ITK_DISALLOW_COPY_AND_MOVE(CannyEdgesDistanceAdvectionFieldFeatureGenerator);
 
   /** Standard class type alias. */
   using Self = CannyEdgesDistanceAdvectionFieldFeatureGenerator;

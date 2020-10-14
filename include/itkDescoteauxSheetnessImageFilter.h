@@ -188,7 +188,7 @@ class ITK_TEMPLATE_EXPORT DescoteauxSheetnessImageFilter
       Function::Sheetness<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(DescoteauxSheetnessImageFilter);
+  ITK_DISALLOW_COPY_AND_MOVE(DescoteauxSheetnessImageFilter);
 
   /** Standard class type alias. */
   using Self = DescoteauxSheetnessImageFilter;

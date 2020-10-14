@@ -38,7 +38,7 @@ class ITK_TEMPLATE_EXPORT GeodesicActiveContourLevelSetSegmentationModule
   : public SinglePhaseLevelSetSegmentationModule<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(GeodesicActiveContourLevelSetSegmentationModule);
+  ITK_DISALLOW_COPY_AND_MOVE(GeodesicActiveContourLevelSetSegmentationModule);
 
   /** Standard class type alias. */
   using Self = GeodesicActiveContourLevelSetSegmentationModule;

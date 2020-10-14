@@ -196,7 +196,7 @@ class ITK_TEMPLATE_EXPORT FrangiTubularnessImageFilter
       Function::Tubularness<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(FrangiTubularnessImageFilter);
+  ITK_DISALLOW_COPY_AND_MOVE(FrangiTubularnessImageFilter);
 
   /** Standard class type alias. */
   using Self = FrangiTubularnessImageFilter;

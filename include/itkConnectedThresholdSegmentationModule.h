@@ -37,7 +37,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT ConnectedThresholdSegmentationModule : public RegionGrowingSegmentationModule<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(ConnectedThresholdSegmentationModule);
+  ITK_DISALLOW_COPY_AND_MOVE(ConnectedThresholdSegmentationModule);
 
   /** Standard class type alias. */
   using Self = ConnectedThresholdSegmentationModule;

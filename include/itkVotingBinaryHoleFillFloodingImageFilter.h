@@ -42,7 +42,7 @@ class ITK_TEMPLATE_EXPORT VotingBinaryHoleFillFloodingImageFilter
   : public VotingBinaryImageFilter<TInputImage, TOutputImage>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(VotingBinaryHoleFillFloodingImageFilter);
+  ITK_DISALLOW_COPY_AND_MOVE(VotingBinaryHoleFillFloodingImageFilter);
 
   /** Standard class type alias. */
   using Self = VotingBinaryHoleFillFloodingImageFilter;

@@ -43,7 +43,7 @@ template <unsigned int NDimension>
 class ITK_TEMPLATE_EXPORT GradientMagnitudeSigmoidFeatureGenerator : public FeatureGenerator<NDimension>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(GradientMagnitudeSigmoidFeatureGenerator);
+  ITK_DISALLOW_COPY_AND_MOVE(GradientMagnitudeSigmoidFeatureGenerator);
 
   /** Standard class type alias. */
   using Self = GradientMagnitudeSigmoidFeatureGenerator;
