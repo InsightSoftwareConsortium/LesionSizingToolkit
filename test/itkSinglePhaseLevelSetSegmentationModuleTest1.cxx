@@ -30,7 +30,7 @@ itkSinglePhaseLevelSetSegmentationModuleTest1(int itkNotUsed(argc), char * itkNo
 
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(segmentationModule, SinglePhaseLevelSetSegmentationModule, SegmentationModule);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(segmentationModule, SinglePhaseLevelSetSegmentationModule, SegmentationModule);
 
   using ImageSpatialObjectType = itk::ImageSpatialObject<Dimension>;
 
@@ -44,26 +44,26 @@ itkSinglePhaseLevelSetSegmentationModuleTest1(int itkNotUsed(argc), char * itkNo
 
   constexpr double propagationScaling = 1.3;
   segmentationModule->SetPropagationScaling(propagationScaling);
-  TEST_SET_GET_VALUE(propagationScaling, segmentationModule->GetPropagationScaling());
+  ITK_TEST_SET_GET_VALUE(propagationScaling, segmentationModule->GetPropagationScaling());
 
   constexpr double curvatureScaling = 1.7;
   segmentationModule->SetCurvatureScaling(curvatureScaling);
-  TEST_SET_GET_VALUE(curvatureScaling, segmentationModule->GetCurvatureScaling());
+  ITK_TEST_SET_GET_VALUE(curvatureScaling, segmentationModule->GetCurvatureScaling());
 
   constexpr double advectionScaling = 1.9;
   segmentationModule->SetAdvectionScaling(advectionScaling);
-  TEST_SET_GET_VALUE(advectionScaling, segmentationModule->GetAdvectionScaling());
+  ITK_TEST_SET_GET_VALUE(advectionScaling, segmentationModule->GetAdvectionScaling());
 
   constexpr double maximumRMSError = 0.01;
   segmentationModule->SetMaximumRMSError(maximumRMSError);
-  TEST_SET_GET_VALUE(maximumRMSError, segmentationModule->GetMaximumRMSError());
+  ITK_TEST_SET_GET_VALUE(maximumRMSError, segmentationModule->GetMaximumRMSError());
 
   constexpr unsigned int maximumNumberOfIterations = 179;
   segmentationModule->SetMaximumNumberOfIterations(maximumNumberOfIterations);
-  TEST_SET_GET_VALUE(maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations());
+  ITK_TEST_SET_GET_VALUE(maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations());
 
 
-  TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
 
 
   std::cout << "Test finished." << std::endl;

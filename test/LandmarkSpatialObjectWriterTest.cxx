@@ -67,7 +67,7 @@ LandmarkSpatialObjectWriterTest(int itkNotUsed(argc), char * argv[])
   writer->SetFileName(argv[1]);
   writer->SetBinaryPoints(false);
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

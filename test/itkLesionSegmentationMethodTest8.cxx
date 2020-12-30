@@ -65,7 +65,7 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
 
   inputImageReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
 
   using MethodType = itk::LesionSegmentationMethod<Dimension>;
 
@@ -133,7 +133,7 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
     maxSpacing = std::stod(argv[4]);
   }
   cannyEdgesGenerator->SetSigma(maxSpacing);
-  TEST_SET_GET_VALUE(maxSpacing, cannyEdgesGenerator->GetSigma());
+  ITK_TEST_SET_GET_VALUE(maxSpacing, cannyEdgesGenerator->GetSigma());
 
   double upperThreshold = 150.0;
   if (argc > 5)
@@ -141,7 +141,7 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
     upperThreshold = std::stod(argv[5]);
   }
   cannyEdgesGenerator->SetUpperThreshold(upperThreshold);
-  TEST_SET_GET_VALUE(upperThreshold, cannyEdgesGenerator->GetUpperThreshold());
+  ITK_TEST_SET_GET_VALUE(upperThreshold, cannyEdgesGenerator->GetUpperThreshold());
 
   double lowerThreshold = 75.0;
   if (argc > 6)
@@ -149,13 +149,13 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
     lowerThreshold = std::stod(argv[6]);
   }
   cannyEdgesGenerator->SetLowerThreshold(lowerThreshold);
-  TEST_SET_GET_VALUE(lowerThreshold, cannyEdgesGenerator->GetLowerThreshold());
+  ITK_TEST_SET_GET_VALUE(lowerThreshold, cannyEdgesGenerator->GetLowerThreshold());
 
 
   using SegmentationModuleType = itk::FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule<Dimension>;
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(segmentationModule,
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(segmentationModule,
                                 FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule,
                                 SinglePhaseLevelSetSegmentationModule);
 
@@ -165,7 +165,7 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
     maximumRMSError = std::stod(argv[7]);
   }
   segmentationModule->SetMaximumRMSError(maximumRMSError);
-  TEST_SET_GET_VALUE(maximumRMSError, segmentationModule->GetMaximumRMSError());
+  ITK_TEST_SET_GET_VALUE(maximumRMSError, segmentationModule->GetMaximumRMSError());
 
   unsigned int maximumNumberOfIterations = 300;
   if (argc > 8)
@@ -173,7 +173,7 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
     maximumNumberOfIterations = std::stoi(argv[8]);
   }
   segmentationModule->SetMaximumNumberOfIterations(maximumNumberOfIterations);
-  TEST_SET_GET_VALUE(maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations());
+  ITK_TEST_SET_GET_VALUE(maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations());
 
   double curvatureScaling = 1.0;
   if (argc > 9)
@@ -181,7 +181,7 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
     curvatureScaling = std::stod(argv[9]);
   }
   segmentationModule->SetCurvatureScaling(curvatureScaling);
-  TEST_SET_GET_VALUE(curvatureScaling, segmentationModule->GetCurvatureScaling());
+  ITK_TEST_SET_GET_VALUE(curvatureScaling, segmentationModule->GetCurvatureScaling());
 
   double propagationScaling = 500.0;
   if (argc > 10)
@@ -189,7 +189,7 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
     propagationScaling = std::stod(argv[10]);
   }
   segmentationModule->SetPropagationScaling(propagationScaling);
-  TEST_SET_GET_VALUE(propagationScaling, segmentationModule->GetPropagationScaling());
+  ITK_TEST_SET_GET_VALUE(propagationScaling, segmentationModule->GetPropagationScaling());
 
   double advectionScaling = 0.0;
   if (argc > 11)
@@ -197,7 +197,7 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
     advectionScaling = std::stod(argv[11]);
   }
   segmentationModule->SetAdvectionScaling(advectionScaling);
-  TEST_SET_GET_VALUE(advectionScaling, segmentationModule->GetAdvectionScaling());
+  ITK_TEST_SET_GET_VALUE(advectionScaling, segmentationModule->GetAdvectionScaling());
 
   double stoppingValue = 5.0;
   if (argc > 12)
@@ -205,7 +205,7 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
     stoppingValue = std::stod(argv[12]);
   }
   segmentationModule->SetStoppingValue(stoppingValue);
-  TEST_SET_GET_VALUE(stoppingValue, segmentationModule->GetStoppingValue());
+  ITK_TEST_SET_GET_VALUE(stoppingValue, segmentationModule->GetStoppingValue());
 
   double distanceFromSeeds = 0.5;
   if (argc > 13)
@@ -213,7 +213,7 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
     distanceFromSeeds = std::stod(argv[13]);
   }
   segmentationModule->SetDistanceFromSeeds(distanceFromSeeds);
-  TEST_SET_GET_VALUE(distanceFromSeeds, segmentationModule->GetDistanceFromSeeds());
+  ITK_TEST_SET_GET_VALUE(distanceFromSeeds, segmentationModule->GetDistanceFromSeeds());
 
 
   lesionSegmentationMethod->SetSegmentationModule(segmentationModule);
@@ -224,12 +224,12 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
 
   landmarksReader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
 
 
   lesionSegmentationMethod->SetInitialSegmentation(landmarksReader->GetOutput());
 
-  TRY_EXPECT_NO_EXCEPTION(lesionSegmentationMethod->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(lesionSegmentationMethod->Update());
 
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
@@ -250,7 +250,7 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   //
@@ -258,7 +258,7 @@ itkLesionSegmentationMethodTest8(int argc, char * argv[])
   //
   lesionSegmentationMethod->AddFeatureGenerator(lungWallGenerator);
 
-  TRY_EXPECT_EXCEPTION(lesionSegmentationMethod->Update());
+  ITK_TRY_EXPECT_EXCEPTION(lesionSegmentationMethod->Update());
 
 
   std::cout << "Test finished." << std::endl;

@@ -41,7 +41,7 @@ itkGeodesicActiveContourLevelSetSegmentationModuleTest1(int argc, char * argv[])
 
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
     segmentationModule, GeodesicActiveContourLevelSetSegmentationModule, SinglePhaseLevelSetSegmentationModule);
 
 
@@ -58,11 +58,11 @@ itkGeodesicActiveContourLevelSetSegmentationModuleTest1(int argc, char * argv[])
 
   inputReader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(inputReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(inputReader->Update());
 
   featureReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION(featureReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(featureReader->Update());
 
 
   using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
@@ -84,7 +84,7 @@ itkGeodesicActiveContourLevelSetSegmentationModuleTest1(int argc, char * argv[])
     advectionScaling = std::stod(argv[4]);
   }
   segmentationModule->SetAdvectionScaling(advectionScaling);
-  TEST_SET_GET_VALUE(advectionScaling, segmentationModule->GetAdvectionScaling());
+  ITK_TEST_SET_GET_VALUE(advectionScaling, segmentationModule->GetAdvectionScaling());
 
   double curvatureScaling = 1.0;
   if (argc > 5)
@@ -92,7 +92,7 @@ itkGeodesicActiveContourLevelSetSegmentationModuleTest1(int argc, char * argv[])
     curvatureScaling = std::stod(argv[5]);
   }
   segmentationModule->SetCurvatureScaling(curvatureScaling);
-  TEST_SET_GET_VALUE(curvatureScaling, segmentationModule->GetCurvatureScaling());
+  ITK_TEST_SET_GET_VALUE(curvatureScaling, segmentationModule->GetCurvatureScaling());
 
   double propagationScaling = 100.0;
   if (argc > 6)
@@ -100,7 +100,7 @@ itkGeodesicActiveContourLevelSetSegmentationModuleTest1(int argc, char * argv[])
     propagationScaling = std::stod(argv[6]);
   }
   segmentationModule->SetPropagationScaling(propagationScaling);
-  TEST_SET_GET_VALUE(propagationScaling, segmentationModule->GetPropagationScaling());
+  ITK_TEST_SET_GET_VALUE(propagationScaling, segmentationModule->GetPropagationScaling());
 
   unsigned int maximumNumberOfIterations = 100;
   if (argc > 7)
@@ -108,10 +108,10 @@ itkGeodesicActiveContourLevelSetSegmentationModuleTest1(int argc, char * argv[])
     maximumNumberOfIterations = std::stod(argv[7]);
   }
   segmentationModule->SetMaximumNumberOfIterations(maximumNumberOfIterations);
-  TEST_SET_GET_VALUE(maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations());
+  ITK_TEST_SET_GET_VALUE(maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations());
 
 
-  TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
@@ -126,7 +126,7 @@ itkGeodesicActiveContourLevelSetSegmentationModuleTest1(int argc, char * argv[])
   writer->SetFileName(argv[3]);
   writer->SetInput(outputImage);
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   std::cout << "Test finished." << std::endl;

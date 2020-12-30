@@ -50,18 +50,18 @@ itkFastMarchingSegmentationModuleTest1(int argc, char * argv[])
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName(argv[1]);
-  TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
 
 
   FeatureReaderType::Pointer featureReader = FeatureReaderType::New();
   featureReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION(featureReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(featureReader->Update());
 
 
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
     segmentationModule, FastMarchingSegmentationModule, SinglePhaseLevelSetSegmentationModule);
 
   using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
@@ -85,7 +85,7 @@ itkFastMarchingSegmentationModuleTest1(int argc, char * argv[])
     stoppingTime = std::stod(argv[4]);
   }
   segmentationModule->SetStoppingValue(stoppingTime);
-  TEST_SET_GET_VALUE(stoppingTime, segmentationModule->GetStoppingValue());
+  ITK_TEST_SET_GET_VALUE(stoppingTime, segmentationModule->GetStoppingValue());
 
   double distanceFromSeeds = 5.0;
   if (argc > 5)
@@ -93,10 +93,10 @@ itkFastMarchingSegmentationModuleTest1(int argc, char * argv[])
     distanceFromSeeds = std::stod(argv[5]);
   }
   segmentationModule->SetDistanceFromSeeds(distanceFromSeeds);
-  TEST_SET_GET_VALUE(distanceFromSeeds, segmentationModule->GetDistanceFromSeeds());
+  ITK_TEST_SET_GET_VALUE(distanceFromSeeds, segmentationModule->GetDistanceFromSeeds());
 
 
-  TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
 
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
@@ -111,7 +111,7 @@ itkFastMarchingSegmentationModuleTest1(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

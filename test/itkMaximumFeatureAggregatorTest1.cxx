@@ -47,13 +47,13 @@ itkMaximumFeatureAggregatorTest1(int argc, char * argv[])
 
   inputImageReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
 
   using AggregatorType = itk::MaximumFeatureAggregator<Dimension>;
 
   AggregatorType::Pointer featureAggregator = AggregatorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(featureAggregator, MaximumFeatureAggregator, FeatureAggregator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureAggregator, MaximumFeatureAggregator, FeatureAggregator);
 
   using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator<Dimension>;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
@@ -94,7 +94,7 @@ itkMaximumFeatureAggregatorTest1(int argc, char * argv[])
   sigmoidGenerator->SetBeta(-200.0);
 
 
-  TRY_EXPECT_NO_EXCEPTION(featureAggregator->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(featureAggregator->Update());
 
 
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
@@ -113,7 +113,7 @@ itkMaximumFeatureAggregatorTest1(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

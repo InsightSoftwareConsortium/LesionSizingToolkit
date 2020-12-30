@@ -119,7 +119,7 @@ itkDescoteauxSheetnessImageFilterTest2(int argc, char * argv[])
 
   FilterType::Pointer sheetnessFilter = FilterType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(sheetnessFilter, DescoteauxSheetnessImageFilter, UnaryFunctorImageFilter);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(sheetnessFilter, DescoteauxSheetnessImageFilter, UnaryFunctorImageFilter);
 
   hessian->SetInput(inputImage);
   eigen->SetInput(hessian->GetOutput());
@@ -132,7 +132,7 @@ itkDescoteauxSheetnessImageFilterTest2(int argc, char * argv[])
     detectBrightSheets = std::stoi(argv[2]);
   }
   sheetnessFilter->SetDetectBrightSheets(detectBrightSheets);
-  // TEST_SET_GET_BOOLEAN( sheetnessFilter, DetectBrightSheets, detectBrightSheets );
+  // ITK_TEST_SET_GET_BOOLEAN( sheetnessFilter, DetectBrightSheets, detectBrightSheets );
 
   double sigma = 1.0;
   if (argc > 3)
@@ -140,7 +140,7 @@ itkDescoteauxSheetnessImageFilterTest2(int argc, char * argv[])
     sigma = std::stod(argv[3]);
   }
   hessian->SetSigma(sigma);
-  TEST_SET_GET_VALUE(sigma, hessian->GetSigma());
+  ITK_TEST_SET_GET_VALUE(sigma, hessian->GetSigma());
 
   double sheetnessNormalization = 0.5;
   if (argc > 4)
@@ -148,7 +148,7 @@ itkDescoteauxSheetnessImageFilterTest2(int argc, char * argv[])
     sheetnessNormalization = std::stod(argv[4]);
   }
   sheetnessFilter->SetSheetnessNormalization(sheetnessNormalization);
-  // TEST_SET_GET_VALUE( sheetnessNormalization, sheetnessFilter->GetSheetnessNormalization() );
+  // ITK_TEST_SET_GET_VALUE( sheetnessNormalization, sheetnessFilter->GetSheetnessNormalization() );
 
   double bloobinessNormalization = 2.0;
   if (argc > 5)
@@ -156,7 +156,7 @@ itkDescoteauxSheetnessImageFilterTest2(int argc, char * argv[])
     bloobinessNormalization = std::stod(argv[5]);
   }
   sheetnessFilter->SetBloobinessNormalization(bloobinessNormalization);
-  // TEST_SET_GET_VALUE( bloobinessNormalization, sheetnessFilter->GetBloobinessNormalization() );
+  // ITK_TEST_SET_GET_VALUE( bloobinessNormalization, sheetnessFilter->GetBloobinessNormalization() );
 
   double noiseNormalization = 1.0;
   if (argc > 6)
@@ -164,13 +164,13 @@ itkDescoteauxSheetnessImageFilterTest2(int argc, char * argv[])
     noiseNormalization = std::stod(argv[6]);
   }
   sheetnessFilter->SetNoiseNormalization(noiseNormalization);
-  // TEST_SET_GET_VALUE( noiseNormalization, sheetnessFilter->GetNoiseNormalization() );
+  // ITK_TEST_SET_GET_VALUE( noiseNormalization, sheetnessFilter->GetNoiseNormalization() );
 
 
   eigen->SetDimension(Dimension);
 
 
-  TRY_EXPECT_NO_EXCEPTION(sheetnessFilter->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(sheetnessFilter->Update());
 
 
   WriterType::Pointer writer = WriterType::New();
@@ -178,7 +178,7 @@ itkDescoteauxSheetnessImageFilterTest2(int argc, char * argv[])
   writer->SetFileName(argv[1]);
   writer->SetInput(sheetnessFilter->GetOutput());
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   OutputImageType::ConstPointer outputImage = sheetnessFilter->GetOutput();

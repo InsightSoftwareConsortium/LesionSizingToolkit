@@ -63,7 +63,7 @@ itkLocalStructureImageFilterTest1(int argc, char * argv[])
 
   LocalStructureFilterType::Pointer localStructure = LocalStructureFilterType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(localStructure, LocalStructureImageFilter, UnaryFunctorImageFilter);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(localStructure, LocalStructureImageFilter, UnaryFunctorImageFilter);
 
   hessian->SetInput(reader->GetOutput());
   eigen->SetInput(hessian->GetOutput());
@@ -76,7 +76,7 @@ itkLocalStructureImageFilterTest1(int argc, char * argv[])
     sigma = std::stod(argv[3]);
   }
   hessian->SetSigma(sigma);
-  TEST_SET_GET_VALUE(sigma, hessian->GetSigma());
+  ITK_TEST_SET_GET_VALUE(sigma, hessian->GetSigma());
 
   double alpha = 0.25;
   if (argc > 4)
@@ -84,7 +84,7 @@ itkLocalStructureImageFilterTest1(int argc, char * argv[])
     alpha = std::stod(argv[4]);
   }
   localStructure->SetAlpha(alpha);
-  // TEST_SET_GET_VALUE( alpha, localStructure->GetAlpha() );
+  // ITK_TEST_SET_GET_VALUE( alpha, localStructure->GetAlpha() );
 
   double gamma = 0.5;
   if (argc > 5)
@@ -92,7 +92,7 @@ itkLocalStructureImageFilterTest1(int argc, char * argv[])
     gamma = std::stod(argv[5]);
   }
   localStructure->SetGamma(gamma);
-  // TEST_SET_GET_VALUE( gamma, localStructure->GetGamma() );
+  // ITK_TEST_SET_GET_VALUE( gamma, localStructure->GetGamma() );
 
   eigen->SetDimension(Dimension);
 
@@ -101,7 +101,7 @@ itkLocalStructureImageFilterTest1(int argc, char * argv[])
   writer->SetFileName(argv[2]);
   writer->SetInput(localStructure->GetOutput());
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

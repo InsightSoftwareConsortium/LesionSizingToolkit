@@ -53,7 +53,7 @@ itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1(int argc, char * argv[]
 
   reader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(reader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
 
   using CannyEdgesDistanceAdvectionFieldFeatureGeneratorType =
@@ -63,7 +63,7 @@ itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1(int argc, char * argv[]
   CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::Pointer featureGenerator =
     CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, CannyEdgesDistanceAdvectionFieldFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, CannyEdgesDistanceAdvectionFieldFeatureGenerator, FeatureGenerator);
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -83,7 +83,7 @@ itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1(int argc, char * argv[]
     sigma = std::stod(argv[3]);
   }
   featureGenerator->SetSigma(sigma);
-  TEST_SET_GET_VALUE(sigma, featureGenerator->GetSigma());
+  ITK_TEST_SET_GET_VALUE(sigma, featureGenerator->GetSigma());
 
   double upperThreshold =
     itk::NumericTraits<CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::InternalPixelType>::max();
@@ -92,7 +92,7 @@ itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1(int argc, char * argv[]
     upperThreshold = std::stod(argv[4]);
   }
   featureGenerator->SetUpperThreshold(upperThreshold);
-  TEST_SET_GET_VALUE(upperThreshold, featureGenerator->GetUpperThreshold());
+  ITK_TEST_SET_GET_VALUE(upperThreshold, featureGenerator->GetUpperThreshold());
 
   double lowerThreshold =
     itk::NumericTraits<CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::InternalPixelType>::min();
@@ -101,10 +101,10 @@ itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1(int argc, char * argv[]
     lowerThreshold = std::stod(argv[5]);
   }
   featureGenerator->SetLowerThreshold(lowerThreshold);
-  TEST_SET_GET_VALUE(lowerThreshold, featureGenerator->GetLowerThreshold());
+  ITK_TEST_SET_GET_VALUE(lowerThreshold, featureGenerator->GetLowerThreshold());
 
 
-  TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
@@ -120,7 +120,7 @@ itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1(int argc, char * argv[]
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   std::cout << "Test finished." << std::endl;

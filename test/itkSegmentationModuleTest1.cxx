@@ -30,7 +30,7 @@ itkSegmentationModuleTest1(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(segmentationModule, SegmentationModule, ProcessObject);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(segmentationModule, SegmentationModule, ProcessObject);
 
 
   using ImageSpatialObjectType = itk::ImageSpatialObject<Dimension>;
@@ -43,7 +43,7 @@ itkSegmentationModuleTest1(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 
   segmentationModule->SetFeature(featureObject);
 
-  TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
 
 
   std::cout << "Test finished." << std::endl;

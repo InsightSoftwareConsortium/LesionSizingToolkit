@@ -52,7 +52,7 @@ itkSatoVesselnessSigmoidFeatureGeneratorTest1(int argc, char * argv[])
 
   reader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(reader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
 
   using SatoVesselnessSigmoidFeatureGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator<Dimension>;
@@ -61,7 +61,7 @@ itkSatoVesselnessSigmoidFeatureGeneratorTest1(int argc, char * argv[])
   SatoVesselnessSigmoidFeatureGeneratorType::Pointer featureGenerator =
     SatoVesselnessSigmoidFeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
     featureGenerator, SatoVesselnessSigmoidFeatureGenerator, SatoVesselnessFeatureGenerator);
 
 
@@ -82,7 +82,7 @@ itkSatoVesselnessSigmoidFeatureGeneratorTest1(int argc, char * argv[])
     sigma = std::stod(argv[3]);
   }
   featureGenerator->SetSigma(sigma);
-  TEST_SET_GET_VALUE(sigma, featureGenerator->GetSigma());
+  ITK_TEST_SET_GET_VALUE(sigma, featureGenerator->GetSigma());
 
   double alpha1 = 0.5;
   if (argc > 4)
@@ -90,7 +90,7 @@ itkSatoVesselnessSigmoidFeatureGeneratorTest1(int argc, char * argv[])
     alpha1 = std::stod(argv[4]);
   }
   featureGenerator->SetAlpha1(alpha1);
-  TEST_SET_GET_VALUE(alpha1, featureGenerator->GetAlpha1());
+  ITK_TEST_SET_GET_VALUE(alpha1, featureGenerator->GetAlpha1());
 
   double alpha2 = 2.0;
   if (argc > 5)
@@ -98,7 +98,7 @@ itkSatoVesselnessSigmoidFeatureGeneratorTest1(int argc, char * argv[])
     alpha2 = std::stod(argv[5]);
   }
   featureGenerator->SetAlpha2(alpha2);
-  TEST_SET_GET_VALUE(alpha2, featureGenerator->GetAlpha2());
+  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator->GetAlpha2());
 
   double sigmoidAlpha = 1.0;
   if (argc > 6)
@@ -106,7 +106,7 @@ itkSatoVesselnessSigmoidFeatureGeneratorTest1(int argc, char * argv[])
     sigmoidAlpha = std::stod(argv[6]);
   }
   featureGenerator->SetSigmoidAlpha(sigmoidAlpha);
-  TEST_SET_GET_VALUE(sigmoidAlpha, featureGenerator->GetSigmoidAlpha());
+  ITK_TEST_SET_GET_VALUE(sigmoidAlpha, featureGenerator->GetSigmoidAlpha());
 
   double sigmoidBeta = -200.0;
   if (argc > 7)
@@ -114,10 +114,10 @@ itkSatoVesselnessSigmoidFeatureGeneratorTest1(int argc, char * argv[])
     sigmoidBeta = std::stod(argv[7]);
   }
   featureGenerator->SetSigmoidBeta(sigmoidBeta);
-  TEST_SET_GET_VALUE(sigmoidBeta, featureGenerator->GetSigmoidBeta());
+  ITK_TEST_SET_GET_VALUE(sigmoidBeta, featureGenerator->GetSigmoidBeta());
 
 
-  TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
@@ -133,7 +133,7 @@ itkSatoVesselnessSigmoidFeatureGeneratorTest1(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   std::cout << "Test finished." << std::endl;
