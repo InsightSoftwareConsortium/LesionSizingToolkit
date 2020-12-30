@@ -32,7 +32,7 @@ itkGrayscaleImageSegmentationVolumeEstimatorTest1(int itkNotUsed(argc), char * i
 
   VolumeEstimatorType::Pointer volumeEstimator = VolumeEstimatorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
     volumeEstimator, GrayscaleImageSegmentationVolumeEstimator, SegmentationVolumeEstimator);
 
   using ImageSpatialObjectType = itk::ImageSpatialObject<Dimension>;
@@ -41,7 +41,7 @@ itkGrayscaleImageSegmentationVolumeEstimatorTest1(int itkNotUsed(argc), char * i
 
   volumeEstimator->SetInput(inputObject);
 
-  TRY_EXPECT_EXCEPTION(volumeEstimator->Update());
+  ITK_TRY_EXPECT_EXCEPTION(volumeEstimator->Update());
 
 
   using InputImageType = VolumeEstimatorType::InputImageType;
@@ -114,7 +114,7 @@ itkGrayscaleImageSegmentationVolumeEstimatorTest1(int itkNotUsed(argc), char * i
     ++itr;
   }
 
-  TRY_EXPECT_NO_EXCEPTION(volumeEstimator->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(volumeEstimator->Update());
 
   VolumeEstimatorType::RealType volume1 = volumeEstimator->GetVolume();
 
@@ -134,7 +134,7 @@ itkGrayscaleImageSegmentationVolumeEstimatorTest1(int itkNotUsed(argc), char * i
   writer->SetInput(image);
   writer->SetFileName("sphereForVolumeTest.mhd");
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   const double pi = atan(1.0) * 4.0;
 

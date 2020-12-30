@@ -51,14 +51,14 @@ itkBinaryThresholdFeatureGeneratorTest1(int argc, char * argv[])
 
   reader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(reader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
   using BinaryThresholdFeatureGeneratorType = itk::BinaryThresholdFeatureGenerator<Dimension>;
   using SpatialObjectType = BinaryThresholdFeatureGeneratorType::SpatialObjectType;
 
   BinaryThresholdFeatureGeneratorType::Pointer featureGenerator = BinaryThresholdFeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, BinaryThresholdFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, BinaryThresholdFeatureGenerator, FeatureGenerator);
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -77,9 +77,9 @@ itkBinaryThresholdFeatureGeneratorTest1(int argc, char * argv[])
     threshold = std::stod(argv[3]);
   }
   featureGenerator->SetThreshold(threshold);
-  TEST_SET_GET_VALUE(threshold, featureGenerator->GetThreshold());
+  ITK_TEST_SET_GET_VALUE(threshold, featureGenerator->GetThreshold());
 
-  TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
 
@@ -94,7 +94,7 @@ itkBinaryThresholdFeatureGeneratorTest1(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

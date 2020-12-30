@@ -34,7 +34,7 @@ itkLesionSegmentationMethodTest2(int itkNotUsed(argc), char * itkNotUsed(argv)[]
 
   MethodType::Pointer segmentationMethod = MethodType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(segmentationMethod, LesionSegmentationMethod, ProcessObject);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(segmentationMethod, LesionSegmentationMethod, ProcessObject);
 
   using ImageMaskSpatialObjectType = itk::ImageMaskSpatialObject<Dimension>;
 
@@ -68,7 +68,7 @@ itkLesionSegmentationMethodTest2(int itkNotUsed(argc), char * itkNotUsed(argv)[]
   segmentationMethod->AddFeatureGenerator(localStructureGenerator);
   segmentationMethod->AddFeatureGenerator(gradientMagnitudeSigmoidGenerator);
 
-  TRY_EXPECT_EXCEPTION(segmentationMethod->Update());
+  ITK_TRY_EXPECT_EXCEPTION(segmentationMethod->Update());
 
 
   std::cout << "Test finished." << std::endl;

@@ -47,7 +47,7 @@ itkWeightedSumFeatureAggregatorTest1(int argc, char * argv[])
 
   inputImageReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
 
 
   using AggregatorType = itk::WeightedSumFeatureAggregator<Dimension>;
@@ -117,7 +117,7 @@ itkWeightedSumFeatureAggregatorTest1(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   featureAggregator->Print(std::cout);
@@ -127,7 +127,7 @@ itkWeightedSumFeatureAggregatorTest1(int argc, char * argv[])
   //
   featureAggregator->AddWeight(13.0);
 
-  TRY_EXPECT_EXCEPTION(featureAggregator->Update());
+  ITK_TRY_EXPECT_EXCEPTION(featureAggregator->Update());
 
 
   std::cout << "Test finished." << std::endl;

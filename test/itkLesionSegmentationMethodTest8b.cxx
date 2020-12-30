@@ -59,21 +59,21 @@ itkLesionSegmentationMethodTest8b(int argc, char * argv[])
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
   inputImageReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
 
   const InputImageType * inputImage = inputImageReader->GetOutput();
 
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
   landmarksReader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
 
 
   const SeedSpatialObjectType * landmarks = landmarksReader->GetOutput();
 
   SegmentationMethodType::Pointer segmentationMethod = SegmentationMethodType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(segmentationMethod, LesionSegmentationImageFilter8, ImageToImageFilter);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(segmentationMethod, LesionSegmentationImageFilter8, ImageToImageFilter);
 
 
   segmentationMethod->SetInput(inputImage);
@@ -86,19 +86,19 @@ itkLesionSegmentationMethodTest8b(int argc, char * argv[])
     sigmoidBeta = std::stod(argv[4]);
   }
   segmentationMethod->SetSigmoidBeta(sigmoidBeta);
-  TEST_SET_GET_VALUE(sigmoidBeta, segmentationMethod->GetSigmoidBeta());
+  ITK_TEST_SET_GET_VALUE(sigmoidBeta, segmentationMethod->GetSigmoidBeta());
 
   segmentationMethod->SetResampleThickSliceData(resampleThickSliceData);
   segmentationMethod->SetUseVesselEnhancingDiffusion(useVesselEnhancingDiffusion);
 
-  TRY_EXPECT_NO_EXCEPTION(segmentationMethod->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(segmentationMethod->Update());
 
   OutputWriterType::Pointer writer = OutputWriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(segmentationMethod->GetOutput());
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

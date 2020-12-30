@@ -50,7 +50,7 @@ itkLesionSegmentationMethodTest3(int argc, char * argv[])
 
   inputImageReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
 
   using LandmarksReaderType = itk::LandmarksReader<Dimension>;
 
@@ -58,7 +58,7 @@ itkLesionSegmentationMethodTest3(int argc, char * argv[])
 
   landmarksReader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
 
 
   using MethodType = itk::LesionSegmentationMethod<Dimension>;
@@ -117,7 +117,7 @@ itkLesionSegmentationMethodTest3(int argc, char * argv[])
 
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
     segmentationModule, ConnectedThresholdSegmentationModule, RegionGrowingSegmentationModule);
 
   lesionSegmentationMethod->SetSegmentationModule(segmentationModule);
@@ -129,7 +129,7 @@ itkLesionSegmentationMethodTest3(int argc, char * argv[])
     lowerThreshold = std::stod(argv[4]);
   }
   segmentationModule->SetLowerThreshold(lowerThreshold);
-  TEST_SET_GET_VALUE(lowerThreshold, segmentationModule->GetLowerThreshold());
+  ITK_TEST_SET_GET_VALUE(lowerThreshold, segmentationModule->GetLowerThreshold());
 
   double upperThreshold = 1.0;
   if (argc > 5)
@@ -137,12 +137,12 @@ itkLesionSegmentationMethodTest3(int argc, char * argv[])
     upperThreshold = std::stod(argv[5]);
   }
   segmentationModule->SetUpperThreshold(upperThreshold);
-  TEST_SET_GET_VALUE(upperThreshold, segmentationModule->GetUpperThreshold());
+  ITK_TEST_SET_GET_VALUE(upperThreshold, segmentationModule->GetUpperThreshold());
 
 
   lesionSegmentationMethod->SetInitialSegmentation(landmarksReader->GetOutput());
 
-  TRY_EXPECT_NO_EXCEPTION(lesionSegmentationMethod->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(lesionSegmentationMethod->Update());
 
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
@@ -163,7 +163,7 @@ itkLesionSegmentationMethodTest3(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

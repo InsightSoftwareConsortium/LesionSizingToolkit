@@ -44,7 +44,7 @@ itkSatoVesselnessFeatureGeneratorMultiScaleTest1(int argc, char * argv[])
 
   inputImageReader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
 
 
   using AggregatorType = itk::MaximumFeatureAggregator<Dimension>;
@@ -56,18 +56,18 @@ itkSatoVesselnessFeatureGeneratorMultiScaleTest1(int argc, char * argv[])
 
   FeatureGeneratorType::Pointer featureGenerator1 = FeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator1, SatoVesselnessFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator1, SatoVesselnessFeatureGenerator, FeatureGenerator);
 
   FeatureGeneratorType::Pointer featureGenerator2 = FeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator2, SatoVesselnessFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator2, SatoVesselnessFeatureGenerator, FeatureGenerator);
 
   FeatureGeneratorType::Pointer featureGenerator3 = FeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator3, SatoVesselnessFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator3, SatoVesselnessFeatureGenerator, FeatureGenerator);
 
   FeatureGeneratorType::Pointer featureGenerator4 = FeatureGeneratorType::New();
-  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator4, SatoVesselnessFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator4, SatoVesselnessFeatureGenerator, FeatureGenerator);
 
 
   double smallestSigma = 1.0;
@@ -76,16 +76,16 @@ itkSatoVesselnessFeatureGeneratorMultiScaleTest1(int argc, char * argv[])
     smallestSigma = std::stod(argv[3]);
   }
   featureGenerator1->SetSigma(smallestSigma);
-  TEST_SET_GET_VALUE(smallestSigma, featureGenerator1->GetSigma());
+  ITK_TEST_SET_GET_VALUE(smallestSigma, featureGenerator1->GetSigma());
   double smallestSigma2 = smallestSigma * 2.0;
   featureGenerator2->SetSigma(smallestSigma2);
-  TEST_SET_GET_VALUE(smallestSigma2, featureGenerator2->GetSigma());
+  ITK_TEST_SET_GET_VALUE(smallestSigma2, featureGenerator2->GetSigma());
   double smallestSigma3 = smallestSigma * 4.0;
   featureGenerator3->SetSigma(smallestSigma3);
-  TEST_SET_GET_VALUE(smallestSigma3, featureGenerator3->GetSigma());
+  ITK_TEST_SET_GET_VALUE(smallestSigma3, featureGenerator3->GetSigma());
   double smallestSigma4 = smallestSigma * 8.0;
   featureGenerator4->SetSigma(smallestSigma4);
-  TEST_SET_GET_VALUE(smallestSigma4, featureGenerator4->GetSigma());
+  ITK_TEST_SET_GET_VALUE(smallestSigma4, featureGenerator4->GetSigma());
 
   double alpha1 = 0.5;
   if (argc > 4)
@@ -93,13 +93,13 @@ itkSatoVesselnessFeatureGeneratorMultiScaleTest1(int argc, char * argv[])
     alpha1 = std::stod(argv[4]);
   }
   featureGenerator1->SetAlpha1(alpha1);
-  TEST_SET_GET_VALUE(alpha1, featureGenerator1->GetAlpha1());
+  ITK_TEST_SET_GET_VALUE(alpha1, featureGenerator1->GetAlpha1());
   featureGenerator2->SetAlpha1(alpha1);
-  TEST_SET_GET_VALUE(alpha1, featureGenerator2->GetAlpha1());
+  ITK_TEST_SET_GET_VALUE(alpha1, featureGenerator2->GetAlpha1());
   featureGenerator3->SetAlpha1(alpha1);
-  TEST_SET_GET_VALUE(alpha1, featureGenerator3->GetAlpha1());
+  ITK_TEST_SET_GET_VALUE(alpha1, featureGenerator3->GetAlpha1());
   featureGenerator4->SetAlpha1(alpha1);
-  TEST_SET_GET_VALUE(alpha1, featureGenerator4->GetAlpha1());
+  ITK_TEST_SET_GET_VALUE(alpha1, featureGenerator4->GetAlpha1());
 
   double alpha2 = 2.0;
   if (argc > 5)
@@ -107,13 +107,13 @@ itkSatoVesselnessFeatureGeneratorMultiScaleTest1(int argc, char * argv[])
     alpha2 = std::stod(argv[5]);
   }
   featureGenerator1->SetAlpha2(alpha2);
-  TEST_SET_GET_VALUE(alpha2, featureGenerator1->GetAlpha2());
+  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator1->GetAlpha2());
   featureGenerator2->SetAlpha2(alpha2);
-  TEST_SET_GET_VALUE(alpha2, featureGenerator2->GetAlpha2());
+  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator2->GetAlpha2());
   featureGenerator3->SetAlpha2(alpha2);
-  TEST_SET_GET_VALUE(alpha2, featureGenerator3->GetAlpha2());
+  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator3->GetAlpha2());
   featureGenerator4->SetAlpha2(alpha2);
-  TEST_SET_GET_VALUE(alpha2, featureGenerator4->GetAlpha2());
+  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator4->GetAlpha2());
 
 
   using SpatialObjectType = AggregatorType::SpatialObjectType;
@@ -137,7 +137,7 @@ itkSatoVesselnessFeatureGeneratorMultiScaleTest1(int argc, char * argv[])
   featureAggregator->AddFeatureGenerator(featureGenerator3);
   featureAggregator->AddFeatureGenerator(featureGenerator4);
 
-  TRY_EXPECT_NO_EXCEPTION(featureAggregator->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(featureAggregator->Update());
 
 
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
@@ -157,7 +157,7 @@ itkSatoVesselnessFeatureGeneratorMultiScaleTest1(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   featureAggregator->Print(std::cout);

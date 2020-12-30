@@ -57,7 +57,7 @@ itkLesionSegmentationMethodTest4(int argc, char * argv[])
 
   inputImageReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
 
 
   using MethodType = itk::LesionSegmentationMethod<Dimension>;
@@ -131,7 +131,7 @@ itkLesionSegmentationMethodTest4(int argc, char * argv[])
     stoppingTime = std::stod(argv[4]);
   }
   segmentationModule->SetStoppingValue(stoppingTime);
-  TEST_SET_GET_VALUE(stoppingTime, segmentationModule->GetStoppingValue());
+  ITK_TEST_SET_GET_VALUE(stoppingTime, segmentationModule->GetStoppingValue());
 
   double distanceFromSeeds = 5.0;
   if (argc > 5)
@@ -139,7 +139,7 @@ itkLesionSegmentationMethodTest4(int argc, char * argv[])
     distanceFromSeeds = std::stod(argv[5]);
   }
   segmentationModule->SetDistanceFromSeeds(distanceFromSeeds);
-  TEST_SET_GET_VALUE(distanceFromSeeds, segmentationModule->GetDistanceFromSeeds());
+  ITK_TEST_SET_GET_VALUE(distanceFromSeeds, segmentationModule->GetDistanceFromSeeds());
 
 
   lesionSegmentationMethod->SetSegmentationModule(segmentationModule);
@@ -150,12 +150,12 @@ itkLesionSegmentationMethodTest4(int argc, char * argv[])
 
   landmarksReader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
 
 
   lesionSegmentationMethod->SetInitialSegmentation(landmarksReader->GetOutput());
 
-  TRY_EXPECT_NO_EXCEPTION(lesionSegmentationMethod->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(lesionSegmentationMethod->Update());
 
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
@@ -176,7 +176,7 @@ itkLesionSegmentationMethodTest4(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   segmentationModule->Print(std::cout);

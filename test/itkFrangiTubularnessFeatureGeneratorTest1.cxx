@@ -51,14 +51,14 @@ itkFrangiTubularnessFeatureGeneratorTest1(int argc, char * argv[])
 
   reader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(reader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
   using FrangiTubularnessFeatureGeneratorType = itk::FrangiTubularnessFeatureGenerator<Dimension>;
   using SpatialObjectType = FrangiTubularnessFeatureGeneratorType::SpatialObjectType;
 
   FrangiTubularnessFeatureGeneratorType::Pointer featureGenerator = FrangiTubularnessFeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, FrangiTubularnessFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, FrangiTubularnessFeatureGenerator, FeatureGenerator);
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
 
@@ -77,7 +77,7 @@ itkFrangiTubularnessFeatureGeneratorTest1(int argc, char * argv[])
     sigma = std::stod(argv[3]);
   }
   featureGenerator->SetSigma(sigma);
-  TEST_SET_GET_VALUE(sigma, featureGenerator->GetSigma());
+  ITK_TEST_SET_GET_VALUE(sigma, featureGenerator->GetSigma());
 
   double sheetnessNormalization = 0.5;
   if (argc > 4)
@@ -85,7 +85,7 @@ itkFrangiTubularnessFeatureGeneratorTest1(int argc, char * argv[])
     sheetnessNormalization = std::stod(argv[4]);
   }
   featureGenerator->SetSheetnessNormalization(sheetnessNormalization);
-  TEST_SET_GET_VALUE(sheetnessNormalization, featureGenerator->GetSheetnessNormalization());
+  ITK_TEST_SET_GET_VALUE(sheetnessNormalization, featureGenerator->GetSheetnessNormalization());
 
   double bloobinessNormalization = 2.0;
   if (argc > 5)
@@ -93,7 +93,7 @@ itkFrangiTubularnessFeatureGeneratorTest1(int argc, char * argv[])
     bloobinessNormalization = std::stod(argv[5]);
   }
   featureGenerator->SetBloobinessNormalization(bloobinessNormalization);
-  TEST_SET_GET_VALUE(bloobinessNormalization, featureGenerator->GetBloobinessNormalization());
+  ITK_TEST_SET_GET_VALUE(bloobinessNormalization, featureGenerator->GetBloobinessNormalization());
 
   double noiseNormalization = 1.0;
   if (argc > 6)
@@ -101,10 +101,10 @@ itkFrangiTubularnessFeatureGeneratorTest1(int argc, char * argv[])
     noiseNormalization = std::stod(argv[6]);
   }
   featureGenerator->SetNoiseNormalization(noiseNormalization);
-  TEST_SET_GET_VALUE(noiseNormalization, featureGenerator->GetNoiseNormalization());
+  ITK_TEST_SET_GET_VALUE(noiseNormalization, featureGenerator->GetNoiseNormalization());
 
 
-  TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
@@ -119,7 +119,7 @@ itkFrangiTubularnessFeatureGeneratorTest1(int argc, char * argv[])
   writer->SetFileName(argv[2]);
   writer->SetInput(outputImage);
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

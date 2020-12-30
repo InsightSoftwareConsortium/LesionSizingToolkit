@@ -51,7 +51,7 @@ itkIsotropicResamplerTest1(int argc, char * argv[])
 
   reader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(reader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
 
   using ResampleFilterType = itk::IsotropicResampler<Dimension>;
@@ -59,7 +59,7 @@ itkIsotropicResamplerTest1(int argc, char * argv[])
 
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(resampler, IsotropicResampler, ProcessObject);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(resampler, IsotropicResampler, ProcessObject);
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -72,7 +72,7 @@ itkIsotropicResamplerTest1(int argc, char * argv[])
 
   resampler->SetInput(inputObject);
 
-  TRY_EXPECT_NO_EXCEPTION(resampler->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(resampler->Update());
 
 
   SpatialObjectType::ConstPointer resampledImage = resampler->GetOutput();
@@ -88,7 +88,7 @@ itkIsotropicResamplerTest1(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   std::cout << "Test finished." << std::endl;

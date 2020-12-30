@@ -43,7 +43,7 @@ itkGrayscaleImageSegmentationVolumeEstimatorTest2(int argc, char * argv[])
   InputImageReaderType::Pointer inputImageReader = InputImageReaderType::New();
   inputImageReader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
 
   InputImageType::Pointer inputImage = inputImageReader->GetOutput();
   inputImage->DisconnectPipeline();
@@ -53,7 +53,7 @@ itkGrayscaleImageSegmentationVolumeEstimatorTest2(int argc, char * argv[])
 
   VolumeEstimatorType::Pointer volumeEstimator = VolumeEstimatorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
     volumeEstimator, GrayscaleImageSegmentationVolumeEstimator, SegmentationVolumeEstimator);
 
 

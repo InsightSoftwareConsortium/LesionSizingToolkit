@@ -46,13 +46,13 @@ itkMinimumFeatureAggregatorTest1(int argc, char * argv[])
 
   inputImageReader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
 
   using AggregatorType = itk::MinimumFeatureAggregator<Dimension>;
 
   AggregatorType::Pointer featureAggregator = AggregatorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(featureAggregator, MinimumFeatureAggregator, FeatureAggregator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureAggregator, MinimumFeatureAggregator, FeatureAggregator);
 
   using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator<Dimension>;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
@@ -103,7 +103,7 @@ itkMinimumFeatureAggregatorTest1(int argc, char * argv[])
   cannyEdgesGenerator->SetUpperThreshold(150.0);
   cannyEdgesGenerator->SetLowerThreshold(75.0);
 
-  TRY_EXPECT_NO_EXCEPTION(featureAggregator->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(featureAggregator->Update());
 
   SpatialObjectType::ConstPointer finalFeature = featureAggregator->GetFeature();
 
@@ -121,7 +121,7 @@ itkMinimumFeatureAggregatorTest1(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

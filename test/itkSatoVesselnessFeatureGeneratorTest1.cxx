@@ -51,7 +51,7 @@ itkSatoVesselnessFeatureGeneratorTest1(int argc, char * argv[])
 
   reader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(reader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
 
   using SatoVesselnessFeatureGeneratorType = itk::SatoVesselnessFeatureGenerator<Dimension>;
@@ -59,7 +59,7 @@ itkSatoVesselnessFeatureGeneratorTest1(int argc, char * argv[])
 
   SatoVesselnessFeatureGeneratorType::Pointer featureGenerator = SatoVesselnessFeatureGeneratorType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, SatoVesselnessFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, SatoVesselnessFeatureGenerator, FeatureGenerator);
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();
@@ -79,7 +79,7 @@ itkSatoVesselnessFeatureGeneratorTest1(int argc, char * argv[])
     sigma = std::stod(argv[3]);
   }
   featureGenerator->SetSigma(sigma);
-  TEST_SET_GET_VALUE(sigma, featureGenerator->GetSigma());
+  ITK_TEST_SET_GET_VALUE(sigma, featureGenerator->GetSigma());
 
   double alpha1 = 0.5;
   if (argc > 4)
@@ -87,7 +87,7 @@ itkSatoVesselnessFeatureGeneratorTest1(int argc, char * argv[])
     alpha1 = std::stod(argv[4]);
   }
   featureGenerator->SetAlpha1(alpha1);
-  TEST_SET_GET_VALUE(alpha1, featureGenerator->GetAlpha1());
+  ITK_TEST_SET_GET_VALUE(alpha1, featureGenerator->GetAlpha1());
 
   double alpha2 = 2.0;
   if (argc > 5)
@@ -95,10 +95,10 @@ itkSatoVesselnessFeatureGeneratorTest1(int argc, char * argv[])
     alpha2 = std::stod(argv[5]);
   }
   featureGenerator->SetAlpha2(alpha2);
-  TEST_SET_GET_VALUE(alpha2, featureGenerator->GetAlpha2());
+  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator->GetAlpha2());
 
 
-  TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(featureGenerator->Update());
 
 
   SpatialObjectType::ConstPointer feature = featureGenerator->GetFeature();
@@ -113,7 +113,7 @@ itkSatoVesselnessFeatureGeneratorTest1(int argc, char * argv[])
   writer->SetFileName(argv[2]);
   writer->SetInput(outputImage);
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   std::cout << "Test finished." << std::endl;

@@ -42,7 +42,7 @@ itkShapeDetectionLevelSetSegmentationModuleTest1(int argc, char * argv[])
 
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
     segmentationModule, ShapeDetectionLevelSetSegmentationModule, SinglePhaseLevelSetSegmentationModule);
 
   using InputImageType = SegmentationModuleType::InputImageType;
@@ -62,7 +62,7 @@ itkShapeDetectionLevelSetSegmentationModuleTest1(int argc, char * argv[])
 
   inputReader->SetFileName(argv[1]);
 
-  TRY_EXPECT_NO_EXCEPTION(inputReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(inputReader->Update());
 
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
@@ -71,12 +71,12 @@ itkShapeDetectionLevelSetSegmentationModuleTest1(int argc, char * argv[])
   rescaler->SetOutputMinimum(-4.0);
   rescaler->SetOutputMaximum(4.0);
 
-  TRY_EXPECT_NO_EXCEPTION(rescaler->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(rescaler->Update());
 
 
   featureReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION(featureReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(featureReader->Update());
 
   using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
   using FeatureSpatialObjectType = SegmentationModuleType::FeatureSpatialObjectType;
@@ -98,7 +98,7 @@ itkShapeDetectionLevelSetSegmentationModuleTest1(int argc, char * argv[])
     propagationScaling = std::stod(argv[4]);
   }
   segmentationModule->SetPropagationScaling(propagationScaling);
-  TEST_SET_GET_VALUE(propagationScaling, segmentationModule->GetPropagationScaling());
+  ITK_TEST_SET_GET_VALUE(propagationScaling, segmentationModule->GetPropagationScaling());
 
   double curvatureScaling = 1.0;
   if (argc > 5)
@@ -106,7 +106,7 @@ itkShapeDetectionLevelSetSegmentationModuleTest1(int argc, char * argv[])
     curvatureScaling = std::stod(argv[5]);
   }
   segmentationModule->SetCurvatureScaling(curvatureScaling);
-  TEST_SET_GET_VALUE(curvatureScaling, segmentationModule->GetCurvatureScaling());
+  ITK_TEST_SET_GET_VALUE(curvatureScaling, segmentationModule->GetCurvatureScaling());
 
   unsigned int maximumNumberOfIterations = 50;
   if (argc > 6)
@@ -114,10 +114,10 @@ itkShapeDetectionLevelSetSegmentationModuleTest1(int argc, char * argv[])
     maximumNumberOfIterations = std::stoi(argv[6]);
   }
   segmentationModule->SetMaximumNumberOfIterations(maximumNumberOfIterations);
-  TEST_SET_GET_VALUE(maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations());
+  ITK_TEST_SET_GET_VALUE(maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations());
 
 
-  TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
@@ -132,7 +132,7 @@ itkShapeDetectionLevelSetSegmentationModuleTest1(int argc, char * argv[])
   writer->SetFileName(argv[3]);
   writer->SetInput(outputImage);
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;

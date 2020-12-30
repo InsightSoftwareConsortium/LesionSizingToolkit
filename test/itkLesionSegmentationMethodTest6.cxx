@@ -61,7 +61,7 @@ itkLesionSegmentationMethodTest6(int argc, char * argv[])
 
   inputImageReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(inputImageReader->Update());
 
 
   using MethodType = itk::LesionSegmentationMethod<Dimension>;
@@ -129,7 +129,7 @@ itkLesionSegmentationMethodTest6(int argc, char * argv[])
   using SegmentationModuleType = itk::FastMarchingAndShapeDetectionLevelSetSegmentationModule<Dimension>;
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
     segmentationModule, FastMarchingAndShapeDetectionLevelSetSegmentationModule, SinglePhaseLevelSetSegmentationModule);
 
 
@@ -139,7 +139,7 @@ itkLesionSegmentationMethodTest6(int argc, char * argv[])
     maximumRMSError = std::stod(argv[4]);
   }
   segmentationModule->SetMaximumRMSError(maximumRMSError);
-  TEST_SET_GET_VALUE(maximumRMSError, segmentationModule->GetMaximumRMSError());
+  ITK_TEST_SET_GET_VALUE(maximumRMSError, segmentationModule->GetMaximumRMSError());
 
   unsigned int maximumNumberOfIterations = 300;
   if (argc > 5)
@@ -147,7 +147,7 @@ itkLesionSegmentationMethodTest6(int argc, char * argv[])
     maximumNumberOfIterations = std::stoi(argv[5]);
   }
   segmentationModule->SetMaximumNumberOfIterations(maximumNumberOfIterations);
-  TEST_SET_GET_VALUE(maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations());
+  ITK_TEST_SET_GET_VALUE(maximumNumberOfIterations, segmentationModule->GetMaximumNumberOfIterations());
 
   double curvatureScaling = 1.0;
   if (argc > 6)
@@ -155,7 +155,7 @@ itkLesionSegmentationMethodTest6(int argc, char * argv[])
     curvatureScaling = std::stod(argv[6]);
   }
   segmentationModule->SetCurvatureScaling(curvatureScaling);
-  TEST_SET_GET_VALUE(curvatureScaling, segmentationModule->GetCurvatureScaling());
+  ITK_TEST_SET_GET_VALUE(curvatureScaling, segmentationModule->GetCurvatureScaling());
 
   double propagationScaling = 10.0;
   if (argc > 7)
@@ -163,7 +163,7 @@ itkLesionSegmentationMethodTest6(int argc, char * argv[])
     propagationScaling = std::stod(argv[7]);
   }
   segmentationModule->SetPropagationScaling(propagationScaling);
-  TEST_SET_GET_VALUE(propagationScaling, segmentationModule->GetPropagationScaling());
+  ITK_TEST_SET_GET_VALUE(propagationScaling, segmentationModule->GetPropagationScaling());
 
   double stoppingValue = 500.0;
   if (argc > 8)
@@ -171,7 +171,7 @@ itkLesionSegmentationMethodTest6(int argc, char * argv[])
     stoppingValue = std::stod(argv[8]);
   }
   segmentationModule->SetStoppingValue(stoppingValue);
-  TEST_SET_GET_VALUE(stoppingValue, segmentationModule->GetStoppingValue());
+  ITK_TEST_SET_GET_VALUE(stoppingValue, segmentationModule->GetStoppingValue());
 
   double distanceFromSeeds = 0.5;
   if (argc > 9)
@@ -179,7 +179,7 @@ itkLesionSegmentationMethodTest6(int argc, char * argv[])
     distanceFromSeeds = std::stod(argv[9]);
   }
   segmentationModule->SetDistanceFromSeeds(distanceFromSeeds);
-  TEST_SET_GET_VALUE(distanceFromSeeds, segmentationModule->GetDistanceFromSeeds());
+  ITK_TEST_SET_GET_VALUE(distanceFromSeeds, segmentationModule->GetDistanceFromSeeds());
 
 
   lesionSegmentationMethod->SetSegmentationModule(segmentationModule);
@@ -189,12 +189,12 @@ itkLesionSegmentationMethodTest6(int argc, char * argv[])
   LandmarksReaderType::Pointer landmarksReader = LandmarksReaderType::New();
 
   landmarksReader->SetFileName(argv[1]);
-  TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(landmarksReader->Update());
 
 
   lesionSegmentationMethod->SetInitialSegmentation(landmarksReader->GetOutput());
 
-  TRY_EXPECT_NO_EXCEPTION(lesionSegmentationMethod->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(lesionSegmentationMethod->Update());
 
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
@@ -220,7 +220,7 @@ itkLesionSegmentationMethodTest6(int argc, char * argv[])
 
   std::cout << "Name of class " << segmentationModule->GetNameOfClass() << std::endl;
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   std::cout << "Test finished." << std::endl;

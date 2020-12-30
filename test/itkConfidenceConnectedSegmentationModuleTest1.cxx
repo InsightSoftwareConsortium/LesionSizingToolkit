@@ -57,12 +57,12 @@ itkConfidenceConnectedSegmentationModuleTest1(int argc, char * argv[])
 
   featureReader->SetFileName(argv[2]);
 
-  TRY_EXPECT_NO_EXCEPTION(featureReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(featureReader->Update());
 
 
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
     segmentationModule, ConfidenceConnectedSegmentationModule, RegionGrowingSegmentationModule);
 
   using InputSpatialObjectType = SegmentationModuleType::InputSpatialObjectType;
@@ -88,10 +88,10 @@ itkConfidenceConnectedSegmentationModuleTest1(int argc, char * argv[])
     sigmaMultiplier = std::stod(argv[4]);
   }
   segmentationModule->SetSigmaMultiplier(sigmaMultiplier);
-  TEST_SET_GET_VALUE(sigmaMultiplier, segmentationModule->GetSigmaMultiplier());
+  ITK_TEST_SET_GET_VALUE(sigmaMultiplier, segmentationModule->GetSigmaMultiplier());
 
 
-  TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(segmentationModule->Update());
 
   using SpatialObjectType = SegmentationModuleType::SpatialObjectType;
   SpatialObjectType::ConstPointer segmentation = segmentationModule->GetOutput();
@@ -107,7 +107,7 @@ itkConfidenceConnectedSegmentationModuleTest1(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->UseCompressionOn();
 
-  TRY_EXPECT_NO_EXCEPTION(writer->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
 
   std::cout << "Test finished." << std::endl;
