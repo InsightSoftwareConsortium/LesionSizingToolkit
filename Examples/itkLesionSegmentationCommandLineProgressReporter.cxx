@@ -62,7 +62,7 @@ LesionSegmentationCommandLineProgressReporter ::ExecuteInternal(const Object * c
       {
         this->ProgressString = statusText;
       }
-      if (fabs((double)(progressValue - this->ProgressValue)) >= 1.0)
+      if (itk::Math::abs((double)(progressValue - this->ProgressValue)) >= 1.0)
       {
         this->ProgressValue = static_cast<int>(filter->GetProgress() * 100.0);
         report = true;

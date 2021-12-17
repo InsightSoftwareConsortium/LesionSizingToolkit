@@ -463,7 +463,7 @@ main(int argc, char * argv[])
   InputImageType::SizeType roiSize;
   for (unsigned int i = 0; i < ImageDimension; i++)
   {
-    roiSize[i] = abs(pi2[i] - pi1[i]);
+    roiSize[i] = itk::Math::abs(pi2[i] - pi1[i]);
     startIndex[i] = (pi1[i] < pi2[i]) ? pi1[i] : pi2[i];
   }
   InputImageType::RegionType roiRegion(startIndex, roiSize);
