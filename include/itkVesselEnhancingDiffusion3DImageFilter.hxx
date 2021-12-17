@@ -518,11 +518,11 @@ VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::MaxVesselResponse(
       ev[1] = ES.get_eigenvalue(1);
       ev[2] = ES.get_eigenvalue(2);
 
-      if (std::abs(ev[0]) > std::abs(ev[1]))
+      if (itk::Math::abs(ev[0]) > itk::Math::abs(ev[1]))
         std::swap(ev[0], ev[1]);
-      if (std::abs(ev[1]) > std::abs(ev[2]))
+      if (itk::Math::abs(ev[1]) > itk::Math::abs(ev[2]))
         std::swap(ev[1], ev[2]);
-      if (std::abs(ev[0]) > std::abs(ev[1]))
+      if (itk::Math::abs(ev[0]) > itk::Math::abs(ev[1]))
         std::swap(ev[0], ev[1]);
 
       const Precision vesselness = VesselnessFunction3D(ev[0], ev[1], ev[2]);
@@ -564,9 +564,9 @@ VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::VesselnessFunction
     const Precision vc2 = 2.0 * m_Gamma * m_Gamma;
 
     const Precision Ra2 = (l2 * l2) / (l3 * l3);
-    const Precision Rb2 = (l1 * l1) / std::abs(l2 * l3);
+    const Precision Rb2 = (l1 * l1) / itk::Math::abs(l2 * l3);
     const Precision S2 = (l1 * l1) + (l2 * l2) + (l3 * l3);
-    const Precision T = std::exp(-(2 * smoothC * smoothC) / (std::abs(l2) * l3 * l3));
+    const Precision T = std::exp(-(2 * smoothC * smoothC) / (itk::Math::abs(l2) * l3 * l3));
 
     vesselness = T * (1.0 - std::exp(-Ra2 / va2)) * std::exp(-Rb2 / vb2) * (1.0 - std::exp(-S2 / vc2));
   }
@@ -610,11 +610,11 @@ VesselEnhancingDiffusion3DImageFilter<PixelType, NDimension>::DiffusionTensor()
     ev[1] = ES.get_eigenvalue(1);
     ev[2] = ES.get_eigenvalue(2);
 
-    if (std::abs(ev[0]) > std::abs(ev[1]))
+    if (itk::Math::abs(ev[0]) > itk::Math::abs(ev[1]))
       std::swap(ev[0], ev[1]);
-    if (std::abs(ev[1]) > std::abs(ev[2]))
+    if (itk::Math::abs(ev[1]) > itk::Math::abs(ev[2]))
       std::swap(ev[1], ev[2]);
-    if (std::abs(ev[0]) > std::abs(ev[1]))
+    if (itk::Math::abs(ev[0]) > itk::Math::abs(ev[1]))
       std::swap(ev[0], ev[1]);
 
     const Precision       V = VesselnessFunction3D(ev[0], ev[1], ev[2]);
