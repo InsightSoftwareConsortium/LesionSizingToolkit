@@ -18,7 +18,6 @@
 #ifndef itkConnectedThresholdSegmentationModule_hxx
 #define itkConnectedThresholdSegmentationModule_hxx
 
-#include "itkConnectedThresholdSegmentationModule.h"
 #include "itkProgressAccumulator.h"
 
 

@@ -18,7 +18,6 @@
 #ifndef itkShapeDetectionLevelSetSegmentationModule_hxx
 #define itkShapeDetectionLevelSetSegmentationModule_hxx
 
-#include "itkShapeDetectionLevelSetSegmentationModule.h"
 #include "itkShapeDetectionLevelSetImageFilter.h"
 
 

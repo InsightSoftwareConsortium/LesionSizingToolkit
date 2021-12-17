@@ -18,7 +18,6 @@
 #ifndef itkMaximumFeatureAggregator_hxx
 #define itkMaximumFeatureAggregator_hxx
 
-#include "itkMaximumFeatureAggregator.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageFileWriter.h"

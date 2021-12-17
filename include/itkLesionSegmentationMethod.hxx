@@ -18,7 +18,6 @@
 #ifndef itkLesionSegmentationMethod_hxx
 #define itkLesionSegmentationMethod_hxx
 
-#include "itkLesionSegmentationMethod.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageRegionIterator.h"
 

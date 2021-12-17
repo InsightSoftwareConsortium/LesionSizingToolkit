@@ -18,7 +18,6 @@
 #ifndef itkGradientMagnitudeSigmoidFeatureGenerator_hxx
 #define itkGradientMagnitudeSigmoidFeatureGenerator_hxx
 
-#include "itkGradientMagnitudeSigmoidFeatureGenerator.h"
 #include "itkProgressAccumulator.h"
 
 

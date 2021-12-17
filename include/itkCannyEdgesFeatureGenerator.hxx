@@ -18,7 +18,6 @@
 #ifndef itkCannyEdgesFeatureGenerator_hxx
 #define itkCannyEdgesFeatureGenerator_hxx
 
-#include "itkCannyEdgesFeatureGenerator.h"
 
 
 namespace itk

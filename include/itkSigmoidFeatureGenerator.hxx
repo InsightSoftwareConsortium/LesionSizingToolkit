@@ -18,7 +18,6 @@
 #ifndef itkSigmoidFeatureGenerator_hxx
 #define itkSigmoidFeatureGenerator_hxx
 
-#include "itkSigmoidFeatureGenerator.h"
 #include "itkProgressAccumulator.h"
 
 namespace itk

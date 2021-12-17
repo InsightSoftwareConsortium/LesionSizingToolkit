@@ -18,7 +18,6 @@
 #ifndef itkIsotropicResamplerImageFilter_hxx
 #define itkIsotropicResamplerImageFilter_hxx
 
-#include "itkIsotropicResamplerImageFilter.h"
 #include "itkProgressAccumulator.h"
 
 namespace itk

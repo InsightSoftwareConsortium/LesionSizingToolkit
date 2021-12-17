@@ -18,7 +18,6 @@
 #ifndef itkGeodesicActiveContourLevelSetSegmentationModule_hxx
 #define itkGeodesicActiveContourLevelSetSegmentationModule_hxx
 
-#include "itkGeodesicActiveContourLevelSetSegmentationModule.h"
 #include "itkGeodesicActiveContourLevelSetImageFilter.h"
 #include "itkProgressAccumulator.h"
 

@@ -18,7 +18,6 @@
 #ifndef itkSatoLocalStructureFeatureGenerator_hxx
 #define itkSatoLocalStructureFeatureGenerator_hxx
 
-#include "itkSatoLocalStructureFeatureGenerator.h"
 
 
 namespace itk

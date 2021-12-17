@@ -18,7 +18,6 @@
 #ifndef itkFrangiTubularnessFeatureGenerator_hxx
 #define itkFrangiTubularnessFeatureGenerator_hxx
 
-#include "itkFrangiTubularnessFeatureGenerator.h"
 
 
 namespace itk

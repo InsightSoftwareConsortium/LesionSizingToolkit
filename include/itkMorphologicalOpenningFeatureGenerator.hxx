@@ -18,7 +18,6 @@
 #ifndef itkMorphologicalOpenningFeatureGenerator_hxx
 #define itkMorphologicalOpenningFeatureGenerator_hxx
 
-#include "itkMorphologicalOpenningFeatureGenerator.h"
 #include "itkProgressAccumulator.h"
 
 

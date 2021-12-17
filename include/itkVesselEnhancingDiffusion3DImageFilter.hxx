@@ -18,7 +18,6 @@
 #ifndef itkVesselEnhancingDiffusion3DImageFilter_hxx
 #define itkVesselEnhancingDiffusion3DImageFilter_hxx
 
-#include "itkVesselEnhancingDiffusion3DImageFilter.h"
 
 #include "itkCastImageFilter.h"
 #include "itkConstShapedNeighborhoodIterator.h"

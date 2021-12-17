@@ -18,7 +18,6 @@
 #ifndef itkGrayscaleImageSegmentationVolumeEstimator_hxx
 #define itkGrayscaleImageSegmentationVolumeEstimator_hxx
 
-#include "itkGrayscaleImageSegmentationVolumeEstimator.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageRegionIterator.h"
 

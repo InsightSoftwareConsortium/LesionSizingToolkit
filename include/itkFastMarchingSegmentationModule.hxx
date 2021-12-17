@@ -18,7 +18,6 @@
 #ifndef itkFastMarchingSegmentationModule_hxx
 #define itkFastMarchingSegmentationModule_hxx
 
-#include "itkFastMarchingSegmentationModule.h"
 #include "itkImageRegionIterator.h"
 #include "itkFastMarchingImageFilter.h"
 #include "itkIntensityWindowingImageFilter.h"

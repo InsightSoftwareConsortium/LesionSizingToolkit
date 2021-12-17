@@ -18,7 +18,6 @@
 #ifndef itkIsotropicResampler_hxx
 #define itkIsotropicResampler_hxx
 
-#include "itkIsotropicResampler.h"
 #include "itkResampleImageFilter.h"
 #include "itkIdentityTransform.h"
 #include "itkBSplineInterpolateImageFunction.h"
