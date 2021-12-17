@@ -18,7 +18,6 @@
 #ifndef itkVotingBinaryHoleFillFloodingImageFilter_hxx
 #define itkVotingBinaryHoleFillFloodingImageFilter_hxx
 
-#include "itkVotingBinaryHoleFillFloodingImageFilter.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionExclusionIteratorWithIndex.h"

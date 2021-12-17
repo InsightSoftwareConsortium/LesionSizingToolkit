@@ -18,7 +18,6 @@
 #ifndef itkSinglePhaseLevelSetSegmentationModule_hxx
 #define itkSinglePhaseLevelSetSegmentationModule_hxx
 
-#include "itkSinglePhaseLevelSetSegmentationModule.h"
 #include "itkLandmarkSpatialObject.h"
 #include "itkIntensityWindowingImageFilter.h"
 

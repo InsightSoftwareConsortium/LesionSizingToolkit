@@ -18,7 +18,6 @@
 #ifndef itkSatoVesselnessFeatureGenerator_hxx
 #define itkSatoVesselnessFeatureGenerator_hxx
 
-#include "itkSatoVesselnessFeatureGenerator.h"
 #include "itkProgressAccumulator.h"
 
 

@@ -18,7 +18,6 @@
 #ifndef itkMinimumFeatureAggregator_hxx
 #define itkMinimumFeatureAggregator_hxx
 
-#include "itkMinimumFeatureAggregator.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageFileWriter.h"

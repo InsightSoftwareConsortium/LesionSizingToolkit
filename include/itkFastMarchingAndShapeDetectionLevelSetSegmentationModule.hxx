@@ -18,7 +18,6 @@
 #ifndef itkFastMarchingAndShapeDetectionLevelSetSegmentationModule_hxx
 #define itkFastMarchingAndShapeDetectionLevelSetSegmentationModule_hxx
 
-#include "itkFastMarchingAndShapeDetectionLevelSetSegmentationModule.h"
 #include "itkShapeDetectionLevelSetImageFilter.h"
 #include "itkProgressAccumulator.h"
 

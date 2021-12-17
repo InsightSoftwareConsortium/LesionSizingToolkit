@@ -18,7 +18,6 @@
 #ifndef itkSegmentationModule_hxx
 #define itkSegmentationModule_hxx
 
-#include "itkSegmentationModule.h"
 
 
 namespace itk

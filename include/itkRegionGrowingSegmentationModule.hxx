@@ -18,7 +18,6 @@
 #ifndef itkRegionGrowingSegmentationModule_hxx
 #define itkRegionGrowingSegmentationModule_hxx
 
-#include "itkRegionGrowingSegmentationModule.h"
 #include "itkImageRegionIterator.h"
 
 

@@ -18,7 +18,6 @@
 #ifndef itkConfidenceConnectedSegmentationModule_hxx
 #define itkConfidenceConnectedSegmentationModule_hxx
 
-#include "itkConfidenceConnectedSegmentationModule.h"
 #include "itkProgressAccumulator.h"
 
 

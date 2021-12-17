@@ -18,7 +18,6 @@
 #ifndef itkLungWallFeatureGenerator_hxx
 #define itkLungWallFeatureGenerator_hxx
 
-#include "itkLungWallFeatureGenerator.h"
 #include "itkProgressAccumulator.h"
 
 

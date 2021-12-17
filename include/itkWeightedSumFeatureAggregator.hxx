@@ -18,7 +18,6 @@
 #ifndef itkWeightedSumFeatureAggregator_hxx
 #define itkWeightedSumFeatureAggregator_hxx
 
-#include "itkWeightedSumFeatureAggregator.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageFileWriter.h"

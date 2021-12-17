@@ -17,7 +17,6 @@
  *=========================================================================*/
 #ifndef itkCannyEdgeDetectionRecursiveGaussianImageFilter_hxx
 #define itkCannyEdgeDetectionRecursiveGaussianImageFilter_hxx
-#include "itkCannyEdgeDetectionRecursiveGaussianImageFilter.h"
 
 #include "itkZeroCrossingImageFilter.h"
 #include "itkNeighborhoodInnerProduct.h"

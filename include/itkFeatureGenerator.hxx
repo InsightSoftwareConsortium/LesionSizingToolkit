@@ -18,7 +18,6 @@
 #ifndef itkFeatureGenerator_hxx
 #define itkFeatureGenerator_hxx
 
-#include "itkFeatureGenerator.h"
 
 
 namespace itk

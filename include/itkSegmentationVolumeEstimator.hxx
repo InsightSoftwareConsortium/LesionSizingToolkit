@@ -18,7 +18,6 @@
 #ifndef itkSegmentationVolumeEstimator_hxx
 #define itkSegmentationVolumeEstimator_hxx
 
-#include "itkSegmentationVolumeEstimator.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageRegionIterator.h"
 

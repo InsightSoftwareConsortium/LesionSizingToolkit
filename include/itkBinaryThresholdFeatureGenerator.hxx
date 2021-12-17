@@ -18,7 +18,6 @@
 #ifndef itkBinaryThresholdFeatureGenerator_hxx
 #define itkBinaryThresholdFeatureGenerator_hxx
 
-#include "itkBinaryThresholdFeatureGenerator.h"
 #include "itkProgressAccumulator.h"
 
 namespace itk

@@ -18,7 +18,6 @@
 #ifndef itkLandmarksReader_hxx
 #define itkLandmarksReader_hxx
 
-#include "itkLandmarksReader.h"
 #include "itkSpatialObjectReader.h"
 
 

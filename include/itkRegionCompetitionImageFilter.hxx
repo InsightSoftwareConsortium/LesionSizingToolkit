@@ -18,7 +18,6 @@
 #ifndef itkRegionCompetitionImageFilter_hxx
 #define itkRegionCompetitionImageFilter_hxx
 
-#include "itkRegionCompetitionImageFilter.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionExclusionIteratorWithIndex.h"

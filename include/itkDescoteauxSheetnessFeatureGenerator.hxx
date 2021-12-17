@@ -18,7 +18,6 @@
 #ifndef itkDescoteauxSheetnessFeatureGenerator_hxx
 #define itkDescoteauxSheetnessFeatureGenerator_hxx
 
-#include "itkDescoteauxSheetnessFeatureGenerator.h"
 
 
 namespace itk

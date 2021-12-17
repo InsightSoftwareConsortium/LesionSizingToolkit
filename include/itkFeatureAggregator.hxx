@@ -18,7 +18,6 @@
 #ifndef itkFeatureAggregator_hxx
 #define itkFeatureAggregator_hxx
 
-#include "itkFeatureAggregator.h"
 #include "itkImageSpatialObject.h"
 #include "itkImageRegionIterator.h"
 

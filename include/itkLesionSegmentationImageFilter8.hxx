@@ -17,7 +17,6 @@
  *=========================================================================*/
 #ifndef itkLesionSegmentationImageFilter8_hxx
 #define itkLesionSegmentationImageFilter8_hxx
-#include "itkLesionSegmentationImageFilter8.h"
 
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"

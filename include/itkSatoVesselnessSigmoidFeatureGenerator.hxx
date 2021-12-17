@@ -18,7 +18,6 @@
 #ifndef itkSatoVesselnessSigmoidFeatureGenerator_hxx
 #define itkSatoVesselnessSigmoidFeatureGenerator_hxx
 
-#include "itkSatoVesselnessSigmoidFeatureGenerator.h"
 #include "itkProgressAccumulator.h"
 
 
