@@ -19,18 +19,18 @@ The Lesion Sizing Toolkit (LSTK)
 Overview
 --------
 
-This is a module for the `Insight Toolkit (ITK) <http://itk.org>`_ that
+This is a module for the `Insight Toolkit (ITK) <https://itk.org>`_ that
 provides a generic, modular, and extensible architecture for lesion sizing
 algorithms in medical images as well as a reference algorithm for lung
 solid lesion segmentation in CT images.
 
-For more information, see the `Insight Journal article <http://hdl.handle.net/10380/3369>`_::
+For more information, see the `Insight Journal article <https://hdl.handle.net/10380/3369>`_::
 
   Liu X., Helba B., Krishnan K., Reynolds P., McCormick M., Turner W., Ibáñez L., Yankelevitz D., Avila R.
   Fostering Open Science in Lung Cancer Lesion Sizing with ITK module LSTK
   The Insight Journal. January-December. 2012.
-  http://hdl.handle.net/10380/3369
-  http://www.insight-journal.org/browse/publication/869
+  https://hdl.handle.net/10380/3369
+  https://www.insight-journal.org/browse/publication/869
 
 Installation
 ------------
@@ -52,7 +52,7 @@ The data collection can be obtained via ftp from
 `here <ftp://ftp.nist.gov/pub/itl/biochange/Biochange2008/FindingCT_ScansForBiochange2008.htm>`_.
 
 The team participated in the
-`Volcano'09 Challenge benchmark <http://www.via.cornell.edu/challenge/>`_.
+`Volcano'09 Challenge benchmark <https://www.via.cornell.edu/challenge/>`_.
 
 The project has also been used on the
 `BioChange 2011 <ftp://ftp.nist.gov/pub/itl/biochange/BiochangeChallenge/BiochangeChallengeProtocol.pdf>`_
