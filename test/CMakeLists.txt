@@ -68,12 +68,12 @@ include(CollectionTestMacro.cmake)
 find_path(TEST_CORNELL_DATA_ROOT README.txt DOC "Directory with data from the Cornell ELCAP database")
 find_path(TEST_NIST_DATA_ROOT  LevineJResNIST2008b.pdf DOC "Directory with data from the NIST Phantom database")
 find_path(TEST_FDA_DATA_ROOT  phantom_diameter_measures.xls DOC "Directory with data from the FDA Phantom database")
-find_path(TEST_VOLCANO_DATA_ROOT SCseeds.csv DOC "Directory with data from for the MICCAI Volcano challenge. http://www.via.cornell.edu/challenge")
+find_path(TEST_VOLCANO_DATA_ROOT SCseeds.csv DOC "Directory with data from for the MICCAI Volcano challenge. https://www.via.cornell.edu/challenge")
 
 option(TEST_CORNELL_COLLECTION "Run tests in the collection of datasets from Cornell" OFF)
 option(TEST_NIST_PHANTOM_COLLECTION "Run tests in the collection of phantom datasets from NIST" OFF)
 option(TEST_FDA_PHANTOM_COLLECTION "Run tests in the collection of phantom datasets from FDA" OFF)
-option(TEST_VOLCANO_DATA_COLLECTION "Run tests at MICCAI Volcano challenge. http://www.via.cornell.edu/challenge" OFF)
+option(TEST_VOLCANO_DATA_COLLECTION "Run tests at MICCAI Volcano challenge. https://www.via.cornell.edu/challenge" OFF)
 
 
 

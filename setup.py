@@ -27,7 +27,7 @@ setup(
                      'Please refer to:\n'
                      'Liu X., Helba B., Krishnan K., Reynolds P., McCormick M., Turner W., Ibáñez L., Yankelevitz D., Avila R., '
                      '"Fostering Open Science in Lung Cancer Lesion Sizing with ITK module LSTK", '
-                     'Insight Journal, January-December 2012, http://hdl.handle.net/10380/3369.',
+                     'Insight Journal, January-December 2012, https://hdl.handle.net/10380/3369.',
     classifiers=[
         "License :: OSI Approved :: BSD 2-Clause \"Simplified\" License",
         "Programming Language :: Python",
