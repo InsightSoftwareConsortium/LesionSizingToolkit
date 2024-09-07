@@ -1,20 +1,14 @@
 The Lesion Sizing Toolkit (LSTK)
 ================================
 
-.. |CircleCI| image:: https://circleci.com/gh/InsightSoftwareConsortium/LesionSizingToolkit.svg?style=shield
-    :target: https://circleci.com/gh/InsightSoftwareConsortium/LesionSizingToolkit
+.. image:: https://github.com/InsightSoftwareConsortium/LesionSizingToolkit/actions/workflows/build-test-package.yml/badge.svg
+    :target: https://github.com/InsightSoftwareConsortium/LesionSizingToolkit/actions/workflows/build-test-package.yml
+    :alt: Build Status
 
-.. |TravisCI| image:: https://travis-ci.org/InsightSoftwareConsortium/LesionSizingToolkit.svg?branch=master
-    :target: https://travis-ci.org/InsightSoftwareConsortium/LesionSizingToolkit
+.. image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+    :target: https://github.com/InsightSoftwareConsortium/LesionSizingToolkit/blob/master/LICENSE
+    :alt: License
 
-.. |AppVeyor| image:: https://img.shields.io/appveyor/ci/InsightSoftwareConsortium/lesionsizingtoolkit.svg
-    :target: https://ci.appveyor.com/project/InsightSoftwareConsortium/lesionsizingtoolkit
-
-=========== =========== ===========
-   Linux      macOS       Windows
-=========== =========== ===========
-|CircleCI|  |TravisCI|  |AppVeyor|
-=========== =========== ===========
 
 Overview
 --------
