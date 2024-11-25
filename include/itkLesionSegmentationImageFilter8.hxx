@@ -92,8 +92,7 @@ LesionSegmentationImageFilter8<TInputImage, TOutputImage>::LesionSegmentationIma
 
 template <typename TInputImage, typename TOutputImage>
 void
-LesionSegmentationImageFilter8<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw(
-  InvalidRequestedRegionError)
+LesionSegmentationImageFilter8<TInputImage, TOutputImage>::GenerateInputRequestedRegion() noexcept(false)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();

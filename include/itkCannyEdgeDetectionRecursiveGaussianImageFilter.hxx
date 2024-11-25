@@ -95,8 +95,8 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Alloc
 
 template <typename TInputImage, typename TOutputImage>
 void
-CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw(
-  InvalidRequestedRegionError)
+CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() noexcept(
+  false)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
