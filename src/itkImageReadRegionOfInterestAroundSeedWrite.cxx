@@ -114,9 +114,7 @@ main(int argc, char ** argv)
 
   const InputImageType * inputImage = reader->GetOutput();
 
-  InputImageType::IndexType centralIndex;
-
-  inputImage->TransformPhysicalPointToIndex(seedPoint, centralIndex);
+  InputImageType::IndexType centralIndex = inputImage->TransformPhysicalPointToIndex(seedPoint);
 
   InputImageType::SpacingType spacing = inputImage->GetSpacing();
 
