@@ -19,7 +19,6 @@
 #define itkSatoLocalStructureFeatureGenerator_hxx
 
 
-
 namespace itk
 {
 

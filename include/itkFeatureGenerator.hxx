@@ -19,7 +19,6 @@
 #define itkFeatureGenerator_hxx
 
 
-
 namespace itk
 {
 

@@ -19,7 +19,6 @@
 #define itkCannyEdgesDistanceFeatureGenerator_hxx
 
 
-
 namespace itk
 {
 

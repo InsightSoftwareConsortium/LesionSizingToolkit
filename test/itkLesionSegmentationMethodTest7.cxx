@@ -113,8 +113,8 @@ itkLesionSegmentationMethodTest7(int argc, char * argv[])
   SegmentationModuleType::Pointer segmentationModule = SegmentationModuleType::New();
 
   ITK_EXERCISE_BASIC_OBJECT_METHODS(segmentationModule,
-                                FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule,
-                                SinglePhaseLevelSetSegmentationModule);
+                                    FastMarchingAndGeodesicActiveContourLevelSetSegmentationModule,
+                                    SinglePhaseLevelSetSegmentationModule);
 
 
   double maximumRMSError = 0.0002;

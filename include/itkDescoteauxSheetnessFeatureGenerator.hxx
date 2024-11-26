@@ -19,7 +19,6 @@
 #define itkDescoteauxSheetnessFeatureGenerator_hxx
 
 
-
 namespace itk
 {
 

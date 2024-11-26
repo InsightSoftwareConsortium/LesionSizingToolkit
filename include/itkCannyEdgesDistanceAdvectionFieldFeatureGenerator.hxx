@@ -19,7 +19,6 @@
 #define itkCannyEdgesDistanceAdvectionFieldFeatureGenerator_hxx
 
 
-
 namespace itk
 {
 
