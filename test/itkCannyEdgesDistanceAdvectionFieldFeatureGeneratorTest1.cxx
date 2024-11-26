@@ -63,7 +63,8 @@ itkCannyEdgesDistanceAdvectionFieldFeatureGeneratorTest1(int argc, char * argv[]
   CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::Pointer featureGenerator =
     CannyEdgesDistanceAdvectionFieldFeatureGeneratorType::New();
 
-  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator, CannyEdgesDistanceAdvectionFieldFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
+    featureGenerator, CannyEdgesDistanceAdvectionFieldFeatureGenerator, FeatureGenerator);
 
 
   InputImageSpatialObjectType::Pointer inputObject = InputImageSpatialObjectType::New();

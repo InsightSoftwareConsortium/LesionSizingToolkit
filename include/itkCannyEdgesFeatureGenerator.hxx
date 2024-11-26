@@ -19,7 +19,6 @@
 #define itkCannyEdgesFeatureGenerator_hxx
 
 
-
 namespace itk
 {
 

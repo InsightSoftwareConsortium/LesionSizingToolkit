@@ -19,7 +19,6 @@
 #define itkFrangiTubularnessFeatureGenerator_hxx
 
 
-
 namespace itk
 {
 

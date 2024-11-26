@@ -19,7 +19,6 @@
 #define itkSegmentationModule_hxx
 
 
-
 namespace itk
 {
 
