@@ -102,35 +102,36 @@ itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1(int argc, char * argv[])
   ITK_TEST_SET_GET_VALUE(alpha1, featureGenerator3->GetAlpha1());
   featureGenerator4->SetAlpha1(alpha1);
   ITK_TEST_SET_GET_VALUE(alpha1, featureGenerator4->GetAlpha1());
-
-  double alpha2 = 2.0;
-  if (argc > 5)
   {
-    alpha2 = std::stod(argv[5]);
+    double alpha2 = 2.0;
+    if (argc > 5)
+    {
+      alpha2 = std::stod(argv[5]);
+    }
+    featureGenerator1->SetAlpha2(alpha2);
+    ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator1->GetAlpha2());
+    featureGenerator2->SetAlpha2(alpha2);
+    ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator2->GetAlpha2());
+    featureGenerator3->SetAlpha2(alpha2);
+    ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator3->GetAlpha2());
+    featureGenerator4->SetAlpha2(alpha2);
+    ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator4->GetAlpha2());
   }
-  featureGenerator1->SetAlpha2(alpha2);
-  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator1->GetAlpha2());
-  featureGenerator2->SetAlpha2(alpha2);
-  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator2->GetAlpha2());
-  featureGenerator3->SetAlpha2(alpha2);
-  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator3->GetAlpha2());
-  featureGenerator4->SetAlpha2(alpha2);
-  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator4->GetAlpha2());
-
-  double sigmoidAlpha = -1.0;
-  if (argc > 6)
   {
-    sigmoidAlpha = std::stod(argv[6]);
+    double sigmoidAlpha = -1.0;
+    if (argc > 6)
+    {
+      sigmoidAlpha = std::stod(argv[6]);
+    }
+    featureGenerator1->SetSigmoidAlpha(sigmoidAlpha);
+    ITK_TEST_SET_GET_VALUE(sigmoidAlpha, featureGenerator1->GetSigmoidAlpha());
+    featureGenerator2->SetSigmoidAlpha(sigmoidAlpha);
+    ITK_TEST_SET_GET_VALUE(sigmoidAlpha, featureGenerator2->GetSigmoidAlpha());
+    featureGenerator3->SetSigmoidAlpha(sigmoidAlpha);
+    ITK_TEST_SET_GET_VALUE(sigmoidAlpha, featureGenerator3->GetSigmoidAlpha());
+    featureGenerator4->SetSigmoidAlpha(sigmoidAlpha);
+    ITK_TEST_SET_GET_VALUE(sigmoidAlpha, featureGenerator4->GetSigmoidAlpha());
   }
-  featureGenerator1->SetSigmoidAlpha(alpha2);
-  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator1->GetSigmoidAlpha());
-  featureGenerator2->SetSigmoidAlpha(alpha2);
-  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator2->GetSigmoidAlpha());
-  featureGenerator3->SetSigmoidAlpha(alpha2);
-  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator3->GetSigmoidAlpha());
-  featureGenerator4->SetSigmoidAlpha(alpha2);
-  ITK_TEST_SET_GET_VALUE(alpha2, featureGenerator4->GetSigmoidAlpha());
-
   double sigmoidBeta = 90.0;
   if (argc > 7)
   {
