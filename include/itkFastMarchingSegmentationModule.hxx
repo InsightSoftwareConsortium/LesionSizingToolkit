@@ -101,11 +101,10 @@ FastMarchingSegmentationModule<NDimension>::GenerateData()
 
   const LandmarkPointListType & points = inputSeeds->GetPoints();
 
-  IndexType index;
 
   for (unsigned int i = 0; i < numberOfPoints; i++)
   {
-    featureImage->TransformPhysicalPointToIndex(points[i].GetPositionInObjectSpace(), index);
+    const IndexType index = featureImage->TransformPhysicalPointToIndex(points[i].GetPositionInObjectSpace());
 
     NodeType node;
 

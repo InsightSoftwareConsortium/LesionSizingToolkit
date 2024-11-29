@@ -83,7 +83,7 @@ public:
   using SigmaArrayType = typename CannyEdgesFeatureGeneratorType::SigmaArrayType;
 
   void
-  GenerateInputRequestedRegion() throw(InvalidRequestedRegionError) override;
+  GenerateInputRequestedRegion() noexcept(false) override;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
