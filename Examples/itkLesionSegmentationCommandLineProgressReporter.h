@@ -38,7 +38,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LesionSegmentationCommandLineProgressReporter, Command);
+  itkOverrideGetNameOfClassMacro(LesionSegmentationCommandLineProgressReporter);
 
   // Description:
   // Satisfy the superclass API for callbacks. Recall that the caller is

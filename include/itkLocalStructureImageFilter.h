@@ -193,7 +193,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LocalStructureImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(LocalStructureImageFilter);
 
   /** Set the normalization term for sheetness */
   void

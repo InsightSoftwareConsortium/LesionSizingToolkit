@@ -52,7 +52,7 @@ public:
   /** This is an abstract class, therefore it doesn't need the itkNewMacro() */
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FeatureAggregator, FeatureGenerator);
+  itkOverrideGetNameOfClassMacro(FeatureAggregator);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

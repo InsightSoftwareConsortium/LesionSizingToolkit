@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MinimumFeatureAggregator, FeatureAggregator);
+  itkOverrideGetNameOfClassMacro(MinimumFeatureAggregator);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

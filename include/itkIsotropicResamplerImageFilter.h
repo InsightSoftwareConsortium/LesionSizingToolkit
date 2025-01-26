@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(IsotropicResamplerImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(IsotropicResamplerImageFilter);
 
   /** ImageDimension constant    */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;

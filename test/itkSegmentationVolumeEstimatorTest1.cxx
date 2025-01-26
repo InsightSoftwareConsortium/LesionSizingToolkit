@@ -35,7 +35,7 @@ public:
 
   itkNewMacro(Self);
 
-  itkTypeMacro(VolumeEstimatorSurrogate, SegmentationVolumeEstimator);
+  itkOverrideGetNameOfClassMacro(VolumeEstimatorSurrogate);
 };
 
 } // namespace itk

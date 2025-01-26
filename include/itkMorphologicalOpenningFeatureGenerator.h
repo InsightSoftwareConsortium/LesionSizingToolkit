@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MorphologicalOpenningFeatureGenerator, FeatureGenerator);
+  itkOverrideGetNameOfClassMacro(MorphologicalOpenningFeatureGenerator);
 
   /** Dimension of the space */
   itkStaticConstMacro(Dimension, unsigned int, NDimension);

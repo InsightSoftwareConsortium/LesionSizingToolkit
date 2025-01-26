@@ -52,7 +52,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FastMarchingAndShapeDetectionLevelSetSegmentationModule, SinglePhaseLevelSetSegmentationModule);
+  itkOverrideGetNameOfClassMacro(FastMarchingAndShapeDetectionLevelSetSegmentationModule);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

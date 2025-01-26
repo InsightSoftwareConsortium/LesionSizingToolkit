@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FrangiTubularnessFeatureGenerator, FeatureGenerator);
+  itkOverrideGetNameOfClassMacro(FrangiTubularnessFeatureGenerator);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

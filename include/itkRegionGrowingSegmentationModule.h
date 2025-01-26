@@ -49,7 +49,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RegionGrowingSegmentationModule, SegmentationModule);
+  itkOverrideGetNameOfClassMacro(RegionGrowingSegmentationModule);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

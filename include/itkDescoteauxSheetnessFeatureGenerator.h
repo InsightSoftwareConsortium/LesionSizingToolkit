@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DescoteauxSheetnessFeatureGenerator, FeatureGenerator);
+  itkOverrideGetNameOfClassMacro(DescoteauxSheetnessFeatureGenerator);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

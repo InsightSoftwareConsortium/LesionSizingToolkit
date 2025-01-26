@@ -50,7 +50,7 @@ public:
   /** This is an abstract class, therefore it doesn't need the itkNewMacro() */
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SegmentationVolumeEstimator, FeatureGenerator);
+  itkOverrideGetNameOfClassMacro(SegmentationVolumeEstimator);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

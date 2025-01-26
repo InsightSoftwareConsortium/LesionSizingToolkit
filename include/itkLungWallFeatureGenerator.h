@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LungWallFeatureGenerator, FeatureGenerator);
+  itkOverrideGetNameOfClassMacro(LungWallFeatureGenerator);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;
