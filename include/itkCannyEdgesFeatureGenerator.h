@@ -87,7 +87,7 @@ public:
   using SpatialObjectType = typename Superclass::SpatialObjectType;
 
   using ScalarRealType = typename NumericTraits<InputPixelType>::ScalarRealType;
-  using SigmaArrayType = FixedArray<ScalarRealType, itkGetStaticConstMacro(Dimension)>;
+  using SigmaArrayType = FixedArray<ScalarRealType, Self::Dimension>;
 
   /** Input data that will be used for generating the feature. */
   using ProcessObject::SetInput;
