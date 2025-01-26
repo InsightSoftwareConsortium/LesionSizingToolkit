@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods).  */
-  itkTypeMacro(VotingBinaryHoleFillFloodingImageFilter, VotingBinaryImageFilter);
+  itkOverrideGetNameOfClassMacro(VotingBinaryHoleFillFloodingImageFilter);
 
   using InputImageType = typename Superclass::InputImageType;
   using InputImagePointer = typename InputImageType::Pointer;

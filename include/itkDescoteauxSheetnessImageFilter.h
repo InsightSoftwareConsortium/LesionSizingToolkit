@@ -203,7 +203,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(DescoteauxSheetnessImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(DescoteauxSheetnessImageFilter);
 
   /** Set the normalization term for sheetness */
   void

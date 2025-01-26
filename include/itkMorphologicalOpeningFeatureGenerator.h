@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MorphologicalOpeningFeatureGenerator, FeatureGenerator);
+  itkOverrideGetNameOfClassMacro(MorphologicalOpeningFeatureGenerator);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

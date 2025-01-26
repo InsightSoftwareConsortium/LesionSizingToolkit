@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods).  */
-  itkTypeMacro(RegionCompetitionImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(RegionCompetitionImageFilter);
 
   using InputImageType = TInputImage;
   using InputImagePointer = typename InputImageType::Pointer;

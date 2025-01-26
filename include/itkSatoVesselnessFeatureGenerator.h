@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SatoVesselnessFeatureGenerator, FeatureGenerator);
+  itkOverrideGetNameOfClassMacro(SatoVesselnessFeatureGenerator);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

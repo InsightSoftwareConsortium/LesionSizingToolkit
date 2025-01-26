@@ -82,7 +82,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CannyEdgesDistanceAdvectionFieldFeatureGenerator, FeatureGenerator);
+  itkOverrideGetNameOfClassMacro(CannyEdgesDistanceAdvectionFieldFeatureGenerator);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

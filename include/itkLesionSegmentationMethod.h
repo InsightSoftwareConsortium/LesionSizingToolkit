@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LesionSegmentationMethod, ProcessObject);
+  itkOverrideGetNameOfClassMacro(LesionSegmentationMethod);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

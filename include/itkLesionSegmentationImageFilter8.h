@@ -72,7 +72,7 @@ public:
   using RegionType = typename TOutputImage::RegionType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LesionSegmentationImageFilter8, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LesionSegmentationImageFilter8);
 
   /** ImageDimension constant    */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;

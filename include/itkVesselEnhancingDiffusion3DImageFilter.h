@@ -89,7 +89,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
-  itkTypeMacro(VesselEnhancingDiffusion3DImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(VesselEnhancingDiffusion3DImageFilter);
 
   itkSetMacro(TimeStep, Precision);
   itkSetMacro(Iterations, unsigned int);

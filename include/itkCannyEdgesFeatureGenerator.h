@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CannyEdgesFeatureGenerator, FeatureGenerator);
+  itkOverrideGetNameOfClassMacro(CannyEdgesFeatureGenerator);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BinaryThresholdFeatureGenerator, FeatureGenerator);
+  itkOverrideGetNameOfClassMacro(BinaryThresholdFeatureGenerator);
 
   /** Dimension of the space */
   static constexpr unsigned int Dimension = NDimension;

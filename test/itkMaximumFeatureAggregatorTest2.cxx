@@ -39,7 +39,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MaximumFeatureAggregatorSurrogage, MaximumFeatureAggregator);
+  itkOverrideGetNameOfClassMacro(MaximumFeatureAggregatorSurrogage);
 
   using InputFeatureType = Superclass::InputFeatureType;
 

@@ -211,7 +211,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(FrangiTubularnessImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(FrangiTubularnessImageFilter);
 
   /** Set the normalization term for sheetness */
   void
