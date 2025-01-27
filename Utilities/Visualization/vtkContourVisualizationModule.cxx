@@ -199,19 +199,22 @@ vtkContourVisualizationModule::Update()
 
   switch (this->SliceOrientation)
   {
-    case SLICE_ORIENTATION_YZ: {
+    case SLICE_ORIENTATION_YZ:
+    {
       sliceExtent[0] = 0;
       sliceExtent[1] = 0;
       sliceOrigin[0] = this->SlicePosition[0];
       break;
     }
-    case SLICE_ORIENTATION_XZ: {
+    case SLICE_ORIENTATION_XZ:
+    {
       sliceExtent[2] = 0;
       sliceExtent[3] = 0;
       sliceOrigin[1] = this->SlicePosition[1];
       break;
     }
-    case SLICE_ORIENTATION_XY: {
+    case SLICE_ORIENTATION_XY:
+    {
       sliceExtent[4] = 0;
       sliceExtent[5] = 0;
       sliceOrigin[2] = this->SlicePosition[2];
