@@ -27,7 +27,7 @@ class LesionSegmentationCLI : public MetaCommand
 {
 public:
   using PixelType = short;
-  constexpr static unsigned int ImageDimension = 3;
+  static constexpr unsigned int ImageDimension = 3;
   using InputImageType = itk::Image<PixelType, ImageDimension>;
   using RealImageType = itk::Image<float, ImageDimension>;
 
