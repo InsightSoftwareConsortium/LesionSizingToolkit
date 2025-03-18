@@ -8,6 +8,10 @@ file(READ "${MY_CURRENT_DIR}/README.rst" DOCUMENTATION)
 # By convention those modules outside of ITK are not prefixed with
 # ITK.
 
+if(LSTK_USE_VTK)
+  set(LesionSizingToolkit_VTK_GLUE_SUPPORT ITKVtkGlue)
+endif()
+
 # define the dependencies of the include module and the tests
 itk_module(LesionSizingToolkit
   DEPENDS
@@ -17,7 +21,7 @@ itk_module(LesionSizingToolkit
     ITKRegionGrowing
     ITKLabelVoting
     ITKMathematicalMorphology
-    ITKVtkGlue
+    ${LesionSizingToolkit_VTK_GLUE_SUPPORT}
     ITKIOSpatialObjects
     ITKCommon
     ITKIOGDCM
