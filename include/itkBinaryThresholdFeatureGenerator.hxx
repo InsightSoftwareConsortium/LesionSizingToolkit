@@ -79,7 +79,7 @@ BinaryThresholdFeatureGenerator<NDimension>::GenerateData()
 
   this->m_BinaryThresholdFilter->SetInput(inputImage);
   this->m_BinaryThresholdFilter->SetLowerThreshold(this->m_Threshold);
-  this->m_BinaryThresholdFilter->SetUpperThreshold(itk::NumericTraits<OutputPixelType>::max());
+  this->m_BinaryThresholdFilter->SetUpperThreshold(itk::NumericTraits<InputPixelType>::max());
   this->m_BinaryThresholdFilter->SetOutsideValue(0.0);
   this->m_BinaryThresholdFilter->SetInsideValue(1.0);
 
