@@ -97,7 +97,7 @@ LesionSegmentationImageFilter8<TInputImage, TOutputImage>::GenerateInputRequeste
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
-  if (!this->GetInput())
+  if (this->GetInput() != nullptr)
   {
     typename InputImageType::Pointer inputPtr = const_cast<TInputImage *>(this->GetInput());
 
