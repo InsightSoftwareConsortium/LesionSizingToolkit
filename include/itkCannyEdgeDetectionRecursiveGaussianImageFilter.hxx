@@ -23,6 +23,7 @@
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 #include "itkGradientMagnitudeImageFilter.h"
+#include "itkImageRegionIteratorWithIndex.h"
 #include <iostream>
 namespace itk
 {
