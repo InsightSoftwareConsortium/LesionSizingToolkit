@@ -161,7 +161,7 @@ itk_add_test(NAME itkGradientMagnitudeSigmoidFeatureGeneratorTest1
   90.0
  )
 
-itk_add_test(NAME itkGradientMagnitudeImageFilterTest1
+itk_add_test(NAME LesionSizingToolkitGradientMagnitudeImageFilterTest1
   COMMAND ${ITK_TEST_DRIVER}
   $<TARGET_FILE:itkGradientMagnitudeImageFilter>
   ${TEST_DATA_ROOT}/Input/PartSolidLesionCropped.mha
@@ -216,7 +216,7 @@ itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest1
   ${TEMP}/CannyEdgeDetectionNonMaximumSuppressionImageFilterTest1_1.mha
  )
 
-itk_add_test(NAME itkCannyEdgeDetectionImageFilterTest2
+itk_add_test(NAME LesionSizingToolkitCannyEdgeDetectionImageFilterTest2
   COMMAND ${ITK_TEST_DRIVER}
 --compare ${TEMP}/CannyEdgeDetectionImageFilterTest2_1.mha
           ${TEST_DATA_ROOT}/Baseline/CannyEdgeDetectionImageFilterTest2_1.mha
