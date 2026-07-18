@@ -19,6 +19,7 @@ const
 #include "itkRegionCompetitionImageFilter.h"
 #include "itkImageFileWriter.h"
 #include "itkImage.h"
+#include "itkImageRegionIteratorWithIndex.h"
 #include "itkTestingMacros.h"
 
 
