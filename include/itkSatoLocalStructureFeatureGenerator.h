@@ -72,8 +72,6 @@ public:
   using ProcessObject::SetInput;
   void
   SetInput(const SpatialObjectType * input);
-  const SpatialObjectType *
-  GetInput() const;
 
   /** Output data that carries the feature in the form of a
    * SpatialObject. */

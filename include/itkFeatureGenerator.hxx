@@ -48,6 +48,13 @@ FeatureGenerator<NDimension>::SetInput(const SpatialObjectType * spatialObject)
 
 template <unsigned int NDimension>
 const typename FeatureGenerator<NDimension>::SpatialObjectType *
+FeatureGenerator<NDimension>::GetInput() const
+{
+  return dynamic_cast<const SpatialObjectType *>(this->ProcessObject::GetInput(0));
+}
+
+template <unsigned int NDimension>
+const typename FeatureGenerator<NDimension>::SpatialObjectType *
 FeatureGenerator<NDimension>::GetFeature() const
 {
   if (this->GetNumberOfOutputs() < 1)

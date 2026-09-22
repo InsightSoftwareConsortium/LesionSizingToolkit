@@ -52,6 +52,13 @@ IsotropicResampler<NDimension>::SetInput(const SpatialObjectType * spatialObject
 
 template <unsigned int NDimension>
 const typename IsotropicResampler<NDimension>::SpatialObjectType *
+IsotropicResampler<NDimension>::GetInput() const
+{
+  return dynamic_cast<const SpatialObjectType *>(this->ProcessObject::GetInput(0));
+}
+
+template <unsigned int NDimension>
+const typename IsotropicResampler<NDimension>::SpatialObjectType *
 IsotropicResampler<NDimension>::GetOutput() const
 {
   return static_cast<const SpatialObjectType *>(this->ProcessObject::GetOutput(0));
