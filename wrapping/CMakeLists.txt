@@ -1,6 +1,14 @@
 itk_wrap_module(LesionSizingToolkit)
 
 set(WRAPPER_SUBMODULE_ORDER
+   itkFeatureGenerator
+   itkFeatureAggregator
+   itkSatoVesselnessFeatureGenerator
+   itkSegmentationModule
+   itkRegionGrowingSegmentationModule
+   itkSinglePhaseLevelSetSegmentationModule
+   itkFastMarchingSegmentationModule
+   itkSegmentationVolumeEstimator
    itkBinaryThresholdFeatureGenerator
    itkCannyEdgeDetectionRecursiveGaussianImageFilter
    itkCannyEdgesDistanceAdvectionFieldFeatureGenerator
@@ -12,9 +20,6 @@ set(WRAPPER_SUBMODULE_ORDER
    itkDescoteauxSheetnessImageFilter
    itkFastMarchingAndGeodesicActiveContourLevelSetSegmentationModule
    itkFastMarchingAndShapeDetectionLevelSetSegmentationModule
-   itkFastMarchingSegmentationModule
-   itkFeatureAggregator
-   itkFeatureGenerator
    itkFrangiTubularnessFeatureGenerator
    itkFrangiTubularnessImageFilter
    itkGeodesicActiveContourLevelSetSegmentationModule
@@ -31,15 +36,10 @@ set(WRAPPER_SUBMODULE_ORDER
    itkMinimumFeatureAggregator
    itkMorphologicalOpeningFeatureGenerator
    itkRegionCompetitionImageFilter
-   itkRegionGrowingSegmentationModule
    itkSatoLocalStructureFeatureGenerator
-   itkSatoVesselnessFeatureGenerator
    itkSatoVesselnessSigmoidFeatureGenerator
-   itkSegmentationModule
-   itkSegmentationVolumeEstimator
    itkShapeDetectionLevelSetSegmentationModule
    itkSigmoidFeatureGenerator
-   itkSinglePhaseLevelSetSegmentationModule
    itkVesselEnhancingDiffusion3DImageFilter
    itkVotingBinaryHoleFillFloodingImageFilter
    itkWeightedSumFeatureAggregator
