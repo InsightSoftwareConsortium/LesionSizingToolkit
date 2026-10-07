@@ -57,19 +57,23 @@ itkSatoVesselnessSigmoidFeatureGeneratorMultiScaleTest1(int argc, char * argv[])
 
   FeatureGeneratorType::Pointer featureGenerator1 = FeatureGeneratorType::New();
 
-  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator1, SatoVesselnessSigmoidFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
+    featureGenerator1, SatoVesselnessSigmoidFeatureGenerator, SatoVesselnessFeatureGenerator);
 
   FeatureGeneratorType::Pointer featureGenerator2 = FeatureGeneratorType::New();
 
-  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator2, SatoVesselnessSigmoidFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
+    featureGenerator2, SatoVesselnessSigmoidFeatureGenerator, SatoVesselnessFeatureGenerator);
 
   FeatureGeneratorType::Pointer featureGenerator3 = FeatureGeneratorType::New();
 
-  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator3, SatoVesselnessSigmoidFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
+    featureGenerator3, SatoVesselnessSigmoidFeatureGenerator, SatoVesselnessFeatureGenerator);
 
   FeatureGeneratorType::Pointer featureGenerator4 = FeatureGeneratorType::New();
 
-  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureGenerator4, SatoVesselnessSigmoidFeatureGenerator, FeatureGenerator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
+    featureGenerator4, SatoVesselnessSigmoidFeatureGenerator, SatoVesselnessFeatureGenerator);
 
 
   double smallestSigma = 1.0;
