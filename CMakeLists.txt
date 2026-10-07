@@ -3,7 +3,6 @@ project(LesionSizingToolkit)
 
 if(NOT ITK_SOURCE_DIR)
   find_package(ITK REQUIRED)
-  include(${ITK_USE_FILE})
   list(APPEND CMAKE_MODULE_PATH ${ITK_CMAKE_DIR})
   include(ITKModuleExternal)
 else()
