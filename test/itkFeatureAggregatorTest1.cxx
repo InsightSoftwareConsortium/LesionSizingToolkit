@@ -158,18 +158,19 @@ itkFeatureAggregatorTest1(int argc, char * argv[])
   using VesselnessGeneratorType = itk::SatoVesselnessSigmoidFeatureGenerator<Dimension>;
   VesselnessGeneratorType::Pointer vesselnessGenerator = VesselnessGeneratorType::New();
 
-  ITK_EXERCISE_BASIC_OBJECT_METHODS(vesselnessGenerator, SatoVesselnessSigmoidFeatureGenerator, FeatureAggregator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
+    vesselnessGenerator, SatoVesselnessSigmoidFeatureGenerator, SatoVesselnessFeatureGenerator);
 
   using LungWallGeneratorType = itk::LungWallFeatureGenerator<Dimension>;
   LungWallGeneratorType::Pointer lungWallGenerator = LungWallGeneratorType::New();
 
-  ITK_EXERCISE_BASIC_OBJECT_METHODS(lungWallGenerator, LungWallFeatureGenerator, FeatureAggregator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(lungWallGenerator, LungWallFeatureGenerator, FeatureGenerator);
 
 
   using SigmoidFeatureGeneratorType = itk::SigmoidFeatureGenerator<Dimension>;
   SigmoidFeatureGeneratorType::Pointer sigmoidGenerator = SigmoidFeatureGeneratorType::New();
 
-  ITK_EXERCISE_BASIC_OBJECT_METHODS(sigmoidGenerator, SigmoidFeatureGenerator, FeatureAggregator);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(sigmoidGenerator, SigmoidFeatureGenerator, FeatureGenerator);
 
   featureAggregator->AddFeatureGenerator(lungWallGenerator);
   featureAggregator->AddFeatureGenerator(vesselnessGenerator);

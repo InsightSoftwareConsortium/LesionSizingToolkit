@@ -60,7 +60,7 @@ itkDescoteauxSheetnessFeatureGeneratorMultiScaleTest1(int argc, char * argv[])
 
   AggregatorType::Pointer featureAggregator = AggregatorType::New();
 
-  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureAggregator, MaximumFeatureAggregator, UnaryFunctorImageFilter);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(featureAggregator, MaximumFeatureAggregator, FeatureAggregator);
 
   using DescoteauxSheetnessFeatureGeneratorType = itk::DescoteauxSheetnessFeatureGenerator<Dimension>;
   using SpatialObjectType = DescoteauxSheetnessFeatureGeneratorType::SpatialObjectType;
