@@ -151,7 +151,7 @@ GetImage(std::string dir, bool ignoreDirection)
     catch (itk::ExceptionObject & ex)
     {
       std::cout << ex << std::endl;
-      return NULL;
+      return nullptr;
     }
 
 
@@ -172,10 +172,10 @@ GetImage(std::string dir, bool ignoreDirection)
   catch (itk::ExceptionObject & ex)
   {
     std::cout << ex << std::endl;
-    return NULL;
+    return nullptr;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 // --------------------------------------------------------------------------

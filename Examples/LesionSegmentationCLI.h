@@ -125,8 +125,8 @@ public:
       seeds[0];
       for (int i = 0; i < 3; i++)
       {
-        this->ROI[2 * i] = seeds[0].GetPosition()[i] - this->GetValueAsFloat("MaximumRadius");
-        this->ROI[2 * i + 1] = seeds[0].GetPosition()[i] + this->GetValueAsFloat("MaximumRadius");
+        this->ROI[2 * i] = seeds[0].GetPositionInObjectSpace()[i] - this->GetValueAsFloat("MaximumRadius");
+        this->ROI[2 * i + 1] = seeds[0].GetPositionInObjectSpace()[i] + this->GetValueAsFloat("MaximumRadius");
       }
     }
     return this->ROI;
@@ -252,7 +252,7 @@ public:
         exit(-1);
       }
 
-      seeds[i].SetPosition(sx, sy, sz);
+      seeds[i].SetPositionInObjectSpace(sx, sy, sz);
     }
     return seeds;
   }

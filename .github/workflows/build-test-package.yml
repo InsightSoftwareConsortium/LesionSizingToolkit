@@ -11,14 +11,23 @@ on:
       - main
 
 jobs:
-  cxx-build-workflow:
-    uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-cxx.yml@v5.4.4
+  cxx-build-workflow-itk5:
+    uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-cxx.yml@v5.4.6
 
-  python-build-workflow:
-    uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@v5.4.4
+  cxx-build-workflow-itk6:
+    uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-cxx.yml@v6.0b02
     with:
-      itk-wheel-tag: 'v5.4.5'
-      itk-python-package-tag: 'v5.4.5'
+      # ITK main as of 2026-10-01; the action's own default predates v6.0b02. Replace with v6.0.0 once released.
+      itk-git-tag: '5d31af3cfdf2071d14dfc331d169111487b80597'
+
+  python-build-workflow-itk5:
+    uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@v5.4.6
+    with:
+      test-notebooks: false
+
+  python-build-workflow-itk6:
+    uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@v6.0b02
+    with:
       test-notebooks: false
     secrets:
       pypi_password: ${{ secrets.pypi_password }}
