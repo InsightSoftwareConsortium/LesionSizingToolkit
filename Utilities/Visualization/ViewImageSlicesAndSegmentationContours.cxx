@@ -88,11 +88,11 @@ main(int argc, char * argv[])
       return EXIT_FAILURE;
     }
 
-    std::cout << "Number of objects in the group:" << group->GetNumberOfObjects(1) << std::endl;
+    std::cout << "Number of objects in the group:" << group->GetNumberOfChildren(1) << std::endl;
 
-    using ObjectListType = SpatialObjectReaderType::GroupType::ObjectListType;
+    using ObjectListType = SpatialObjectReaderType::GroupType::ChildrenListType;
 
-    ObjectListType * groupChildren = group->GetObjects(999999);
+    ObjectListType * groupChildren = group->GetChildren(999999);
 
     ObjectListType::const_iterator spatialObjectItr = groupChildren->begin();
 
@@ -119,7 +119,7 @@ main(int argc, char * argv[])
     const LandmarkPointListType & points = landmarkSpatialObject->GetPoints();
 
     // Grab the first point in the list of seed points
-    PointType point = points[0].GetPosition();
+    PointType point = points[0].GetPositionInObjectSpace();
 
     std::cout << "Seed point = " << point << std::endl;
 
