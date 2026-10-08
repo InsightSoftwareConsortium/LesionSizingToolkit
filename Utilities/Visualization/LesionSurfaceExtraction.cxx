@@ -24,6 +24,8 @@
 #include "vtksys/SystemTools.hxx"
 #include "vtkVersion.h"
 
+#include <iostream>
+
 
 #define VTK_CREATE(type, name) vtkSmartPointer<type> name = vtkSmartPointer<type>::New()
 
