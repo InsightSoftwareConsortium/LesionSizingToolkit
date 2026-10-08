@@ -17,11 +17,11 @@
  *=========================================================================*/
 
 #ifndef itkLesionSegmentationCommandLineProgressReporter_h
-#  define itkLesionSegmentationCommandLineProgressReporter_h
+#define itkLesionSegmentationCommandLineProgressReporter_h
 
-#  include "itkLesionSegmentationImageFilter8.h"
-#  include "itkCommand.h"
-#  include <string>
+#include "itkLesionSegmentationImageFilter8.h"
+#include "itkCommand.h"
+#include <string>
 
 namespace itk
 {
