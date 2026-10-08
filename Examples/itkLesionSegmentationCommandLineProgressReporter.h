@@ -45,10 +45,10 @@ public:
   // the instance invoking the event; eid is the event id (see
   // vtkCommand.h); and calldata is information sent when the callback
   // was invoked (e.g., progress value in the vtkCommand::ProgressEvent).
-  virtual void
-  Execute(const Object * caller, const EventObject & event);
-  virtual void
-  Execute(Object * caller, const EventObject & event);
+  void
+  Execute(const Object * caller, const EventObject & event) override;
+  void
+  Execute(Object * caller, const EventObject & event) override;
 
   void
   SetReportProgress(int i)
