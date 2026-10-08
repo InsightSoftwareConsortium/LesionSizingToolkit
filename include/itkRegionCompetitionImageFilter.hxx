@@ -24,6 +24,8 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkOffset.h"
 
+#include <algorithm>
+
 namespace itk
 {
 
@@ -459,9 +461,7 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>::ComputeArrayOfNeighborh
   // Copy the offsets from the Input image.
   // We assume that they are the same for the output image.
   //
-  const size_t sizeOfOffsetTableInBytes = (InputImageDimension + 1) * sizeof(unsigned long);
-
-  memcpy(this->m_OffsetTable, this->m_OutputImage->GetOffsetTable(), sizeOfOffsetTableInBytes);
+  std::copy_n(this->m_OutputImage->GetOffsetTable(), InputImageDimension + 1, this->m_OffsetTable);
 
 
   //
@@ -482,7 +482,7 @@ RegionCompetitionImageFilter<TInputImage, TOutputImage>::ComputeArrayOfNeighborh
   {
     NeighborOffsetType offset = this->m_Neighborhood.GetOffset(i);
 
-    signed int bufferOffset = 0; // must be a signed number
+    OffsetValueType bufferOffset = 0;
 
     for (unsigned int d = 0; d < InputImageDimension; d++)
     {
