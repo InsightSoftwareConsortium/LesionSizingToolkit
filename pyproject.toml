@@ -3,7 +3,7 @@ requires = ["scikit-build-core"]
 build-backend = "scikit_build_core.build"
 
 [project]
-name = "lesionsizingtoolkit"
+name = "itk-lesionsizingtoolkit"
 version = "1.0.1"
 description = "A generic and extensible ITK module for lesion segmentation"
 readme = "README.rst"
