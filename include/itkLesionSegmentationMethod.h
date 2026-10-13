@@ -125,12 +125,10 @@ private:
 
   SegmentationModulePointer m_SegmentationModule;
 
-  ProgressAccumulator::Pointer m_ProgressAccumulator;
-
 
   /** This method calls the Update() method of each one of the feature generators */
   void
-  UpdateAllFeatureGenerators();
+  UpdateAllFeatureGenerators(ProgressAccumulator * progress);
 
   /** This method compares the number of available features against the number
    * of expected features, and it will throw an exception if they do not match.
@@ -143,7 +141,7 @@ private:
   ConnectFeaturesToSegmentationModule();
 
   void
-  ExecuteSegmentationModule();
+  ExecuteSegmentationModule(ProgressAccumulator * progress);
 };
 
 } // end namespace itk

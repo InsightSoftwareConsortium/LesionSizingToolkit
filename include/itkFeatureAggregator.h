@@ -102,8 +102,6 @@ protected:
   const InputFeatureType *
   GetInputFeature(unsigned int featureId) const;
 
-  ProgressAccumulator::Pointer m_ProgressAccumulator;
-
 private:
   using FeatureGeneratorPointer = typename FeatureGeneratorType::Pointer;
   using FeatureGeneratorArrayType = std::vector<FeatureGeneratorPointer>;
