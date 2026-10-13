@@ -36,9 +36,6 @@ FeatureAggregator<NDimension>::FeatureAggregator()
   typename OutputImageSpatialObjectType::Pointer outputObject = OutputImageSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput(0, outputObject.GetPointer());
-
-  this->m_ProgressAccumulator = ProgressAccumulator::New();
-  this->m_ProgressAccumulator->SetMiniPipelineFilter(this);
 }
 
 
@@ -143,6 +140,9 @@ template <unsigned int NDimension>
 void
 FeatureAggregator<NDimension>::UpdateAllFeatureGenerators()
 {
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+
   auto gitr = this->m_FeatureGenerators.begin();
   auto gend = this->m_FeatureGenerators.end();
 
@@ -150,7 +150,7 @@ FeatureAggregator<NDimension>::UpdateAllFeatureGenerators()
   {
     // Assuming that most of the time is spent in generating the features and
     // hardly negligible time is spent in consolidating the features
-    this->m_ProgressAccumulator->RegisterInternalFilter(*gitr, 1.0 / this->m_FeatureGenerators.size());
+    progress->RegisterInternalFilter(*gitr, 1.0 / this->m_FeatureGenerators.size());
 
     (*gitr)->Update();
     ++gitr;

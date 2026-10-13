@@ -42,9 +42,6 @@ LesionSegmentationMethod<NDimension>::LesionSegmentationMethod()
   typename OutputSpatialObjectType::Pointer outputObject = OutputSpatialObjectType::New();
 
   this->ProcessObject::SetNthOutput(0, outputObject.GetPointer());
-
-  this->m_ProgressAccumulator = ProgressAccumulator::New();
-  this->m_ProgressAccumulator->SetMiniPipelineFilter(this);
 }
 
 
@@ -105,13 +102,16 @@ LesionSegmentationMethod<NDimension>::GenerateData()
     itkExceptionMacro("Segmentation Module has not been connected");
   }
 
-  this->UpdateAllFeatureGenerators();
+  ProgressAccumulator::Pointer progress = ProgressAccumulator::New();
+  progress->SetMiniPipelineFilter(this);
+
+  this->UpdateAllFeatureGenerators(progress);
 
   this->VerifyNumberOfAvailableFeaturesMatchedExpectations();
 
   this->ConnectFeaturesToSegmentationModule();
 
-  this->ExecuteSegmentationModule();
+  this->ExecuteSegmentationModule(progress);
 }
 
 
@@ -120,14 +120,14 @@ LesionSegmentationMethod<NDimension>::GenerateData()
  */
 template <unsigned int NDimension>
 void
-LesionSegmentationMethod<NDimension>::UpdateAllFeatureGenerators()
+LesionSegmentationMethod<NDimension>::UpdateAllFeatureGenerators(ProgressAccumulator * progress)
 {
   auto gitr = this->m_FeatureGenerators.begin();
   auto gend = this->m_FeatureGenerators.end();
 
   while (gitr != gend)
   {
-    this->m_ProgressAccumulator->RegisterInternalFilter(*gitr, 0.5 / this->m_FeatureGenerators.size());
+    progress->RegisterInternalFilter(*gitr, 0.5 / this->m_FeatureGenerators.size());
     (*gitr)->Update();
     ++gitr;
   }
@@ -164,9 +164,9 @@ LesionSegmentationMethod<NDimension>::ConnectFeaturesToSegmentationModule()
 
 template <unsigned int NDimension>
 void
-LesionSegmentationMethod<NDimension>::ExecuteSegmentationModule()
+LesionSegmentationMethod<NDimension>::ExecuteSegmentationModule(ProgressAccumulator * progress)
 {
-  this->m_ProgressAccumulator->RegisterInternalFilter(this->m_SegmentationModule, 0.5);
+  progress->RegisterInternalFilter(this->m_SegmentationModule, 0.5);
   this->m_SegmentationModule->SetInput(this->m_InitialSegmentation);
   this->m_SegmentationModule->Update();
 }
