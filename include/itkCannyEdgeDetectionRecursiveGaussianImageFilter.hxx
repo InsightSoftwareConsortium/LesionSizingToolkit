@@ -26,6 +26,9 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkMath.h"
 #include "itkProgressTransformer.h"
+#ifdef LST_ITK_HAS_PRINT_NUMERIC_TRAIT
+#  include "itkPrintHelper.h"
+#endif
 
 namespace itk
 {
@@ -116,7 +119,11 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Threa
   {
     NeighborhoodType bit(radius, input, face);
 
+#ifdef LST_ITK_HAS_ITERATOR_CTAD
+    ImageRegionIterator it(this->m_OutputImage, face);
+#else
     ImageRegionIterator<TOutputImage> it(this->m_OutputImage, face);
+#endif
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
 
@@ -275,9 +282,17 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Hyste
   ListNodeType * node = nullptr;
 
   // fix me
+#ifdef LST_ITK_HAS_ITERATOR_CTAD
+  ImageRegionIterator oit(input, input->GetRequestedRegion());
+#else
   ImageRegionIterator<TOutputImage> oit(input, input->GetRequestedRegion());
+#endif
 
+#ifdef LST_ITK_HAS_ITERATOR_CTAD
+  ImageRegionIterator uit(this->m_OutputImage, this->m_OutputImage->GetRequestedRegion());
+#else
   ImageRegionIterator<TOutputImage> uit(this->m_OutputImage, this->m_OutputImage->GetRequestedRegion());
+#endif
   while (!uit.IsAtEnd())
   {
     uit.Value() = OutputImagePixelType{};
@@ -413,7 +428,11 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Threa
   {
     bit = ConstNeighborhoodIterator<InputImageType>(radius, input, face);
     bit1 = ConstNeighborhoodIterator<InputImageType>(radius, input1, face);
+#ifdef LST_ITK_HAS_ITERATOR_CTAD
+    ImageRegionIterator it(output, face);
+#else
     ImageRegionIterator<TOutputImage> it(output, face);
+#endif
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
     bit1.GoToBegin();
@@ -503,12 +522,17 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Print
   Superclass::PrintSelf(os, indent);
 
   os << "Sigma: " << m_Sigma << std::endl;
+#ifdef LST_ITK_HAS_PRINT_NUMERIC_TRAIT
+  print_helper::PrintNumericTrait(os, indent, "UpperThreshold", m_UpperThreshold);
+  print_helper::PrintNumericTrait(os, indent, "LowerThreshold", m_LowerThreshold);
+#else
   os << indent
      << "UpperThreshold: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_UpperThreshold)
      << std::endl;
   os << indent
      << "LowerThreshold: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_LowerThreshold)
      << std::endl;
+#endif
   os << indent << "Center: " << m_Center << std::endl;
   os << indent << "Stride: " << m_Stride << std::endl;
   itkPrintSelfObjectMacro(GaussianFilter);

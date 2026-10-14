@@ -77,12 +77,11 @@ public:
  * \todo Edge-linking will be added when an itk connected component labeling
  * algorithm is available.
  *
- * \ingroup LesionSizingToolkit
- *
  * \sa SmoothingRecursiveGaussianImageFilter
  * \sa ZeroCrossingImageFilter
  * \sa ThresholdImageFilter
  * \ingroup ITKImageFeature
+ * \ingroup LesionSizingToolkit
  */
 template <typename TInputImage, typename TOutputImage>
 class ITK_TEMPLATE_EXPORT CannyEdgeDetectionRecursiveGaussianImageFilter
@@ -108,10 +107,6 @@ public:
   using OutputImagePixelType = typename TOutputImage::PixelType;
   using IndexType = typename TInputImage::IndexType;
   using SizeValueType = itk::SizeValueType;
-
-  using GaussianImageFilterType = SmoothingRecursiveGaussianImageFilter<InputImageType, OutputImageType>;
-  using ScalarRealType = typename GaussianImageFilterType::ScalarRealType;
-  using SigmaArrayType = typename GaussianImageFilterType::SigmaArrayType;
 
   /** The default boundary condition is used unless overridden
    *in the Evaluate() method. */
@@ -144,6 +139,11 @@ public:
   /** Typedef of double containers. */
   using ArrayType = FixedArray<double, Self::ImageDimension>;
 
+  using ScalarRealType =
+    typename SmoothingRecursiveGaussianImageFilter<InputImageType, OutputImageType>::ScalarRealType;
+  using SigmaArrayType =
+    typename SmoothingRecursiveGaussianImageFilter<InputImageType, OutputImageType>::SigmaArrayType;
+
   /** Smoothing parameters for the Gaussian filter. */
   void
   SetSigmaArray(const SigmaArrayType & sigmas);
@@ -165,7 +165,7 @@ public:
   itkGetConstMacro(LowerThreshold, OutputImagePixelType);
 
   OutputImageType *
-  GetNonMaximumSuppressionImage() const
+  GetNonMaximumSuppressionImage()
   {
     return this->m_MultiplyImageFilter->GetOutput();
   }
@@ -184,6 +184,7 @@ protected:
   void
   GenerateData() override;
 
+  using GaussianImageFilterType = SmoothingRecursiveGaussianImageFilter<InputImageType, OutputImageType>;
   using MultiplyImageFilterType = MultiplyImageFilter<OutputImageType, OutputImageType, OutputImageType>;
 
 private:
@@ -218,10 +219,7 @@ private:
   void
   ThreadedCompute2ndDerivativePos(const OutputImageRegionType & outputRegionForThread);
 
-  /** Standard deviation of the gaussian used for smoothing */
-  SigmaArrayType m_Sigma;
-
-  ArrayType m_MaximumError;
+  SigmaArrayType m_Sigma{};
 
   OutputImagePixelType m_UpperThreshold{}; // should be float here?
   OutputImagePixelType m_LowerThreshold{}; // should be float here?
