@@ -24,7 +24,8 @@
 #include "itkProgressReporter.h"
 #include "itkGradientMagnitudeImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
-#include <iostream>
+#include "itkMath.h"
+
 namespace itk
 {
 
@@ -36,8 +37,6 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,
 
   m_Sigma.Fill(1.0);
 
-  m_OutsideValue = NumericTraits<OutputImagePixelType>::Zero;
-  m_Threshold = NumericTraits<OutputImagePixelType>::Zero;
   m_UpperThreshold = NumericTraits<OutputImagePixelType>::Zero;
   m_LowerThreshold = NumericTraits<OutputImagePixelType>::Zero;
 
@@ -104,50 +103,6 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Gener
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
   return;
-  // get pointers to the input and output
-  typename Superclass::InputImagePointer  inputPtr = const_cast<TInputImage *>(this->GetInput());
-  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-
-  if (!inputPtr || !outputPtr)
-  {
-    return;
-  }
-
-  // Set the kernel size.
-  //  fix me this needs to be based on the variance of the gaussian filter
-  typename TInputImage::SizeValueType radius = 1;
-
-  // get a copy of the input requested region (should equal the output
-  // requested region)
-  typename TInputImage::RegionType inputRequestedRegion;
-  inputRequestedRegion = inputPtr->GetRequestedRegion();
-
-  // pad the input requested region by the operator radius
-  inputRequestedRegion.PadByRadius(radius);
-
-  // crop the input requested region at the input's largest possible region
-  if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
-  {
-    inputPtr->SetRequestedRegion(inputRequestedRegion);
-    return;
-  }
-  else
-  {
-    // Couldn't crop the region (requested region is outside the largest
-    // possible region).  Throw an exception.
-
-    // store what we tried to request (prior to trying to crop)
-    inputPtr->SetRequestedRegion(inputRequestedRegion);
-
-    // build an exception
-    InvalidRequestedRegionError e(__FILE__, __LINE__);
-    std::ostringstream          msg;
-    msg << this->GetNameOfClass() << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
-    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-    e.SetDataObject(inputPtr);
-    throw e;
-  }
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -315,12 +270,6 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Gener
   typename ZeroCrossingImageFilter<TOutputImage, TOutputImage>::Pointer zeroCrossFilter =
     ZeroCrossingImageFilter<TOutputImage, TOutputImage>::New();
 
-  typename GradientMagnitudeImageFilter<TOutputImage, TOutputImage>::Pointer gradMag =
-    GradientMagnitudeImageFilter<TOutputImage, TOutputImage>::New();
-
-  typename MultiplyImageFilter<TOutputImage, TOutputImage, TOutputImage>::Pointer multFilter =
-    MultiplyImageFilter<TOutputImage, TOutputImage, TOutputImage>::New();
-
   this->AllocateUpdateBuffer();
 
   // 1.Apply the Gaussian Filter to the input image.-------
@@ -428,7 +377,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Follo
   ImageRegionIteratorWithIndex<TOutputImage> uit(this->m_OutputImage, this->m_OutputImage->GetRequestedRegion());
 
   uit.SetIndex(index);
-  if (uit.Get() == NumericTraits<OutputImagePixelType>::One)
+  if (Math::ExactlyEquals(uit.Get(), NumericTraits<OutputImagePixelType>::OneValue()))
   {
     // we must remove the node if we are not going to follow it!
 
@@ -460,7 +409,8 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Follo
       uit.SetIndex(nIndex);
       if (inputRegion.IsInside(nIndex))
       {
-        if (oit.GetPixel(i) > m_LowerThreshold && uit.Value() != NumericTraits<OutputImagePixelType>::One)
+        if (oit.GetPixel(i) > m_LowerThreshold &&
+            Math::NotExactlyEquals(uit.Value(), NumericTraits<OutputImagePixelType>::OneValue()))
         {
           node = m_NodeStore->Borrow(); // get a new node struct
           node->m_Value = nIndex;       // set its value
@@ -669,16 +619,11 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Print
   Superclass::PrintSelf(os, indent);
 
   os << "Sigma: " << m_Sigma << std::endl;
-  os << indent << "Threshold: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_Threshold)
-     << std::endl;
   os << indent
      << "UpperThreshold: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_UpperThreshold)
      << std::endl;
   os << indent
      << "LowerThreshold: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_LowerThreshold)
-     << std::endl;
-  os << indent
-     << "OutsideValue: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_OutsideValue)
      << std::endl;
   os << "Center: " << m_Center << std::endl;
   os << "Stride: " << m_Stride << std::endl;

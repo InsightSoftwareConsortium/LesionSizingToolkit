@@ -109,7 +109,6 @@ CannyEdgesDistanceAdvectionFieldFeatureGenerator<NDimension>::GenerateData()
   this->m_CannyFilter->SetSigma(this->m_Sigma);
   this->m_CannyFilter->SetUpperThreshold(this->m_UpperThreshold);
   this->m_CannyFilter->SetLowerThreshold(this->m_LowerThreshold);
-  this->m_CannyFilter->SetOutsideValue(NumericTraits<InternalPixelType>::Zero);
 
   this->m_DistanceMapFilter->Update();
 

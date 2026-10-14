@@ -29,6 +29,7 @@
 #include "itkDerivativeOperator.h"
 #include "itkSparseFieldLayer.h"
 #include "itkObjectStore.h"
+#include "itkMath.h"
 
 
 namespace itk
@@ -111,6 +112,7 @@ public:
   using InputImagePixelType = typename TInputImage::PixelType;
   using OutputImagePixelType = typename TOutputImage::PixelType;
   using IndexType = typename TInputImage::IndexType;
+  using SizeValueType = typename TInputImage::SizeValueType;
 
   using GaussianImageFilterType = SmoothingRecursiveGaussianImageFilter<InputImageType, OutputImageType>;
   using ScalarRealType = typename GaussianImageFilterType::ScalarRealType;
@@ -157,33 +159,12 @@ public:
   ScalarRealType
   GetSigma() const;
 
-  /* Set the Threshold value for detected edges. */
-  void
-  SetThreshold(const OutputImagePixelType th)
-  {
-    this->m_Threshold = th;
-    this->m_UpperThreshold = m_Threshold;
-    this->m_LowerThreshold = m_Threshold / 2.0;
-    itkLegacyReplaceBodyMacro(SetThreshold, 2.2, SetUpperThreshold);
-  }
-
-  OutputImagePixelType
-  GetThreshold(OutputImagePixelType itkNotUsed(th))
-  {
-    itkLegacyReplaceBodyMacro(GetThreshold, 2.2, GetUpperThreshold);
-    return this->m_Threshold;
-  }
-
   ///* Set the Threshold value for detected edges. */
   itkSetMacro(UpperThreshold, OutputImagePixelType);
-  itkGetMacro(UpperThreshold, OutputImagePixelType);
+  itkGetConstMacro(UpperThreshold, OutputImagePixelType);
 
   itkSetMacro(LowerThreshold, OutputImagePixelType);
-  itkGetMacro(LowerThreshold, OutputImagePixelType);
-
-  /* Set the Thresholdvalue for detected edges. */
-  itkSetMacro(OutsideValue, OutputImagePixelType);
-  itkGetMacro(OutsideValue, OutputImagePixelType);
+  itkGetConstMacro(LowerThreshold, OutputImagePixelType);
 
   OutputImageType *
   GetNonMaximumSuppressionImage() const
@@ -201,15 +182,11 @@ public:
   void
   GenerateInputRequestedRegion() noexcept(false) override;
 
-#ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
   itkConceptMacro(InputHasNumericTraitsCheck, (Concept::HasNumericTraits<InputImagePixelType>));
   itkConceptMacro(OutputHasNumericTraitsCheck, (Concept::HasNumericTraits<OutputImagePixelType>));
   itkConceptMacro(SameDimensionCheck, (Concept::SameDimension<ImageDimension, OutputImageDimension>));
   itkConceptMacro(InputIsFloatingPointCheck, (Concept::IsFloatingPoint<InputImagePixelType>));
   itkConceptMacro(OutputIsFloatingPointCheck, (Concept::IsFloatingPoint<OutputImagePixelType>));
-  /** End concept checking */
-#endif
 
 protected:
   CannyEdgeDetectionRecursiveGaussianImageFilter();
@@ -315,12 +292,6 @@ private:
   /** Lower threshold value for identifying edges. */
   OutputImagePixelType m_LowerThreshold; // should be float here?
 
-  /** Threshold value for identifying edges. */
-  OutputImagePixelType m_Threshold;
-
-  /** "Background" value for use in thresholding. */
-  OutputImagePixelType m_OutsideValue;
-
   /** Update buffers used during calculation of multiple steps */
   typename OutputImageType::Pointer m_UpdateBuffer1;
 
@@ -338,8 +309,8 @@ private:
 
   std::slice m_ComputeCannyEdgeSlice[ImageDimension];
 
-  unsigned long m_Stride[ImageDimension];
-  unsigned long m_Center;
+  SizeValueType m_Stride[ImageDimension];
+  SizeValueType m_Center;
 
   typename ListNodeStorageType::Pointer m_NodeStore;
   ListPointerType                       m_NodeList;
