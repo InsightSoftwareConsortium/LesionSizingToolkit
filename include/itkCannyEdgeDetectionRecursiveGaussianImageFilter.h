@@ -18,9 +18,6 @@
 #ifndef itkCannyEdgeDetectionRecursiveGaussianImageFilter_h
 #define itkCannyEdgeDetectionRecursiveGaussianImageFilter_h
 
-#include "itkImageToImageFilter.h"
-#include "itkImage.h"
-#include "itkFixedArray.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkSmoothingRecursiveGaussianImageFilter.h"
 #include "itkMultiplyImageFilter.h"
@@ -30,17 +27,13 @@
 #include "itkObjectStore.h"
 #include "itkMath.h"
 
-
 namespace itk
 {
-using MultiThreader = MultiThreaderBase;
-
-
-template <typename TValueType>
+template <typename TValue>
 class ITK_TEMPLATE_EXPORT ListNode
 {
 public:
-  TValueType m_Value;
+  TValue m_Value;
 
   ListNode * Next;
   ListNode * Previous;
@@ -91,7 +84,9 @@ public:
  *
  * \sa SmoothingRecursiveGaussianImageFilter
  * \sa ZeroCrossingImageFilter
- * \sa ThresholdImageFilter */
+ * \sa ThresholdImageFilter
+ * \ingroup ITKImageFeature
+ */
 template <typename TInputImage, typename TOutputImage>
 class ITK_TEMPLATE_EXPORT CannyEdgeDetectionRecursiveGaussianImageFilter
   : public ImageToImageFilter<TInputImage, TOutputImage>
@@ -206,7 +201,6 @@ private:
   void
   FollowEdge(IndexType index, const OutputImageType * multiplyImageFilterOutput);
 
-
   /** Calculate the second derivative of the smoothed image, it writes the
    *  result to the update buffer */
   void
@@ -258,7 +252,6 @@ private:
 
   OutputImageType * m_OutputImage{};
 };
-
 } // end of namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
