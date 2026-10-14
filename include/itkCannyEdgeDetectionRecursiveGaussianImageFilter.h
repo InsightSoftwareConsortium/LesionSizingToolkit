@@ -201,7 +201,7 @@ private:
 
   /** Edge linking funciton */
   void
-  FollowEdge(IndexType index);
+  FollowEdge(IndexType index, const OutputImageType * multiplyImageFilterOutput);
 
 
   /** Calculate the second derivative of the smoothed image, it writes the

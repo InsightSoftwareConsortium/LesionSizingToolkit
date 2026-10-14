@@ -109,7 +109,6 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Threa
   // Here input is the result from the gaussian filter
   //      output is the update buffer.
   typename OutputImageType::Pointer input = m_GaussianFilter->GetOutput();
-  typename OutputImageType::Pointer output = this->m_OutputImage;
 
   // set iterator radius
   Size<ImageDimension> radius;
@@ -128,7 +127,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Threa
   {
     NeighborhoodType bit(radius, input, *fit);
 
-    it = ImageRegionIterator<OutputImageType>(output, *fit);
+    it = ImageRegionIterator<OutputImageType>(this->m_OutputImage, *fit);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
 
@@ -303,16 +302,18 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Hyste
     ++uit;
   }
 
+  const OutputImageType * multiplyImageFilterOutput = this->m_MultiplyImageFilter->GetOutput();
   while (!oit.IsAtEnd())
   {
     value = oit.Value();
 
     if (value > m_UpperThreshold)
     {
+      const auto computedIndex = oit.ComputeIndex();
       node = m_NodeStore->Borrow();
-      node->m_Value = oit.GetIndex();
+      node->m_Value = computedIndex;
       m_NodeList->PushFront(node);
-      FollowEdge(oit.GetIndex());
+      FollowEdge(computedIndex, multiplyImageFilterOutput);
     }
 
     ++oit;
@@ -321,13 +322,14 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Hyste
 
 template <typename TInputImage, typename TOutputImage>
 void
-CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::FollowEdge(IndexType index)
+CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::FollowEdge(
+  IndexType               index,
+  const OutputImageType * multiplyImageFilterOutput)
 {
   // This is the Zero crossings of the Second derivative multiplied with the
   // gradients of the image. HysteresisThresholding of this image should give
   // the Canny output.
-  typename OutputImageType::Pointer input = m_MultiplyImageFilter->GetOutput();
-  InputImageRegionType              inputRegion = input->GetRequestedRegion();
+  InputImageRegionType inputRegion = multiplyImageFilterOutput->GetRequestedRegion();
 
   IndexType      nIndex;
   IndexType      cIndex;
@@ -337,7 +339,8 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Follo
   Size<ImageDimension> radius;
   radius.Fill(1);
 
-  ConstNeighborhoodIterator<TOutputImage>    oit(radius, input, input->GetRequestedRegion());
+  ConstNeighborhoodIterator<TOutputImage> oit(
+    radius, multiplyImageFilterOutput, multiplyImageFilterOutput->GetRequestedRegion());
   ImageRegionIteratorWithIndex<TOutputImage> uit(this->m_OutputImage, this->m_OutputImage->GetRequestedRegion());
 
   uit.SetIndex(index);
