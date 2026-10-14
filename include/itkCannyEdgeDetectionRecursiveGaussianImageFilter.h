@@ -46,8 +46,10 @@ public:
   ListNode * Previous;
 };
 
-
-/** \class CannyEdgeDetectionRecursiveGaussianImageFilter
+/**
+ *\class CannyEdgeDetectionRecursiveGaussianImageFilter
+ * \brief This filter is an implementation of a Canny edge detector for
+ * scalar-valued images.
  *
  * This filter is an implementation of a Canny edge detector for scalar-valued
  * images.  Based on John Canny's paper "A Computational Approach to Edge
@@ -95,6 +97,8 @@ class ITK_TEMPLATE_EXPORT CannyEdgeDetectionRecursiveGaussianImageFilter
   : public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
+  ITK_DISALLOW_COPY_AND_MOVE(CannyEdgeDetectionRecursiveGaussianImageFilter);
+
   /** Standard "Self" & Superclass type alias.  */
   using Self = CannyEdgeDetectionRecursiveGaussianImageFilter;
   using Superclass = ImageToImageFilter<TInputImage, TOutputImage>;
@@ -111,7 +115,7 @@ public:
   using InputImagePixelType = typename TInputImage::PixelType;
   using OutputImagePixelType = typename TOutputImage::PixelType;
   using IndexType = typename TInputImage::IndexType;
-  using SizeValueType = typename TInputImage::SizeValueType;
+  using SizeValueType = itk::SizeValueType;
 
   using GaussianImageFilterType = SmoothingRecursiveGaussianImageFilter<InputImageType, OutputImageType>;
   using ScalarRealType = typename GaussianImageFilterType::ScalarRealType;
@@ -135,17 +139,17 @@ public:
   itkNewMacro(Self);
 
   /** Typedef to describe the output image region type. */
-  typedef typename TOutputImage::RegionType OutputImageRegionType;
-  typedef typename TInputImage::RegionType  InputImageRegionType;
+  using OutputImageRegionType = typename TOutputImage::RegionType;
+  using InputImageRegionType = typename TInputImage::RegionType;
 
   /** Run-time type information (and related methods). */
   itkOverrideGetNameOfClassMacro(CannyEdgeDetectionRecursiveGaussianImageFilter);
 
-  /** ImageDimension constant    */
+  /** ImageDimension constant. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
   static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
-  /** Typedef of double containers */
+  /** Typedef of double containers. */
   using ArrayType = FixedArray<double, Self::ImageDimension>;
 
   /** Smoothing parameters for the Gaussian filter. */
@@ -179,7 +183,6 @@ public:
 
 protected:
   CannyEdgeDetectionRecursiveGaussianImageFilter();
-  CannyEdgeDetectionRecursiveGaussianImageFilter(const Self &) {}
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
@@ -228,34 +231,32 @@ private:
    * direction.  */
   ArrayType m_MaximumError;
 
-  /** Upper threshold value for identifying edges. */
-  OutputImagePixelType m_UpperThreshold; // should be float here?
-  OutputImagePixelType m_LowerThreshold; // should be float here?
+  OutputImagePixelType m_UpperThreshold{}; // should be float here?
+  OutputImagePixelType m_LowerThreshold{}; // should be float here?
 
-  /** Update buffers used during calculation of multiple steps */
-  typename OutputImageType::Pointer m_UpdateBuffer1;
+  typename OutputImageType::Pointer m_UpdateBuffer1{};
 
-  /** Gaussian filter to smooth the input image  */
-  typename GaussianImageFilterType::Pointer m_GaussianFilter;
+  /** Gaussian filter to smooth the input image. */
+  typename GaussianImageFilterType::Pointer m_GaussianFilter{};
 
   /** Multiply image filter to multiply with the zero crossings of the second
-   *  derivative.  */
-  typename MultiplyImageFilterType::Pointer m_MultiplyImageFilter;
+   *  derivative. */
+  typename MultiplyImageFilterType::Pointer m_MultiplyImageFilter{};
 
   /** Function objects that are used in the inner loops of derivatiVex
-      calculations. */
-  DerivativeOperator<OutputImagePixelType, Self::ImageDimension> m_ComputeCannyEdge1stDerivativeOper;
-  DerivativeOperator<OutputImagePixelType, Self::ImageDimension> m_ComputeCannyEdge2ndDerivativeOper;
+   *  calculations. */
+  DerivativeOperator<OutputImagePixelType, Self::ImageDimension> m_ComputeCannyEdge1stDerivativeOper{};
+  DerivativeOperator<OutputImagePixelType, Self::ImageDimension> m_ComputeCannyEdge2ndDerivativeOper{};
 
-  std::slice m_ComputeCannyEdgeSlice[ImageDimension];
+  std::slice m_ComputeCannyEdgeSlice[ImageDimension]{};
 
-  SizeValueType m_Stride[ImageDimension];
-  SizeValueType m_Center;
+  SizeValueType m_Stride[ImageDimension]{};
+  SizeValueType m_Center{};
 
-  typename ListNodeStorageType::Pointer m_NodeStore;
-  ListPointerType                       m_NodeList;
+  typename ListNodeStorageType::Pointer m_NodeStore{};
+  ListPointerType                       m_NodeList{};
 
-  OutputImageType * m_OutputImage;
+  OutputImageType * m_OutputImage{};
 };
 
 } // end of namespace itk
