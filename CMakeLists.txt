@@ -4,6 +4,17 @@ project(LesionSizingToolkit)
 if(NOT ITK_SOURCE_DIR)
   find_package(ITK REQUIRED)
   list(APPEND CMAKE_MODULE_PATH ${ITK_CMAKE_DIR})
+endif()
+
+# ITK_VERSION_TWEAK is the commit date (YYYYMMDD) of ITK builds after v6.0b02; it is empty before that.
+if(ITK_VERSION_TWEAK AND ITK_VERSION_TWEAK GREATER_EQUAL 20260227)
+  add_compile_definitions(LST_ITK_HAS_ITERATOR_CTAD)
+endif()
+if(ITK_VERSION_TWEAK AND ITK_VERSION_TWEAK GREATER_EQUAL 20260508)
+  add_compile_definitions(LST_ITK_HAS_PRINT_NUMERIC_TRAIT)
+endif()
+
+if(NOT ITK_SOURCE_DIR)
   include(ITKModuleExternal)
 else()
   itk_module_impl()
