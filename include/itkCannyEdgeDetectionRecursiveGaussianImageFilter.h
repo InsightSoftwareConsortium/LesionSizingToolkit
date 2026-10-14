@@ -40,15 +40,12 @@ public:
 };
 
 /**
- *\class CannyEdgeDetectionRecursiveGaussianImageFilter
+ * \class CannyEdgeDetectionRecursiveGaussianImageFilter
  * \brief This filter is an implementation of a Canny edge detector for
  * scalar-valued images.
  *
- * This filter is an implementation of a Canny edge detector for scalar-valued
- * images.  Based on John Canny's paper "A Computational Approach to Edge
- * Detection"(IEEE Transactions on Pattern Analysis and Machine Intelligence,
- * Vol. PAMI-8, No.6, November 1986),  there are four major steps used in the
- * edge-detection scheme:
+ * Based on John Canny's paper \cite canny1986 there are four major steps
+ * used in the edge-detection scheme:
  * (1) Smooth the input image with Gaussian filter.
  * (2) Calculate the second directional derivatives of the smoothed image.
  * (3) Non-Maximum Suppression: the zero-crossings of 2nd derivative are found,
@@ -137,7 +134,7 @@ public:
   using OutputImageRegionType = typename TOutputImage::RegionType;
   using InputImageRegionType = typename TInputImage::RegionType;
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(CannyEdgeDetectionRecursiveGaussianImageFilter);
 
   /** ImageDimension constant. */
@@ -157,10 +154,13 @@ public:
   ScalarRealType
   GetSigma() const;
 
-  ///* Set the Threshold value for detected edges. */
+  /** \brief Set the upper threshold value for detected edges.
+   */
   itkSetMacro(UpperThreshold, OutputImagePixelType);
   itkGetConstMacro(UpperThreshold, OutputImagePixelType);
 
+  /** \brief Set the lower threshold value for detected edges.
+   */
   itkSetMacro(LowerThreshold, OutputImagePixelType);
   itkGetConstMacro(LowerThreshold, OutputImagePixelType);
 
@@ -193,11 +193,11 @@ private:
   void
   AllocateUpdateBuffer();
 
-  /** Implement hysteresis thresholding */
+  /** Implement hysteresis thresholding. */
   void
   HysteresisThresholding();
 
-  /** Edge linking funciton */
+  /** Edge linking function. */
   void
   FollowEdge(IndexType index, const OutputImageType * multiplyImageFilterOutput);
 
@@ -207,7 +207,7 @@ private:
   ThreadedCompute2ndDerivative(const OutputImageRegionType & outputRegionForThread);
 
 
-  /** This methos is used to calculate the 2nd derivative for
+  /** This method is used to calculate the 2nd derivative for
    * non-boundary pixels. It is called by the ThreadedCompute2ndDerivative
    * method. */
   OutputImagePixelType
@@ -221,8 +221,6 @@ private:
   /** Standard deviation of the gaussian used for smoothing */
   SigmaArrayType m_Sigma;
 
-  /** The maximum error of the gaussian blurring kernel in each dimensional
-   * direction.  */
   ArrayType m_MaximumError;
 
   OutputImagePixelType m_UpperThreshold{}; // should be float here?
@@ -237,7 +235,7 @@ private:
    *  derivative. */
   typename MultiplyImageFilterType::Pointer m_MultiplyImageFilter{};
 
-  /** Function objects that are used in the inner loops of derivatiVex
+  /** Function objects that are used in the inner loops of derivative
    *  calculations. */
   DerivativeOperator<OutputImagePixelType, Self::ImageDimension> m_ComputeCannyEdge1stDerivativeOper{};
   DerivativeOperator<OutputImagePixelType, Self::ImageDimension> m_ComputeCannyEdge2ndDerivativeOper{};

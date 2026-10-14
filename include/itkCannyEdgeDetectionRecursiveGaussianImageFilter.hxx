@@ -43,7 +43,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,
   // Set up neighborhood slices for all the dimensions.
   constexpr auto r = MakeFilled<typename Neighborhood<OutputImagePixelType, ImageDimension>::RadiusType>(1);
 
-  // Dummy neighborhood used to set up the slices.
+  // Dummy neighborhood used to set up the slices
   Neighborhood<OutputImagePixelType, ImageDimension> it;
   it.SetRadius(r);
 
@@ -60,7 +60,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage,
     m_ComputeCannyEdgeSlice[i] = std::slice(m_Center - m_Stride[i], 3, m_Stride[i]);
   }
 
-  // Allocate the derivative operator.
+  // Allocate the derivative operator
   m_ComputeCannyEdge1stDerivativeOper.SetDirection(0);
   m_ComputeCannyEdge1stDerivativeOper.SetOrder(1);
   m_ComputeCannyEdge1stDerivativeOper.CreateDirectional();
@@ -110,7 +110,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Threa
   const typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType faceList =
     bC(input, outputRegionForThread, radius);
 
-  // Process the non-boundady region and then each of the boundary faces.
+  // Process the non-boundary region and then each of the boundary faces.
   // These are N-d regions which border the edge of the buffer.
   for (const auto & face : faceList)
   {
@@ -207,7 +207,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Gener
   m_GaussianFilter->SetSigmaArray(this->m_Sigma);
   m_GaussianFilter->SetNormalizeAcrossScale(true);
   m_GaussianFilter->SetInput(input);
-  // modify to force excution, due to grafting complications
+  // Modify to force execution, due to grafting complications
   m_GaussianFilter->Modified();
   m_GaussianFilter->Update();
   this->UpdateProgress(0.01f);
@@ -233,7 +233,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Gener
     },
     progress2.GetProcessObject());
 
-  // 3. Non-maximum suppression----------
+  // 3. Non-maximum suppression
 
   // Calculate the zero crossings of the 2nd directional derivative and write
   // the result to output buffer.
@@ -241,7 +241,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Gener
   zeroCrossFilter->Update();
   this->UpdateProgress(0.92f);
 
-  // 4. Hysteresis Thresholding---------
+  // 4. Hysteresis Thresholding
 
   // First get all the edges corresponding to zerocrossings
   m_MultiplyImageFilter->SetInput1(m_UpdateBuffer1);
@@ -253,7 +253,7 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Gener
   m_MultiplyImageFilter->Update();
   this->UpdateProgress(0.95f);
 
-  // Then do the double threshoulding upon the edge reponses
+  // Then do the double thresholding upon the edge responses
   this->HysteresisThresholding();
   this->UpdateProgress(0.99f);
 
@@ -323,8 +323,8 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Follo
   uit.SetIndex(index);
   if (Math::ExactlyEquals(uit.Get(), NumericTraits<OutputImagePixelType>::OneValue()))
   {
-    // we must remove the node if we are not going to follow it!
-
+    // Remove the node if we are not going to follow it!
+    //
     // Pop the front node from the list and read its index value.
     auto node = m_NodeList->Front(); // get a pointer to the first node
     m_NodeList->PopFront();          // unlink the front node
@@ -356,9 +356,9 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Follo
         if (oit.GetPixel(i) > m_LowerThreshold &&
             Math::NotExactlyEquals(uit.Value(), NumericTraits<OutputImagePixelType>::OneValue()))
         {
-          node = m_NodeStore->Borrow(); // get a new node struct
-          node->m_Value = nIndex;       // set its value
-          m_NodeList->PushFront(node);  // add the new node to the list
+          node = m_NodeStore->Borrow(); // Get a new node struct
+          node->m_Value = nIndex;       // Set its value
+          m_NodeList->PushFront(node);  // Add the new node to the list
 
           uit.SetIndex(nIndex);
           uit.Value() = NumericTraits<OutputImagePixelType>::OneValue();
@@ -436,11 +436,9 @@ CannyEdgeDetectionRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Threa
       for (unsigned int i = 0; i < ImageDimension; ++i)
       {
         // First calculate the directional derivative
-
         directional[i] = dx[i] / gradMag;
 
-        // calculate gradient of 2nd derivative
-
+        // Calculate gradient of 2nd derivative
         derivPos += dx1[i] * directional[i];
       }
 
